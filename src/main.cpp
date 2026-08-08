@@ -56,10 +56,18 @@ void setup()
     transportClock.begin(120);
     transportClock.setOnTick(onClockTick);
     transportClock.start();
+
+    pinMode(D2, INPUT_PULLUP);
 }
 
 void loop()
 {
+    bool change = digitalRead(D2) == LOW;
+
+    if (change) {
+        transportClock.toggleStartStop();
+    }
+
     transportClock.run();
     midiInOut.read();
 }

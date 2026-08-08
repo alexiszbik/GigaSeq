@@ -34,10 +34,20 @@ void TransportClock::run() {
 
 void TransportClock::start() {
     uClock.start();
+    isPlaying = true;
 }
 
 void TransportClock::stop() {
     uClock.stop();
+    isPlaying = false;
+}
+
+void TransportClock::toggleStartStop() {
+    if (isPlaying) {
+        stop();
+    } else {
+        start();
+    }
 }
 
 void TransportClock::setTempo(uint16_t bpm) {

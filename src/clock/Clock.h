@@ -15,6 +15,7 @@ public:
     void run();
     void start();
     void stop();
+    void toggleStartStop();
     void setTempo(uint16_t bpm);
     void setOnTick(TickCallback callback, void* context = nullptr);
 
@@ -29,6 +30,8 @@ private:
     void* tickContext_ = nullptr;
     uint32_t currentTick_ = 0;
     static TransportClock* instance_;
+
+    bool isPlaying = false;
 };
 
 }  // namespace GigaSeq
