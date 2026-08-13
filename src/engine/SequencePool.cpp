@@ -15,6 +15,7 @@ void SequencePool::add(Song song)
 {
     song.attachMidi(midi_);
     songs_.push_back(std::move(song));
+    wireTrackMuteCallbacks();
 }
 
 std::size_t SequencePool::sequenceCount() const noexcept
@@ -166,6 +167,40 @@ void SequencePool::allNotesOff()
     }
 }
 
+void SequencePool::setOnSequenceChanged(SequenceChangedCallback callback, void* context)
+{
+    onSequenceChanged_ = callback;
+    onSequenceChangedContext_ = context;
+}
+
+void SequencePool::setOnTrackMuteChanged(MuteChangedCallback callback, void* context)
+{
+    onTrackMuteChanged_ = callback;
+    onTrackMuteChangedContext_ = context;
+    wireTrackMuteCallbacks();
+}
+
+void SequencePool::wireTrackMuteCallbacks()
+{
+    if (!onTrackMuteChanged_) {
+        return;
+    }
+
+    for (Song& song : songs_) {
+        for (std::size_t i = 0; i < song.size(); ++i) {
+            song.sequence(i).setOnTrackMuteChanged(onTrackMuteChanged_, onTrackMuteChangedContext_);
+        }
+    }
+}
+
+void SequencePool::notifySequenceChanged()
+{
+    logCurrentSequenceSwitch();
+    if (onSequenceChanged_) {
+        onSequenceChanged_(onSequenceChangedContext_);
+    }
+}
+
 void SequencePool::logCurrentSequenceSwitch()
 {
     char buffer[192];
@@ -202,8 +237,7 @@ void SequencePool::advanceToNext()
     }
 
     current().reset();
-    //TODO : use #define
-    logCurrentSequenceSwitch();
+    notifySequenceChanged();
 }
 
 void SequencePool::advanceToPrevious()
@@ -225,8 +259,7 @@ void SequencePool::advanceToPrevious()
     }
 
     current().reset();
-
-    logCurrentSequenceSwitch();
+    notifySequenceChanged();
 }
 
 SequencePool SequencePool::createDefault(MidiInOut& midi, Logger& logger)

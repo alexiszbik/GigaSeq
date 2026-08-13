@@ -2,6 +2,7 @@
 
 #include "StringHelper.h"
 
+#include <cstddef>
 #include <stdexcept>
 
 SequenceTrack::SequenceTrack(const char* name, uint8_t channel)
@@ -63,7 +64,30 @@ void SequenceTrack::reset()
     programChanges_.reset();
     muteEvents_.reset();
     activeNotes_.clear();
+
+    const bool wasMuted = muted_;
     muted_ = startMuted_;
+    if (muted_ != wasMuted) {
+        notifyMuteChanged();
+    }
+}
+
+void SequenceTrack::setTrackIndex(std::size_t index)
+{
+    trackIndex_ = index;
+}
+
+void SequenceTrack::setOnMuteChanged(MuteChangedCallback callback, void* context)
+{
+    onMuteChanged_ = callback;
+    onMuteChangedContext_ = context;
+}
+
+void SequenceTrack::notifyMuteChanged()
+{
+    if (onMuteChanged_) {
+        onMuteChanged_(trackIndex_, muted_, onMuteChangedContext_);
+    }
 }
 
 void SequenceTrack::setMuted(bool muted)
@@ -81,6 +105,8 @@ void SequenceTrack::setMuted(bool muted)
         programChanges_.reset();
         muteEvents_.reset();
     }
+
+    notifyMuteChanged();
 }
 
 void SequenceTrack::startNote(const Note& note)

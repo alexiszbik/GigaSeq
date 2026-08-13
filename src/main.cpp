@@ -32,7 +32,7 @@ Switch pushMode(PUSH_MODE);
 
 Mux mux(41, 33, 35, 37, 39);
 
-GigaDisplay_GFX display;
+MyDisplay display;
 TransportClock transportClock;
 GigaMidiInOut gigaMidi;
 EngineMidiBridge midiBridge(gigaMidi);
@@ -48,15 +48,8 @@ void resetTickCounters() {
     beatTickCounter = 0;
 }
 
-Sequence* displayedSequence = nullptr;
-
-void refreshViewFromPool(bool force = false) {
+void refreshViewFromPool() {
     Sequence& sequence = sequencePool.current();
-    if (!force && displayedSequence == &sequence) {
-        return;
-    }
-    displayedSequence = &sequence;
-
     sequencerView.updateSequenceName(sequence.name());
 
     for (uint8_t trackIndex = 0; trackIndex < 16; ++trackIndex) {
@@ -69,10 +62,22 @@ void refreshViewFromPool(bool force = false) {
     }
 }
 
+void onSequenceChanged(void* /*context*/) {
+    refreshViewFromPool();
+}
+
+void onTrackMuteChanged(std::size_t trackIndex, bool muted, void* /*context*/) {
+    if (trackIndex >= 16) {
+        return;
+    }
+
+    const SequenceTrack& track = sequencePool.current().track(trackIndex);
+    sequencerView.drawTrack(trackIndex, track.name(), muted);
+}
+
 void startTransport() {
     sequencePool.resetCurrent();
     resetTickCounters();
-    refreshViewFromPool(true);
     transportClock.start();
     midiBridge.sendStart();
 }
@@ -95,12 +100,10 @@ void inputCheckCallback() {
 
     if (pushNext.isPushed()) {
         sequencePool.requestNext(!isPlaying);
-        refreshViewFromPool();
     }
 
     if (pushPrev.isPushed()) {
         sequencePool.requestPrevious(!isPlaying);
-        refreshViewFromPool();
     }
 }
 
@@ -114,15 +117,19 @@ void muxCallback() {
         if ((pressed & 1) && i < sequence.trackCount()) {
             SequenceTrack& track = sequence.track(i);
             track.setMuted(!track.isMuted());
-            sequencerView.drawTrack(i, track.name(), track.isMuted());
         }
     }
 
     mux.clearChangedStates();
 }
 
+void displayCallback() {
+    display.endWrite();
+}
+
 TimedTask inputCheck(20, inputCheckCallback);
 TimedTask muxCheck(1, muxCallback);
+TimedTask displayCheck(1, displayCallback);
 
 void onClockTick(uint32_t tick, void* context) {
     (void)tick;
@@ -166,6 +173,8 @@ void setup() {
     gigaMidi.begin();
     transportClock.begin(120);
     transportClock.setOnTick(onClockTick);
+    sequencePool.setOnSequenceChanged(onSequenceChanged);
+    sequencePool.setOnTrackMuteChanged(onTrackMuteChanged);
 }
 
 void loop() {
@@ -173,6 +182,7 @@ void loop() {
 
     inputCheck.update(currentTime);
     muxCheck.update(currentTime);
+    displayCheck.update(currentTime);
 
     transportClock.run();
     gigaMidi.read();

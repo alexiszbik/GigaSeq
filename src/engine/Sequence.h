@@ -42,6 +42,8 @@ public:
 
     void setTrackMuted(std::size_t index, bool muted);
 
+    void setOnTrackMuteChanged(MuteChangedCallback callback, void* context = nullptr);
+
     void reset();
     void processTick(bool wrapAtEnd = true);
     void allNotesOff();
@@ -55,6 +57,10 @@ public:
     std::vector<SequenceTrack> tracks_;
 
 private:
+    void applyTrackMuteCallbacks();
+
     MidiInOut* midi_ = nullptr;
     StringHelper::NameBuffer name_ = {};
+    MuteChangedCallback onTrackMuteChanged_ = nullptr;
+    void* onTrackMuteChangedContext_ = nullptr;
 };

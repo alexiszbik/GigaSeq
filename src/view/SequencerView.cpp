@@ -13,7 +13,7 @@ namespace GigaSeq
         constexpr uint16_t kWhite = 0xFFFF;
     }
 
-    void SequencerView::begin(GigaDisplay_GFX &display)
+    void SequencerView::begin(MyDisplay &display)
     {
         display_ = &display;
         display_->fillScreen(kBlack);

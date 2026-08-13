@@ -1,10 +1,10 @@
 #pragma once
 
-#include <Arduino_GigaDisplay_GFX.h>
+#include "MyDisplay.h"
 
 namespace GigaSeq {
 
-void printTextInRect(GigaDisplay_GFX& display,
+void printTextInRect(MyDisplay& display,
                      int x, int y, int w, int h,
                      const char* text,
                      uint8_t textSize,

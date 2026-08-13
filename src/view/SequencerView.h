@@ -1,14 +1,13 @@
 #pragma once
 
-#include <Arduino_GigaDisplay_GFX.h>
+#include "MyDisplay.h"
 
 namespace GigaSeq
 {
-
     class SequencerView
     {
     public:
-        void begin(GigaDisplay_GFX &display);
+        void begin(MyDisplay &display);
         void drawStaticLayout();
         void updateSequenceName(const char *name);
         void updatePosition(uint16_t bar, uint8_t beat);
@@ -16,7 +15,7 @@ namespace GigaSeq
 
     private:
 
-        GigaDisplay_GFX *display_ = nullptr;
+        MyDisplay *display_ = nullptr;
 
         static constexpr int kWidth = 800;
         static constexpr int kHeight = 480;

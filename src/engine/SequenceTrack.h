@@ -12,6 +12,8 @@
 #include <cstdint>
 #include <vector>
 
+using MuteChangedCallback = void (*)(std::size_t trackIndex, bool muted, void* context);
+
 class SequenceTrack
 {
 public:
@@ -24,6 +26,9 @@ public:
 
     bool isMuted() const noexcept { return muted_; }
     void setMuted(bool muted);
+
+    void setTrackIndex(std::size_t index);
+    void setOnMuteChanged(MuteChangedCallback callback, void* context = nullptr);
 
     void setStartMuted() { startMuted_ = true; }
 
@@ -58,14 +63,18 @@ private:
 
     void startNote(const Note& note);
     void tickActiveNotes();
+    void notifyMuteChanged();
 
     StringHelper::NameBuffer name_ = {};
     uint8_t channel_ = 0;
+    std::size_t trackIndex_ = 0;
 
     bool muted_ = false;
     bool startMuted_ = false;
 
     MidiInOut* midi_ = nullptr;
+    MuteChangedCallback onMuteChanged_ = nullptr;
+    void* onMuteChangedContext_ = nullptr;
     std::vector<ActiveNote> activeNotes_;
 
     TimedEventList<Note> notes_;

@@ -10,7 +10,7 @@ constexpr int kFontHeight = 8;
 constexpr uint8_t kMaxLineLength = 32;
 }
 
-void printTextInRect(GigaDisplay_GFX& display,
+void printTextInRect(MyDisplay& display,
                      int x, int y, int w, int h,
                      const char* text,
                      uint8_t textSize,
