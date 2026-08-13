@@ -20,7 +20,7 @@ void MyDisplay::refresh_if_needed() {
     rtos::ThisThread::flags_wait_any(0x1);
     //dsi_lcdDrawImage((void *) this->getBuffer(), (void *)(dsi_getActiveFrameBuffer()), 480, 800, DMA2D_INPUT_RGB565);
 
-    const uint32_t bandHeight = 40;
+    const uint32_t bandHeight = 16;
     uint32_t y = currentBand * bandHeight;
     uint16_t* src = buffer + y * 480;
     void* dst = (uint16_t*)dsi_getActiveFrameBuffer() + y * 480;
@@ -150,7 +150,7 @@ void MyDisplay::fillScreen(uint16_t color) {
       for (i = 0; i < pixels; i++)
         buffer[i] = color;
     }
-    endWrite();		// PR #3
+    //endWrite();		// PR #3
   }
 }
 
@@ -263,7 +263,7 @@ void MyDisplay::drawFastRawVLine(int16_t x, int16_t y, int16_t h,
     (*buffer_ptr) = color;
     buffer_ptr += WIDTH;
   }
-  endWrite();
+  //endWrite();
 }
 
 void MyDisplay::drawFastRawHLine(int16_t x, int16_t y, int16_t w,
@@ -274,5 +274,5 @@ void MyDisplay::drawFastRawHLine(int16_t x, int16_t y, int16_t w,
   for (uint32_t i = buffer_index; i < buffer_index + w; i++) {
     buffer[i] = color;
   }
-  endWrite();
+  //endWrite();
 }

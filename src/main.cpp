@@ -124,11 +124,11 @@ void muxCallback() {
 }
 
 void displayCallback() {
-    display.endWrite();
+    //display.endWrite();
 }
 
 TimedTask inputCheck(20, inputCheckCallback);
-TimedTask muxCheck(1, muxCallback);
+TimedTask muxCheck(4, muxCallback);
 TimedTask displayCheck(1, displayCallback);
 
 void onClockTick(uint32_t tick, void* context) {
@@ -146,9 +146,11 @@ void onClockTick(uint32_t tick, void* context) {
     }
 
     if (beatTickCounter == 0) {
+        /*
         sequencerView.updatePosition(
             transportClock.getBar(),
             transportClock.getBeat());
+        */
     }
     beatTickCounter++;
     if (beatTickCounter >= TransportClock::kPpqn) {
@@ -182,8 +184,10 @@ void loop() {
 
     inputCheck.update(currentTime);
     muxCheck.update(currentTime);
-    displayCheck.update(currentTime);
+    //displayCheck.update(currentTime);
 
     transportClock.run();
     gigaMidi.read();
+
+    display.endWrite();
 }
