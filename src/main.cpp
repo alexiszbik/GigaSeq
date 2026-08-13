@@ -35,6 +35,8 @@ TransportClock transportClock;
 MidiInOut midiInOut;
 SequencerView sequencerView;
 
+bool seqState[16];
+
 void inputCheckCallback() {
     if (pushPlay.debounce()) {
         if (pushPlay.getState()) {
@@ -51,6 +53,8 @@ void muxCallback() {
     for (uint8_t i = 0; pressed; ++i, pressed >>= 1) { //continue when pressed still got 1, each loop will move bits to the right
         if (pressed & 1) {
             Serial.println(i);
+            seqState[i] = ! seqState[i];
+            sequencerView.drawTrack(i, "Hello World of Darkness!", seqState[i]);
         }
     }
 
@@ -101,13 +105,12 @@ void setup()
     
     for (uint8_t trackIndex = 0; trackIndex < 16; trackIndex++)
     {
-        sequencerView.setTrackLabel(trackIndex, "Hello World of Darkness!");
+        sequencerView.drawTrack(trackIndex, "Hello World of Darkness!", false);
     }
     
     midiInOut.begin();
     transportClock.begin(120);
     transportClock.setOnTick(onClockTick);
-    transportClock.start();
 
     Serial.write("hello world");
 }

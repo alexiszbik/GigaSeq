@@ -33,11 +33,6 @@ namespace GigaSeq
         display_->print("Sequence 01");
 
         updatePosition(1, 1, 0);
-
-        for (uint8_t trackIndex = 0; trackIndex < kTrackCount; trackIndex++)
-        {
-            drawTrack(trackIndex);
-        }
     }
 
     void SequencerView::updatePosition(uint16_t bar, uint8_t beat, uint8_t tick)
@@ -57,36 +52,32 @@ namespace GigaSeq
         display_->print(positionText);
     }
 
-    void SequencerView::setTrackLabel(uint8_t trackIndex, const char *text)
-    {
-        if (trackIndex >= kTrackCount)
-        {
-            return;
-        }
-
-        trackLabels_[trackIndex] = text;
-        drawTrack(trackIndex);
-    }
-
-    void SequencerView::drawTrack(uint8_t trackIndex)
+    void SequencerView::drawTrack(uint8_t trackIndex, const char *text, bool state)
     {
         if (!display_ || trackIndex >= kTrackCount)
         {
             return;
         }
 
+        display_->setTextColor(state ? kBlack : kWhite);
+
         const int tracksY = kHeight - kTracksHeight;
         const int trackW = kWidth / kColCount;
         const int trackH = kTracksHeight / kColCount;
 
         const uint8_t col = trackIndex % kColCount;
-        const uint8_t row = trackIndex / kColCount;
+        const uint8_t row = kColCount - 1 - (trackIndex / kColCount);
         const int x = col * trackW;
         const int y = tracksY + row * trackH;
 
-        display_->drawRect(x, y, trackW, trackH, kWhite);
+        if (state) {
+            display_->fillRect(x, y, trackW, trackH, kWhite);
+        } else {
+            display_->fillRect(x, y, trackW, trackH, kBlack);
+            display_->drawRect(x, y, trackW, trackH, kWhite);
+        }
 
-        const char *label = trackLabels_[trackIndex];
+        const char *label = text;
         if (label && label[0] != '\0')
         {
             printTextInRect(*display_, x, y, trackW, trackH, label, kTrackTextSize, kCharsPerLine);

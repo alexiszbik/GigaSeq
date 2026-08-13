@@ -11,10 +11,9 @@ namespace GigaSeq
         void begin(GigaDisplay_GFX &display);
         void drawStaticLayout();
         void updatePosition(uint16_t bar, uint8_t beat, uint8_t tick);
-        void setTrackLabel(uint8_t trackIndex, const char *text);
+        void drawTrack(uint8_t trackIndex, const char *text, bool state);
 
     private:
-        void drawTrack(uint8_t trackIndex);
 
         GigaDisplay_GFX *display_ = nullptr;
 
@@ -29,8 +28,6 @@ namespace GigaSeq
         static constexpr int kPositionX = kWidth / 2;
         static constexpr int kPositionWidth = 210;
         static constexpr int kHeaderHeight = 40;
-
-        const char *trackLabels_[kTrackCount] = {};
     };
 
 } // namespace GigaSeq
