@@ -18,7 +18,6 @@ static int currentBand = 0;
 void MyDisplay::refresh_if_needed() {
   while (1) {
     rtos::ThisThread::flags_wait_any(0x1);
-    //dsi_lcdDrawImage((void *) this->getBuffer(), (void *)(dsi_getActiveFrameBuffer()), 480, 800, DMA2D_INPUT_RGB565);
 
     const uint32_t bandHeight = 16;
     uint32_t y = currentBand * bandHeight;
@@ -58,28 +57,12 @@ void MyDisplay::begin() {
     #endif
 }
 
-void MyDisplay::startWrite() { }
-
 void MyDisplay::endWrite() {
 #ifdef __MBED__
-  if (!buffering)
     _refresh_thd->flags_set(0x1);
 #elif defined(__ZEPHYR__)
-  if (!buffering)
      this->display->drawBuffer(0, 0, buffer);
 #endif
-}
-
-// If buffering, defer endWrite calls until endBuffering is called.
-void MyDisplay::startBuffering() {
-  buffering = true;
-}
-
-void MyDisplay::endBuffering() {
-  if (buffering) {
-    buffering = false;
-    endWrite();
-  }
 }
 
 void MyDisplay::drawPixel(int16_t x, int16_t y, uint16_t color) {
