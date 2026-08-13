@@ -2,7 +2,6 @@
 
 #include "TextBox.h"
 
-#include <cstdio>
 #include <cstring>
 
 namespace GigaSeq
@@ -11,6 +10,27 @@ namespace GigaSeq
     {
         constexpr uint16_t kBlack = 0x0000;
         constexpr uint16_t kWhite = 0xFFFF;
+
+        char* appendUInt(char *p, uint32_t value)
+        {
+            if (value == 0)
+            {
+                *p++ = '0';
+                return p;
+            }
+            char tmp[10];
+            int i = 0;
+            while (value > 0)
+            {
+                tmp[i++] = '0' + (value % 10);
+                value /= 10;
+            }
+            while (i > 0)
+            {
+                *p++ = tmp[--i];
+            }
+            return p;
+        }
     }
 
     void SequencerView::begin(MyDisplay &display)
@@ -20,7 +40,101 @@ namespace GigaSeq
         display_->setTextColor(kWhite);
     }
 
+    void SequencerView::copyActionText(char *dest, const char *src)
+    {
+        if (!src)
+        {
+            dest[0] = '\0';
+            return;
+        }
+        std::strncpy(dest, src, sizeof(ViewAction::text) - 1);
+        dest[sizeof(ViewAction::text) - 1] = '\0';
+    }
+
+    void SequencerView::enqueueAction(const ViewAction &action)
+    {
+        if (queueCount_ >= kQueueCapacity)
+        {
+            // Queue full: drop the oldest action to make room for the newest.
+            queueTail_ = (queueTail_ + 1) % kQueueCapacity;
+            --queueCount_;
+        }
+        queue_[queueHead_] = action;
+        queueHead_ = (queueHead_ + 1) % kQueueCapacity;
+        ++queueCount_;
+    }
+
     void SequencerView::drawStaticLayout()
+    {
+        ViewAction action;
+        action.type = ViewActionType::DrawStaticLayout;
+        enqueueAction(action);
+    }
+
+    void SequencerView::updateSequenceName(const char *name)
+    {
+        ViewAction action;
+        action.type = ViewActionType::UpdateSequenceName;
+        copyActionText(action.text, name);
+        enqueueAction(action);
+    }
+
+    void SequencerView::updatePosition(uint16_t bar, uint8_t beat)
+    {
+        ViewAction action;
+        action.type = ViewActionType::UpdatePosition;
+        action.bar = bar;
+        action.beat = beat;
+        enqueueAction(action);
+    }
+
+    void SequencerView::drawTrack(uint8_t trackIndex, const char *text, bool state)
+    {
+        if (trackIndex >= kTrackCount)
+        {
+            return;
+        }
+        ViewAction action;
+        action.type = ViewActionType::DrawTrack;
+        action.trackIndex = trackIndex;
+        action.state = state;
+        copyActionText(action.text, text);
+        enqueueAction(action);
+    }
+
+    bool SequencerView::processOne()
+    {
+        if (queueCount_ == 0)
+        {
+            return false;
+        }
+
+        ViewAction action = queue_[queueTail_];
+        queueTail_ = (queueTail_ + 1) % kQueueCapacity;
+        --queueCount_;
+
+        switch (action.type)
+        {
+            case ViewActionType::DrawStaticLayout:
+                executeDrawStaticLayout();
+                break;
+            case ViewActionType::UpdateSequenceName:
+                executeUpdateSequenceName(action.text);
+                break;
+            case ViewActionType::UpdatePosition:
+                executeUpdatePosition(action.bar, action.beat);
+                break;
+            case ViewActionType::DrawTrack:
+                executeDrawTrack(action.trackIndex, action.text, action.state);
+                break;
+            default:
+                break;
+        }
+
+        return true;
+    }
+
+    void SequencerView::executeDrawStaticLayout()
     {
         if (!display_ || disable)
         {
@@ -32,10 +146,10 @@ namespace GigaSeq
         display_->setCursor(0, 0);
         display_->print("Sequence");
 
-        updatePosition(1, 1);
+        executeUpdatePosition(1, 1);
     }
 
-    void SequencerView::updateSequenceName(const char *name)
+    void SequencerView::executeUpdateSequenceName(const char *name)
     {
         if (!display_ || disable)
         {
@@ -49,7 +163,7 @@ namespace GigaSeq
         display_->print(name ? name : "");
     }
 
-    void SequencerView::updatePosition(uint16_t bar, uint8_t beat)
+    void SequencerView::executeUpdatePosition(uint16_t bar, uint8_t beat)
     {
         if (!display_ || disable)
         {
@@ -57,7 +171,11 @@ namespace GigaSeq
         }
 
         char positionText[16];
-        snprintf(positionText, sizeof(positionText), "%u.%u", bar, beat);
+        char *p = positionText;
+        p = appendUInt(p, bar);
+        *p++ = '.';
+        p = appendUInt(p, beat);
+        *p = '\0';
 
         display_->fillRect(kPositionX, 0, kPositionWidth, kHeaderHeight, kBlack);
         display_->setTextSize(kHeaderTextSize);
@@ -66,7 +184,7 @@ namespace GigaSeq
         display_->print(positionText);
     }
 
-    void SequencerView::drawTrack(uint8_t trackIndex, const char *text, bool state)
+    void SequencerView::executeDrawTrack(uint8_t trackIndex, const char *text, bool state)
     {
         if (!display_ || trackIndex >= kTrackCount || disable)
         {
@@ -84,9 +202,12 @@ namespace GigaSeq
         const int x = col * trackW;
         const int y = tracksY + row * trackH;
 
-        if (state) {
+        if (state)
+        {
             display_->fillRect(x, y, trackW, trackH, kWhite);
-        } else {
+        }
+        else
+        {
             display_->fillRect(x, y, trackW, trackH, kBlack);
             display_->drawRect(x, y, trackW, trackH, kWhite);
         }

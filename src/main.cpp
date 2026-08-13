@@ -125,12 +125,12 @@ void muxCallback() {
 }
 
 void displayCallback() {
-    //display.endWrite();
+    sequencerView.processOne();
 }
 
 TimedTask inputCheck(20, inputCheckCallback);
 TimedTask muxCheck(4, muxCallback);
-TimedTask displayCheck(1, displayCallback);
+TimedTask displayCheck(40, displayCallback);
 
 void onClockTick(uint32_t tick, void* context) {
     (void)tick;
@@ -173,7 +173,7 @@ void setup() {
     refreshViewFromPool();
 
     gigaMidi.begin();
-    transportClock.begin(120);
+    transportClock.begin(166);
     transportClock.setOnTick(onClockTick);
     sequencePool.setOnSequenceChanged(onSequenceChanged);
     sequencePool.setOnTrackMuteChanged(onTrackMuteChanged);
@@ -184,7 +184,7 @@ void loop() {
 
     inputCheck.update(currentTime);
     muxCheck.update(currentTime);
-    //displayCheck.update(currentTime);
+    displayCheck.update(currentTime);
 
     transportClock.run();
     gigaMidi.read();
