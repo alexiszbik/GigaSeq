@@ -26,7 +26,7 @@ Sequence buildSequence(
 Sequence SequenceFactory::createSequenceOne(int barCount)
 {
     return buildSequence(
-        2, 7, 1, "Kick/Hat1",
+        2, 7, 1, "Kick/Hat12345",
         {
             SequenceTrackFactory::createKickSnareWithHats, 
             SequenceTrackFactory::createCMaj7Arpeggio

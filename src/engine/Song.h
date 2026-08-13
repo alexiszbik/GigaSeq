@@ -10,6 +10,8 @@
 class Song
 {
 public:
+    static constexpr std::size_t kNameMaxLength = 12;
+
     explicit Song(const char* name);
 
     const char* name() const noexcept { return name_; }
@@ -24,6 +26,6 @@ public:
     void allNotesOff();
 
 private:
-    StringHelper::NameBuffer name_ = {};
+    char name_[kNameMaxLength + 1] = {};
     std::vector<Sequence> sequences_;
 };

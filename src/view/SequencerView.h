@@ -23,9 +23,10 @@ namespace GigaSeq
         static constexpr int kColCount = 4;
         static constexpr int kTrackCount = 16;
         static constexpr uint8_t kTrackTextSize = 3;
-        static constexpr uint8_t kCharsPerLine = 9;
+        static constexpr uint8_t kCharsPerLine = 10;
         static constexpr uint8_t kHeaderTextSize = 5;
-        static constexpr int kSequenceNameWidth = 280;
+        static constexpr int kHeaderCaracSize = 30;
+        static constexpr int kSequenceNameWidth = 12*kHeaderCaracSize;
         static constexpr int kPositionX = kWidth / 2;
         static constexpr int kPositionWidth = 280;
         static constexpr int kHeaderHeight = 40;

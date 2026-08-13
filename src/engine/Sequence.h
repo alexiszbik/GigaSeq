@@ -12,6 +12,7 @@ class Sequence
 {
 public:
     static constexpr int kTicksPerQuarterNote = 96;
+    static constexpr std::size_t kNameMaxLength = 12;
 
     Sequence(
         const char* name,
@@ -60,7 +61,7 @@ private:
     void applyTrackMuteCallbacks();
 
     MidiInOut* midi_ = nullptr;
-    StringHelper::NameBuffer name_ = {};
+    char name_[kNameMaxLength + 1] = {};
     MuteChangedCallback onTrackMuteChanged_ = nullptr;
     void* onTrackMuteChangedContext_ = nullptr;
 };

@@ -13,7 +13,7 @@ Sequence::Sequence(
     : barCount_(barCount)
     , beatsPerBar_(beatsPerBar)
 {
-    StringHelper::copyName(name_, name);
+    StringHelper::copyName(name_, name, kNameMaxLength + 1);
 
     const uint32_t length = static_cast<uint32_t>(barCount_) * beatsPerBar_ * kTicksPerQuarterNote;
     if (!fitsInTickRange(length)) {

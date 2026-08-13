@@ -6,7 +6,7 @@
 
 Song::Song(const char* name)
 {
-    StringHelper::copyName(name_, name);
+    StringHelper::copyName(name_, name, kNameMaxLength + 1);
 }
 
 void Song::add(Sequence sequence)

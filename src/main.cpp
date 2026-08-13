@@ -60,6 +60,7 @@ void refreshViewFromPool() {
             sequencerView.drawTrack(trackIndex, "", false);
         }
     }
+
 }
 
 void onSequenceChanged(void* /*context*/) {
@@ -146,11 +147,10 @@ void onClockTick(uint32_t tick, void* context) {
     }
 
     if (beatTickCounter == 0) {
-        /*
         sequencerView.updatePosition(
             transportClock.getBar(),
             transportClock.getBeat());
-        */
+        
     }
     beatTickCounter++;
     if (beatTickCounter >= TransportClock::kPpqn) {

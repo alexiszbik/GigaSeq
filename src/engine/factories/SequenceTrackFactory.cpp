@@ -124,7 +124,7 @@ SequenceTrack SequenceTrackFactory::createFourOnFloorKick(tick_t lengthInTicks)
 
 SequenceTrack SequenceTrackFactory::createCMaj7Arpeggio(tick_t lengthInTicks)
 {
-    SequenceTrack track("Cmaj7 Arpeggio", MidiChannel::kModularA);
+    SequenceTrack track("abcdefghijklmnopqrstuvwxyz123456789", MidiChannel::kModularA);
 
     SequenceDesc desc;
     desc.notes = {{60}, {64}, {67}, {71}};
