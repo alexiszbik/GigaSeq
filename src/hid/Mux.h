@@ -10,13 +10,13 @@ public:
 
     void begin();
     uint8_t readNext();
-    bool getValue(uint8_t channel);
-    bool hasChanged(uint8_t channel);
+    uint16_t getStates();
+    uint16_t getChangedStates();
+    void clearChangedStates();
 
 private:
     void selectChannel(uint8_t channel);
     bool readChannel(uint8_t channel);
-    void clearChanged(uint8_t channel);
 
     uint8_t sigPin_;
     uint8_t selectPins_[4];

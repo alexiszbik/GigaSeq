@@ -47,17 +47,17 @@ void inputCheckCallback() {
 void muxCallback() {
     mux.readNext();
 
-    for (byte i = 0; i < 16; i++) {
-        if (mux.hasChanged(i)) {
-            bool state = mux.getValue(i);
-            if (state) {
-                Serial.println(i);
-            }
+    uint16_t pressed = mux.getChangedStates() & mux.getStates();
+    for (uint8_t i = 0; pressed; ++i, pressed >>= 1) { //continue when pressed still got 1, each loop will move bits to the right
+        if (pressed & 1) {
+            Serial.println(i);
         }
     }
+
+    mux.clearChangedStates();
 }
 
-TimedTask inputCheck(200, inputCheckCallback);
+TimedTask inputCheck(20, inputCheckCallback);
 TimedTask muxCheck(1, muxCallback);
 
 void onClockTick(uint32_t tick, void *context)

@@ -40,25 +40,16 @@ uint8_t Mux::readNext() {
     return readIndex;
 }
 
-bool Mux::getValue(uint8_t channel) {
-    if (channel >= channelCount) {
-        return false;
-    }
-    clearChanged(channel);
-    return (states_ >> channel) & 1u;
+uint16_t Mux::getStates() {
+    return states_;
 }
 
-bool Mux::hasChanged(uint8_t channel)  {
-    if (channel >= channelCount) {
-        return false;
-    }
-    return (changed_ >> channel) & 1u;
+uint16_t Mux::getChangedStates() {
+    return changed_;
 }
 
-void Mux::clearChanged(uint8_t channel) {
-    if (channel < channelCount) {
-        changed_ &= ~(1u << channel);
-    }
+void Mux::clearChangedStates() {
+    changed_ = 0;
 }
 
 void Mux::selectChannel(uint8_t channel) {
