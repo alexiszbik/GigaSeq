@@ -8,7 +8,7 @@ using TickCallback = void (*)(uint32_t tick, void* context);
 
 class TransportClock {
 public:
-    static constexpr uint8_t kPpqn = 24;
+    static constexpr uint8_t kPpqn = 96;
     static constexpr uint8_t kBeatsPerBar = 4;
 
     void begin(uint16_t bpm = 120);
@@ -19,6 +19,8 @@ public:
     void setTempo(uint16_t bpm);
     void setOnTick(TickCallback callback, void* context = nullptr);
 
+    bool isPlaying() const;
+    uint32_t getRawTick() const;
     uint16_t getBar() const;
     uint8_t getBeat() const;
     uint8_t getTick() const;
@@ -31,7 +33,7 @@ private:
     uint32_t currentTick_ = 0;
     static TransportClock* instance_;
 
-    bool isPlaying = false;
+    bool playing_ = false;
 };
 
 }  // namespace GigaSeq

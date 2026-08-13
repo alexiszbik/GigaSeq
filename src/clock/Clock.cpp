@@ -24,7 +24,7 @@ void TransportClock::begin(uint16_t bpm) {
 
     uClock.init();
     uClock.setTempo(bpm);
-    uClock.setOutputPPQN(uClock.PPQN_24);
+    uClock.setOutputPPQN(uClock.PPQN_96);
     uClock.setOnOutputPPQN(onOutputPPQN);
 }
 
@@ -34,16 +34,16 @@ void TransportClock::run() {
 
 void TransportClock::start() {
     uClock.start();
-    isPlaying = true;
+    playing_ = true;
 }
 
 void TransportClock::stop() {
     uClock.stop();
-    isPlaying = false;
+    playing_ = false;
 }
 
 void TransportClock::toggleStartStop() {
-    if (isPlaying) {
+    if (playing_) {
         stop();
     } else {
         start();
@@ -57,6 +57,14 @@ void TransportClock::setTempo(uint16_t bpm) {
 void TransportClock::setOnTick(TickCallback callback, void* context) {
     tickCallback_ = callback;
     tickContext_ = context;
+}
+
+bool TransportClock::isPlaying() const {
+    return playing_;
+}
+
+uint32_t TransportClock::getRawTick() const {
+    return currentTick_;
 }
 
 uint16_t TransportClock::getBar() const {

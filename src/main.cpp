@@ -1,11 +1,14 @@
 #include <Arduino_GigaDisplay_GFX.h>
 
 #include "clock/Clock.h"
-#include "midi/MidiInOut.h"
-#include "view/SequencerView.h"
-#include "hid/Switch.h"
-#include "task/TimedTask.h"
+#include "SequencePool.h"
 #include "hid/Mux.h"
+#include "hid/Switch.h"
+#include "midi/EngineMidiBridge.h"
+#include "midi/GigaMidiInOut.h"
+#include "platform/ArduinoLogger.h"
+#include "task/TimedTask.h"
+#include "view/SequencerView.h"
 
 using namespace GigaSeq;
 
@@ -21,36 +24,81 @@ unsigned long currentTime = 0;
 #define TOGGLE_SCENE 53
 
 Switch pushPedal(PUSH_PEDAL);
-
 Switch pushPlay(PUSH_PLAY);
 Switch pushNext(PUSH_NEXT);
 Switch pushPrev(PUSH_PREV);
 Switch pushSong(PUSH_SONG);
 Switch pushMode(PUSH_MODE);
 
-Mux mux(41,33,35,37,39);
+Mux mux(41, 33, 35, 37, 39);
 
 GigaDisplay_GFX display;
 TransportClock transportClock;
-MidiInOut midiInOut;
+GigaMidiInOut gigaMidi;
+EngineMidiBridge midiBridge(gigaMidi);
+ArduinoLogger logger;
+SequencePool sequencePool = SequencePool::createDefault(midiBridge, logger);
 SequencerView sequencerView;
 
-bool seqState[16];
+void refreshViewFromPool() {
+    const Sequence& sequence = sequencePool.current();
+    sequencerView.updateSequenceName(sequence.name());
+
+    for (uint8_t trackIndex = 0; trackIndex < 16; ++trackIndex) {
+        if (trackIndex < sequence.trackCount()) {
+            const SequenceTrack& track = sequence.track(trackIndex);
+            sequencerView.drawTrack(trackIndex, track.name(), track.isMuted());
+        } else {
+            sequencerView.drawTrack(trackIndex, "", false);
+        }
+    }
+}
+
+void startTransport() {
+    sequencePool.resetCurrent();
+    refreshViewFromPool();
+    transportClock.start();
+    midiBridge.sendStart();
+}
+
+void stopTransport() {
+    transportClock.stop();
+    midiBridge.sendStop();
+    sequencePool.allNotesOff();
+}
 
 void inputCheckCallback() {
+    bool isPlaying = transportClock.isPlaying();
     if (pushPlay.isPushed()) {
-        transportClock.toggleStartStop();
+        if (isPlaying) {
+            stopTransport();
+        } else {
+            startTransport();
+        }
+    }
+
+    if (pushNext.isPushed()) {
+        sequencePool.requestNext(!isPlaying);
+        refreshViewFromPool();
+    }
+
+    if (pushPrev.isPushed()) {
+        sequencePool.requestPrevious(!isPlaying);
+        refreshViewFromPool();
     }
 }
 
 void muxCallback() {
     mux.readNext();
 
+    Sequence& sequence = sequencePool.current();
     uint16_t pressed = mux.getChangedStates() & mux.getStates();
-    for (uint8_t i = 0; pressed; ++i, pressed >>= 1) { //continue when pressed still got 1, each loop will move bits to the right
-        if (pressed & 1) {
-            seqState[i] = ! seqState[i];
-            sequencerView.drawTrack(i, "Hello World of Darkness!", seqState[i]);
+
+    for (uint8_t i = 0; pressed; ++i, pressed >>= 1) {
+        if ((pressed & 1) && i < sequence.trackCount()) {
+            SequenceTrack& track = sequence.track(i);
+            track.setMuted(!track.isMuted());
+            sequencerView.drawTrack(i, track.name(), track.isMuted());
         }
     }
 
@@ -60,30 +108,24 @@ void muxCallback() {
 TimedTask inputCheck(20, inputCheckCallback);
 TimedTask muxCheck(1, muxCallback);
 
-void onClockTick(uint32_t tick, void *context)
-{
+void onClockTick(uint32_t tick, void* context) {
     (void)context;
 
-    static bool state = false;
-    if (tick % 96 == 0)
-    {
-        state = !state;
-        if (state)
-        {
-            midiInOut.sendNoteOn(60, 127, 4);
-        }
-        else
-        {
-            midiInOut.sendNoteOff(60, 127, 4);
-        }
+    sequencePool.processTick();
+
+    if (tick % 4 == 0) {
+        midiBridge.sendClock();
     }
-
-    sequencerView.updatePosition(transportClock.getBar(), transportClock.getBeat());
-
+/*
+    if (tick % 96 == 0) {
+        sequencerView.updatePosition(
+            transportClock.getBar(),
+            transportClock.getBeat());
+    }
+*/
 }
 
-void setup()
-{   
+void setup() {
     Serial.begin(9600);
 
     delay(100);
@@ -95,26 +137,19 @@ void setup()
 
     sequencerView.begin(display);
     sequencerView.drawStaticLayout();
-    
-    for (uint8_t trackIndex = 0; trackIndex < 16; trackIndex++)
-    {
-        sequencerView.drawTrack(trackIndex, "Hello World of Darkness!", false);
-    }
-    
-    midiInOut.begin();
+    refreshViewFromPool();
+
+    gigaMidi.begin();
     transportClock.begin(120);
     transportClock.setOnTick(onClockTick);
-
-    Serial.write("hello world");
 }
 
-void loop()
-{
+void loop() {
     currentTime = millis();
 
     inputCheck.update(currentTime);
     muxCheck.update(currentTime);
 
     transportClock.run();
-    midiInOut.read();
+    gigaMidi.read();
 }

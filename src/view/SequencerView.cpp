@@ -7,7 +7,6 @@
 
 namespace GigaSeq
 {
-
     namespace
     {
         constexpr uint16_t kBlack = 0x0000;
@@ -23,21 +22,36 @@ namespace GigaSeq
 
     void SequencerView::drawStaticLayout()
     {
-        if (!display_)
+        if (!display_ || disable)
         {
             return;
         }
 
         display_->setTextSize(kHeaderTextSize);
+        display_->fillRect(0, 0, kSequenceNameWidth, kHeaderHeight, kBlack);
         display_->setCursor(0, 0);
-        display_->print("Sequence 01");
+        display_->print("Sequence");
 
         updatePosition(1, 1);
     }
 
+    void SequencerView::updateSequenceName(const char *name)
+    {
+        if (!display_ || disable)
+        {
+            return;
+        }
+
+        display_->fillRect(0, 0, kSequenceNameWidth, kHeaderHeight, kBlack);
+        display_->setTextSize(kHeaderTextSize);
+        display_->setTextColor(kWhite);
+        display_->setCursor(0, 0);
+        display_->print(name ? name : "");
+    }
+
     void SequencerView::updatePosition(uint16_t bar, uint8_t beat)
     {
-        if (!display_)
+        if (!display_ || disable)
         {
             return;
         }
@@ -54,7 +68,7 @@ namespace GigaSeq
 
     void SequencerView::drawTrack(uint8_t trackIndex, const char *text, bool state)
     {
-        if (!display_ || trackIndex >= kTrackCount)
+        if (!display_ || trackIndex >= kTrackCount || disable)
         {
             return;
         }
