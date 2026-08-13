@@ -8,8 +8,9 @@
 MyDisplay::MyDisplay() : Adafruit_GFX(480, 800) { }
 
 MyDisplay::~MyDisplay(void) {
-  if (buffer)
+  if (buffer) {
     free(buffer);
+    }
 }
 
 static int currentBand = 0;
@@ -66,22 +67,21 @@ void MyDisplay::endWrite() {
 }
 
 void MyDisplay::drawPixel(int16_t x, int16_t y, uint16_t color) {
-  if (hasBuffer()) {
     if ((x < 0) || (y < 0) || (x >= _width) || (y >= _height))
-      return;
+        return;
 
     int16_t t;
     switch (rotation) {
-      case 1:
+        case 1:
         t = x;
         x = WIDTH - 1 - y;
         y = t;
         break;
-      case 2:
+        case 2:
         x = WIDTH - 1 - x;
         y = HEIGHT - 1 - y;
         break;
-      case 3:
+        case 3:
         t = x;
         x = y;
         y = HEIGHT - 1 - t;
@@ -89,7 +89,6 @@ void MyDisplay::drawPixel(int16_t x, int16_t y, uint16_t color) {
     }
 
     buffer[x + y * WIDTH] = color;
-  }
 }
 
 uint16_t MyDisplay::getPixel(int16_t x, int16_t y) {
@@ -114,35 +113,32 @@ uint16_t MyDisplay::getPixel(int16_t x, int16_t y) {
 }
 
 uint16_t MyDisplay::getRawPixel(int16_t x, int16_t y) {
-  if ((x < 0) || (y < 0) || (x >= WIDTH) || (y >= HEIGHT))
+  if ((x < 0) || (y < 0) || (x >= WIDTH) || (y >= HEIGHT)) {
     return 0;
-  if (hasBuffer()) {
-    return buffer[x + y * WIDTH];
-  }
-  return 0;
+    } else   return buffer[x + y * WIDTH];
+
 }
 
 void MyDisplay::fillScreen(uint16_t color) {
-  if (hasBuffer()) {
-	startWrite();	// PR #3
     uint8_t hi = color >> 8, lo = color & 0xFF;
     if (hi == lo) {
       memset(buffer, lo, WIDTH * HEIGHT * 2);
     } else {
       uint32_t i, pixels = WIDTH * HEIGHT;
-      for (i = 0; i < pixels; i++)
+      for (i = 0; i < pixels; i++) {
         buffer[i] = color;
+        }
     }
-    //endWrite();		// PR #3
-  }
+
 }
 
 void MyDisplay::byteSwap(void) {
-  if (hasBuffer()) {
+
     uint32_t i, pixels = WIDTH * HEIGHT;
-    for (i = 0; i < pixels; i++)
+    for (i = 0; i < pixels; i++) {
       buffer[i] = __builtin_bswap16(buffer[i]);
-  }
+      }
+
 }
 
 void MyDisplay::drawFastVLine(int16_t x, int16_t y, int16_t h,
@@ -239,23 +235,21 @@ void MyDisplay::drawFastHLine(int16_t x, int16_t y, int16_t w,
 
 void MyDisplay::drawFastRawVLine(int16_t x, int16_t y, int16_t h,
                                        uint16_t color) {
-  startWrite();
+
   // x & y already in raw (rotation 0) coordinates, no need to transform.
   uint16_t *buffer_ptr = buffer + y * WIDTH + x;
   for (int16_t i = 0; i < h; i++) {
     (*buffer_ptr) = color;
     buffer_ptr += WIDTH;
   }
-  //endWrite();
+
 }
 
 void MyDisplay::drawFastRawHLine(int16_t x, int16_t y, int16_t w,
                                        uint16_t color) {
-  startWrite();
   // x & y already in raw (rotation 0) coordinates, no need to transform.
   uint32_t buffer_index = y * WIDTH + x;
   for (uint32_t i = buffer_index; i < buffer_index + w; i++) {
     buffer[i] = color;
   }
-  //endWrite();
 }

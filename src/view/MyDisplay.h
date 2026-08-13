@@ -26,13 +26,6 @@ class MyDisplay : public Adafruit_GFX {
     void drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color);
     uint16_t getPixel(int16_t x, int16_t y);
 
-    uint16_t *hasBuffer(void) {
-      if (!buffer) {
-        begin();
-      }
-      return buffer;
-    }
-
     void endWrite();
 
     uint16_t color565(uint8_t red, uint8_t green, uint8_t blue) {
