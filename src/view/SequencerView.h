@@ -27,7 +27,7 @@ namespace GigaSeq
         static constexpr uint8_t kCharsPerLine = 9;
         static constexpr uint8_t kHeaderTextSize = 5;
         static constexpr int kPositionX = kWidth / 2;
-        static constexpr int kPositionWidth = 200;
+        static constexpr int kPositionWidth = 210;
         static constexpr int kHeaderHeight = 40;
 
         const char *trackLabels_[kTrackCount] = {};

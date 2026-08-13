@@ -3,13 +3,43 @@
 #include "clock/Clock.h"
 #include "midi/MidiInOut.h"
 #include "view/SequencerView.h"
+#include "hid/Switch.h"
+#include "task/TimedTask.h"
 
 using namespace GigaSeq;
+
+unsigned long currentTime = 0;
+
+#define PUSH_PEDAL 2
+
+#define PUSH_PLAY 43
+#define PUSH_NEXT 45
+#define PUSH_PREV 47
+#define PUSH_SONG 49
+#define PUSH_MODE 51
+#define TOGGLE_SCENE 53
+
+Switch pushPlay(PUSH_PLAY);
+Switch pushNext(PUSH_NEXT);
+Switch pushPrev(PUSH_PREV);
+Switch pushSong(PUSH_SONG);
+Switch pushMode(PUSH_MODE);
 
 GigaDisplay_GFX display;
 TransportClock transportClock;
 MidiInOut midiInOut;
 SequencerView sequencerView;
+
+void inputCheckCallback() {
+    if (pushPlay.debounce()) {
+        if (pushPlay.getState()) {
+            transportClock.toggleStartStop();
+        }
+        Serial.write(pushPlay.getState());
+    }
+}
+
+TimedTask inputCheck(20, inputCheckCallback);
 
 void onClockTick(uint32_t tick, void *context)
 {
@@ -38,7 +68,9 @@ void onClockTick(uint32_t tick, void *context)
 }
 
 void setup()
-{
+{   
+    Serial.begin(9600);
+
     delay(100);
 
     display.begin();
@@ -58,15 +90,15 @@ void setup()
     transportClock.start();
 
     pinMode(D2, INPUT_PULLUP);
+
+    Serial.write("hello world");
 }
 
 void loop()
 {
-    bool change = digitalRead(D2) == LOW;
+    currentTime = millis();
 
-    if (change) {
-        transportClock.toggleStartStop();
-    }
+    inputCheck.update(currentTime);
 
     transportClock.run();
     midiInOut.read();

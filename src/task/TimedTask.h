@@ -1,0 +1,25 @@
+#pragma once
+
+class TimedTask {
+private:
+    unsigned long interval;
+    unsigned long lastRun;
+    void (*callback)();
+
+public:
+    TimedTask(unsigned long ms, void (*cb)()) {
+        interval = ms;
+        callback = cb;
+        lastRun = 0;
+    }
+
+    void update(unsigned long& currentTime) {
+        if (currentTime - lastRun >= interval) {
+            lastRun = currentTime;
+            if (callback) callback();
+        }
+    }
+
+    void setInterval(unsigned long ms) { interval = ms; }
+    void setCallback(void (*cb)()) { callback = cb; }
+};

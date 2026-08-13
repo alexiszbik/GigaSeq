@@ -6,7 +6,7 @@ namespace GigaSeq {
 
 void MidiInOut::begin(uint8_t channel) {
     Serial1.begin(31250);
-    Serial.begin(9600);
+    
     MIDI.begin(channel);
 }
 
