@@ -266,21 +266,84 @@ SequencePool SequencePool::createDefault(MidiInOut& midi, Logger& logger)
 {
     SequencePool pool(midi, logger);
 
-    Song intro("Intro");
-    intro.add(SequenceFactory::createSequenceOne(4));
-    intro.add(SequenceFactory::createSequenceTwo(4));
-    pool.add(std::move(intro));
+    using Builder = Sequence (*)(int);
+    auto addSong = [&pool](const char* name, std::vector<Builder> builders) {
+        Song song(name);
+        for (auto& b : builders) {
+            song.add(b(4));
+        }
+        pool.add(std::move(song));
+    };
 
-    Song mainSong("Main");
-    mainSong.add(SequenceFactory::createSequenceThree(4));
-    mainSong.add(SequenceFactory::createSequenceFour(4));
-    mainSong.add(SequenceFactory::createSequenceFive(4));
-    pool.add(std::move(mainSong));
+    addSong("Intro", {
+        SequenceFactory::createSequenceOne,
+        SequenceFactory::createSequenceTwo,
+    });
+    addSong("Main", {
+        SequenceFactory::createSequenceThree,
+        SequenceFactory::createSequenceFour,
+        SequenceFactory::createSequenceFive,
+    });
+    addSong("Outro", {
+        SequenceFactory::createSequenceSix,
+        SequenceFactory::createSequenceSeven,
+    });
 
-    Song outro("Outro");
-    outro.add(SequenceFactory::createSequenceSix(4));
-    outro.add(SequenceFactory::createSequenceSeven(2));
-    pool.add(std::move(outro));
+    addSong("Intro 2", {
+        SequenceFactory::createSequenceOne,
+        SequenceFactory::createSequenceTwo,
+    });
+    addSong("Main 2", {
+        SequenceFactory::createSequenceThree,
+        SequenceFactory::createSequenceFour,
+        SequenceFactory::createSequenceFive,
+    });
+    addSong("Outro 2", {
+        SequenceFactory::createSequenceSix,
+        SequenceFactory::createSequenceSeven,
+    });
+
+    addSong("Intro 3", {
+        SequenceFactory::createSequenceOne,
+        SequenceFactory::createSequenceTwo,
+    });
+    addSong("Main 3", {
+        SequenceFactory::createSequenceThree,
+        SequenceFactory::createSequenceFour,
+        SequenceFactory::createSequenceFive,
+    });
+    addSong("Outro 3", {
+        SequenceFactory::createSequenceSix,
+        SequenceFactory::createSequenceSeven,
+    });
+
+    addSong("Intro 4", {
+        SequenceFactory::createSequenceOne,
+        SequenceFactory::createSequenceTwo,
+    });
+    addSong("Main 4", {
+        SequenceFactory::createSequenceThree,
+        SequenceFactory::createSequenceFour,
+        SequenceFactory::createSequenceFive,
+    });
+    addSong("Outro 4", {
+        SequenceFactory::createSequenceSix,
+        SequenceFactory::createSequenceSeven,
+    });
+
+    addSong("Intro 5", {
+        SequenceFactory::createSequenceOne,
+        SequenceFactory::createSequenceTwo,
+    });
+    addSong("Main 5", {
+        SequenceFactory::createSequenceThree,
+        SequenceFactory::createSequenceFour,
+        SequenceFactory::createSequenceFive,
+    });
+    addSong("Outro 5", {
+        SequenceFactory::createSequenceSix,
+        SequenceFactory::createSequenceSeven,
+    });
 
     return pool;
 }

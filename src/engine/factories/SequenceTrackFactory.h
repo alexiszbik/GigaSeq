@@ -17,4 +17,22 @@ public:
     static SequenceTrack createPadChords(tick_t lengthInTicks);
     static SequenceTrack createSynthStabs(tick_t lengthInTicks);
     static SequenceTrack createClapBackbeat(tick_t lengthInTicks);
+
+    // Additional tracks for limit testing
+    static SequenceTrack createOpenHat(tick_t lengthInTicks);
+    static SequenceTrack createTomFill(tick_t lengthInTicks);
+    static SequenceTrack createRimshot(tick_t lengthInTicks);
+    static SequenceTrack createCymbalRide(tick_t lengthInTicks);
+    static SequenceTrack createTambourine(tick_t lengthInTicks);
+    static SequenceTrack createShaker(tick_t lengthInTicks);
+    static SequenceTrack createClave(tick_t lengthInTicks);
+    static SequenceTrack createCowbell(tick_t lengthInTicks);
+    static SequenceTrack createChordStab(tick_t lengthInTicks);
+    static SequenceTrack createPluck(tick_t lengthInTicks);
+    static SequenceTrack createLead(tick_t lengthInTicks);
+    static SequenceTrack createSubBass(tick_t lengthInTicks);
+    static SequenceTrack createPadSwells(tick_t lengthInTicks);
+    static SequenceTrack createFxBleep(tick_t lengthInTicks);
+    static SequenceTrack createArpFast(tick_t lengthInTicks);
+    static SequenceTrack createGtrChug(tick_t lengthInTicks);
 };

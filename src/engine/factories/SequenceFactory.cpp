@@ -28,18 +28,46 @@ Sequence SequenceFactory::createSequenceOne(int barCount)
     return buildSequence(
         2, 7, 1, "Kick/Hat12345",
         {
-            SequenceTrackFactory::createKickSnareWithHats, 
-            SequenceTrackFactory::createCMaj7Arpeggio
+            SequenceTrackFactory::createKickSnareWithHats,
+            SequenceTrackFactory::createCMaj7Arpeggio,
+            SequenceTrackFactory::createFourOnFloorKick,
+            SequenceTrackFactory::createHiHatPattern,
+            SequenceTrackFactory::createOpenHat,
+            SequenceTrackFactory::createSnareBackbeat,
+            SequenceTrackFactory::createClapBackbeat,
+            SequenceTrackFactory::createBassLine,
+            SequenceTrackFactory::createMelodicBass,
+            SequenceTrackFactory::createSubBass,
+            SequenceTrackFactory::createPadChords,
+            SequenceTrackFactory::createPadSwells,
+            SequenceTrackFactory::createSynthStabs,
+            SequenceTrackFactory::createChordStab,
+            SequenceTrackFactory::createPluck,
+            SequenceTrackFactory::createLead,
         });
 }
 
 Sequence SequenceFactory::createSequenceTwo(int barCount)
 {
     return buildSequence(
-        barCount, 4, 2, "F on Flour", 
+        barCount, 4, 2, "F on Flour",
         {
             SequenceTrackFactory::createCMaj7Arpeggio,
-            SequenceTrackFactory::createFourOnFloorKick
+            SequenceTrackFactory::createFourOnFloorKick,
+            SequenceTrackFactory::createKickSnare,
+            SequenceTrackFactory::createKickSnareWithHats,
+            SequenceTrackFactory::createHiHatPattern,
+            SequenceTrackFactory::createOpenHat,
+            SequenceTrackFactory::createCymbalRide,
+            SequenceTrackFactory::createTambourine,
+            SequenceTrackFactory::createShaker,
+            SequenceTrackFactory::createRimshot,
+            SequenceTrackFactory::createCowbell,
+            SequenceTrackFactory::createBassLine,
+            SequenceTrackFactory::createMelodicBass,
+            SequenceTrackFactory::createSubBass,
+            SequenceTrackFactory::createSynthStabs,
+            SequenceTrackFactory::createArpFast,
         });
 }
 
@@ -49,7 +77,21 @@ Sequence SequenceFactory::createSequenceThree(int barCount)
         barCount, 4, 0, "Am7Hi-Hat",
         {
             SequenceTrackFactory::createAm7Arpeggio,
-            SequenceTrackFactory::createHiHatPattern
+            SequenceTrackFactory::createHiHatPattern,
+            SequenceTrackFactory::createFourOnFloorKick,
+            SequenceTrackFactory::createKickSnare,
+            SequenceTrackFactory::createSnareBackbeat,
+            SequenceTrackFactory::createClapBackbeat,
+            SequenceTrackFactory::createOpenHat,
+            SequenceTrackFactory::createCymbalRide,
+            SequenceTrackFactory::createTambourine,
+            SequenceTrackFactory::createShaker,
+            SequenceTrackFactory::createClave,
+            SequenceTrackFactory::createTomFill,
+            SequenceTrackFactory::createMelodicBass,
+            SequenceTrackFactory::createSubBass,
+            SequenceTrackFactory::createPadChords,
+            SequenceTrackFactory::createLead,
         });
 }
 
@@ -59,7 +101,21 @@ Sequence SequenceFactory::createSequenceFour(int barCount)
         barCount, 4, 0, "Pads",
         {
             SequenceTrackFactory::createPadChords,
-            SequenceTrackFactory::createKickSnare
+            SequenceTrackFactory::createKickSnare,
+            SequenceTrackFactory::createPadSwells,
+            SequenceTrackFactory::createFourOnFloorKick,
+            SequenceTrackFactory::createHiHatPattern,
+            SequenceTrackFactory::createSnareBackbeat,
+            SequenceTrackFactory::createClapBackbeat,
+            SequenceTrackFactory::createOpenHat,
+            SequenceTrackFactory::createShaker,
+            SequenceTrackFactory::createTambourine,
+            SequenceTrackFactory::createBassLine,
+            SequenceTrackFactory::createMelodicBass,
+            SequenceTrackFactory::createSubBass,
+            SequenceTrackFactory::createChordStab,
+            SequenceTrackFactory::createSynthStabs,
+            SequenceTrackFactory::createFxBleep,
         });
 }
 
@@ -69,7 +125,21 @@ Sequence SequenceFactory::createSequenceFive(int barCount)
         barCount, 4, 1, "Melodic",
         {
             SequenceTrackFactory::createMelodicBass,
-            SequenceTrackFactory::createSnareBackbeat
+            SequenceTrackFactory::createSnareBackbeat,
+            SequenceTrackFactory::createFourOnFloorKick,
+            SequenceTrackFactory::createHiHatPattern,
+            SequenceTrackFactory::createOpenHat,
+            SequenceTrackFactory::createClapBackbeat,
+            SequenceTrackFactory::createCymbalRide,
+            SequenceTrackFactory::createShaker,
+            SequenceTrackFactory::createRimshot,
+            SequenceTrackFactory::createClave,
+            SequenceTrackFactory::createSubBass,
+            SequenceTrackFactory::createLead,
+            SequenceTrackFactory::createPluck,
+            SequenceTrackFactory::createChordStab,
+            SequenceTrackFactory::createPadChords,
+            SequenceTrackFactory::createArpFast,
         });
 }
 
@@ -79,7 +149,21 @@ Sequence SequenceFactory::createSequenceSix(int barCount)
         barCount, 4, 2, "Stabs",
         {
             SequenceTrackFactory::createSynthStabs,
-            SequenceTrackFactory::createKickSnareWithHats
+            SequenceTrackFactory::createKickSnareWithHats,
+            SequenceTrackFactory::createFourOnFloorKick,
+            SequenceTrackFactory::createHiHatPattern,
+            SequenceTrackFactory::createSnareBackbeat,
+            SequenceTrackFactory::createClapBackbeat,
+            SequenceTrackFactory::createOpenHat,
+            SequenceTrackFactory::createTambourine,
+            SequenceTrackFactory::createShaker,
+            SequenceTrackFactory::createCowbell,
+            SequenceTrackFactory::createBassLine,
+            SequenceTrackFactory::createMelodicBass,
+            SequenceTrackFactory::createSubBass,
+            SequenceTrackFactory::createChordStab,
+            SequenceTrackFactory::createLead,
+            SequenceTrackFactory::createGtrChug,
         });
 }
 
@@ -89,6 +173,20 @@ Sequence SequenceFactory::createSequenceSeven(int barCount)
         barCount, 4, 0, "Clap",
         {
             SequenceTrackFactory::createClapBackbeat,
-            SequenceTrackFactory::createMelodicBass
+            SequenceTrackFactory::createMelodicBass,
+            SequenceTrackFactory::createFourOnFloorKick,
+            SequenceTrackFactory::createKickSnare,
+            SequenceTrackFactory::createHiHatPattern,
+            SequenceTrackFactory::createOpenHat,
+            SequenceTrackFactory::createCymbalRide,
+            SequenceTrackFactory::createRimshot,
+            SequenceTrackFactory::createTambourine,
+            SequenceTrackFactory::createShaker,
+            SequenceTrackFactory::createClave,
+            SequenceTrackFactory::createTomFill,
+            SequenceTrackFactory::createSubBass,
+            SequenceTrackFactory::createPadChords,
+            SequenceTrackFactory::createPadSwells,
+            SequenceTrackFactory::createFxBleep,
         });
 }
