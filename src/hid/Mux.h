@@ -16,7 +16,6 @@ public:
 
 private:
     void selectChannel(uint8_t channel);
-    bool readChannel(uint8_t channel);
 
     uint8_t sigPin_;
     uint8_t selectPins_[4];
