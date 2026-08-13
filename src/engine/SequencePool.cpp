@@ -179,6 +179,7 @@ void SequencePool::logCurrentSequenceSwitch()
         currentSong().size(),
         current().name(),
         current().trackCount());
+
     logger_.info(buffer);
 }
 
@@ -201,7 +202,7 @@ void SequencePool::advanceToNext()
     }
 
     current().reset();
-
+    //TODO : use #define
     logCurrentSequenceSwitch();
 }
 

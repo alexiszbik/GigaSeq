@@ -206,7 +206,7 @@ SequenceTrack SequenceTrackFactory::createBassLine(tick_t lengthInTicks)
 
 SequenceTrack SequenceTrackFactory::createMelodicBass(tick_t lengthInTicks)
 {
-    SequenceTrack track("Melodic Bass", 0);
+    SequenceTrack track("Melodic Bass", MidiChannel::kModularA);
 
     SequenceDesc desc;
     desc.notes = {{36}, {36}, {43}, {41}, {38}, {38}, {43}, {41}};

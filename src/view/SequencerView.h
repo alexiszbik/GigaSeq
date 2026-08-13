@@ -31,7 +31,7 @@ namespace GigaSeq
         static constexpr int kPositionWidth = 280;
         static constexpr int kHeaderHeight = 40;
 
-        bool disable = true;
+        bool disable = false;
     };
 
 } // namespace GigaSeq

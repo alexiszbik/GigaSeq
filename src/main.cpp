@@ -40,8 +40,23 @@ ArduinoLogger logger;
 SequencePool sequencePool = SequencePool::createDefault(midiBridge, logger);
 SequencerView sequencerView;
 
-void refreshViewFromPool() {
-    const Sequence& sequence = sequencePool.current();
+uint8_t midiClockCounter = 0;
+uint8_t beatTickCounter = 0;
+
+void resetTickCounters() {
+    midiClockCounter = 0;
+    beatTickCounter = 0;
+}
+
+Sequence* displayedSequence = nullptr;
+
+void refreshViewFromPool(bool force = false) {
+    Sequence& sequence = sequencePool.current();
+    if (!force && displayedSequence == &sequence) {
+        return;
+    }
+    displayedSequence = &sequence;
+
     sequencerView.updateSequenceName(sequence.name());
 
     for (uint8_t trackIndex = 0; trackIndex < 16; ++trackIndex) {
@@ -56,7 +71,8 @@ void refreshViewFromPool() {
 
 void startTransport() {
     sequencePool.resetCurrent();
-    refreshViewFromPool();
+    resetTickCounters();
+    refreshViewFromPool(true);
     transportClock.start();
     midiBridge.sendStart();
 }
@@ -109,20 +125,28 @@ TimedTask inputCheck(20, inputCheckCallback);
 TimedTask muxCheck(1, muxCallback);
 
 void onClockTick(uint32_t tick, void* context) {
+    (void)tick;
     (void)context;
 
     sequencePool.processTick();
 
-    if (tick % 4 == 0) {
+    if (midiClockCounter == 0) {
         midiBridge.sendClock();
     }
-/*
-    if (tick % 96 == 0) {
+    midiClockCounter++;
+    if (midiClockCounter >= 4) {
+        midiClockCounter = 0;
+    }
+
+    if (beatTickCounter == 0) {
         sequencerView.updatePosition(
             transportClock.getBar(),
             transportClock.getBeat());
     }
-*/
+    beatTickCounter++;
+    if (beatTickCounter >= TransportClock::kPpqn) {
+        beatTickCounter = 0;
+    }
 }
 
 void setup() {
