@@ -8,7 +8,7 @@
 SequenceTrack::SequenceTrack(const char* name, uint8_t channel)
     : channel_(channel)
 {
-    StringHelper::copyName(name_, name);
+    StringHelper::copyName(name_, name, kNameMaxLength + 1);
 }
 
 void SequenceTrack::attachMidi(MidiInOut& midi)

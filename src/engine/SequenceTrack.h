@@ -17,6 +17,8 @@ using MuteChangedCallback = void (*)(std::size_t trackIndex, bool muted, void* c
 class SequenceTrack
 {
 public:
+    static constexpr std::size_t kNameMaxLength = 30;
+
     SequenceTrack(const char* name = "", uint8_t channel = 0);
 
     const char* name() const noexcept { return name_; }
@@ -65,7 +67,7 @@ private:
     void tickActiveNotes();
     void notifyMuteChanged();
 
-    StringHelper::NameBuffer name_ = {};
+    char name_[kNameMaxLength + 1] = {};
     uint8_t channel_ = 0;
     std::size_t trackIndex_ = 0;
 
