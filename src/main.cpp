@@ -5,6 +5,7 @@
 #include "view/SequencerView.h"
 #include "hid/Switch.h"
 #include "task/TimedTask.h"
+#include "hid/Mux.h"
 
 using namespace GigaSeq;
 
@@ -19,11 +20,15 @@ unsigned long currentTime = 0;
 #define PUSH_MODE 51
 #define TOGGLE_SCENE 53
 
+Switch pushPedal(PUSH_PEDAL);
+
 Switch pushPlay(PUSH_PLAY);
 Switch pushNext(PUSH_NEXT);
 Switch pushPrev(PUSH_PREV);
 Switch pushSong(PUSH_SONG);
 Switch pushMode(PUSH_MODE);
+
+Mux mux(41,33,35,37,39);
 
 GigaDisplay_GFX display;
 TransportClock transportClock;
@@ -39,7 +44,21 @@ void inputCheckCallback() {
     }
 }
 
-TimedTask inputCheck(20, inputCheckCallback);
+void muxCallback() {
+    mux.readNext();
+
+    for (byte i = 0; i < 16; i++) {
+        if (mux.hasChanged(i)) {
+            bool state = mux.getValue(i);
+            if (state) {
+                Serial.println(i);
+            }
+        }
+    }
+}
+
+TimedTask inputCheck(200, inputCheckCallback);
+TimedTask muxCheck(1, muxCallback);
 
 void onClockTick(uint32_t tick, void *context)
 {
@@ -52,12 +71,10 @@ void onClockTick(uint32_t tick, void *context)
         if (state)
         {
             midiInOut.sendNoteOn(60, 127, 4);
-            Serial.println("note on");
         }
         else
         {
             midiInOut.sendNoteOff(60, 127, 4);
-            Serial.println("note off");
         }
     }
 
@@ -65,6 +82,7 @@ void onClockTick(uint32_t tick, void *context)
             transportClock.getBar(),
             transportClock.getBeat(),
             transportClock.getTick());
+
 }
 
 void setup()
@@ -76,20 +94,20 @@ void setup()
     display.begin();
     display.setRotation(1);
 
+    mux.begin();
+
     sequencerView.begin(display);
     sequencerView.drawStaticLayout();
-
+    
     for (uint8_t trackIndex = 0; trackIndex < 16; trackIndex++)
     {
         sequencerView.setTrackLabel(trackIndex, "Hello World of Darkness!");
     }
-
+    
     midiInOut.begin();
     transportClock.begin(120);
     transportClock.setOnTick(onClockTick);
     transportClock.start();
-
-    pinMode(D2, INPUT_PULLUP);
 
     Serial.write("hello world");
 }
@@ -99,6 +117,7 @@ void loop()
     currentTime = millis();
 
     inputCheck.update(currentTime);
+    muxCheck.update(currentTime);
 
     transportClock.run();
     midiInOut.read();
