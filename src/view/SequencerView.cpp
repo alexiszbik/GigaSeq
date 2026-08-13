@@ -32,10 +32,10 @@ namespace GigaSeq
         display_->setCursor(0, 0);
         display_->print("Sequence 01");
 
-        updatePosition(1, 1, 0);
+        updatePosition(1, 1);
     }
 
-    void SequencerView::updatePosition(uint16_t bar, uint8_t beat, uint8_t tick)
+    void SequencerView::updatePosition(uint16_t bar, uint8_t beat)
     {
         if (!display_)
         {
@@ -43,7 +43,7 @@ namespace GigaSeq
         }
 
         char positionText[16];
-        snprintf(positionText, sizeof(positionText), "%u.%u.%02u", bar, beat, tick);
+        snprintf(positionText, sizeof(positionText), "%u.%u", bar, beat);
 
         display_->fillRect(kPositionX, 0, kPositionWidth, kHeaderHeight, kBlack);
         display_->setTextSize(kHeaderTextSize);

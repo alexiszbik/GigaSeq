@@ -4,6 +4,15 @@ Switch::Switch(byte pin) : pin_(pin) {
     pinMode(pin_, INPUT_PULLUP);
 }
 
+bool Switch::isPushed() {
+    if (debounce()) {
+        if (getState()) {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool Switch::debounce() {
     bool currentState = digitalRead(pin_) == HIGH;
     bool previousState = flags_ & FLAG_STATE;

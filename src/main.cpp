@@ -38,11 +38,8 @@ SequencerView sequencerView;
 bool seqState[16];
 
 void inputCheckCallback() {
-    if (pushPlay.debounce()) {
-        if (pushPlay.getState()) {
-            transportClock.toggleStartStop();
-        }
-        Serial.write(pushPlay.getState());
+    if (pushPlay.isPushed()) {
+        transportClock.toggleStartStop();
     }
 }
 
@@ -52,7 +49,6 @@ void muxCallback() {
     uint16_t pressed = mux.getChangedStates() & mux.getStates();
     for (uint8_t i = 0; pressed; ++i, pressed >>= 1) { //continue when pressed still got 1, each loop will move bits to the right
         if (pressed & 1) {
-            Serial.println(i);
             seqState[i] = ! seqState[i];
             sequencerView.drawTrack(i, "Hello World of Darkness!", seqState[i]);
         }
@@ -82,10 +78,7 @@ void onClockTick(uint32_t tick, void *context)
         }
     }
 
-    sequencerView.updatePosition(
-            transportClock.getBar(),
-            transportClock.getBeat(),
-            transportClock.getTick());
+    sequencerView.updatePosition(transportClock.getBar(), transportClock.getBeat());
 
 }
 

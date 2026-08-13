@@ -6,6 +6,8 @@ class Switch {
 public:
     explicit Switch(byte pin);
 
+    bool isPushed();
+
     bool debounce();
     bool getState();
 

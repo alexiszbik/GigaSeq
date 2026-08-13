@@ -10,7 +10,7 @@ namespace GigaSeq
     public:
         void begin(GigaDisplay_GFX &display);
         void drawStaticLayout();
-        void updatePosition(uint16_t bar, uint8_t beat, uint8_t tick);
+        void updatePosition(uint16_t bar, uint8_t beat);
         void drawTrack(uint8_t trackIndex, const char *text, bool state);
 
     private:
