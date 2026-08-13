@@ -13,23 +13,53 @@ MyDisplay::~MyDisplay(void) {
     }
 }
 
-static int currentBand = 0;
-
 #ifdef __MBED__
 void MyDisplay::refresh_if_needed() {
   while (1) {
     rtos::ThisThread::flags_wait_any(0x1);
 
-    const uint32_t bandHeight = 16;
-    uint32_t y = currentBand * bandHeight;
-    uint16_t* src = buffer + y * 480;
-    void* dst = (uint16_t*)dsi_getActiveFrameBuffer() + y * 480;
-    dsi_lcdDrawImage(src, dst, 480, bandHeight, DMA2D_INPUT_RGB565);
+    int16_t y1 = 0, y2 = -1;
+    bool doDraw = false;
 
-    currentBand++;
-    if (currentBand * bandHeight > 800) { currentBand = 0;}
+    if (sweepActive) {
+      // Continue an ongoing band sweep: one band per wake.
+      y1 = sweepY;
+      y2 = sweepY + bandHeight - 1;
+      if (y2 > sweepYEnd) y2 = sweepYEnd;
+      sweepY += bandHeight;
+      if (sweepY > sweepYEnd) sweepActive = false;
+      doDraw = true;
+    } else if (dirty) {
+      y1 = dirtyY1;
+      y2 = dirtyY2;
+      dirty = false;
+      if (y1 < 0) y1 = 0;
+      if (y2 >= HEIGHT) y2 = HEIGHT - 1;
 
-    delay(10);
+      const int16_t h = y2 - y1 + 1;
+      if (h <= singleBlitThreshold) {
+        // Small update: blit the whole band in one go.
+        doDraw = true;
+      } else {
+        // Large update: spread over multiple wakes, one band at a time.
+        sweepActive = true;
+        sweepY = y1 + bandHeight;
+        sweepYEnd = y2;
+        y2 = y1 + bandHeight - 1;
+        if (y2 > sweepYEnd) y2 = sweepYEnd;
+        doDraw = true;
+      }
+    }
+
+    if (doDraw) {
+      // Blit full-width horizontal bands: dsi_lcdDrawImage hardcodes
+      // InputOffset = 0, which is only valid when xSize == lcd_x_size (480).
+      // Partial-width blits would skew rows into diagonals.
+      const uint32_t bh = y2 - y1 + 1;
+      uint16_t* src = buffer + y1 * WIDTH;
+      void* dst = (uint16_t*)dsi_getActiveFrameBuffer() + y1 * WIDTH;
+      dsi_lcdDrawImage(src, dst, WIDTH, bh, DMA2D_INPUT_RGB565);
+    }
   }
 }
 #endif
@@ -60,10 +90,41 @@ void MyDisplay::begin() {
 
 void MyDisplay::endWrite() {
 #ifdef __MBED__
-    _refresh_thd->flags_set(0x1);
+    if (sweepActive || dirty) {
+        _refresh_thd->flags_set(0x1);
+    }
 #elif defined(__ZEPHYR__)
      this->display->drawBuffer(0, 0, buffer);
 #endif
+}
+
+void MyDisplay::markDirty(int16_t x, int16_t y) {
+    if (!dirty) {
+        dirtyX1 = dirtyX2 = x;
+        dirtyY1 = dirtyY2 = y;
+        dirty = true;
+    } else {
+        if (x < dirtyX1) dirtyX1 = x;
+        if (x > dirtyX2) dirtyX2 = x;
+        if (y < dirtyY1) dirtyY1 = y;
+        if (y > dirtyY2) dirtyY2 = y;
+    }
+}
+
+void MyDisplay::markDirtyRect(int16_t x, int16_t y, int16_t w, int16_t h) {
+    if (w <= 0 || h <= 0) return;
+    const int16_t x2 = x + w - 1;
+    const int16_t y2 = y + h - 1;
+    if (!dirty) {
+        dirtyX1 = x;  dirtyY1 = y;
+        dirtyX2 = x2; dirtyY2 = y2;
+        dirty = true;
+    } else {
+        if (x  < dirtyX1) dirtyX1 = x;
+        if (y  < dirtyY1) dirtyY1 = y;
+        if (x2 > dirtyX2) dirtyX2 = x2;
+        if (y2 > dirtyY2) dirtyY2 = y2;
+    }
 }
 
 void MyDisplay::drawPixel(int16_t x, int16_t y, uint16_t color) {
@@ -89,6 +150,7 @@ void MyDisplay::drawPixel(int16_t x, int16_t y, uint16_t color) {
     }
 
     buffer[x + y * WIDTH] = color;
+    markDirty(x, y);
 }
 
 uint16_t MyDisplay::getPixel(int16_t x, int16_t y) {
@@ -129,6 +191,7 @@ void MyDisplay::fillScreen(uint16_t color) {
         buffer[i] = color;
         }
     }
+    markDirtyRect(0, 0, WIDTH, HEIGHT);
 
 }
 
@@ -138,6 +201,7 @@ void MyDisplay::byteSwap(void) {
     for (i = 0; i < pixels; i++) {
       buffer[i] = __builtin_bswap16(buffer[i]);
       }
+    markDirtyRect(0, 0, WIDTH, HEIGHT);
 
 }
 
@@ -242,6 +306,7 @@ void MyDisplay::drawFastRawVLine(int16_t x, int16_t y, int16_t h,
     (*buffer_ptr) = color;
     buffer_ptr += WIDTH;
   }
+  markDirtyRect(x, y, 1, h);
 
 }
 
@@ -252,4 +317,5 @@ void MyDisplay::drawFastRawHLine(int16_t x, int16_t y, int16_t w,
   for (uint32_t i = buffer_index; i < buffer_index + w; i++) {
     buffer[i] = color;
   }
+  markDirtyRect(x, y, w, 1);
 }

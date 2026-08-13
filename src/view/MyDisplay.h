@@ -39,6 +39,9 @@ class MyDisplay : public Adafruit_GFX {
     uint16_t *buffer = nullptr; ///< Raster data: no longer private, allow subclass access
 
   private:
+    void markDirty(int16_t x, int16_t y);
+    void markDirtyRect(int16_t x, int16_t y, int16_t w, int16_t h);
+
     Arduino_Video* display;
 #ifdef __MBED__
     rtos::Thread* _refresh_thd;
@@ -46,4 +49,18 @@ class MyDisplay : public Adafruit_GFX {
 #endif
     bool buffering = false;
     uint32_t last_refresh = 0;
+
+    // Dirty region in raw buffer coordinates (inclusive bounds)
+    bool dirty = false;
+    int16_t dirtyX1 = 0;
+    int16_t dirtyY1 = 0;
+    int16_t dirtyX2 = 0;
+    int16_t dirtyY2 = 0;
+
+    // Progressive band sweep for large updates
+    static constexpr uint16_t bandHeight = 8;
+    static constexpr uint16_t singleBlitThreshold = 128;
+    bool sweepActive = false;
+    int16_t sweepY = 0;
+    int16_t sweepYEnd = 0;
 };
