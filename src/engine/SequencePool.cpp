@@ -195,7 +195,7 @@ void SequencePool::wireTrackMuteCallbacks()
 
 void SequencePool::notifySequenceChanged()
 {
-    logCurrentSequenceSwitch();
+    //logCurrentSequenceSwitch(); //cost too much on arduino > todo : make a flag for local test
     if (onSequenceChanged_) {
         onSequenceChanged_(onSequenceChangedContext_);
     }
