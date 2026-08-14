@@ -70,17 +70,18 @@ namespace GigaSeq
         ++queueCount_;
     }
 
-    void SequencerView::drawStaticLayout()
-    {
-        ViewAction action;
-        action.type = ViewActionType::DrawStaticLayout;
-        enqueueAction(action);
-    }
-
     void SequencerView::updateSequenceName(const char *name)
     {
         ViewAction action;
         action.type = ViewActionType::UpdateSequenceName;
+        copyActionText(action.text, name);
+        enqueueAction(action);
+    }
+
+    void SequencerView::updateSongName(const char *name)
+    {
+        ViewAction action;
+        action.type = ViewActionType::UpdateSongName;
         copyActionText(action.text, name);
         enqueueAction(action);
     }
@@ -127,8 +128,8 @@ namespace GigaSeq
 
         switch (action.type)
         {
-            case ViewActionType::DrawStaticLayout:
-                executeDrawStaticLayout();
+            case ViewActionType::UpdateSongName:
+                executeUpdateSongName(action.text);
                 break;
             case ViewActionType::UpdateSequenceName:
                 executeUpdateSequenceName(action.text);
@@ -146,23 +147,22 @@ namespace GigaSeq
         return true;
     }
 
-    void SequencerView::executeDrawStaticLayout()
+    void SequencerView::executeUpdateSequenceName(const char *name)
     {
         if (!display_ || disable)
         {
             return;
         }
 
+        display_->fillRect(0, kSequencePosY, kSequenceNameWidth, kHeaderHeight, kBlack);
         display_->setTextSize(kHeaderTextSize);
-        display_->fillRect(0, 0, kSequenceNameWidth, kHeaderHeight, kBlack);
         display_->setTextColor(kWhite, kBlack);
-        display_->setCursor(0, 0);
-        display_->print("Sequence");
-
-        executeUpdatePosition(1, 1);
+        display_->setCursor(0, kSequencePosY);
+        display_->print(name ? name : "");
     }
 
-    void SequencerView::executeUpdateSequenceName(const char *name)
+
+    void SequencerView::executeUpdateSongName(const char *name)
     {
         if (!display_ || disable)
         {

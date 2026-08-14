@@ -29,8 +29,8 @@ public:
     tick_t lengthInTicks() const noexcept;
     tick_t position() const noexcept { return position_; }
 
-    int currentBar() const noexcept { return (position_ + 1) / (beatsPerBar_ * kTicksPerQuarterNote); }
-    int currentBeat() const noexcept { return ((position_ + 1) / kTicksPerQuarterNote) % beatsPerBar_; }
+    int currentBar () const noexcept { return position_ / (beatsPerBar_ * kTicksPerQuarterNote); }
+    int currentBeat () const noexcept { return (position_ / kTicksPerQuarterNote) % beatsPerBar_; }
 
     void attachMidi(MidiInOut& midi);
 

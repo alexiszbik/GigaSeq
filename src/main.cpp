@@ -52,6 +52,8 @@ void refreshViewFromPool() {
     Sequence& sequence = sequencePool.current();
     sequencerView.updateSequenceName(sequence.name());
 
+    sequencerView.updateSongName(sequencePool.currentSong().name());
+
     for (uint8_t trackIndex = 0; trackIndex < 16; ++trackIndex) {
         if (trackIndex < sequence.trackCount()) {
             const SequenceTrack& track = sequence.track(trackIndex);
@@ -149,7 +151,7 @@ void onClockTick(void* context) {
         Sequence& current = sequencePool.current();
         sequencerView.updatePosition(current.currentBar() + 1, current.currentBeat() + 1);
     }
-    
+
     beatTickCounter++;
     if (beatTickCounter >= TransportClock::kPpqn) {
         beatTickCounter = 0;
@@ -167,7 +169,6 @@ void setup() {
     mux.begin();
 
     sequencerView.begin(display);
-    sequencerView.drawStaticLayout();
     refreshViewFromPool();
 
     gigaMidi.begin();

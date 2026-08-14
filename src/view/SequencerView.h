@@ -9,7 +9,7 @@ namespace GigaSeq
     enum class ViewActionType : uint8_t
     {
         None,
-        DrawStaticLayout,
+        UpdateSongName,
         UpdateSequenceName,
         UpdatePosition,
         DrawTrack,
@@ -29,8 +29,8 @@ namespace GigaSeq
     {
     public:
         void begin(MyDisplay &display);
-        void drawStaticLayout();
         void updateSequenceName(const char *name);
+        void updateSongName(const char *name);
         void updatePosition(uint16_t bar, uint8_t beat);
         void drawTrack(uint8_t trackIndex, const char *text, bool state);
 
@@ -40,8 +40,8 @@ namespace GigaSeq
         void enqueueAction(const ViewAction &action);
         void copyActionText(char *dest, const char *src);
 
-        void executeDrawStaticLayout();
         void executeUpdateSequenceName(const char *name);
+        void executeUpdateSongName(const char *name);
         void executeUpdatePosition(uint16_t bar, uint8_t beat);
         void executeDrawTrack(uint8_t trackIndex, const char *text, bool state);
 
@@ -52,14 +52,20 @@ namespace GigaSeq
         static constexpr int kTracksHeight = 380;
         static constexpr int kColCount = 4;
         static constexpr int kTrackCount = 16;
+
         static constexpr uint8_t kTrackTextSize = 3;
         static constexpr uint8_t kCharsPerLine = 10;
+
         static constexpr uint8_t kHeaderTextSize = 5;
         static constexpr int kHeaderCaracSize = 30;
+
+        static constexpr int kHeaderHeight = 40;
+        static constexpr int kSequencePosY = kHeaderHeight + 4;
+        
         static constexpr int kSequenceNameWidth = 12 * kHeaderCaracSize;
         static constexpr int kPositionX = kWidth / 2;
         static constexpr int kPositionWidth = 280;
-        static constexpr int kHeaderHeight = 40;
+        
 
         static constexpr uint8_t kQueueCapacity = 32;
         ViewAction queue_[kQueueCapacity];
