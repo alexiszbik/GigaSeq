@@ -5,7 +5,7 @@
 namespace GigaSeq {
 
 namespace {
-constexpr int kPadding = 4;
+constexpr int kPadding = 6;
 constexpr int kFontHeight = 8;
 constexpr uint8_t kMaxLineLength = 32;
 }
@@ -63,12 +63,8 @@ void printTextInRect(MyDisplay& display,
             len--;
         }
 
-        char line[kMaxLineLength + 1];
-        memcpy(line, text + index, len);
-        line[len] = '\0';
-
         display.setCursor(x + kPadding, y + kPadding + lineIndex * lineHeight);
-        display.print(line);
+        display.write(reinterpret_cast<const uint8_t*>(text + index), len);
 
         index = lineEnd;
         lineIndex++;
