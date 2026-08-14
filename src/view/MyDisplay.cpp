@@ -55,10 +55,12 @@ void MyDisplay::refresh_if_needed() {
       // Blit full-width horizontal bands: dsi_lcdDrawImage hardcodes
       // InputOffset = 0, which is only valid when xSize == lcd_x_size (480).
       // Partial-width blits would skew rows into diagonals.
+      // Source is L8 (1 byte/pixel), DMA2D converts to RGB565 via the CLUT
+      // configured in begin() before writing the RGB565 framebuffer.
       const uint32_t bh = y2 - y1 + 1;
-      uint16_t* src = buffer + y1 * WIDTH;
-      void* dst = (uint16_t*)dsi_getActiveFrameBuffer() + y1 * WIDTH;
-      dsi_lcdDrawImage(src, dst, WIDTH, bh, DMA2D_INPUT_RGB565);
+      uint8_t*  src = buffer + y1 * WIDTH;
+      uint16_t* dst = (uint16_t*)dsi_getActiveFrameBuffer() + y1 * WIDTH;
+      dsi_lcdDrawImage(src, dst, WIDTH, bh, DMA2D_INPUT_L8);
     }
   }
 }
@@ -69,9 +71,17 @@ void MyDisplay::begin() {
     display->begin();
 
     #ifdef __MBED__
-      buffer = (uint16_t*)ea_malloc(this->width() * this-> height() * 2);
+      // L8 indexed buffer: 1 byte/pixel, half the RAM and half the DMA2D
+      // read bandwidth of RGB565. CLUT[0]=black, CLUT[1]=white, rest=black.
+      buffer = (uint8_t*)ea_malloc(WIDTH * HEIGHT);
       _refresh_thd = new rtos::Thread(osPriorityNormal);
       _refresh_thd->start(mbed::callback(this, &MyDisplay::refresh_if_needed));
+
+      uint32_t clut[256];
+      for (int i = 0; i < 256; ++i) clut[i] = 0xFF000000u; // opaque black
+      clut[0] = 0xFF000000u;                                // black  -> RGB565 0x0000
+      clut[1] = 0xFFFFFFFFu;                                // white  -> RGB565 0xFFFF
+      dsi_configueCLUT(clut);
     #elif defined(__ZEPHYR__)
       #ifdef CONFIG_SHARED_MULTI_HEAP
         void* ptrFB = this->display->getFramebuffer();
@@ -79,11 +89,11 @@ void MyDisplay::begin() {
           while(1){}
         }
         // Cast the void pointer to an int pointer to use it
-        buffer = static_cast<uint16_t*>(ptrFB);
+        buffer = static_cast<uint8_t*>(ptrFB);
       #else
         SDRAM.begin();
-        buffer = (uint16_t*)SDRAM.malloc(this->width() * this-> height() * sizeof(uint16_t));
-      #endif   
+        buffer = (uint8_t*)SDRAM.malloc(this->width() * this-> height() * sizeof(uint16_t));
+      #endif
       this->display->setFrameDesc(this->width(), this->height(), this->width(), (this->width() * this-> height() * sizeof(uint16_t)));
     #endif
 }
@@ -136,7 +146,7 @@ void MyDisplay::drawPixel(int16_t x, int16_t y, uint16_t color) {
     x = WIDTH - 1 - y;
     y = t;
 
-    buffer[x + y * WIDTH] = color;
+    buffer[x + y * WIDTH] = (uint8_t)color;
     markDirty(x, y);
 }
 
@@ -151,32 +161,19 @@ uint16_t MyDisplay::getPixel(int16_t x, int16_t y) {
 uint16_t MyDisplay::getRawPixel(int16_t x, int16_t y) {
   if ((x < 0) || (y < 0) || (x >= WIDTH) || (y >= HEIGHT)) {
     return 0;
-    } else   return buffer[x + y * WIDTH];
-
+    }
+  // L8 index -> RGB565 (API stays RGB565 for Adafruit_GFX compatibility).
+  return buffer[x + y * WIDTH] ? 0xFFFF : 0x0000;
 }
 
 void MyDisplay::fillScreen(uint16_t color) {
-    uint8_t hi = color >> 8, lo = color & 0xFF;
-    if (hi == lo) {
-      memset(buffer, lo, WIDTH * HEIGHT * 2);
-    } else {
-      uint32_t i, pixels = WIDTH * HEIGHT;
-      for (i = 0; i < pixels; i++) {
-        buffer[i] = color;
-        }
-    }
+    memset(buffer, (uint8_t)color, WIDTH * HEIGHT);
     markDirtyRect(0, 0, WIDTH, HEIGHT);
-
 }
 
 void MyDisplay::byteSwap(void) {
-
-    uint32_t i, pixels = WIDTH * HEIGHT;
-    for (i = 0; i < pixels; i++) {
-      buffer[i] = __builtin_bswap16(buffer[i]);
-      }
+    // No-op in L8: 1 byte/pixel has no endianness to swap. Kept for API compat.
     markDirtyRect(0, 0, WIDTH, HEIGHT);
-
 }
 
 void MyDisplay::drawFastVLine(int16_t x, int16_t y, int16_t h,
@@ -246,9 +243,10 @@ void MyDisplay::drawFastRawVLine(int16_t x, int16_t y, int16_t h,
                                        uint16_t color) {
 
   // x & y already in raw (rotation 0) coordinates, no need to transform.
-  uint16_t *buffer_ptr = buffer + y * WIDTH + x;
+  uint8_t idx = (uint8_t)color;
+  uint8_t *buffer_ptr = buffer + y * WIDTH + x;
   for (int16_t i = 0; i < h; i++) {
-    (*buffer_ptr) = color;
+    (*buffer_ptr) = idx;
     buffer_ptr += WIDTH;
   }
   markDirtyRect(x, y, 1, h);
@@ -258,10 +256,7 @@ void MyDisplay::drawFastRawVLine(int16_t x, int16_t y, int16_t h,
 void MyDisplay::drawFastRawHLine(int16_t x, int16_t y, int16_t w,
                                        uint16_t color) {
   // x & y already in raw (rotation 0) coordinates, no need to transform.
-  uint32_t buffer_index = y * WIDTH + x;
-  for (uint32_t i = buffer_index; i < buffer_index + w; i++) {
-    buffer[i] = color;
-  }
+  memset(buffer + y * WIDTH + x, (uint8_t)color, w);
   markDirtyRect(x, y, w, 1);
 }
 
@@ -283,11 +278,9 @@ void MyDisplay::fillRect(int16_t x, int16_t y, int16_t w, int16_t h,
   int16_t rw = h;
   int16_t rh = w;
 
+  uint8_t idx = (uint8_t)color;
   for (int16_t row = 0; row < rh; row++) {
-    uint16_t* p = buffer + (ry + row) * WIDTH + rx;
-    for (int16_t col = 0; col < rw; col++) {
-      p[col] = color;
-    }
+    memset(buffer + (ry + row) * WIDTH + rx, idx, rw);
   }
   markDirtyRect(rx, ry, rw, rh);
 }

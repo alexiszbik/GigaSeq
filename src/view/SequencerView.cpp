@@ -8,8 +8,8 @@ namespace GigaSeq
 {
     namespace
     {
-        constexpr uint16_t kBlack = 0x0000;
-        constexpr uint16_t kWhite = 0xFFFF;
+        constexpr uint8_t kBlack = 0;
+        constexpr uint8_t kWhite = 1;
 
         char* appendUInt(char *p, uint32_t value)
         {
@@ -37,7 +37,7 @@ namespace GigaSeq
     {
         display_ = &display;
         display_->fillScreen(kBlack);
-        display_->setTextColor(kWhite);
+        display_->setTextColor(kWhite, kBlack);
     }
 
     void SequencerView::copyActionText(char *dest, const char *src)
@@ -146,6 +146,7 @@ namespace GigaSeq
 
         display_->setTextSize(kHeaderTextSize);
         display_->fillRect(0, 0, kSequenceNameWidth, kHeaderHeight, kBlack);
+        display_->setTextColor(kWhite, kBlack);
         display_->setCursor(0, 0);
         display_->print("Sequence");
 
@@ -161,7 +162,7 @@ namespace GigaSeq
 
         display_->fillRect(0, 0, kSequenceNameWidth, kHeaderHeight, kBlack);
         display_->setTextSize(kHeaderTextSize);
-        display_->setTextColor(kWhite);
+        display_->setTextColor(kWhite, kBlack);
         display_->setCursor(0, 0);
         display_->print(name ? name : "");
     }
@@ -182,7 +183,7 @@ namespace GigaSeq
 
         display_->fillRect(kPositionX, 0, kPositionWidth, kHeaderHeight, kBlack);
         display_->setTextSize(kHeaderTextSize);
-        display_->setTextColor(kWhite);
+        display_->setTextColor(kWhite, kBlack);
         display_->setCursor(kPositionX, 0);
         display_->print(positionText);
     }
@@ -194,7 +195,11 @@ namespace GigaSeq
             return;
         }
 
-        display_->setTextColor(state ? kBlack : kWhite);
+        // Text color follows the cell background: black on white when active,
+        // white on black when inactive. Explicit bg avoids Adafruit_GFX's
+        // default textbgcolor (0xFFFF -> L8 index 255 -> wrong CLUT entry).
+        display_->setTextColor(state ? kBlack : kWhite,
+                               state ? kWhite : kBlack);
 
         const int tracksY = kHeight - kTracksHeight;
         const int trackW = kWidth / kColCount;

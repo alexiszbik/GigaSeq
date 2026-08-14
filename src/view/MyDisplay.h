@@ -37,7 +37,7 @@ class MyDisplay : public Adafruit_GFX {
     uint16_t getRawPixel(int16_t x, int16_t y);
     void drawFastRawVLine(int16_t x, int16_t y, int16_t h, uint16_t color);
     void drawFastRawHLine(int16_t x, int16_t y, int16_t w, uint16_t color);
-    uint16_t *buffer = nullptr; ///< Raster data: no longer private, allow subclass access
+    uint8_t *buffer = nullptr; ///< L8 indexed raster (0=black, 1=white via CLUT) on __MBED__
 
   private:
     void markDirty(int16_t x, int16_t y);
