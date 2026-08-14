@@ -1,0 +1,40 @@
+cmake_minimum_required(VERSION 3.20)
+project(GigaSeq VERSION 0.1.0 LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+include(FetchContent)
+
+FetchContent_Declare(
+    rtmidi
+    GIT_REPOSITORY https://github.com/thestk/rtmidi.git
+    GIT_TAG 6.0.0
+)
+
+set(RTMIDI_BUILD_TESTING OFF CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(rtmidi)
+
+add_executable(GigaSeq
+    src/desktop/main.cpp
+    src/desktop/MidiClock.cpp
+    src/desktop/TerminalLogger.cpp
+    src/desktop/TransportPosition.cpp
+    src/desktop/VirtualMidiSender.cpp
+    src/engine/StringHelper.cpp
+    src/engine/Sequence.cpp
+    src/engine/Song.cpp
+    src/engine/SequencePool.cpp
+    src/engine/SequenceTrack.cpp
+    src/engine/factories/SequenceFactory.cpp
+    src/engine/factories/SequenceTrackFactory.cpp
+)
+
+target_include_directories(GigaSeq PRIVATE src src/engine src/desktop)
+target_compile_definitions(GigaSeq PRIVATE GIGASEQ_LOCAL)
+target_link_libraries(GigaSeq PRIVATE rtmidi)
+
+if(APPLE)
+    target_link_libraries(GigaSeq PRIVATE "-framework CoreMIDI" "-framework CoreFoundation")
+endif()

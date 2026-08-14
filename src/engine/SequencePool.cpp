@@ -195,7 +195,9 @@ void SequencePool::wireTrackMuteCallbacks()
 
 void SequencePool::notifySequenceChanged()
 {
-    //logCurrentSequenceSwitch(); //cost too much on arduino > todo : make a flag for local test
+#ifdef GIGASEQ_LOCAL
+    logCurrentSequenceSwitch();
+#endif
     if (onSequenceChanged_) {
         onSequenceChanged_(onSequenceChangedContext_);
     }
