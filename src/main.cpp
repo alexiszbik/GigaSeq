@@ -67,7 +67,7 @@ void onSequenceChanged(void* /*context*/) {
     refreshViewFromPool();
 }
 
-void onTrackMuteChanged(std::size_t trackIndex, bool muted, void* /*context*/) {
+void onTrackMuteChanged(uint8_t trackIndex, bool muted, void* /*context*/) {
     if (trackIndex >= 16) {
         return;
     }
@@ -132,8 +132,7 @@ TimedTask inputCheck(20, inputCheckCallback);
 TimedTask muxCheck(3, muxCallback);
 TimedTask displayCheck(10, displayCallback);
 
-void onClockTick(uint32_t tick, void* context) {
-    (void)tick;
+void onClockTick(void* context) {
     (void)context;
 
     sequencePool.processTick();
@@ -147,11 +146,10 @@ void onClockTick(uint32_t tick, void* context) {
     }
 
     if (beatTickCounter == 0) {
-        sequencerView.updatePosition(
-            transportClock.getBar(),
-            transportClock.getBeat());
-        
+        Sequence& current = sequencePool.current();
+        sequencerView.updatePosition(current.currentBar() + 1, current.currentBeat() + 1);
     }
+    
     beatTickCounter++;
     if (beatTickCounter >= TransportClock::kPpqn) {
         beatTickCounter = 0;

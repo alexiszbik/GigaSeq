@@ -25,12 +25,12 @@ public:
     int barCount() const noexcept { return barCount_; }
     int beatsPerBar() const noexcept { return beatsPerBar_; }
     tick_t loopInPoint() const noexcept { return loopInPoint_; }
-    int barLoop() const noexcept {
-        return loopInPoint_ / (beatsPerBar_ * kTicksPerQuarterNote);
-    }
 
     tick_t lengthInTicks() const noexcept;
     tick_t position() const noexcept { return position_; }
+
+    int currentBar() const noexcept { return (position_ + 1) / (beatsPerBar_ * kTicksPerQuarterNote); }
+    int currentBeat() const noexcept { return ((position_ + 1) / kTicksPerQuarterNote) % beatsPerBar_; }
 
     void attachMidi(MidiInOut& midi);
 

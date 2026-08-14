@@ -1,10 +1,6 @@
 
 #include "MyDisplay.h"
 
-#ifdef __MBED__
-#include "platform/mbed_critical.h"
-#endif
-
 MyDisplay::MyDisplay() : Adafruit_GFX(480, 800) { }
 
 MyDisplay::~MyDisplay(void) {
@@ -13,7 +9,6 @@ MyDisplay::~MyDisplay(void) {
     }
 }
 
-#ifdef __MBED__
 void MyDisplay::refresh_if_needed() {
   while (1) {
     rtos::ThisThread::flags_wait_any(0x1);
@@ -64,48 +59,28 @@ void MyDisplay::refresh_if_needed() {
     }
   }
 }
-#endif
 
 void MyDisplay::begin() {
     display = new Arduino_Video(480, 800, GigaDisplayShield);
     display->begin();
 
-    #ifdef __MBED__
-      // L8 indexed buffer: 1 byte/pixel, half the RAM and half the DMA2D
-      // read bandwidth of RGB565. CLUT[0]=black, CLUT[1]=white, rest=black.
-      buffer = (uint8_t*)ea_malloc(WIDTH * HEIGHT);
-      _refresh_thd = new rtos::Thread(osPriorityNormal);
-      _refresh_thd->start(mbed::callback(this, &MyDisplay::refresh_if_needed));
+    // L8 indexed buffer: 1 byte/pixel, half the RAM and half the DMA2D
+    // read bandwidth of RGB565. CLUT[0]=black, CLUT[1]=white, rest=black.
+    buffer = (uint8_t*)ea_malloc(WIDTH * HEIGHT);
+    _refresh_thd = new rtos::Thread(osPriorityNormal);
+    _refresh_thd->start(mbed::callback(this, &MyDisplay::refresh_if_needed));
 
-      uint32_t clut[256];
-      for (int i = 0; i < 256; ++i) clut[i] = 0xFF000000u; // opaque black
-      clut[0] = 0xFF000000u;                                // black  -> RGB565 0x0000
-      clut[1] = 0xFFFFFFFFu;                                // white  -> RGB565 0xFFFF
-      dsi_configueCLUT(clut);
-    #elif defined(__ZEPHYR__)
-      #ifdef CONFIG_SHARED_MULTI_HEAP
-        void* ptrFB = this->display->getFramebuffer();
-        if (ptrFB == nullptr){
-          while(1){}
-        }
-        // Cast the void pointer to an int pointer to use it
-        buffer = static_cast<uint8_t*>(ptrFB);
-      #else
-        SDRAM.begin();
-        buffer = (uint8_t*)SDRAM.malloc(this->width() * this-> height() * sizeof(uint16_t));
-      #endif
-      this->display->setFrameDesc(this->width(), this->height(), this->width(), (this->width() * this-> height() * sizeof(uint16_t)));
-    #endif
+    uint32_t clut[256];
+    for (int i = 0; i < 256; ++i) clut[i] = 0xFF000000u; // opaque black
+    clut[0] = 0xFF000000u;                                // black  -> RGB565 0x0000
+    clut[1] = 0xFFFFFFFFu;                                // white  -> RGB565 0xFFFF
+    dsi_configueCLUT(clut);
 }
 
 void MyDisplay::endWrite() {
-#ifdef __MBED__
     if (sweepActive || dirty) {
         _refresh_thd->flags_set(0x1);
     }
-#elif defined(__ZEPHYR__)
-     this->display->drawBuffer(0, 0, buffer);
-#endif
 }
 
 void MyDisplay::markDirty(int16_t x, int16_t y) {

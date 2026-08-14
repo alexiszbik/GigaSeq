@@ -1,18 +1,12 @@
 #pragma once
 
-#if defined(ARDUINO_ARCH_ZEPHYR)
-#include "Arduino_Video.h"
-#else
 #include "Arduino_H7_Video.h"
 using Arduino_Video = Arduino_H7_Video;
-#endif
 #include "Adafruit_GFX.h"
 
-#if __MBED__
 #include "Adafruit_SPITFT.h"
 #include "dsi.h"
 #include "SDRAM.h"
-#endif
 
 class MyDisplay : public Adafruit_GFX {
   public:
@@ -37,17 +31,15 @@ class MyDisplay : public Adafruit_GFX {
     uint16_t getRawPixel(int16_t x, int16_t y);
     void drawFastRawVLine(int16_t x, int16_t y, int16_t h, uint16_t color);
     void drawFastRawHLine(int16_t x, int16_t y, int16_t w, uint16_t color);
-    uint8_t *buffer = nullptr; ///< L8 indexed raster (0=black, 1=white via CLUT) on __MBED__
+    uint8_t *buffer = nullptr; ///< L8 indexed raster (0=black, 1=white via CLUT)
 
   private:
     void markDirty(int16_t x, int16_t y);
     void markDirtyRect(int16_t x, int16_t y, int16_t w, int16_t h);
 
     Arduino_Video* display;
-#ifdef __MBED__
-    rtos::Thread* _refresh_thd;
+    rtos::Thread* _refresh_thd = nullptr;
     void refresh_if_needed();
-#endif
     bool buffering = false;
     uint32_t last_refresh = 0;
 
