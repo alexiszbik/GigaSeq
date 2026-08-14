@@ -150,6 +150,7 @@ namespace GigaSeq
                 break;
             case ViewActionType::UpdateSequenceInfos:
                 executeUpdateSequenceInfos(action.bar);
+                break;
             default:
                 break;
         }
@@ -171,17 +172,19 @@ namespace GigaSeq
         display_->print(name ? name : "");
     }
 
-    void SequencerView::executeUpdateSequenceInfos(const uint8_t bar)
+    void SequencerView::executeUpdateSequenceInfos(const uint16_t bar)
     {
         if (!display_ || disable)
         {
             return;
         }
 
-        char barText[4];
+        // ':' + up to 3 digits (barCount <= 255) + NUL
+        char barText[8];
         char *p = barText;
         *p++ = ':';
         p = appendUInt(p, bar);
+        *p = '\0';
 
         display_->fillRect(kBarX, 0, kBarWidth, kHeaderHeight, kBlack);
         display_->setTextSize(kHeaderTextSize);

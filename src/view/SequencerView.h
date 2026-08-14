@@ -46,7 +46,7 @@ namespace GigaSeq
         void executeUpdateSongName(const char *name);
         void executeUpdatePosition(uint16_t bar, uint8_t beat);
         void executeDrawTrack(uint8_t trackIndex, const char *text, bool state);
-        void executeUpdateSequenceInfos(uint8_t bar);
+        void executeUpdateSequenceInfos(uint16_t bar);
 
         MyDisplay *display_ = nullptr;
 
