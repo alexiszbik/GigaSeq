@@ -51,6 +51,7 @@ void resetTickCounters() {
 void refreshViewFromPool() {
     Sequence& sequence = sequencePool.current();
     sequencerView.updateSequenceName(sequence.name());
+    sequencerView.updateSequenceInfos(sequence.barCount());
 
     sequencerView.updateSongName(sequencePool.currentSong().name());
 

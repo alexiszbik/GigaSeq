@@ -12,6 +12,7 @@ namespace GigaSeq
         UpdateSongName,
         UpdateSequenceName,
         UpdatePosition,
+        UpdateSequenceInfos,
         DrawTrack,
     };
 
@@ -32,6 +33,7 @@ namespace GigaSeq
         void updateSequenceName(const char *name);
         void updateSongName(const char *name);
         void updatePosition(uint16_t bar, uint8_t beat);
+        void updateSequenceInfos(uint16_t bar);
         void drawTrack(uint8_t trackIndex, const char *text, bool state);
 
         bool processOne();
@@ -44,6 +46,7 @@ namespace GigaSeq
         void executeUpdateSongName(const char *name);
         void executeUpdatePosition(uint16_t bar, uint8_t beat);
         void executeDrawTrack(uint8_t trackIndex, const char *text, bool state);
+        void executeUpdateSequenceInfos(uint8_t bar);
 
         MyDisplay *display_ = nullptr;
 
@@ -64,7 +67,10 @@ namespace GigaSeq
         
         static constexpr int kSequenceNameWidth = 12 * kHeaderCaracSize;
         static constexpr int kPositionX = kWidth / 2;
-        static constexpr int kPositionWidth = 280;
+        static constexpr int kPositionWidth = kHeaderCaracSize*6; //like 999.99;
+
+        static constexpr int kBarWidth = kHeaderCaracSize*3;
+        static constexpr int kBarX = kWidth - 4 - kBarWidth;
         
 
         static constexpr uint8_t kQueueCapacity = 32;

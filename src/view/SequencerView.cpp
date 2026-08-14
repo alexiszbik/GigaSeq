@@ -78,6 +78,14 @@ namespace GigaSeq
         enqueueAction(action);
     }
 
+    void SequencerView::updateSequenceInfos(uint16_t bar)
+    {
+        ViewAction action;
+        action.type = ViewActionType::UpdateSequenceInfos;
+        action.bar = bar;
+        enqueueAction(action);
+    }
+
     void SequencerView::updateSongName(const char *name)
     {
         ViewAction action;
@@ -140,6 +148,8 @@ namespace GigaSeq
             case ViewActionType::DrawTrack:
                 executeDrawTrack(action.trackIndex, action.text, action.state);
                 break;
+            case ViewActionType::UpdateSequenceInfos:
+                executeUpdateSequenceInfos(action.bar);
             default:
                 break;
         }
@@ -159,6 +169,25 @@ namespace GigaSeq
         display_->setTextColor(kWhite, kBlack);
         display_->setCursor(0, kSequencePosY);
         display_->print(name ? name : "");
+    }
+
+    void SequencerView::executeUpdateSequenceInfos(const uint8_t bar)
+    {
+        if (!display_ || disable)
+        {
+            return;
+        }
+
+        char barText[4];
+        char *p = barText;
+        *p++ = ':';
+        p = appendUInt(p, bar);
+
+        display_->fillRect(kBarX, 0, kBarWidth, kHeaderHeight, kBlack);
+        display_->setTextSize(kHeaderTextSize);
+        display_->setTextColor(kWhite, kBlack);
+        display_->setCursor(kBarX, 0);
+        display_->print(barText);
     }
 
 
