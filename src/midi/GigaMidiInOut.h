@@ -1,5 +1,7 @@
 #pragma once
 
+#include "MidiQueue.h"
+
 #include <Arduino.h>
 #include <MIDI.h>
 
@@ -17,6 +19,15 @@ public:
     void sendClock();
     void sendStart();
     void sendStop();
+
+    bool flush();
+
+private:
+    void write1(uint8_t b);
+    void write2(uint8_t b1, uint8_t b2);
+    void write3(uint8_t b1, uint8_t b2, uint8_t b3);
+
+    MidiQueue queue_;
 };
 
 }  // namespace GigaSeq

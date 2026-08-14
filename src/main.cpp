@@ -180,14 +180,16 @@ void setup() {
 }
 
 void loop() {
-    currentTime = millis();
-
-    inputCheck.update(currentTime);
-    muxCheck.update(currentTime);
-    displayCheck.update(currentTime);
 
     transportClock.run();
     gigaMidi.read();
+    if (gigaMidi.flush()) return;
+
+    currentTime = millis();
+
+    if (inputCheck.update(currentTime)) return;
+    if (muxCheck.update(currentTime)) return;
+    if (displayCheck.update(currentTime)) return;
 
     display.endWrite();
 }
