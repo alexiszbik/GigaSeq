@@ -56,11 +56,13 @@ namespace GigaSeq
         if (queueCount_ >= kQueueCapacity)
         {
             // Queue full: drop the oldest action to make room for the newest.
-            queueTail_ = (queueTail_ + 1) % kQueueCapacity;
+            queueTail_ = (queueTail_ + 1);
+            if (queueTail_ > kQueueCapacity) queueTail_ = 0;
             --queueCount_;
         }
         queue_[queueHead_] = action;
         queueHead_ = (queueHead_ + 1) % kQueueCapacity;
+        if (queueHead_ > kQueueCapacity) queueHead_ = 0;
         ++queueCount_;
     }
 
@@ -110,7 +112,8 @@ namespace GigaSeq
         }
 
         ViewAction action = queue_[queueTail_];
-        queueTail_ = (queueTail_ + 1) % kQueueCapacity;
+        queueTail_ = (queueTail_ + 1);
+        if (queueTail_ > kQueueCapacity) queueTail_ = 0;
         --queueCount_;
 
         switch (action.type)

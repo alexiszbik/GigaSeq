@@ -129,8 +129,8 @@ void displayCallback() {
 }
 
 TimedTask inputCheck(20, inputCheckCallback);
-TimedTask muxCheck(4, muxCallback);
-TimedTask displayCheck(40, displayCallback);
+TimedTask muxCheck(3, muxCallback);
+TimedTask displayCheck(10, displayCallback);
 
 void onClockTick(uint32_t tick, void* context) {
     (void)tick;
@@ -192,4 +192,6 @@ void loop() {
     if (displayCheck.update(currentTime)) return;
 
     display.endWrite();
+
+    
 }

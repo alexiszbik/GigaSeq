@@ -34,7 +34,6 @@ namespace GigaSeq
         void updatePosition(uint16_t bar, uint8_t beat);
         void drawTrack(uint8_t trackIndex, const char *text, bool state);
 
-        // Execute one queued action. Returns true if an action was executed.
         bool processOne();
 
     private:

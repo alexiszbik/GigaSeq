@@ -131,47 +131,21 @@ void MyDisplay::drawPixel(int16_t x, int16_t y, uint16_t color) {
     if ((x < 0) || (y < 0) || (x >= _width) || (y >= _height))
         return;
 
-    int16_t t;
-    switch (rotation) {
-        case 1:
-        t = x;
-        x = WIDTH - 1 - y;
-        y = t;
-        break;
-        case 2:
-        x = WIDTH - 1 - x;
-        y = HEIGHT - 1 - y;
-        break;
-        case 3:
-        t = x;
-        x = y;
-        y = HEIGHT - 1 - t;
-        break;
-    }
+    // Rotation 1: logical (x,y) -> raw (WIDTH-1-y, x)
+    int16_t t = x;
+    x = WIDTH - 1 - y;
+    y = t;
 
     buffer[x + y * WIDTH] = color;
     markDirty(x, y);
 }
 
 uint16_t MyDisplay::getPixel(int16_t x, int16_t y) {
-  int16_t t;
-  switch (rotation) {
-    case 1:
-      t = x;
-      x = WIDTH - 1 - y;
-      y = t;
-      break;
-    case 2:
-      x = WIDTH - 1 - x;
-      y = HEIGHT - 1 - y;
-      break;
-    case 3:
-      t = x;
-      x = y;
-      y = HEIGHT - 1 - t;
-      break;
-  }
-  return getRawPixel(x, y);
+    // Rotation 1: logical (x,y) -> raw (WIDTH-1-y, x)
+    int16_t t = x;
+    x = WIDTH - 1 - y;
+    y = t;
+    return getRawPixel(x, y);
 }
 
 uint16_t MyDisplay::getRawPixel(int16_t x, int16_t y) {
@@ -229,26 +203,12 @@ void MyDisplay::drawFastVLine(int16_t x, int16_t y, int16_t h,
     h = height() - y;
   }
 
-  if (getRotation() == 0) {
-    drawFastRawVLine(x, y, h, color);
-  } else if (getRotation() == 1) {
-    int16_t t = x;
-    x = WIDTH - 1 - y;
-    y = t;
-    x -= h - 1;
-    drawFastRawHLine(x, y, h, color);
-  } else if (getRotation() == 2) {
-    x = WIDTH - 1 - x;
-    y = HEIGHT - 1 - y;
-
-    y -= h - 1;
-    drawFastRawVLine(x, y, h, color);
-  } else if (getRotation() == 3) {
-    int16_t t = x;
-    x = y;
-    y = HEIGHT - 1 - t;
-    drawFastRawHLine(x, y, h, color);
-  }
+  // Rotation 1: logical VLine -> raw HLine
+  int16_t t = x;
+  x = WIDTH - 1 - y;
+  y = t;
+  x -= h - 1;
+  drawFastRawHLine(x, y, h, color);
 }
 
 void MyDisplay::drawFastHLine(int16_t x, int16_t y, int16_t w,
@@ -275,26 +235,11 @@ void MyDisplay::drawFastHLine(int16_t x, int16_t y, int16_t w,
     w = width() - x;
   }
 
-  if (getRotation() == 0) {
-    drawFastRawHLine(x, y, w, color);
-  } else if (getRotation() == 1) {
-    int16_t t = x;
-    x = WIDTH - 1 - y;
-    y = t;
-    drawFastRawVLine(x, y, w, color);
-  } else if (getRotation() == 2) {
-    x = WIDTH - 1 - x;
-    y = HEIGHT - 1 - y;
-
-    x -= w - 1;
-    drawFastRawHLine(x, y, w, color);
-  } else if (getRotation() == 3) {
-    int16_t t = x;
-    x = y;
-    y = HEIGHT - 1 - t;
-    y -= w - 1;
-    drawFastRawVLine(x, y, w, color);
-  }
+  // Rotation 1: logical HLine -> raw VLine
+  int16_t t = x;
+  x = WIDTH - 1 - y;
+  y = t;
+  drawFastRawVLine(x, y, w, color);
 }
 
 void MyDisplay::drawFastRawVLine(int16_t x, int16_t y, int16_t h,
@@ -318,4 +263,31 @@ void MyDisplay::drawFastRawHLine(int16_t x, int16_t y, int16_t w,
     buffer[i] = color;
   }
   markDirtyRect(x, y, w, 1);
+}
+
+void MyDisplay::fillRect(int16_t x, int16_t y, int16_t w, int16_t h,
+                                uint16_t color) {
+  // Clip to logical viewport (rotation 1: _width=HEIGHT, _height=WIDTH).
+  if (w <= 0 || h <= 0) return;
+  if (x < 0) { w += x; x = 0; }
+  if (y < 0) { h += y; y = 0; }
+  if (x + w > _width)  { w = _width  - x; }
+  if (y + h > _height) { h = _height - y; }
+  if (w <= 0 || h <= 0) return;
+
+  // Rotation 1: logical (x,y) -> raw (rx, ry) with rx = WIDTH-1-y, ry = x.
+  // Logical rect (x,y,w,h) maps to raw rect (rx, ry, w=h, h=w) where
+  // rx = WIDTH-1-(y+h-1), ry = x, rawW = h, rawH = w.
+  int16_t rx = WIDTH - 1 - (y + h - 1);
+  int16_t ry = x;
+  int16_t rw = h;
+  int16_t rh = w;
+
+  for (int16_t row = 0; row < rh; row++) {
+    uint16_t* p = buffer + (ry + row) * WIDTH + rx;
+    for (int16_t col = 0; col < rw; col++) {
+      p[col] = color;
+    }
+  }
+  markDirtyRect(rx, ry, rw, rh);
 }
