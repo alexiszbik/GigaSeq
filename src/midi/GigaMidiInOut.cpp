@@ -83,32 +83,30 @@ void GigaMidiInOut::write3(uint8_t b1, uint8_t b2, uint8_t b3) {
 
 bool GigaMidiInOut::flush() {
     MidiEvent e;
-    //while (queue_.peek(e)) {
     if (queue_.peek(e)) {
-        const uint8_t statusChannel = e.channel > 0 ? (e.channel - 1) : 0;
+        const uint8_t statusChannel = e.channel;
 
-        bool sent = false;
         switch (e.type) {
             case MidiEventType::NoteOn:
-                sent = write3(0x90 | statusChannel, e.data1, e.data2);
+                write3(0x90 | statusChannel, e.data1, e.data2);
                 break;
             case MidiEventType::NoteOff:
-                sent = write3(0x80 | statusChannel, e.data1, e.data2);
+                write3(0x80 | statusChannel, e.data1, e.data2);
                 break;
             case MidiEventType::ControlChange:
-                sent = write3(0xB0 | statusChannel, e.data1, e.data2);
+                write3(0xB0 | statusChannel, e.data1, e.data2);
                 break;
             case MidiEventType::ProgramChange:
-                sent = write2(0xC0 | statusChannel, e.data1);
+                write2(0xC0 | statusChannel, e.data1);
                 break;
             case MidiEventType::Clock:
-                sent = write1(0xF8);
+                write1(0xF8);
                 break;
             case MidiEventType::Start:
-                sent = write1(0xFA);
+                write1(0xFA);
                 break;
             case MidiEventType::Stop:
-                sent = write1(0xFC);
+                write1(0xFC);
                 break;
         }
 
@@ -116,7 +114,6 @@ bool GigaMidiInOut::flush() {
         return true;
     }
     return false;
-    //}
 }
 
 }  // namespace GigaSeq
