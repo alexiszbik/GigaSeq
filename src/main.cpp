@@ -181,7 +181,6 @@ void setup() {
 
 void loop() {
 
-    transportClock.run();
     gigaMidi.read();
     if (gigaMidi.flush()) return;
 
@@ -193,5 +192,5 @@ void loop() {
 
     display.endWrite();
 
-    
+
 }

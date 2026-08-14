@@ -1,45 +1,41 @@
 #include "Clock.h"
 
-#include <uClock.h>
-
 namespace GigaSeq {
 
 TransportClock* TransportClock::instance_ = nullptr;
 
-void TransportClock::onOutputPPQN(uint32_t tick) {
-    if (!instance_) {
-        return;
-    }
-
-    instance_->currentTick_ = tick;
-
-    if (instance_->tickCallback_) {
-        instance_->tickCallback_(tick, instance_->tickContext_);
-    }
+uint32_t TransportClock::intervalFor(uint16_t bpm) {
+    // Microseconds per output tick at kPpqn.
+    return 60000000u / (static_cast<uint32_t>(bpm) * kPpqn);
 }
 
 void TransportClock::begin(uint16_t bpm) {
     instance_ = this;
     currentTick_ = 0;
-
-    uClock.init();
-    uClock.setTempo(bpm);
-    uClock.setOutputPPQN(uClock.PPQN_96);
-    uClock.setOnOutputPPQN(onOutputPPQN);
-}
-
-void TransportClock::run() {
-    uClock.run();
+    bpm_ = bpm;
+    intervalUs_ = intervalFor(bpm);
+    // Ticker is armed by start(); begin() only configures the tempo.
 }
 
 void TransportClock::start() {
-    uClock.start();
+    if (playing_) {
+        return;
+    }
+    currentTick_ = 0;
     playing_ = true;
+#if defined(__MBED__)
+    ticker_.attach_us(mbed::callback(this, &TransportClock::onTicker), intervalUs_);
+#endif
 }
 
 void TransportClock::stop() {
-    uClock.stop();
+    if (!playing_) {
+        return;
+    }
     playing_ = false;
+#if defined(__MBED__)
+    ticker_.detach();
+#endif
 }
 
 void TransportClock::toggleStartStop() {
@@ -51,7 +47,14 @@ void TransportClock::toggleStartStop() {
 }
 
 void TransportClock::setTempo(uint16_t bpm) {
-    uClock.setTempo(bpm);
+    bpm_ = bpm;
+    intervalUs_ = intervalFor(bpm);
+#if defined(__MBED__)
+    if (playing_) {
+        // Re-arm with the new interval (mbed::Ticker supports re-attach).
+        ticker_.attach_us(mbed::callback(this, &TransportClock::onTicker), intervalUs_);
+    }
+#endif
 }
 
 void TransportClock::setOnTick(TickCallback callback, void* context) {
@@ -77,6 +80,14 @@ uint8_t TransportClock::getBeat() const {
 
 uint8_t TransportClock::getTick() const {
     return static_cast<uint8_t>(currentTick_ % kPpqn);
+}
+
+void TransportClock::onTicker() {
+    // Runs in the us_ticker ISR: keep it short and IRQ-safe.
+    ++currentTick_;
+    if (tickCallback_) {
+        tickCallback_(currentTick_, tickContext_);
+    }
 }
 
 }  // namespace GigaSeq

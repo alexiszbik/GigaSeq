@@ -63,7 +63,7 @@ void SequenceTrack::reset()
     controlChanges_.reset();
     programChanges_.reset();
     muteEvents_.reset();
-    activeNotes_.clear();
+    activeNoteCount_ = 0;
 
     const bool wasMuted = muted_;
     muted_ = startMuted_;
@@ -72,7 +72,7 @@ void SequenceTrack::reset()
     }
 }
 
-void SequenceTrack::setTrackIndex(std::size_t index)
+void SequenceTrack::setTrackIndex(uint8_t index)
 {
     trackIndex_ = index;
 }
@@ -112,31 +112,35 @@ void SequenceTrack::setMuted(bool muted)
 void SequenceTrack::startNote(const Note& note)
 {
     midi_->sendNoteOn(channel_, note.note, note.velocity);
-    activeNotes_.push_back({ note.note, note.durationTicks });
+    if (activeNoteCount_ < kMaxActiveNotes) {
+        activeNotes_[activeNoteCount_++] = { note.note, note.durationTicks };
+    }
+    // Pool full: drop the note-on silently rather than allocating in ISR.
 }
 
 void SequenceTrack::tickActiveNotes()
 {
-    for (auto it = activeNotes_.begin(); it != activeNotes_.end();)
+    uint8_t write = 0;
+    for (uint8_t read = 0; read < activeNoteCount_; ++read)
     {
-        --it->remainingTicks;
+        --activeNotes_[read].remainingTicks;
 
-        if (it->remainingTicks == 0) {
-            midi_->sendNoteOff(channel_, it->note, 0);
-            it = activeNotes_.erase(it);
+        if (activeNotes_[read].remainingTicks == 0) {
+            midi_->sendNoteOff(channel_, activeNotes_[read].note, 0);
         } else {
-            ++it;
+            activeNotes_[write++] = activeNotes_[read];
         }
     }
+    activeNoteCount_ = write;
 }
 
 void SequenceTrack::releaseActiveNotes()
 {
-    for (const ActiveNote& activeNote : activeNotes_) {
-        midi_->sendNoteOff(channel_, activeNote.note, 0);
+    for (uint8_t i = 0; i < activeNoteCount_; ++i) {
+        midi_->sendNoteOff(channel_, activeNotes_[i].note, 0);
     }
 
-    activeNotes_.clear();
+    activeNoteCount_ = 0;
 }
 
 void SequenceTrack::processTick(tick_t position, bool loopWrap)

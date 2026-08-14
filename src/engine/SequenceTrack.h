@@ -10,14 +10,13 @@
 #include "Tick.h"
 
 #include <cstdint>
-#include <vector>
 
-using MuteChangedCallback = void (*)(std::size_t trackIndex, bool muted, void* context);
+using MuteChangedCallback = void (*)(uint8_t trackIndex, bool muted, void* context);
 
 class SequenceTrack
 {
 public:
-    static constexpr std::size_t kNameMaxLength = 30;
+    static constexpr uint8_t kNameMaxLength = 30;
 
     SequenceTrack(const char* name = "", uint8_t channel = 0);
 
@@ -29,7 +28,7 @@ public:
     bool isMuted() const noexcept { return muted_; }
     void setMuted(bool muted);
 
-    void setTrackIndex(std::size_t index);
+    void setTrackIndex(uint8_t index);
     void setOnMuteChanged(MuteChangedCallback callback, void* context = nullptr);
 
     void setStartMuted() { startMuted_ = true; }
@@ -69,7 +68,7 @@ private:
 
     char name_[kNameMaxLength + 1] = {};
     uint8_t channel_ = 0;
-    std::size_t trackIndex_ = 0;
+    uint8_t trackIndex_ = 0;
 
     bool muted_ = false;
     bool startMuted_ = false;
@@ -77,7 +76,12 @@ private:
     MidiInOut* midi_ = nullptr;
     MuteChangedCallback onMuteChanged_ = nullptr;
     void* onMuteChangedContext_ = nullptr;
-    std::vector<ActiveNote> activeNotes_;
+
+    // Fixed-capacity active note pool: no heap allocation, so it is safe to
+    // mutate from the clock ISR (startNote/tickActiveNotes run in ISR).
+    static constexpr uint8_t kMaxActiveNotes = 32;
+    ActiveNote activeNotes_[kMaxActiveNotes];
+    uint8_t activeNoteCount_ = 0;
 
     TimedEventList<Note> notes_;
     TimedEventList<ControlChange> controlChanges_;

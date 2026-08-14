@@ -1,6 +1,7 @@
 #include "SequencerView.h"
 
 #include "TextBox.h"
+#include "../platform/CriticalSection.h"
 
 #include <cstring>
 
@@ -53,6 +54,9 @@ namespace GigaSeq
 
     void SequencerView::enqueueAction(const ViewAction &action)
     {
+        // Producer: can be called from the clock ISR (updatePosition) or from
+        // the main loop (mute, sequence switch). Guard against processOne().
+        CriticalSection cs;
         if (queueCount_ >= kQueueCapacity)
         {
             // Queue full: drop the oldest action to make room for the newest.
@@ -106,15 +110,20 @@ namespace GigaSeq
 
     bool SequencerView::processOne()
     {
-        if (queueCount_ == 0)
+        ViewAction action;
         {
-            return false;
+            // Consumer: runs in the main loop. Guard against ISR enqueueAction().
+            CriticalSection cs;
+            if (queueCount_ == 0)
+            {
+                return false;
+            }
+            action = queue_[queueTail_];
+            ++queueTail_;
+            if (queueTail_ >= kQueueCapacity) queueTail_ = 0;
+            --queueCount_;
+            // Lock released here: execute* below must not run IRQ-disabled.
         }
-
-        ViewAction action = queue_[queueTail_];
-        ++queueTail_;
-        if (queueTail_ >= kQueueCapacity) queueTail_ = 0;
-        --queueCount_;
 
         switch (action.type)
         {
