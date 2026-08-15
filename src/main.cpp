@@ -71,6 +71,10 @@ void onSequenceChanged() {
     refreshViewFromPool();
 }
 
+void onPendingChanged(PendingSwitch sw) {
+    sequencerView.updatePending(sw);
+}
+
 void onTrackMuteChanged(uint8_t trackIndex, bool muted) {
     if (trackIndex >= 16) {
         return;
@@ -181,6 +185,7 @@ void setup() {
     transportClock.setOnTick(onClockTick);
     sequencePool.setOnSequenceChanged(onSequenceChanged);
     sequencePool.setOnTrackMuteChanged(onTrackMuteChanged);
+    sequencePool.setOnPendingChanged(onPendingChanged);
 }
 
 void loop() {

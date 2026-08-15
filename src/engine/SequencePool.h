@@ -8,7 +8,16 @@
 #include <cstddef>
 #include <vector>
 
+enum class PendingSwitch
+{
+    None,
+    Next,
+    Previous
+};
+
+
 using SequenceChangedCallback = void (*)();
+using PendingChangedCallback = void (*)(PendingSwitch);
 
 class SequencePool
 {
@@ -36,17 +45,11 @@ public:
 
     void setOnSequenceChanged(SequenceChangedCallback callback);
     void setOnTrackMuteChanged(MuteChangedCallback callback);
+    void setOnPendingChanged(PendingChangedCallback callback);
 
     static SequencePool createDefault(MidiInOut& midi, Logger& logger);
 
 private:
-    enum class PendingSwitch
-    {
-        None,
-        Next,
-        Previous
-    };
-
     bool canAdvanceNext() const;
     bool canAdvancePrevious() const;
     void advanceToNext();
@@ -55,6 +58,7 @@ private:
     void logCurrentSequenceSwitch();
     void notifySequenceChanged();
     void wireTrackMuteCallbacks();
+    void setPending(PendingSwitch sw);
 
     MidiInOut& midi_;
     Logger& logger_;
@@ -65,4 +69,5 @@ private:
 
     SequenceChangedCallback onSequenceChanged_ = nullptr;
     MuteChangedCallback onTrackMuteChanged_ = nullptr;
+    PendingChangedCallback onPendingChanged_ = nullptr;
 };

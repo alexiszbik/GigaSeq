@@ -114,6 +114,19 @@ namespace GigaSeq
         enqueueAction(action);
     }
 
+    void SequencerView::updatePending(PendingSwitch sw)
+    {
+        ViewAction action;
+        action.type = ViewActionType::UpdatePending;
+        copyActionText(action.text, "");
+        if (sw == PendingSwitch::Next) {
+            copyActionText(action.text, "NEXT");
+        } else if (sw == PendingSwitch::Previous) {
+            copyActionText(action.text, "PREV");
+        }
+        enqueueAction(action);
+    }
+
     void SequencerView::drawTrack(uint8_t trackIndex, const char *text, bool state)
     {
         if (trackIndex >= kTrackCount)
@@ -164,6 +177,9 @@ namespace GigaSeq
                 break;
             case ViewActionType::UpdateTransportState:
                 executeUpdateTransportState(action.state);
+                break;
+            case ViewActionType::UpdatePending:
+                executePendingSwitch(action.text);
                 break;
             default:
                 break;
@@ -242,6 +258,17 @@ namespace GigaSeq
 
         drawHeaderText(0, 0, kSequenceNameWidth, name);
     }
+
+    void SequencerView::executePendingSwitch(const char *name)
+    {
+        if (!display_ || disable)
+        {
+            return;
+        }
+
+        drawHeaderText(kTransportIconX, kSequencePosY, kSequenceNameWidth, name);
+    }
+
 
     void SequencerView::executeUpdatePosition(uint16_t bar, uint8_t beat)
     {

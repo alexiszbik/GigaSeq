@@ -49,7 +49,7 @@ const Sequence& SequencePool::current() const
 
 void SequencePool::resetCurrent()
 {
-    pendingSwitch_ = PendingSwitch::None;
+    setPending(PendingSwitch::None);
     current().reset();
 }
 
@@ -89,13 +89,13 @@ void SequencePool::queueSwitch(PendingSwitch direction)
 
     if (pendingSwitch_ == PendingSwitch::Next && direction == PendingSwitch::Previous) {
         logger_.info("Cancel next sequence.\n");
-        pendingSwitch_ = PendingSwitch::None;
+        setPending(PendingSwitch::None);
         return;
     }
 
     if (pendingSwitch_ == PendingSwitch::Previous && direction == PendingSwitch::Next) {
         logger_.info("Cancel previous sequence.\n");
-        pendingSwitch_ = PendingSwitch::None;
+        setPending(PendingSwitch::None);
         return;
     }
 
@@ -114,12 +114,19 @@ void SequencePool::queueSwitch(PendingSwitch direction)
         return;
     }
 
-    pendingSwitch_ = direction;
+    setPending(direction);
 
     if (direction == PendingSwitch::Next) {
         logger_.info("Next sequence queued — finishing current sequence...\n");
     } else {
         logger_.info("Previous sequence queued — finishing current sequence...\n");
+    }
+}
+
+void SequencePool::setPending(PendingSwitch sw) {
+    pendingSwitch_ = sw;
+    if (onPendingChanged_) {
+        onPendingChanged_(sw);
     }
 }
 
@@ -178,6 +185,11 @@ void SequencePool::setOnTrackMuteChanged(MuteChangedCallback callback)
     wireTrackMuteCallbacks();
 }
 
+void SequencePool::setOnPendingChanged(PendingChangedCallback callback) 
+{
+    onPendingChanged_ = callback;
+}
+
 void SequencePool::wireTrackMuteCallbacks()
 {
     if (!onTrackMuteChanged_) {
@@ -227,7 +239,7 @@ void SequencePool::advanceToNext()
 
     current().allNotesOff();
 
-    pendingSwitch_ = PendingSwitch::None;
+    setPending(PendingSwitch::None);
 
     if (currentSequenceIndex_ + 1 < currentSong().size()) {
         ++currentSequenceIndex_;
@@ -249,7 +261,7 @@ void SequencePool::advanceToPrevious()
 
     current().allNotesOff();
 
-    pendingSwitch_ = PendingSwitch::None;
+    setPending(PendingSwitch::None);
 
     if (currentSequenceIndex_ > 0) {
         --currentSequenceIndex_;

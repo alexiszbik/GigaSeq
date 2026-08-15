@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MyDisplay.h"
+#include "SequencePool.h"
 
 #include <cstdint>
 
@@ -15,6 +16,7 @@ namespace GigaSeq
         UpdateSequenceInfos,
         UpdateTransportState,
         DrawTrack,
+        UpdatePending,
     };
 
     struct ViewAction
@@ -36,6 +38,7 @@ namespace GigaSeq
         void updatePosition(uint16_t bar, uint8_t beat);
         void updateSequenceInfos(uint16_t bar);
         void updateTransportState(bool isPlaying);
+        void updatePending(PendingSwitch sw);
         void drawTrack(uint8_t trackIndex, const char *text, bool state);
 
         bool processOne();
@@ -50,6 +53,7 @@ namespace GigaSeq
         void executeDrawTrack(uint8_t trackIndex, const char *text, bool state);
         void executeUpdateSequenceInfos(uint16_t bar);
         void executeUpdateTransportState(bool isPlaying);
+        void executePendingSwitch(const char* name);
 
         void drawHeaderText(int x, int y, int width, const char *text);
         void drawHeaderChar(int x, int y, int width, uint8_t ch);
