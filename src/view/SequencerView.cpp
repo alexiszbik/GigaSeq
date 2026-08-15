@@ -5,6 +5,9 @@
 
 #include <cstring>
 
+#define CHAR_PLAY 16
+#define CHAR_STOP 253
+
 namespace GigaSeq
 {
     namespace
@@ -103,6 +106,14 @@ namespace GigaSeq
         enqueueAction(action);
     }
 
+    void SequencerView::updateTransportState(bool isPlaying)
+    {
+        ViewAction action;
+        action.type = ViewActionType::UpdateTransportState;
+        action.state = isPlaying;
+        enqueueAction(action);
+    }
+
     void SequencerView::drawTrack(uint8_t trackIndex, const char *text, bool state)
     {
         if (trackIndex >= kTrackCount)
@@ -151,6 +162,9 @@ namespace GigaSeq
             case ViewActionType::UpdateSequenceInfos:
                 executeUpdateSequenceInfos(action.bar);
                 break;
+            case ViewActionType::UpdateTransportState:
+                executeUpdateTransportState(action.state);
+                break;
             default:
                 break;
         }
@@ -193,6 +207,21 @@ namespace GigaSeq
         display_->print(barText);
     }
 
+    void SequencerView::executeUpdateTransportState(bool isPlaying)
+    {
+        if (!display_ || disable)
+        {
+            return;
+        }
+
+        display_->fillRect(kTransportIconX, 0, kTransportIconWidth, kHeaderHeight, kBlack);
+
+        display_->setTextSize(kHeaderTextSize);
+        display_->setTextColor(kWhite, kBlack);
+        display_->setCursor(kTransportIconX, 0);
+        display_->write(isPlaying ?  CHAR_PLAY : CHAR_STOP);
+
+    }
 
     void SequencerView::executeUpdateSongName(const char *name)
     {

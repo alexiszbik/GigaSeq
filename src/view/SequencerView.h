@@ -13,6 +13,7 @@ namespace GigaSeq
         UpdateSequenceName,
         UpdatePosition,
         UpdateSequenceInfos,
+        UpdateTransportState,
         DrawTrack,
     };
 
@@ -34,6 +35,7 @@ namespace GigaSeq
         void updateSongName(const char *name);
         void updatePosition(uint16_t bar, uint8_t beat);
         void updateSequenceInfos(uint16_t bar);
+        void updateTransportState(bool isPlaying);
         void drawTrack(uint8_t trackIndex, const char *text, bool state);
 
         bool processOne();
@@ -47,6 +49,7 @@ namespace GigaSeq
         void executeUpdatePosition(uint16_t bar, uint8_t beat);
         void executeDrawTrack(uint8_t trackIndex, const char *text, bool state);
         void executeUpdateSequenceInfos(uint16_t bar);
+        void executeUpdateTransportState(bool isPlaying);
 
         MyDisplay *display_ = nullptr;
 
@@ -63,14 +66,19 @@ namespace GigaSeq
         static constexpr int kHeaderCaracSize = 30;
 
         static constexpr int kHeaderHeight = 40;
-        static constexpr int kSequencePosY = kHeaderHeight + 4;
+        static constexpr int kSequencePosY = kHeaderHeight + 8;
         
         static constexpr int kSequenceNameWidth = 12 * kHeaderCaracSize;
-        static constexpr int kPositionX = kWidth / 2;
+
+        static constexpr int kTransportIconX = kWidth / 2;
+        static constexpr int kPositionX = kTransportIconX + kHeaderCaracSize;
+
+        static constexpr int kTransportIconWidth = kHeaderCaracSize;
+        
         static constexpr int kPositionWidth = kHeaderCaracSize*6; //like 999.99;
 
         static constexpr int kBarWidth = kHeaderCaracSize*3;
-        static constexpr int kBarX = kWidth - 4 - kBarWidth;
+        static constexpr int kBarX = kWidth - kBarWidth;
         
 
         static constexpr uint8_t kQueueCapacity = 32;

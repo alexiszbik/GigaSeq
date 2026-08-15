@@ -54,6 +54,7 @@ void refreshViewFromPool() {
     sequencerView.updateSequenceInfos(sequence.barCount());
 
     sequencerView.updateSongName(sequencePool.currentSong().name());
+    sequencerView.updateTransportState(transportClock.isPlaying());
 
     for (uint8_t trackIndex = 0; trackIndex < 16; ++trackIndex) {
         if (trackIndex < sequence.trackCount()) {
@@ -97,8 +98,11 @@ void inputCheckCallback() {
     if (pushPlay.isPushed()) {
         if (isPlaying) {
             stopTransport();
+            sequencerView.updateTransportState(false);
         } else {
             startTransport();
+            sequencerView.updateTransportState(true);
+            sequencerView.updatePosition(1, 1);
         }
     }
 
