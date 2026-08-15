@@ -55,9 +55,9 @@ namespace GigaSeq
         void executeUpdateTransportState(bool isPlaying);
         void executePendingSwitch(const char* name);
 
-        void drawHeaderText(int x, int y, int width, const char *text);
+        void drawHeaderText(int x, int y, int width, const char *text, bool inverted = false);
         void drawHeaderChar(int x, int y, int width, uint8_t ch);
-        void prepareHeaderArea(int x, int y, int width);
+        void prepareHeaderArea(int x, int y, int width, bool inverted = false);
 
         MyDisplay *display_ = nullptr;
 

@@ -188,17 +188,17 @@ namespace GigaSeq
         return true;
     }
 
-    void SequencerView::prepareHeaderArea(int x, int y, int width)
+    void SequencerView::prepareHeaderArea(int x, int y, int width, bool inverted)
     {
-        display_->fillRect(x, y, width, kHeaderHeight, kBlack);
+        display_->fillRect(x, y, width, kHeaderHeight, inverted ? kWhite : kBlack);
         display_->setTextSize(kHeaderTextSize);
-        display_->setTextColor(kWhite, kBlack);
+        display_->setTextColor(inverted ? kBlack : kWhite, inverted ? kWhite : kBlack);
         display_->setCursor(x, y);
     }
 
-    void SequencerView::drawHeaderText(int x, int y, int width, const char *text)
+    void SequencerView::drawHeaderText(int x, int y, int width, const char *text, bool inverted)
     {
-        prepareHeaderArea(x, y, width);
+        prepareHeaderArea(x, y, width, inverted);
         if (text)
         {
             display_->print(text);
@@ -266,7 +266,7 @@ namespace GigaSeq
             return;
         }
 
-        drawHeaderText(kTransportIconX, kSequencePosY, kSequenceNameWidth, name);
+        drawHeaderText(kTransportIconX, kSequencePosY, kSequenceNameWidth, name, name[0] != '\0');
     }
 
 
