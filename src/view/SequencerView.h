@@ -51,6 +51,10 @@ namespace GigaSeq
         void executeUpdateSequenceInfos(uint16_t bar);
         void executeUpdateTransportState(bool isPlaying);
 
+        void drawHeaderText(int x, int y, int width, const char *text);
+        void drawHeaderChar(int x, int y, int width, uint8_t ch);
+        void prepareHeaderArea(int x, int y, int width);
+
         MyDisplay *display_ = nullptr;
 
         static constexpr int kWidth = 800;

@@ -77,16 +77,15 @@ void SequenceTrack::setTrackIndex(uint8_t index)
     trackIndex_ = index;
 }
 
-void SequenceTrack::setOnMuteChanged(MuteChangedCallback callback, void* context)
+void SequenceTrack::setOnMuteChanged(MuteChangedCallback callback)
 {
     onMuteChanged_ = callback;
-    onMuteChangedContext_ = context;
 }
 
 void SequenceTrack::notifyMuteChanged()
 {
     if (onMuteChanged_) {
-        onMuteChanged_(trackIndex_, muted_, onMuteChangedContext_);
+        onMuteChanged_(trackIndex_, muted_);
     }
 }
 

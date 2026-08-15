@@ -43,7 +43,7 @@ public:
 
     void setTrackMuted(std::size_t index, bool muted);
 
-    void setOnTrackMuteChanged(MuteChangedCallback callback, void* context = nullptr);
+    void setOnTrackMuteChanged(MuteChangedCallback callback);
 
     void reset();
     void processTick(bool wrapAtEnd = true);
@@ -63,5 +63,4 @@ private:
     MidiInOut* midi_ = nullptr;
     char name_[kNameMaxLength + 1] = {};
     MuteChangedCallback onTrackMuteChanged_ = nullptr;
-    void* onTrackMuteChangedContext_ = nullptr;
 };

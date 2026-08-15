@@ -8,7 +8,7 @@
 #include <cstddef>
 #include <vector>
 
-using SequenceChangedCallback = void (*)(void* context);
+using SequenceChangedCallback = void (*)();
 
 class SequencePool
 {
@@ -34,8 +34,8 @@ public:
     void processTick();
     void allNotesOff();
 
-    void setOnSequenceChanged(SequenceChangedCallback callback, void* context = nullptr);
-    void setOnTrackMuteChanged(MuteChangedCallback callback, void* context = nullptr);
+    void setOnSequenceChanged(SequenceChangedCallback callback);
+    void setOnTrackMuteChanged(MuteChangedCallback callback);
 
     static SequencePool createDefault(MidiInOut& midi, Logger& logger);
 
@@ -62,8 +62,7 @@ private:
     std::size_t currentSongIndex_ = 0;
     std::size_t currentSequenceIndex_ = 0;
     PendingSwitch pendingSwitch_ = PendingSwitch::None;
+
     SequenceChangedCallback onSequenceChanged_ = nullptr;
-    void* onSequenceChangedContext_ = nullptr;
     MuteChangedCallback onTrackMuteChanged_ = nullptr;
-    void* onTrackMuteChangedContext_ = nullptr;
 };

@@ -48,10 +48,9 @@ void Sequence::addTrack(SequenceTrack track)
     applyTrackMuteCallbacks();
 }
 
-void Sequence::setOnTrackMuteChanged(MuteChangedCallback callback, void* context)
+void Sequence::setOnTrackMuteChanged(MuteChangedCallback callback)
 {
     onTrackMuteChanged_ = callback;
-    onTrackMuteChangedContext_ = context;
     applyTrackMuteCallbacks();
 }
 
@@ -59,7 +58,7 @@ void Sequence::applyTrackMuteCallbacks()
 {
     for (std::size_t i = 0; i < tracks_.size(); ++i) {
         tracks_[i].setTrackIndex(i);
-        tracks_[i].setOnMuteChanged(onTrackMuteChanged_, onTrackMuteChangedContext_);
+        tracks_[i].setOnMuteChanged(onTrackMuteChanged_);
     }
 }
 

@@ -167,16 +167,14 @@ void SequencePool::allNotesOff()
     }
 }
 
-void SequencePool::setOnSequenceChanged(SequenceChangedCallback callback, void* context)
+void SequencePool::setOnSequenceChanged(SequenceChangedCallback callback)
 {
     onSequenceChanged_ = callback;
-    onSequenceChangedContext_ = context;
 }
 
-void SequencePool::setOnTrackMuteChanged(MuteChangedCallback callback, void* context)
+void SequencePool::setOnTrackMuteChanged(MuteChangedCallback callback)
 {
     onTrackMuteChanged_ = callback;
-    onTrackMuteChangedContext_ = context;
     wireTrackMuteCallbacks();
 }
 
@@ -188,7 +186,7 @@ void SequencePool::wireTrackMuteCallbacks()
 
     for (Song& song : songs_) {
         for (std::size_t i = 0; i < song.size(); ++i) {
-            song.sequence(i).setOnTrackMuteChanged(onTrackMuteChanged_, onTrackMuteChangedContext_);
+            song.sequence(i).setOnTrackMuteChanged(onTrackMuteChanged_);
         }
     }
 }
@@ -199,7 +197,7 @@ void SequencePool::notifySequenceChanged()
     logCurrentSequenceSwitch();
 #endif
     if (onSequenceChanged_) {
-        onSequenceChanged_(onSequenceChangedContext_);
+        onSequenceChanged_();
     }
 }
 

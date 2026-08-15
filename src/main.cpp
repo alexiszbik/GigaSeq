@@ -67,11 +67,11 @@ void refreshViewFromPool() {
 
 }
 
-void onSequenceChanged(void* /*context*/) {
+void onSequenceChanged() {
     refreshViewFromPool();
 }
 
-void onTrackMuteChanged(uint8_t trackIndex, bool muted, void* /*context*/) {
+void onTrackMuteChanged(uint8_t trackIndex, bool muted) {
     if (trackIndex >= 16) {
         return;
     }

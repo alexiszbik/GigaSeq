@@ -172,6 +172,29 @@ namespace GigaSeq
         return true;
     }
 
+    void SequencerView::prepareHeaderArea(int x, int y, int width)
+    {
+        display_->fillRect(x, y, width, kHeaderHeight, kBlack);
+        display_->setTextSize(kHeaderTextSize);
+        display_->setTextColor(kWhite, kBlack);
+        display_->setCursor(x, y);
+    }
+
+    void SequencerView::drawHeaderText(int x, int y, int width, const char *text)
+    {
+        prepareHeaderArea(x, y, width);
+        if (text)
+        {
+            display_->print(text);
+        }
+    }
+
+    void SequencerView::drawHeaderChar(int x, int y, int width, uint8_t ch)
+    {
+        prepareHeaderArea(x, y, width);
+        display_->write(ch);
+    }
+
     void SequencerView::executeUpdateSequenceName(const char *name)
     {
         if (!display_ || disable)
@@ -179,11 +202,7 @@ namespace GigaSeq
             return;
         }
 
-        display_->fillRect(0, kSequencePosY, kSequenceNameWidth, kHeaderHeight, kBlack);
-        display_->setTextSize(kHeaderTextSize);
-        display_->setTextColor(kWhite, kBlack);
-        display_->setCursor(0, kSequencePosY);
-        display_->print(name ? name : "");
+        drawHeaderText(0, kSequencePosY, kSequenceNameWidth, name);
     }
 
     void SequencerView::executeUpdateSequenceInfos(const uint16_t bar)
@@ -200,11 +219,7 @@ namespace GigaSeq
         p = appendUInt(p, bar);
         *p = '\0';
 
-        display_->fillRect(kBarX, 0, kBarWidth, kHeaderHeight, kBlack);
-        display_->setTextSize(kHeaderTextSize);
-        display_->setTextColor(kWhite, kBlack);
-        display_->setCursor(kBarX, 0);
-        display_->print(barText);
+        drawHeaderText(kBarX, 0, kBarWidth, barText);
     }
 
     void SequencerView::executeUpdateTransportState(bool isPlaying)
@@ -214,13 +229,8 @@ namespace GigaSeq
             return;
         }
 
-        display_->fillRect(kTransportIconX, 0, kTransportIconWidth, kHeaderHeight, kBlack);
-
-        display_->setTextSize(kHeaderTextSize);
-        display_->setTextColor(kWhite, kBlack);
-        display_->setCursor(kTransportIconX, 0);
-        display_->write(isPlaying ?  CHAR_PLAY : CHAR_STOP);
-
+        drawHeaderChar(kTransportIconX, 0, kTransportIconWidth,
+                       isPlaying ? CHAR_PLAY : CHAR_STOP);
     }
 
     void SequencerView::executeUpdateSongName(const char *name)
@@ -230,11 +240,7 @@ namespace GigaSeq
             return;
         }
 
-        display_->fillRect(0, 0, kSequenceNameWidth, kHeaderHeight, kBlack);
-        display_->setTextSize(kHeaderTextSize);
-        display_->setTextColor(kWhite, kBlack);
-        display_->setCursor(0, 0);
-        display_->print(name ? name : "");
+        drawHeaderText(0, 0, kSequenceNameWidth, name);
     }
 
     void SequencerView::executeUpdatePosition(uint16_t bar, uint8_t beat)
@@ -251,11 +257,7 @@ namespace GigaSeq
         p = appendUInt(p, beat);
         *p = '\0';
 
-        display_->fillRect(kPositionX, 0, kPositionWidth, kHeaderHeight, kBlack);
-        display_->setTextSize(kHeaderTextSize);
-        display_->setTextColor(kWhite, kBlack);
-        display_->setCursor(kPositionX, 0);
-        display_->print(positionText);
+        drawHeaderText(kPositionX, 0, kPositionWidth, positionText);
     }
 
     void SequencerView::executeDrawTrack(uint8_t trackIndex, const char *text, bool state)

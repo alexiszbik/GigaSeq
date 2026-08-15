@@ -11,7 +11,7 @@
 
 #include <cstdint>
 
-using MuteChangedCallback = void (*)(uint8_t trackIndex, bool muted, void* context);
+using MuteChangedCallback = void (*)(uint8_t trackIndex, bool muted);
 
 class SequenceTrack
 {
@@ -29,7 +29,7 @@ public:
     void setMuted(bool muted);
 
     void setTrackIndex(uint8_t index);
-    void setOnMuteChanged(MuteChangedCallback callback, void* context = nullptr);
+    void setOnMuteChanged(MuteChangedCallback callback);
 
     void setStartMuted() { startMuted_ = true; }
 
@@ -75,7 +75,6 @@ private:
 
     MidiInOut* midi_ = nullptr;
     MuteChangedCallback onMuteChanged_ = nullptr;
-    void* onMuteChangedContext_ = nullptr;
 
     // Fixed-capacity active note pool: no heap allocation, so it is safe to
     // mutate from the clock ISR (startNote/tickActiveNotes run in ISR).
