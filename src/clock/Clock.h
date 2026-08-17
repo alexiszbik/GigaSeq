@@ -35,8 +35,10 @@ private:
     TickCallback tickCallback_ = nullptr;
     void* tickContext_ = nullptr;
     uint32_t intervalUs_ = 0;
+    volatile uint32_t pendingIntervalUs_ = 0;
     uint16_t bpm_ = 120;
     volatile bool playing_ = false;
+    volatile bool intervalDirty_ = false;
 
     mbed::Ticker ticker_;
 };

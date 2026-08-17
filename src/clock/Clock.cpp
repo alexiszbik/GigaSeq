@@ -42,10 +42,12 @@ void TransportClock::toggleStartStop() {
 
 void TransportClock::setTempo(uint16_t bpm) {
     bpm_ = bpm;
-    intervalUs_ = intervalFor(bpm);
+    const uint32_t newInterval = intervalFor(bpm);
     if (playing_) {
-        // Re-arm with the new interval (mbed::Ticker supports re-attach).
-        ticker_.attach_us(mbed::callback(this, &TransportClock::onTicker), intervalUs_);
+        pendingIntervalUs_ = newInterval;
+        intervalDirty_ = true;
+    } else {
+        intervalUs_ = newInterval;
     }
 }
 
@@ -59,6 +61,14 @@ bool TransportClock::isPlaying() const {
 }
 
 void TransportClock::onTicker() {
+    // Apply pending tempo changes at tick boundary, before the tick callback.
+    // setTempo() only marks dirty when playing — never re-arms from inside the callback chain.
+    if (intervalDirty_) {
+        intervalDirty_ = false;
+        intervalUs_ = pendingIntervalUs_;
+        ticker_.attach_us(mbed::callback(this, &TransportClock::onTicker), intervalUs_);
+    }
+
     // Runs in the us_ticker ISR: keep it short and IRQ-safe.
     if (tickCallback_) {
         tickCallback_(tickContext_);

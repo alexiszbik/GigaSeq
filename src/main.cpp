@@ -43,9 +43,6 @@ SequencerView sequencerView;
 uint8_t midiClockCounter = 0;
 uint8_t beatTickCounter = 0;
 
-volatile uint8_t pendingTempoBpm = 0;
-volatile bool tempoDirty = false;
-
 void resetTickCounters() {
     midiClockCounter = 0;
     beatTickCounter = 0;
@@ -88,16 +85,7 @@ void onTrackMuteChanged(uint8_t trackIndex, bool muted) {
 }
 
 void onTempoChanged(uint8_t bpm) {
-    pendingTempoBpm = bpm;
-    tempoDirty = true;
-}
-
-void applyPendingTempo() {
-    if (!tempoDirty) {
-        return;
-    }
-    tempoDirty = false;
-    transportClock.setTempo(pendingTempoBpm);
+    transportClock.setTempo(bpm);
 }
 
 void startTransport() {
@@ -206,8 +194,6 @@ void setup() {
 }
 
 void loop() {
-
-    applyPendingTempo();
 
     gigaMidi.read();
     if (gigaMidi.flush()) return;
