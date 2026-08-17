@@ -85,6 +85,7 @@ void onTrackMuteChanged(uint8_t trackIndex, bool muted) {
 }
 
 void onTempoChanged(uint8_t bpm) {
+    sequencerView.updateBpm(bpm);
     transportClock.setTempo(bpm);
 }
 

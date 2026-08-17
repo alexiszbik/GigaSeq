@@ -85,7 +85,7 @@ namespace GigaSeq
     {
         ViewAction action;
         action.type = ViewActionType::UpdateSequenceInfos;
-        action.bar = bar;
+        action.value1 = bar;
         enqueueAction(action);
     }
 
@@ -101,8 +101,8 @@ namespace GigaSeq
     {
         ViewAction action;
         action.type = ViewActionType::UpdatePosition;
-        action.bar = bar;
-        action.beat = beat;
+        action.value1 = bar;
+        action.value2 = beat;
         enqueueAction(action);
     }
 
@@ -124,6 +124,13 @@ namespace GigaSeq
         } else if (sw == PendingSwitch::Previous) {
             copyActionText(action.text, "PREV");
         }
+        enqueueAction(action);
+    }
+
+    void SequencerView::updateBpm(uint8_t bpm) {
+        ViewAction action;
+        action.type = ViewActionType::UpdateBpm;
+        action.value2 = bpm;
         enqueueAction(action);
     }
 
@@ -167,19 +174,22 @@ namespace GigaSeq
                 executeUpdateSequenceName(action.text);
                 break;
             case ViewActionType::UpdatePosition:
-                executeUpdatePosition(action.bar, action.beat);
+                executeUpdatePosition(action.value1, action.value2);
                 break;
             case ViewActionType::DrawTrack:
                 executeDrawTrack(action.trackIndex, action.text, action.state);
                 break;
             case ViewActionType::UpdateSequenceInfos:
-                executeUpdateSequenceInfos(action.bar);
+                executeUpdateSequenceInfos(action.value1);
                 break;
             case ViewActionType::UpdateTransportState:
                 executeUpdateTransportState(action.state);
                 break;
             case ViewActionType::UpdatePending:
                 executePendingSwitch(action.text);
+                break;
+            case ViewActionType::UpdateBpm:
+                executeUpdateBpm(action.value2);
                 break;
             default:
                 break;
@@ -266,9 +276,23 @@ namespace GigaSeq
             return;
         }
 
-        drawHeaderText(kTransportIconX, kSequencePosY, kSequenceNameWidth, name, name[0] != '\0');
+        drawHeaderText(kTransportIconX, kSequencePosY, kPendingSwitchWidth, name, name[0] != '\0');
     }
 
+    void SequencerView::executeUpdateBpm(uint8_t bpm) {
+        if (!display_ || disable)
+        {
+            return;
+        }
+
+        // ':' + up to 3 digits (barCount <= 255) + NUL
+        char tempoText[8];
+        char *p = tempoText;
+        p = appendUInt(tempoText, bpm);
+        *p = '\0';
+
+        drawHeaderText(kBarX, kSequencePosY, kBarWidth, tempoText);
+    }
 
     void SequencerView::executeUpdatePosition(uint16_t bar, uint8_t beat)
     {

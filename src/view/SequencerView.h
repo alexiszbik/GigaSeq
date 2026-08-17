@@ -17,6 +17,7 @@ namespace GigaSeq
         UpdateTransportState,
         DrawTrack,
         UpdatePending,
+        UpdateBpm,
     };
 
     struct ViewAction
@@ -24,8 +25,8 @@ namespace GigaSeq
         ViewActionType type = ViewActionType::None;
         uint8_t trackIndex = 0;
         bool state = false;
-        uint16_t bar = 0;
-        uint8_t beat = 0;
+        uint16_t value1 = 0;
+        uint8_t value2 = 0;
         char text[31] = {0};
     };
 
@@ -39,6 +40,7 @@ namespace GigaSeq
         void updateSequenceInfos(uint16_t bar);
         void updateTransportState(bool isPlaying);
         void updatePending(PendingSwitch sw);
+        void updateBpm(uint8_t bpm);
         void drawTrack(uint8_t trackIndex, const char *text, bool state);
 
         bool processOne();
@@ -54,6 +56,7 @@ namespace GigaSeq
         void executeUpdateSequenceInfos(uint16_t bar);
         void executeUpdateTransportState(bool isPlaying);
         void executePendingSwitch(const char* name);
+        void executeUpdateBpm(uint8_t bpm);
 
         void drawHeaderText(int x, int y, int width, const char *text, bool inverted = false);
         void drawHeaderChar(int x, int y, int width, uint8_t ch);
@@ -87,6 +90,11 @@ namespace GigaSeq
 
         static constexpr int kBarWidth = kHeaderCaracSize*3;
         static constexpr int kBarX = kWidth - kBarWidth;
+        
+        static constexpr int kPendingSwitchWidth = kHeaderCaracSize*4;
+
+        static constexpr int kBpmWidth = kHeaderCaracSize*3;
+        static constexpr int kBpmX = kWidth - kBpmWidth;
         
 
         static constexpr uint8_t kQueueCapacity = 32;
