@@ -1,5 +1,6 @@
 #include "SequenceTrackFactory.h"
 
+#include "MidiNotes.h"
 #include "MidiChannel.h"
 #include "Sequence.h"
 #include "Tick.h"
@@ -109,6 +110,38 @@ void makeAutomationTrack(
 }
 
 } // namespace
+
+SequenceTrack SequenceTrackFactory::togetherArp(tick_t lengthInTicks) {
+    SequenceTrack track("Modular", MidiChannel::kModularA);
+
+    SequenceDesc desc;
+    desc.notes = {
+        {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3},
+        {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3},
+        {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3},
+        {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3},
+        {C4}, {C3}, {C2}, {C3}, {C4}, {C3}, {C2}, {C3}, {C4}, {C3}, {C2}, {C3}, {C4}, {C3}, {C2}, {C3}, 
+        {C4}, {C3}, {C2}, {C3}, {C4}, {C3}, {C2}, {C3}, {C4}, {C3}, {C2}, {C3}, {C4}, {C3}, {C2}, {C3}, 
+        {C4}, {C3}, {C2}, {C3}, {C4}, {C3}, {C2}, {C3}, {C4}, {C3}, {C2}, {C3}, {C4}, {C3}, {C2}, {C3}, 
+        {C4}, {C3}, {C2}, {C3}, {C4}, {C3}, {C2}, {C3}, {C4}, {C3}, {C2}, {C3}, {C4}, {C3}, {C2}, {C3}
+    };
+    desc.rate = 16;
+    makeSequenceTrack(track, desc, lengthInTicks);
+
+    return track;
+}
+
+SequenceTrack SequenceTrackFactory::togetherHiDrum(tick_t lengthInTicks)
+{
+    SequenceTrack track("Hi Drum", MidiChannel::kDrums);
+
+    SequenceDesc desc;
+    desc.notes = {{56}};
+    desc.rate = 2;
+    makeSequenceTrack(track, desc, lengthInTicks);
+
+    return track;
+}
 
 SequenceTrack SequenceTrackFactory::createFourOnFloorKick(tick_t lengthInTicks)
 {

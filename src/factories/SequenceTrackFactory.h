@@ -5,6 +5,11 @@
 class SequenceTrackFactory
 {
 public:
+    static SequenceTrack togetherArp(tick_t lengthInTicks);
+    static SequenceTrack togetherHiDrum(tick_t lengthInTicks);
+
+
+
     static SequenceTrack createCMaj7Arpeggio(tick_t lengthInTicks);
     static SequenceTrack createAm7Arpeggio(tick_t lengthInTicks);
     static SequenceTrack createKickSnare(tick_t lengthInTicks);

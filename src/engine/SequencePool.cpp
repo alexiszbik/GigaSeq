@@ -299,14 +299,19 @@ SequencePool SequencePool::createDefault(MidiInOut& midi, Logger& logger)
 {
     SequencePool pool(midi, logger);
 
-    using Builder = Sequence (*)(int);
+    using Builder = Sequence (*)();
     auto addSong = [&pool](const char* name, std::vector<Builder> builders) {
         Song song(name);
         for (auto& b : builders) {
-            song.add(b(4));
+            song.add(b());
         }
         pool.add(std::move(song));
     };
+
+    addSong("Together", {
+        SequenceFactory::togetherIntro,
+        SequenceFactory::togetherDrum,
+    });
 
     addSong("Intro", {
         SequenceFactory::createSequenceOne,
