@@ -16,6 +16,7 @@ public:
 
     Sequence(
         const char* name,
+        uint8_t tempo,
         uint8_t barCount,
         uint8_t beatsPerBar = 4,
         uint8_t barLoop = 0);
@@ -31,6 +32,8 @@ public:
 
     int currentBar () const noexcept { return position_ / (beatsPerBar_ * kTicksPerQuarterNote); }
     int currentBeat () const noexcept { return (position_ / kTicksPerQuarterNote) % beatsPerBar_; }
+
+    uint8_t getTempo () const noexcept { return tempo_; }
 
     void attachMidi(MidiInOut& midi);
 
@@ -49,6 +52,14 @@ public:
     void processTick(bool wrapAtEnd = true);
     void allNotesOff();
 
+private:
+    void applyTrackMuteCallbacks();
+
+    MidiInOut* midi_ = nullptr;
+    char name_[kNameMaxLength + 1] = {};
+    MuteChangedCallback onTrackMuteChanged_ = nullptr;
+
+    uint8_t tempo_ = 120;
     uint8_t barCount_;
     uint8_t beatsPerBar_;
 
@@ -56,11 +67,4 @@ public:
     tick_t position_ = 0;
     bool loopStartAfterWrap_ = false;
     std::vector<SequenceTrack> tracks_;
-
-private:
-    void applyTrackMuteCallbacks();
-
-    MidiInOut* midi_ = nullptr;
-    char name_[kNameMaxLength + 1] = {};
-    MuteChangedCallback onTrackMuteChanged_ = nullptr;
 };

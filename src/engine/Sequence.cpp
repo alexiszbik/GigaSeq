@@ -7,10 +7,12 @@
 
 Sequence::Sequence(
     const char* name,
+    uint8_t tempo,
     uint8_t barCount,
     uint8_t beatsPerBar,
     uint8_t barLoop)
-    : barCount_(barCount)
+    : tempo_(tempo),
+      barCount_(barCount)
     , beatsPerBar_(beatsPerBar)
 {
     StringHelper::copyName(name_, name, kNameMaxLength + 1);

@@ -11,9 +11,10 @@ Sequence buildSequence(
     int beatsPerBar,
     int barLoop,
     const char* name,
+    uint8_t tempo,
     std::vector<TrackBuilder> builders)
 {
-    Sequence sequence(name, barCount, beatsPerBar, barLoop);
+    Sequence sequence(name, tempo, barCount, beatsPerBar, barLoop);
     const tick_t length = sequence.lengthInTicks();
 
     for (auto& tb : builders) {
@@ -26,7 +27,7 @@ Sequence buildSequence(
 Sequence SequenceFactory::createSequenceOne(int barCount)
 {
     return buildSequence(
-        2, 7, 1, "Kick/Hat12345",
+        2, 7, 1, "Kick/Hat12345", 120,
         {
             SequenceTrackFactory::createKickSnareWithHats,
             SequenceTrackFactory::createCMaj7Arpeggio,
@@ -50,7 +51,7 @@ Sequence SequenceFactory::createSequenceOne(int barCount)
 Sequence SequenceFactory::createSequenceTwo(int barCount)
 {
     return buildSequence(
-        barCount, 4, 2, "F on Flour",
+        barCount, 4, 2, "F on Flour", 140,
         {
             SequenceTrackFactory::createCMaj7Arpeggio,
             SequenceTrackFactory::createFourOnFloorKick,
@@ -74,7 +75,7 @@ Sequence SequenceFactory::createSequenceTwo(int barCount)
 Sequence SequenceFactory::createSequenceThree(int barCount)
 {
     return buildSequence(
-        barCount, 4, 0, "Am7Hi-Hat",
+        barCount, 4, 0, "Am7Hi-Hat", 165,
         {
             SequenceTrackFactory::createAm7Arpeggio,
             SequenceTrackFactory::createHiHatPattern,
@@ -98,7 +99,7 @@ Sequence SequenceFactory::createSequenceThree(int barCount)
 Sequence SequenceFactory::createSequenceFour(int barCount)
 {
     return buildSequence(
-        barCount, 4, 0, "Pads",
+        barCount, 4, 0, "Pads", 90,
         {
             SequenceTrackFactory::createPadChords,
             SequenceTrackFactory::createKickSnare,
@@ -122,7 +123,7 @@ Sequence SequenceFactory::createSequenceFour(int barCount)
 Sequence SequenceFactory::createSequenceFive(int barCount)
 {
     return buildSequence(
-        barCount, 4, 1, "Melodic",
+        barCount, 4, 1, "Melodic", 104,
         {
             SequenceTrackFactory::createMelodicBass,
             SequenceTrackFactory::createSnareBackbeat,
@@ -146,7 +147,7 @@ Sequence SequenceFactory::createSequenceFive(int barCount)
 Sequence SequenceFactory::createSequenceSix(int barCount)
 {
     return buildSequence(
-        barCount, 4, 2, "Stabs",
+        barCount, 4, 2, "Stabs", 115,
         {
             SequenceTrackFactory::createSynthStabs,
             SequenceTrackFactory::createKickSnareWithHats,
@@ -170,7 +171,7 @@ Sequence SequenceFactory::createSequenceSix(int barCount)
 Sequence SequenceFactory::createSequenceSeven(int barCount)
 {
     return buildSequence(
-        barCount, 4, 0, "Clap",
+        barCount, 4, 0, "Clap", 155,
         {
             SequenceTrackFactory::createClapBackbeat,
             SequenceTrackFactory::createMelodicBass,
