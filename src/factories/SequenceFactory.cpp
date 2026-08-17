@@ -33,15 +33,34 @@ Sequence SequenceFactory::togetherIntro()
         });
 }
 
-Sequence SequenceFactory::togetherDrum()
+Sequence SequenceFactory::togetherSample()
 {
     return buildSequence(
-        8, 4, 0, "Drum", 130,
+        8, 4, 0, "Sample", 130,
         {
             SequenceTrackFactory::togetherArp,
-            SequenceTrackFactory::togetherHiDrum
+            SequenceTrackFactory::togetherHiDrum,
+            SequenceTrackFactory::togetherSample,
+            SequenceTrackFactory::togetherDX7
         });
 }
+
+Sequence SequenceFactory::togetherKick()
+{
+    return buildSequence(
+        8, 4, 0, "Kick", 130,
+        {
+            SequenceTrackFactory::togetherArp,
+            SequenceTrackFactory::togetherHiDrum,
+            SequenceTrackFactory::togetherSample,
+            SequenceTrackFactory::togetherDX7,
+            SequenceTrackFactory::kickFour
+        });
+}
+
+
+
+
 
 Sequence SequenceFactory::createSequenceOne()
 {
@@ -50,7 +69,7 @@ Sequence SequenceFactory::createSequenceOne()
         {
             SequenceTrackFactory::createKickSnareWithHats,
             SequenceTrackFactory::createCMaj7Arpeggio,
-            SequenceTrackFactory::createFourOnFloorKick,
+            SequenceTrackFactory::kickFour,
             SequenceTrackFactory::createHiHatPattern,
             SequenceTrackFactory::createOpenHat,
             SequenceTrackFactory::createSnareBackbeat,
@@ -73,7 +92,7 @@ Sequence SequenceFactory::createSequenceTwo()
         4, 4, 2, "F on Flour", 140,
         {
             SequenceTrackFactory::createCMaj7Arpeggio,
-            SequenceTrackFactory::createFourOnFloorKick,
+            SequenceTrackFactory::kickFour,
             SequenceTrackFactory::createKickSnare,
             SequenceTrackFactory::createKickSnareWithHats,
             SequenceTrackFactory::createHiHatPattern,
@@ -98,7 +117,7 @@ Sequence SequenceFactory::createSequenceThree()
         {
             SequenceTrackFactory::createAm7Arpeggio,
             SequenceTrackFactory::createHiHatPattern,
-            SequenceTrackFactory::createFourOnFloorKick,
+            SequenceTrackFactory::kickFour,
             SequenceTrackFactory::createKickSnare,
             SequenceTrackFactory::createSnareBackbeat,
             SequenceTrackFactory::createClapBackbeat,
@@ -130,7 +149,7 @@ Sequence SequenceFactory::createSequenceFour()
             SequenceTrackFactory::createPadChords,
             SequenceTrackFactory::createKickSnare,
             SequenceTrackFactory::createPadSwells,
-            SequenceTrackFactory::createFourOnFloorKick,
+            SequenceTrackFactory::kickFour,
             SequenceTrackFactory::createHiHatPattern,
             SequenceTrackFactory::createSnareBackbeat,
             SequenceTrackFactory::createClapBackbeat,
@@ -153,7 +172,7 @@ Sequence SequenceFactory::createSequenceFive()
         {
             SequenceTrackFactory::createMelodicBass,
             SequenceTrackFactory::createSnareBackbeat,
-            SequenceTrackFactory::createFourOnFloorKick,
+            SequenceTrackFactory::kickFour,
             SequenceTrackFactory::createHiHatPattern,
             SequenceTrackFactory::createOpenHat,
             SequenceTrackFactory::createClapBackbeat,
@@ -177,7 +196,7 @@ Sequence SequenceFactory::createSequenceSix()
         {
             SequenceTrackFactory::createSynthStabs,
             SequenceTrackFactory::createKickSnareWithHats,
-            SequenceTrackFactory::createFourOnFloorKick,
+            SequenceTrackFactory::kickFour,
             SequenceTrackFactory::createHiHatPattern,
             SequenceTrackFactory::createSnareBackbeat,
             SequenceTrackFactory::createClapBackbeat,
@@ -201,7 +220,7 @@ Sequence SequenceFactory::createSequenceSeven()
         {
             SequenceTrackFactory::createClapBackbeat,
             SequenceTrackFactory::createMelodicBass,
-            SequenceTrackFactory::createFourOnFloorKick,
+            SequenceTrackFactory::kickFour,
             SequenceTrackFactory::createKickSnare,
             SequenceTrackFactory::createHiHatPattern,
             SequenceTrackFactory::createOpenHat,

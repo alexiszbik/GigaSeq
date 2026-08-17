@@ -16,7 +16,7 @@ struct SequenceDesc
     std::vector<std::vector<uint8_t>> notes;
     std::vector<uint8_t> velocities;
     std::vector<uint8_t> durations;
-    uint8_t rate = 4;
+    double rate = 4;
 };
 
 void makeSequenceTrack(
@@ -140,15 +140,62 @@ SequenceTrack SequenceTrackFactory::togetherHiDrum(tick_t lengthInTicks)
     desc.rate = 2;
     makeSequenceTrack(track, desc, lengthInTicks);
 
+    desc.notes = {{37}};
+    desc.rate = 4;
+    makeSequenceTrack(track, desc, lengthInTicks);
+
+    desc.notes = {{}, {38}};
+    desc.rate = 4;
+    makeSequenceTrack(track, desc, lengthInTicks);
+
+    desc.notes = {{40}};
+    desc.velocities = {{127}, {56}};
+    desc.rate = 8;
+    makeSequenceTrack(track, desc, lengthInTicks);
+
     return track;
 }
 
-SequenceTrack SequenceTrackFactory::createFourOnFloorKick(tick_t lengthInTicks)
+SequenceTrack SequenceTrackFactory::togetherSample(tick_t lengthInTicks)
 {
-    SequenceTrack track("Four On Floor", MidiChannel::kDrums);
+    SequenceTrack track("Sample", MidiChannel::kSampler);
 
     SequenceDesc desc;
-    desc.notes = {{36}, {36}, {36}, {36}};
+    desc.notes = {{52}, {52}, {53}, {53}};
+    desc.rate = 0.5;
+    makeSequenceTrack(track, desc, lengthInTicks);
+
+    return track;
+}
+
+SequenceTrack SequenceTrackFactory::togetherDX7(tick_t lengthInTicks)
+{
+    SequenceTrack track("DX7", MidiChannel::kSampler);
+
+    SequenceDesc desc;
+    desc.notes = {
+        {58}, {58}, {58}, {58}, {58}, {58}, {58}, {58},
+        {58}, {58}, {58}, {58}, {58}, {58}, {58}, {58},
+        {58}, {58}, {58}, {58}, {58}, {58}, {58}, {58},
+        {58}, {58}, {58}, {58}, {58}, {58}, {58}, {58},
+        {59}, {59}, {59}, {59}, {59}, {59}, {59}, {59},
+        {59}, {59}, {59}, {59}, {59}, {59}, {59}, {59},
+        {59}, {59}, {59}, {59}, {59}, {59}, {59}, {59},
+        {59}, {59}, {59}, {59}, {59}, {59}, {59}, {59},
+    };
+    desc.rate = 8;
+    makeSequenceTrack(track, desc, lengthInTicks);
+
+    return track;
+}
+
+
+SequenceTrack SequenceTrackFactory::kickFour(tick_t lengthInTicks)
+{
+    SequenceTrack track("Kick", MidiChannel::kDrums);
+
+    SequenceDesc desc;
+    desc.notes = {{36}};
     desc.rate = 4;
     makeSequenceTrack(track, desc, lengthInTicks);
 

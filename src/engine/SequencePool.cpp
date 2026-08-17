@@ -310,7 +310,8 @@ SequencePool SequencePool::createDefault(MidiInOut& midi, Logger& logger)
 
     addSong("Together", {
         SequenceFactory::togetherIntro,
-        SequenceFactory::togetherDrum,
+        SequenceFactory::togetherSample,
+        SequenceFactory::togetherKick,
     });
 
     addSong("Intro", {

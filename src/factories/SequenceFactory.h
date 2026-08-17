@@ -6,7 +6,8 @@ class SequenceFactory
 {
 public:
     static Sequence togetherIntro();
-    static Sequence togetherDrum();
+    static Sequence togetherSample();
+    static Sequence togetherKick();
 
     static Sequence createSequenceOne();
     static Sequence createSequenceTwo();

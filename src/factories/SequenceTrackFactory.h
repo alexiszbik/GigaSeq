@@ -7,6 +7,8 @@ class SequenceTrackFactory
 public:
     static SequenceTrack togetherArp(tick_t lengthInTicks);
     static SequenceTrack togetherHiDrum(tick_t lengthInTicks);
+    static SequenceTrack togetherSample(tick_t lengthInTicks);
+    static SequenceTrack togetherDX7(tick_t lengthInTicks);
 
 
 
@@ -17,7 +19,7 @@ public:
     static SequenceTrack createBassLine(tick_t lengthInTicks);
     static SequenceTrack createMelodicBass(tick_t lengthInTicks);
     static SequenceTrack createHiHatPattern(tick_t lengthInTicks);
-    static SequenceTrack createFourOnFloorKick(tick_t lengthInTicks);
+    static SequenceTrack kickFour(tick_t lengthInTicks);
     static SequenceTrack createSnareBackbeat(tick_t lengthInTicks);
     static SequenceTrack createPadChords(tick_t lengthInTicks);
     static SequenceTrack createSynthStabs(tick_t lengthInTicks);
