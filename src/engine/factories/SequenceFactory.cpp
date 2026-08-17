@@ -74,7 +74,7 @@ Sequence SequenceFactory::createSequenceTwo(int barCount)
 
 Sequence SequenceFactory::createSequenceThree(int barCount)
 {
-    return buildSequence(
+    Sequence sequence = buildSequence(
         barCount, 4, 0, "Am7Hi-Hat", 165,
         {
             SequenceTrackFactory::createAm7Arpeggio,
@@ -94,6 +94,13 @@ Sequence SequenceFactory::createSequenceThree(int barCount)
             SequenceTrackFactory::createPadChords,
             SequenceTrackFactory::createLead,
         });
+
+    const tick_t bar2Tick = static_cast<tick_t>(1 * 4 * Sequence::kTicksPerQuarterNote);
+    const tick_t bar4Tick = static_cast<tick_t>(3 * 4 * Sequence::kTicksPerQuarterNote);
+    sequence.addTempoEvent(bar2Tick, 140);
+    sequence.addTempoEvent(bar4Tick, 165);
+
+    return sequence;
 }
 
 Sequence SequenceFactory::createSequenceFour(int barCount)

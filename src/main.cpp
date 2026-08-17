@@ -43,6 +43,9 @@ SequencerView sequencerView;
 uint8_t midiClockCounter = 0;
 uint8_t beatTickCounter = 0;
 
+volatile uint8_t pendingTempoBpm = 0;
+volatile bool tempoDirty = false;
+
 void resetTickCounters() {
     midiClockCounter = 0;
     beatTickCounter = 0;
@@ -82,6 +85,19 @@ void onTrackMuteChanged(uint8_t trackIndex, bool muted) {
 
     const SequenceTrack& track = sequencePool.current().track(trackIndex);
     sequencerView.drawTrack(trackIndex, track.name(), muted);
+}
+
+void onTempoChanged(uint8_t bpm) {
+    pendingTempoBpm = bpm;
+    tempoDirty = true;
+}
+
+void applyPendingTempo() {
+    if (!tempoDirty) {
+        return;
+    }
+    tempoDirty = false;
+    transportClock.setTempo(pendingTempoBpm);
 }
 
 void startTransport() {
@@ -181,14 +197,17 @@ void setup() {
     refreshViewFromPool();
 
     gigaMidi.begin();
-    transportClock.begin(166);
+    transportClock.begin(sequencePool.current().getTempo());
     transportClock.setOnTick(onClockTick);
     sequencePool.setOnSequenceChanged(onSequenceChanged);
     sequencePool.setOnTrackMuteChanged(onTrackMuteChanged);
+    sequencePool.setOnTempoChanged(onTempoChanged);
     sequencePool.setOnPendingChanged(onPendingChanged);
 }
 
 void loop() {
+
+    applyPendingTempo();
 
     gigaMidi.read();
     if (gigaMidi.flush()) return;

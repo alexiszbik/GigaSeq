@@ -45,6 +45,7 @@ public:
 
     void setOnSequenceChanged(SequenceChangedCallback callback);
     void setOnTrackMuteChanged(MuteChangedCallback callback);
+    void setOnTempoChanged(TempoChangedCallback callback);
     void setOnPendingChanged(PendingChangedCallback callback);
 
     static SequencePool createDefault(MidiInOut& midi, Logger& logger);
@@ -58,6 +59,7 @@ private:
     void logCurrentSequenceSwitch();
     void notifySequenceChanged();
     void wireTrackMuteCallbacks();
+    void wireTempoCallbacks();
     void setPending(PendingSwitch sw);
 
     MidiInOut& midi_;
@@ -69,5 +71,6 @@ private:
 
     SequenceChangedCallback onSequenceChanged_ = nullptr;
     MuteChangedCallback onTrackMuteChanged_ = nullptr;
+    TempoChangedCallback onTempoChanged_ = nullptr;
     PendingChangedCallback onPendingChanged_ = nullptr;
 };

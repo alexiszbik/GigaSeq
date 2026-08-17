@@ -12,8 +12,9 @@ Sequence::Sequence(
     uint8_t beatsPerBar,
     uint8_t barLoop)
     : tempo_(tempo),
-      barCount_(barCount)
-    , beatsPerBar_(beatsPerBar)
+      activeTempo_(tempo),
+      barCount_(barCount),
+      beatsPerBar_(beatsPerBar)
 {
     StringHelper::copyName(name_, name, kNameMaxLength + 1);
 
@@ -56,6 +57,16 @@ void Sequence::setOnTrackMuteChanged(MuteChangedCallback callback)
     applyTrackMuteCallbacks();
 }
 
+void Sequence::setOnTempoChanged(TempoChangedCallback callback)
+{
+    onTempoChanged_ = callback;
+}
+
+void Sequence::addTempoEvent(tick_t tick, uint8_t bpm)
+{
+    tempoEvents_.add({ tick, bpm });
+}
+
 void Sequence::applyTrackMuteCallbacks()
 {
     for (std::size_t i = 0; i < tracks_.size(); ++i) {
@@ -84,14 +95,25 @@ void Sequence::setTrackMuted(std::size_t index, bool muted)
     tracks_.at(index).setMuted(muted);
 }
 
+void Sequence::notifyTempoChanged()
+{
+    if (onTempoChanged_) {
+        onTempoChanged_(activeTempo_);
+    }
+}
+
 void Sequence::reset()
 {
     position_ = 0;
     loopStartAfterWrap_ = false;
+    tempoEvents_.reset();
 
     for (SequenceTrack& track : tracks_) {
         track.reset();
     }
+
+    activeTempo_ = tempo_;
+    notifyTempoChanged();
 }
 
 void Sequence::processTick(bool wrapAtEnd)
@@ -107,6 +129,13 @@ void Sequence::processTick(bool wrapAtEnd)
 
     const bool loopWrap = wrapAtEnd && loopStartAfterWrap_;
     loopStartAfterWrap_ = false;
+
+    tempoEvents_.process(position_, loopWrap, [this](const TempoEvent& event) {
+        if (event.bpm != activeTempo_) {
+            activeTempo_ = event.bpm;
+            notifyTempoChanged();
+        }
+    });
 
     for (SequenceTrack& track : tracks_) {
         track.processTick(position_, loopWrap);

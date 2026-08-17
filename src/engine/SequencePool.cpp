@@ -16,6 +16,7 @@ void SequencePool::add(Song song)
     song.attachMidi(midi_);
     songs_.push_back(std::move(song));
     wireTrackMuteCallbacks();
+    wireTempoCallbacks();
 }
 
 std::size_t SequencePool::sequenceCount() const noexcept
@@ -185,6 +186,12 @@ void SequencePool::setOnTrackMuteChanged(MuteChangedCallback callback)
     wireTrackMuteCallbacks();
 }
 
+void SequencePool::setOnTempoChanged(TempoChangedCallback callback)
+{
+    onTempoChanged_ = callback;
+    wireTempoCallbacks();
+}
+
 void SequencePool::setOnPendingChanged(PendingChangedCallback callback) 
 {
     onPendingChanged_ = callback;
@@ -199,6 +206,19 @@ void SequencePool::wireTrackMuteCallbacks()
     for (Song& song : songs_) {
         for (std::size_t i = 0; i < song.size(); ++i) {
             song.sequence(i).setOnTrackMuteChanged(onTrackMuteChanged_);
+        }
+    }
+}
+
+void SequencePool::wireTempoCallbacks()
+{
+    if (!onTempoChanged_) {
+        return;
+    }
+
+    for (Song& song : songs_) {
+        for (std::size_t i = 0; i < song.size(); ++i) {
+            song.sequence(i).setOnTempoChanged(onTempoChanged_);
         }
     }
 }
@@ -219,13 +239,14 @@ void SequencePool::logCurrentSequenceSwitch()
     std::snprintf(
         buffer,
         sizeof(buffer),
-        "Switched to song %zu / %zu — sequence %zu / %zu — %s (%zu tracks)\n",
+        "Switched to song %zu / %zu — sequence %zu / %zu — %s (%zu tracks, %u BPM)\n",
         currentSongIndex_ + 1,
         songs_.size(),
         currentSequenceIndex_ + 1,
         currentSong().size(),
         current().name(),
-        current().trackCount());
+        current().trackCount(),
+        current().getTempo());
 
     logger_.info(buffer);
 }

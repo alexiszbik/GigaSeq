@@ -14,6 +14,10 @@ namespace
 {
 volatile std::sig_atomic_t gKeepRunning = 1;
 
+SequencePool* gPool = nullptr;
+Logger* gLogger = nullptr;
+MidiClock* gClock = nullptr;
+
 void handleSignal(int)
 {
     gKeepRunning = 0;
@@ -210,17 +214,18 @@ void maybePrintBarPosition(const Sequence& sequence, Logger& logger)
     logger.info(buffer);
 }
 
-void onSequenceChanged(void* context)
+void onSequenceChanged()
 {
-    auto* data = static_cast<std::pair<SequencePool*, Logger*>*>(context);
-    printPoolStatus(*data->first, *data->second);
+    if (gPool && gLogger) {
+        printPoolStatus(*gPool, *gLogger);
+    }
 }
 
-void onTrackMuteChanged(uint8_t trackIndex, bool muted, void* context)
+void onTrackMuteChanged(uint8_t trackIndex, bool muted)
 {
-    auto* data = static_cast<std::pair<SequencePool*, Logger*>*>(context);
-    SequencePool& pool = *data->first;
-    Logger& logger = *data->second;
+    if (!gPool || !gLogger) {
+        return;
+    }
 
     char buffer[128];
     std::snprintf(
@@ -228,9 +233,26 @@ void onTrackMuteChanged(uint8_t trackIndex, bool muted, void* context)
         sizeof(buffer),
         "Track [%u] %s %s\n",
         trackIndex,
-        pool.current().track(trackIndex).name(),
+        gPool->current().track(trackIndex).name(),
         muted ? "muted" : "unmuted");
-    logger.info(buffer);
+    gLogger->info(buffer);
+}
+
+void onTempoChanged(uint8_t bpm)
+{
+    if (!gClock) {
+        return;
+    }
+
+    try {
+        gClock->setBpm(static_cast<double>(bpm));
+    } catch (const std::exception& error) {
+        if (gLogger) {
+            char buffer[128];
+            std::snprintf(buffer, sizeof(buffer), "%s\n", error.what());
+            gLogger->info(buffer);
+        }
+    }
 }
 } // namespace
 
@@ -239,7 +261,6 @@ int main()
     std::signal(SIGINT, handleSignal);
 
     constexpr auto kPortName = "GigaSeq Virtual";
-    constexpr double kDefaultBpm = 120.0;
 
     try
     {
@@ -248,11 +269,15 @@ int main()
         MidiClock clock(sender, logger);
         SequencePool pool = SequencePool::createDefault(sender, logger);
 
-        std::pair<SequencePool*, Logger*> callbackContext{ &pool, &logger };
-        pool.setOnSequenceChanged(onSequenceChanged, &callbackContext);
-        pool.setOnTrackMuteChanged(onTrackMuteChanged, &callbackContext);
+        gPool = &pool;
+        gLogger = &logger;
+        gClock = &clock;
 
-        clock.setBpm(kDefaultBpm);
+        pool.setOnSequenceChanged(onSequenceChanged);
+        pool.setOnTrackMuteChanged(onTrackMuteChanged);
+        pool.setOnTempoChanged(onTempoChanged);
+
+        clock.setBpm(static_cast<double>(pool.current().getTempo()));
 
         clock.setOnPlay([&pool]() {
             pool.resetCurrent();

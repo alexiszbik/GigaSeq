@@ -3,10 +3,14 @@
 #include "MidiInOut.h"
 #include "SequenceTrack.h"
 #include "StringHelper.h"
+#include "TempoEvent.h"
 #include "Tick.h"
+#include "TimedEventList.h"
 
 #include <cstddef>
 #include <vector>
+
+using TempoChangedCallback = void (*)(uint8_t bpm);
 
 class Sequence
 {
@@ -33,7 +37,7 @@ public:
     int currentBar () const noexcept { return position_ / (beatsPerBar_ * kTicksPerQuarterNote); }
     int currentBeat () const noexcept { return (position_ / kTicksPerQuarterNote) % beatsPerBar_; }
 
-    uint8_t getTempo () const noexcept { return tempo_; }
+    uint8_t getTempo() const noexcept { return activeTempo_; }
 
     void attachMidi(MidiInOut& midi);
 
@@ -47,6 +51,9 @@ public:
     void setTrackMuted(std::size_t index, bool muted);
 
     void setOnTrackMuteChanged(MuteChangedCallback callback);
+    void setOnTempoChanged(TempoChangedCallback callback);
+
+    void addTempoEvent(tick_t tick, uint8_t bpm);
 
     void reset();
     void processTick(bool wrapAtEnd = true);
@@ -54,17 +61,21 @@ public:
 
 private:
     void applyTrackMuteCallbacks();
+    void notifyTempoChanged();
 
     MidiInOut* midi_ = nullptr;
     char name_[kNameMaxLength + 1] = {};
     MuteChangedCallback onTrackMuteChanged_ = nullptr;
+    TempoChangedCallback onTempoChanged_ = nullptr;
 
     uint8_t tempo_ = 120;
+    uint8_t activeTempo_ = 120;
     uint8_t barCount_;
     uint8_t beatsPerBar_;
 
     tick_t loopInPoint_ = 0;
     tick_t position_ = 0;
     bool loopStartAfterWrap_ = false;
+    TimedEventList<TempoEvent> tempoEvents_;
     std::vector<SequenceTrack> tracks_;
 };
