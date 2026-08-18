@@ -230,7 +230,7 @@ SequenceTrack SequenceTrackFactory::togetherVocoderPartSample(tick_t lengthInTic
 {
     auto original = SequenceTrackFactory::togetherSample(vocoderLength);
         
-    original.addControlChange(0, 13, 70);
+    original.addControlChange(0, 13, 65);
     original.addControlChange(24 * oneBarTick, 13, 127);
 
     SequenceDesc desc;

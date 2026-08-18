@@ -146,6 +146,7 @@ Sequence SequenceFactory::togetherPartBClimax()
         });
 
     seq.track(7).addMuteEvent(0);
+    return seq;
 }
 
 Sequence SequenceFactory::createSequenceOne()
