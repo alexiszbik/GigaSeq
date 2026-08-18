@@ -18,6 +18,7 @@ enum class PendingSwitch
 
 using SequenceChangedCallback = void (*)();
 using PendingChangedCallback = void (*)(PendingSwitch);
+using PlaybackStopCallback = void (*)();
 
 class SequencePool
 {
@@ -47,6 +48,7 @@ public:
     void setOnTrackMuteChanged(MuteChangedCallback callback);
     void setOnTempoChanged(TempoChangedCallback callback);
     void setOnPendingChanged(PendingChangedCallback callback);
+    void setOnPlaybackStop(PlaybackStopCallback callback);
 
     static SequencePool createDefault(MidiInOut& midi, Logger& logger);
 
@@ -58,6 +60,7 @@ private:
     void queueSwitch(PendingSwitch direction);
     void logCurrentSequenceSwitch();
     void notifySequenceChanged();
+    void notifyPlaybackStop();
     void wireTrackMuteCallbacks();
     void wireTempoCallbacks();
     void setPending(PendingSwitch sw);
@@ -73,4 +76,5 @@ private:
     MuteChangedCallback onTrackMuteChanged_ = nullptr;
     TempoChangedCallback onTempoChanged_ = nullptr;
     PendingChangedCallback onPendingChanged_ = nullptr;
+    PlaybackStopCallback onPlaybackStop_ = nullptr;
 };

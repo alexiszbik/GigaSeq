@@ -23,13 +23,15 @@ public:
         uint8_t tempo,
         uint8_t barCount,
         uint8_t beatsPerBar = 4,
-        uint8_t barLoop = 0);
+        uint8_t barLoop = 0,
+        bool loop = true);
 
     const char* name() const noexcept { return name_; }
 
     int barCount() const noexcept { return barCount_; }
     int beatsPerBar() const noexcept { return beatsPerBar_; }
     tick_t loopInPoint() const noexcept { return loopInPoint_; }
+    bool isLooping() const noexcept { return loop_; }
 
     tick_t lengthInTicks() const noexcept;
     tick_t position() const noexcept { return position_; }
@@ -75,6 +77,7 @@ private:
 
     tick_t loopInPoint_ = 0;
     tick_t position_ = 0;
+    bool loop_ = true;
     bool loopStartAfterWrap_ = false;
     TimedEventList<TempoEvent> tempoEvents_;
     std::vector<SequenceTrack> tracks_;

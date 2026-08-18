@@ -10,6 +10,9 @@ public:
     static Sequence togetherKick();
     static Sequence togetherVocoder();
     static Sequence togetherPartB();
+    static Sequence togetherPartBWithHats();
+    static Sequence togetherPartBDrums();
+    static Sequence togetherPartBClimax();
 
     static Sequence createSequenceOne();
     static Sequence createSequenceTwo();

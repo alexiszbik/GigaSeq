@@ -12,14 +12,16 @@ Sequence buildSequence(
     int barLoop,
     const char* name,
     uint8_t tempo,
+    bool isLooping,
     std::vector<TrackBuilder> builders)
 {
-    Sequence sequence(name, tempo, barCount, beatsPerBar, barLoop);
+    Sequence sequence(name, tempo, barCount, beatsPerBar, barLoop, isLooping);
     const tick_t length = sequence.lengthInTicks();
 
     for (auto& tb : builders) {
         sequence.addTrack(tb(length));
     }
+    
     return sequence;
 }
 } // namespace
@@ -27,7 +29,7 @@ Sequence buildSequence(
 Sequence SequenceFactory::togetherIntro()
 {
     return buildSequence(
-        8, 4, 0, "Intro", 130,
+        8, 4, 0, "Intro", 130, true,
         {
             SequenceTrackFactory::togetherArp
         });
@@ -36,7 +38,7 @@ Sequence SequenceFactory::togetherIntro()
 Sequence SequenceFactory::togetherSample()
 {
     return buildSequence(
-        8, 4, 0, "Sample", 130,
+        8, 4, 0, "Sample", 130, true,
         {
             SequenceTrackFactory::togetherArp,
             SequenceTrackFactory::togetherHiDrum,
@@ -48,7 +50,7 @@ Sequence SequenceFactory::togetherSample()
 Sequence SequenceFactory::togetherKick()
 {
     return buildSequence(
-        8, 4, 0, "Kick", 130,
+        8, 4, 0, "Kick", 130, true,
         {
             SequenceTrackFactory::togetherArp,
             SequenceTrackFactory::togetherHiDrum,
@@ -61,7 +63,7 @@ Sequence SequenceFactory::togetherKick()
 Sequence SequenceFactory::togetherVocoder()
 {
     return buildSequence(
-        38, 4, 36, "Vocoder", 130,
+        36, 4, 36, "Vocoder", 130, false,
         {
             SequenceTrackFactory::togetherVocoderPartArp,
             SequenceTrackFactory::togetherVocoderPartHiDrum,
@@ -70,15 +72,33 @@ Sequence SequenceFactory::togetherVocoder()
             SequenceTrackFactory::togetherVocoderPartKick,
             SequenceTrackFactory::togetherVocoder,
             SequenceTrackFactory::togetherVocoderPartExtraBass,
-            SequenceTrackFactory::togetherVocoderPartRiser
+            SequenceTrackFactory::togetherEndRiser
         });
 }
 
 Sequence SequenceFactory::togetherPartB()
 {
-    return buildSequence(
-        8, 4, 0, "Part B", 130,
+    Sequence seq = buildSequence(
+        8, 4, 0, "Part B", 130, true,
         {
+            SequenceTrackFactory::togetherPartBSampleCut,
+            SequenceTrackFactory::togetherPartBSynth,
+            SequenceTrackFactory::togetherPartBAh,
+            SequenceTrackFactory::togetherPartBDaDaDa,
+        });
+
+    seq.track(2).setStartMuted();
+    seq.track(3).setStartMuted();
+
+    return seq;
+}
+
+Sequence SequenceFactory::togetherPartBWithHats()
+{
+    return buildSequence(
+        16, 4, 0, "Part B Hats", 130, false,
+        {
+            SequenceTrackFactory::togetherPartBSampleCut,
             SequenceTrackFactory::togetherPartBSynth,
             SequenceTrackFactory::togetherPartBAh,
             SequenceTrackFactory::togetherPartBDaDaDa,
@@ -86,12 +106,46 @@ Sequence SequenceFactory::togetherPartB()
         });
 }
 
+Sequence SequenceFactory::togetherPartBDrums()
+{
+    Sequence seq = buildSequence(
+        8, 4, 0, "Part B Drums", 130, true,
+        {
+            SequenceTrackFactory::togetherPartBSynth,
+            SequenceTrackFactory::togetherPartBAh,
+            SequenceTrackFactory::togetherHiDrum,
+            SequenceTrackFactory::kickFour,
+            SequenceTrackFactory::togetherPartBJC,
+            SequenceTrackFactory::togetherPartBTambourin
+        });
+
+    seq.track(4).setStartMuted();
+    seq.track(5).setStartMuted();
+
+    return seq;
+}
+
+Sequence SequenceFactory::togetherPartBClimax()
+{
+    return buildSequence(
+        8, 4, 0, "Part B Drums", 130, true,
+        {
+            SequenceTrackFactory::togetherPartBSynth,
+            SequenceTrackFactory::togetherPartBAh,
+            SequenceTrackFactory::togetherHiDrum,
+            SequenceTrackFactory::kickFour,
+            SequenceTrackFactory::togetherPartBJC,
+            SequenceTrackFactory::togetherPartBTambourin,
+            SequenceTrackFactory::togetherPartBCymbal,
+            SequenceTrackFactory::togetherEndRiser
+        });
+}
 
 Sequence SequenceFactory::createSequenceOne()
 {
     return buildSequence(
-        2, 7, 1, "Kick/Hat12345", 120,
-        {
+        2, 7, 1, "Kick/Hat12345", 120, true,
+        { 
             SequenceTrackFactory::createKickSnareWithHats,
             SequenceTrackFactory::createCMaj7Arpeggio,
             SequenceTrackFactory::kickFour,
@@ -114,7 +168,7 @@ Sequence SequenceFactory::createSequenceOne()
 Sequence SequenceFactory::createSequenceTwo()
 {
     return buildSequence(
-        4, 4, 2, "F on Flour", 140,
+        4, 4, 2, "F on Flour", 140, true,
         {
             SequenceTrackFactory::createCMaj7Arpeggio,
             SequenceTrackFactory::kickFour,
@@ -138,7 +192,7 @@ Sequence SequenceFactory::createSequenceTwo()
 Sequence SequenceFactory::createSequenceThree()
 {
     Sequence sequence = buildSequence(
-        4, 4, 0, "Am7Hi-Hat", 165,
+        4, 4, 0, "Am7Hi-Hat", 165, true,
         {
             SequenceTrackFactory::createAm7Arpeggio,
             SequenceTrackFactory::createHiHatPattern,
@@ -169,7 +223,7 @@ Sequence SequenceFactory::createSequenceThree()
 Sequence SequenceFactory::createSequenceFour()
 {
     return buildSequence(
-        4, 4, 0, "Pads", 90,
+        4, 4, 0, "Pads", 90, true,
         {
             SequenceTrackFactory::createPadChords,
             SequenceTrackFactory::createKickSnare,
@@ -193,7 +247,7 @@ Sequence SequenceFactory::createSequenceFour()
 Sequence SequenceFactory::createSequenceFive()
 {
     return buildSequence(
-        4, 4, 1, "Melodic", 104,
+        4, 4, 1, "Melodic", 104, true,
         {
             SequenceTrackFactory::createMelodicBass,
             SequenceTrackFactory::createSnareBackbeat,
@@ -217,7 +271,7 @@ Sequence SequenceFactory::createSequenceFive()
 Sequence SequenceFactory::createSequenceSix()
 {
     return buildSequence(
-        4, 4, 2, "Stabs", 115,
+        4, 4, 2, "Stabs", 115, true,
         {
             SequenceTrackFactory::createSynthStabs,
             SequenceTrackFactory::createKickSnareWithHats,
@@ -241,7 +295,7 @@ Sequence SequenceFactory::createSequenceSix()
 Sequence SequenceFactory::createSequenceSeven()
 {
     return buildSequence(
-        2, 4, 0, "Clap", 155,
+        2, 4, 0, "Clap", 155, true,
         {
             SequenceTrackFactory::createClapBackbeat,
             SequenceTrackFactory::createMelodicBass,

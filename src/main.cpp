@@ -102,6 +102,11 @@ void stopTransport() {
     sequencePool.allNotesOff();
 }
 
+void onPlaybackStop() {
+    stopTransport();
+    sequencerView.updateTransportState(false);
+}
+
 void inputCheckCallback() {
     bool isPlaying = transportClock.isPlaying();
     if (pushPlay.isPushed()) {
@@ -192,6 +197,7 @@ void setup() {
     sequencePool.setOnTrackMuteChanged(onTrackMuteChanged);
     sequencePool.setOnTempoChanged(onTempoChanged);
     sequencePool.setOnPendingChanged(onPendingChanged);
+    sequencePool.setOnPlaybackStop(onPlaybackStop);
 }
 
 void loop() {

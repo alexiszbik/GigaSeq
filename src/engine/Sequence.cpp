@@ -10,11 +10,13 @@ Sequence::Sequence(
     uint8_t tempo,
     uint8_t barCount,
     uint8_t beatsPerBar,
-    uint8_t barLoop)
+    uint8_t barLoop,
+    bool loop)
     : tempo_(tempo),
       activeTempo_(tempo),
       barCount_(barCount),
-      beatsPerBar_(beatsPerBar)
+      beatsPerBar_(beatsPerBar),
+      loop_(loop)
 {
     StringHelper::copyName(name_, name, kNameMaxLength + 1);
 

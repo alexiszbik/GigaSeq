@@ -254,6 +254,13 @@ void onTempoChanged(uint8_t bpm)
         }
     }
 }
+
+void onPlaybackStop()
+{
+    if (gClock && gClock->isPlaying()) {
+        gClock->stop();
+    }
+}
 } // namespace
 
 int main()
@@ -276,6 +283,7 @@ int main()
         pool.setOnSequenceChanged(onSequenceChanged);
         pool.setOnTrackMuteChanged(onTrackMuteChanged);
         pool.setOnTempoChanged(onTempoChanged);
+        pool.setOnPlaybackStop(onPlaybackStop);
 
         clock.setBpm(static_cast<double>(pool.current().getTempo()));
 

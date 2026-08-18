@@ -241,9 +241,15 @@ SequenceTrack SequenceTrackFactory::togetherVocoderPartSample(tick_t lengthInTic
     desc.rate = 8;
     makeSequenceTrack(original, desc, oneBarTick, vocoderLength + 3*oneBarTick);
 
-    original.addNote(vocoderLength + repeatPartLength, 24, 54, 127);
-
     return original;
+}
+
+SequenceTrack SequenceTrackFactory::togetherPartBSampleCut(tick_t lengthInTicks)
+{
+    SequenceTrack track("Sample Cut", MidiChannel::kDrums);
+    track.addNote(0, 24, 54, 127);
+
+    return track;
 }
 
 SequenceTrack SequenceTrackFactory::togetherVocoderPartKick(tick_t lengthInTicks)
@@ -293,10 +299,11 @@ SequenceTrack SequenceTrackFactory::togetherVocoderPartExtraBass(tick_t lengthIn
     return track;
 }
 
-SequenceTrack SequenceTrackFactory::togetherVocoderPartRiser(tick_t lengthInTicks)
+SequenceTrack SequenceTrackFactory::togetherEndRiser(tick_t lengthInTicks)
 {
     SequenceTrack track("Riser", MidiChannel::kDrums);
-    track.addNote(34*oneBarTick, 2*oneBarTick, 60, 127);
+    tick_t riserLength = 2*oneBarTick;
+    track.addNote(lengthInTicks - riserLength, riserLength, 60, 127);
 
     return track;
 }
@@ -357,6 +364,44 @@ SequenceTrack SequenceTrackFactory::togetherPartBHat(tick_t lengthInTicks)
     return track;
 }
 
+
+SequenceTrack SequenceTrackFactory::togetherPartBJC(tick_t lengthInTicks) {
+    SequenceTrack track("JC", MidiChannel::kDrums);
+
+    SequenceDesc desc;
+    desc.notes = {
+        {}, {}, {45}, {}, {}, {}, {}, {46}, 
+        {}, {}, {}, {}, {}, {}, {44}, {},
+        {}, {}, {45}, {}, {}, {}, {}, {47}, 
+        {}, {}, {}, {}, {}, {}, {44}, {},
+    };
+    desc.rate = 8;
+    makeSequenceTrack(track, desc, lengthInTicks);
+
+    return track;
+}
+
+SequenceTrack SequenceTrackFactory::togetherPartBTambourin(tick_t lengthInTicks) {
+    SequenceTrack track("Tambourin", MidiChannel::kSampler);
+
+    SequenceDesc desc;
+    desc.notes = {{48, 50}};
+    desc.rate = 4;
+    makeSequenceTrack(track, desc, lengthInTicks);
+
+    return track;
+}
+SequenceTrack SequenceTrackFactory::togetherPartBCymbal(tick_t lengthInTicks) {
+    SequenceTrack track("Cymbal", MidiChannel::kSampler);
+
+    SequenceDesc desc;
+    desc.notes = {{51}};
+    desc.velocities = {127, 56};
+    desc.rate = 8;
+    makeSequenceTrack(track, desc, lengthInTicks);
+
+    return track;
+}
 
 SequenceTrack SequenceTrackFactory::kickFour(tick_t lengthInTicks)
 {

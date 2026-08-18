@@ -17,12 +17,18 @@ public:
     static SequenceTrack togetherVocoderPartArp(tick_t lengthInTicks);
     static SequenceTrack togetherVocoderPartDX7(tick_t lengthInTicks);
     static SequenceTrack togetherVocoderPartExtraBass(tick_t lengthInTicks);
-    static SequenceTrack togetherVocoderPartRiser(tick_t lengthInTicks);
+    static SequenceTrack togetherEndRiser(tick_t lengthInTicks);
 
+    static SequenceTrack togetherPartBSampleCut(tick_t lengthInTicks);
     static SequenceTrack togetherPartBSynth(tick_t lengthInTicks);
     static SequenceTrack togetherPartBAh(tick_t lengthInTicks);
     static SequenceTrack togetherPartBDaDaDa(tick_t lengthInTicks);
     static SequenceTrack togetherPartBHat(tick_t lengthInTicks);
+
+    static SequenceTrack togetherPartBJC(tick_t lengthInTicks);
+    static SequenceTrack togetherPartBTambourin(tick_t lengthInTicks);
+    static SequenceTrack togetherPartBCymbal(tick_t lengthInTicks);
+    static SequenceTrack togetherPartBEndRiser(tick_t lengthInTicks);
 
     static SequenceTrack createCMaj7Arpeggio(tick_t lengthInTicks);
     static SequenceTrack createAm7Arpeggio(tick_t lengthInTicks);

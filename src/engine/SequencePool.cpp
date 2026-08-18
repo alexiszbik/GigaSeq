@@ -156,14 +156,20 @@ void SequencePool::processTick()
     }
 
     Sequence& sequence = current();
-    const bool wrapAtEnd = pendingSwitch_ == PendingSwitch::None;
+    const bool wrapAtEnd = sequence.isLooping() && pendingSwitch_ == PendingSwitch::None;
     sequence.processTick(wrapAtEnd);
 
-    if (pendingSwitch_ != PendingSwitch::None && sequence.position() >= sequence.lengthInTicks()) {
+    if (sequence.position() >= sequence.lengthInTicks()) {
         if (pendingSwitch_ == PendingSwitch::Next) {
             advanceToNext();
-        } else {
+        } else if (pendingSwitch_ == PendingSwitch::Previous) {
             advanceToPrevious();
+        } else if (!sequence.isLooping()) {
+            if (canAdvanceNext()) {
+                advanceToNext();
+            } else {
+                notifyPlaybackStop();
+            }
         }
     }
 }
@@ -195,6 +201,11 @@ void SequencePool::setOnTempoChanged(TempoChangedCallback callback)
 void SequencePool::setOnPendingChanged(PendingChangedCallback callback) 
 {
     onPendingChanged_ = callback;
+}
+
+void SequencePool::setOnPlaybackStop(PlaybackStopCallback callback)
+{
+    onPlaybackStop_ = callback;
 }
 
 void SequencePool::wireTrackMuteCallbacks()
@@ -230,6 +241,13 @@ void SequencePool::notifySequenceChanged()
 #endif
     if (onSequenceChanged_) {
         onSequenceChanged_();
+    }
+}
+
+void SequencePool::notifyPlaybackStop()
+{
+    if (onPlaybackStop_) {
+        onPlaybackStop_();
     }
 }
 
@@ -314,6 +332,9 @@ SequencePool SequencePool::createDefault(MidiInOut& midi, Logger& logger)
         SequenceFactory::togetherKick,
         SequenceFactory::togetherVocoder,
         SequenceFactory::togetherPartB,
+        SequenceFactory::togetherPartBWithHats,
+        SequenceFactory::togetherPartBDrums,
+        SequenceFactory::togetherPartBClimax,
     });
 
     addSong("Intro", {
