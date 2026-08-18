@@ -11,19 +11,19 @@ public:
     static SequenceTrack togetherDX7(tick_t lengthInTicks);
     static SequenceTrack togetherVocoder(tick_t lengthInTicks);
 
-    static SequenceTrack togetherVocoderPartSample(tick_t lengthInTicks);
-    static SequenceTrack togetherVocoderPartKick(tick_t lengthInTicks);
+    static SequenceTrack togetherSampleRepeat(tick_t lengthInTicks);
+    static SequenceTrack togetherKickRepeat(tick_t lengthInTicks);
     static SequenceTrack togetherVocoderPartHiDrum(tick_t lengthInTicks);
     static SequenceTrack togetherVocoderPartArp(tick_t lengthInTicks);
     static SequenceTrack togetherVocoderPartDX7(tick_t lengthInTicks);
-    static SequenceTrack togetherVocoderPartExtraBass(tick_t lengthInTicks);
+    static SequenceTrack togetherExtraBass(tick_t lengthInTicks);
     static SequenceTrack togetherEndRiser(tick_t lengthInTicks);
 
     static SequenceTrack togetherPartBSampleCut(tick_t lengthInTicks);
     static SequenceTrack togetherPartBSynth(tick_t lengthInTicks);
     static SequenceTrack togetherPartBAh(tick_t lengthInTicks);
     static SequenceTrack togetherPartBDaDaDa(tick_t lengthInTicks);
-    static SequenceTrack togetherPartBHat(tick_t lengthInTicks);
+    static SequenceTrack togetherHatsOnly(tick_t lengthInTicks);
 
     static SequenceTrack togetherPartBJC(tick_t lengthInTicks);
     static SequenceTrack togetherPartBTambourin(tick_t lengthInTicks);

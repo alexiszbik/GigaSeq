@@ -67,20 +67,80 @@ Sequence SequenceFactory::togetherKick()
 
 Sequence SequenceFactory::togetherVocoder()
 {
-    return buildSequence(
-        36, 4, 36, "Vocoder", 130, false,
+    Sequence seq = buildSequence(
+        16, 4, 16, "Vocoder", 130, false,
         {
-            SequenceTrackFactory::togetherVocoderPartArp,
+            SequenceTrackFactory::togetherArp,
+            SequenceTrackFactory::togetherHiDrum,
+            SequenceTrackFactory::togetherSample,
+            SequenceTrackFactory::togetherDX7,
+            SequenceTrackFactory::kickFour,
+            SequenceTrackFactory::togetherVocoder,
+        });
+
+    seq.track(2).addControlChange(0, 13, 68);
+    return seq;
+}
+
+Sequence SequenceFactory::togetherPause()
+{
+    return buildSequence(
+        8, 4, 0, "Pause", 130, true,
+        {
+            SequenceTrackFactory::togetherArp,
+            SequenceTrackFactory::togetherHatsOnly,
+            SequenceTrackFactory::togetherSample,
+            SequenceTrackFactory::togetherDX7,
+        });
+}
+
+Sequence SequenceFactory::togetherClimax()
+{
+    Sequence seq = buildSequence(
+        8, 4, 0, "Climax", 130, false,
+        {
+            SequenceTrackFactory::togetherArp,
+            SequenceTrackFactory::togetherHiDrum,
+            SequenceTrackFactory::togetherSample,
+            SequenceTrackFactory::togetherDX7,
+            SequenceTrackFactory::kickFour,
+        });
+
+    seq.track(2).addControlChange(0, 13, 127);
+    return seq;
+}
+
+Sequence SequenceFactory::togetherRepeat()
+{
+    return buildSequence(
+        4, 4, 0, "Climax", 130, false,
+        {
+            SequenceTrackFactory::togetherArp,
+            SequenceTrackFactory::togetherHatsOnly,
+            SequenceTrackFactory::togetherSampleRepeat,
+            SequenceTrackFactory::togetherDX7,
+            SequenceTrackFactory::togetherKickRepeat,
+            SequenceTrackFactory::togetherExtraBass,
+            SequenceTrackFactory::togetherEndRiser
+        });
+}
+/*
+Sequence SequenceFactory::togetherPartAClimax()
+{
+    return buildSequence(
+        102, 4, 0, "A Climax", 130, false,
+        {
+            SequenceTrackFactory::togetherArp,
             SequenceTrackFactory::togetherVocoderPartHiDrum,
             SequenceTrackFactory::togetherVocoderPartSample,
-            SequenceTrackFactory::togetherVocoderPartDX7,
+            SequenceTrackFactory::togetherDX7,
             SequenceTrackFactory::togetherVocoderPartKick,
             SequenceTrackFactory::togetherVocoder,
             SequenceTrackFactory::togetherVocoderPartExtraBass,
             SequenceTrackFactory::togetherEndRiser
         });
 }
-
+*/
 Sequence SequenceFactory::togetherPartB()
 {
     Sequence seq = buildSequence(
@@ -107,7 +167,7 @@ Sequence SequenceFactory::togetherPartBWithHats()
             SequenceTrackFactory::togetherPartBSynth,
             SequenceTrackFactory::togetherPartBAh,
             SequenceTrackFactory::togetherPartBDaDaDa,
-            SequenceTrackFactory::togetherPartBHat
+            SequenceTrackFactory::togetherHatsOnly
         });
 }
 
