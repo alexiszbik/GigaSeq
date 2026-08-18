@@ -312,6 +312,7 @@ SequencePool SequencePool::createDefault(MidiInOut& midi, Logger& logger)
         SequenceFactory::togetherIntro,
         SequenceFactory::togetherSample,
         SequenceFactory::togetherKick,
+        SequenceFactory::togetherVocoder,
     });
 
     addSong("Intro", {

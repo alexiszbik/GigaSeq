@@ -58,8 +58,19 @@ Sequence SequenceFactory::togetherKick()
         });
 }
 
-
-
+Sequence SequenceFactory::togetherVocoder()
+{
+    return buildSequence(
+        40, 4, 0, "Vocoder", 130,
+        {
+            SequenceTrackFactory::togetherArp,
+            SequenceTrackFactory::togetherVocoderPartHiDrum,
+            SequenceTrackFactory::togetherVocoderPartSample,
+            SequenceTrackFactory::togetherDX7,
+            SequenceTrackFactory::togetherVocoderPartKick,
+            SequenceTrackFactory::togetherVocoder
+        });
+}
 
 
 Sequence SequenceFactory::createSequenceOne()

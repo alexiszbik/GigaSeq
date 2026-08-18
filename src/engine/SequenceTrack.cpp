@@ -2,6 +2,7 @@
 
 #include "StringHelper.h"
 
+#include <algorithm>
 #include <cstddef>
 #include <stdexcept>
 
@@ -55,6 +56,35 @@ void SequenceTrack::addMuteEvent(
     tick_t tick)
 {
     muteEvents_.add({ tick });
+}
+
+void SequenceTrack::removeEvents(tick_t tick, tick_t durationTicks)
+{
+    if (durationTicks == 0) {
+        return;
+    }
+
+    notes_.removeInRange(tick, durationTicks);
+    controlChanges_.removeInRange(tick, durationTicks);
+    programChanges_.removeInRange(tick, durationTicks);
+    muteEvents_.removeInRange(tick, durationTicks);
+}
+
+void SequenceTrack::removeNotes(
+    tick_t tick,
+    tick_t durationTicks,
+    const std::vector<uint8_t>& pitches)
+{
+    if (durationTicks == 0) {
+        return;
+    }
+
+    notes_.removeInRangeIf(tick, durationTicks, [&pitches](const Note& note) {
+        if (pitches.empty()) {
+            return true;
+        }
+        return std::find(pitches.begin(), pitches.end(), note.note) != pitches.end();
+    });
 }
 
 void SequenceTrack::reset()

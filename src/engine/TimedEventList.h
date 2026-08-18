@@ -38,6 +38,37 @@ public:
         }
     }
 
+    void removeInRange(tick_t startTick, tick_t durationTicks)
+    {
+        removeInRangeIf(startTick, durationTicks, [](const T&) { return true; });
+    }
+
+    template<typename Predicate>
+    void removeInRangeIf(tick_t startTick, tick_t durationTicks, Predicate&& predicate)
+    {
+        if (durationTicks == 0) {
+            return;
+        }
+
+        const uint32_t start = static_cast<uint32_t>(startTick);
+        const uint32_t endTick = start + static_cast<uint32_t>(durationTicks);
+
+        events_.erase(
+            std::remove_if(
+                events_.begin(),
+                events_.end(),
+                [start, endTick, pred = std::forward<Predicate>(predicate)](const T& event) {
+                    const uint32_t eventTick = static_cast<uint32_t>(event.tick);
+                    if (eventTick < start || eventTick >= endTick) {
+                        return false;
+                    }
+                    return pred(event);
+                }),
+            events_.end());
+
+        nextIndex_ = 0;
+    }
+
 private:
     void sort()
     {

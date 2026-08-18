@@ -149,7 +149,7 @@ SequenceTrack SequenceTrackFactory::togetherHiDrum(tick_t lengthInTicks)
     makeSequenceTrack(track, desc, lengthInTicks);
 
     desc.notes = {{40}};
-    desc.velocities = {{127}, {56}};
+    desc.velocities = {127, 56};
     desc.rate = 8;
     makeSequenceTrack(track, desc, lengthInTicks);
 
@@ -187,6 +187,55 @@ SequenceTrack SequenceTrackFactory::togetherDX7(tick_t lengthInTicks)
     makeSequenceTrack(track, desc, lengthInTicks);
 
     return track;
+}
+
+SequenceTrack SequenceTrackFactory::togetherVocoder(tick_t lengthInTicks)
+{
+    SequenceTrack track("Vocoder", MidiChannel::kVocoder);
+
+    SequenceDesc desc;
+    desc.notes = {
+        {C3, Eb3, Bb3}, {}, {}, {C3, Eb3, Ab3}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, 
+        {C3, Eb3, Bb3}, {}, {}, {C3, Eb3, Ab3}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
+        {C3, Eb3, Ab3}, {}, {}, {C3, Eb3, G3},  {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
+        {Bb2, Eb3, F3}, {}, {}, {C3, Eb3, G3},  {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}
+    };
+    desc.rate = 8;
+    desc.durations = {3, 11};
+    const tick_t oneBarTick = 384;
+    makeSequenceTrack(track, desc, oneBarTick*16);
+
+    return track;
+}
+
+
+SequenceTrack SequenceTrackFactory::togetherVocoderPartSample(tick_t lengthInTicks)
+{
+    auto original = SequenceTrackFactory::togetherSample(lengthInTicks);
+
+    const tick_t oneBarTick = 384;
+        
+    original.addControlChange(0, 13, 70);
+    original.addControlChange(24 * oneBarTick, 13, 127);
+
+    return original;
+}
+
+SequenceTrack SequenceTrackFactory::togetherVocoderPartKick(tick_t lengthInTicks)
+{
+    auto original = SequenceTrackFactory::kickFour(lengthInTicks);
+    const tick_t oneBarTick = 384;
+    original.removeEvents(oneBarTick*16, oneBarTick*8);
+    return original;
+}
+
+SequenceTrack SequenceTrackFactory::togetherVocoderPartHiDrum(tick_t lengthInTicks)
+{
+    auto original = SequenceTrackFactory::togetherHiDrum(lengthInTicks);
+    const tick_t oneBarTick = 384;
+    original.removeNotes(oneBarTick*16, oneBarTick*8, {56,37,38});
+
+    return original;
 }
 
 

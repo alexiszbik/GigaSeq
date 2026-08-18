@@ -10,6 +10,7 @@
 #include "Tick.h"
 
 #include <cstdint>
+#include <vector>
 
 using MuteChangedCallback = void (*)(uint8_t trackIndex, bool muted);
 
@@ -50,6 +51,13 @@ public:
 
     void addMuteEvent(
         tick_t tick);
+
+    void removeEvents(tick_t tick, tick_t duration);
+
+    void removeNotes(
+        tick_t tick,
+        tick_t durationTicks,
+        const std::vector<uint8_t>& pitches = {});
 
     void reset();
     void processTick(tick_t position, bool loopWrap);

@@ -8,6 +8,7 @@ public:
     static Sequence togetherIntro();
     static Sequence togetherSample();
     static Sequence togetherKick();
+    static Sequence togetherVocoder();
 
     static Sequence createSequenceOne();
     static Sequence createSequenceTwo();

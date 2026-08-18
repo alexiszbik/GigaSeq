@@ -9,6 +9,11 @@ public:
     static SequenceTrack togetherHiDrum(tick_t lengthInTicks);
     static SequenceTrack togetherSample(tick_t lengthInTicks);
     static SequenceTrack togetherDX7(tick_t lengthInTicks);
+    static SequenceTrack togetherVocoder(tick_t lengthInTicks);
+
+    static SequenceTrack togetherVocoderPartSample(tick_t lengthInTicks);
+    static SequenceTrack togetherVocoderPartKick(tick_t lengthInTicks);
+    static SequenceTrack togetherVocoderPartHiDrum(tick_t lengthInTicks);
 
 
 
