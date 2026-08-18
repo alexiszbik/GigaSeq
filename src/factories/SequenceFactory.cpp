@@ -37,7 +37,7 @@ Sequence SequenceFactory::togetherIntro()
 
 Sequence SequenceFactory::togetherSample()
 {
-    return buildSequence(
+    Sequence seq = buildSequence(
         8, 4, 0, "Sample", 130, true,
         {
             SequenceTrackFactory::togetherArp,
@@ -45,6 +45,11 @@ Sequence SequenceFactory::togetherSample()
             SequenceTrackFactory::togetherSample,
             SequenceTrackFactory::togetherDX7
         });
+
+    seq.track(2).setStartMuted();
+    seq.track(3).setStartMuted();
+
+    return seq;
 }
 
 Sequence SequenceFactory::togetherKick()
@@ -127,8 +132,8 @@ Sequence SequenceFactory::togetherPartBDrums()
 
 Sequence SequenceFactory::togetherPartBClimax()
 {
-    return buildSequence(
-        8, 4, 0, "Part B Drums", 130, true,
+    Sequence seq = buildSequence(
+        8, 4, 0, "Part B Climax", 130, true,
         {
             SequenceTrackFactory::togetherPartBSynth,
             SequenceTrackFactory::togetherPartBAh,
@@ -139,6 +144,8 @@ Sequence SequenceFactory::togetherPartBClimax()
             SequenceTrackFactory::togetherPartBCymbal,
             SequenceTrackFactory::togetherEndRiser
         });
+
+    seq.track(7).addMuteEvent(0);
 }
 
 Sequence SequenceFactory::createSequenceOne()
