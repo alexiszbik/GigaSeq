@@ -301,6 +301,63 @@ SequenceTrack SequenceTrackFactory::togetherVocoderPartRiser(tick_t lengthInTick
     return track;
 }
 
+SequenceTrack SequenceTrackFactory::togetherPartBSynth(tick_t lengthInTicks)
+{   
+    SequenceTrack track("Poly Synth", MidiChannel::kPoly);
+
+    SequenceDesc desc;
+    desc.notes = {
+        {Ab2, C4, Eb4, Bb4}, {}, {}, {Ab2, C4, Eb4, Ab4}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, 
+        {G2, B3, D4, Bb4}, {}, {}, {G2, B3, D4, G4}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
+        {Bb2, Bb3, D4, F4}, {}, {}, {Bb2, Bb3, D4, G4},  {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
+        {C3, C4, Eb4, Ab4}, {}, {}, {C3, C4, Eb4, G4},  {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}
+    };
+    desc.rate = 8;
+    desc.durations = {2, 9};
+    
+    makeSequenceTrack(track, desc, lengthInTicks);
+
+    return track;
+}
+
+SequenceTrack SequenceTrackFactory::togetherPartBAh(tick_t lengthInTicks)
+{
+    SequenceTrack track("Ah", MidiChannel::kSampler);
+
+    SequenceDesc desc;
+    desc.notes = {{39}};
+    desc.rate = 4;
+    makeSequenceTrack(track, desc, lengthInTicks);
+
+    return track;
+}
+
+SequenceTrack SequenceTrackFactory::togetherPartBDaDaDa(tick_t lengthInTicks)
+{
+    SequenceTrack track("DaDaDa", MidiChannel::kDrums);
+
+    SequenceDesc desc;
+    desc.notes = {{41}, {42}, {43}, {42}, {41}, {42}, {43}, {43}};
+    desc.rate = 8;
+    makeSequenceTrack(track, desc, lengthInTicks);
+
+    return track;
+}
+
+SequenceTrack SequenceTrackFactory::togetherPartBHat(tick_t lengthInTicks)
+{
+    SequenceTrack track("Hat", MidiChannel::kDrums);
+
+    SequenceDesc desc;
+    desc.notes = {{40}};
+    desc.velocities = {127, 56};
+    desc.rate = 8;
+    makeSequenceTrack(track, desc, lengthInTicks);
+
+    return track;
+}
+
+
 SequenceTrack SequenceTrackFactory::kickFour(tick_t lengthInTicks)
 {
     SequenceTrack track("Kick", MidiChannel::kDrums);

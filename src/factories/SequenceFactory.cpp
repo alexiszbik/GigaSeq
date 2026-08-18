@@ -74,6 +74,18 @@ Sequence SequenceFactory::togetherVocoder()
         });
 }
 
+Sequence SequenceFactory::togetherPartB()
+{
+    return buildSequence(
+        8, 4, 0, "Part B", 130,
+        {
+            SequenceTrackFactory::togetherPartBSynth,
+            SequenceTrackFactory::togetherPartBAh,
+            SequenceTrackFactory::togetherPartBDaDaDa,
+            SequenceTrackFactory::togetherPartBHat
+        });
+}
+
 
 Sequence SequenceFactory::createSequenceOne()
 {

@@ -19,7 +19,10 @@ public:
     static SequenceTrack togetherVocoderPartExtraBass(tick_t lengthInTicks);
     static SequenceTrack togetherVocoderPartRiser(tick_t lengthInTicks);
 
-
+    static SequenceTrack togetherPartBSynth(tick_t lengthInTicks);
+    static SequenceTrack togetherPartBAh(tick_t lengthInTicks);
+    static SequenceTrack togetherPartBDaDaDa(tick_t lengthInTicks);
+    static SequenceTrack togetherPartBHat(tick_t lengthInTicks);
 
     static SequenceTrack createCMaj7Arpeggio(tick_t lengthInTicks);
     static SequenceTrack createAm7Arpeggio(tick_t lengthInTicks);
