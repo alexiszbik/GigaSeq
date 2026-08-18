@@ -1,0 +1,74 @@
+Intro
+pgm change channel 16 value 35 > matrix
+pgm change channel 5 value 1 > poly preset
+
+With drums
+
+pgm change channel 8 value 51 > microfreak
+pgm change channel 10 value 31 > hx stomp
+pgm change channel 11 value 18 > looper
+
+cc channel 12 control 40 value 127 > rec mode on sur MIDI loop
+
+
+
+With kick
+pgm change channel 16 value 43 > matrix
+
+cc channel 15 control 3 value 37 > stripes, decay
+
+cc channel 7 control 10 value 127 > vocoder
+cc channel 7 control 11 value 0 > vocoder
+cc channel 7 control 12 value 42 > vocoder
+cc channel 7 control 14 value 101 > vocoder
+
+
+Vocoder
+
+pgm change channel 10 value 38 > hx stomp
+
+cc channel 8 control 106 value 0 
+cc channel 8 control 23 value 0 
+
+> ça c'est pour arrêter le microfreak de jouer
+
+cc channel 10 control 21 value 0 > hx stomp
+>> le silence
+cc channel 11 control 82 value 65 > silence sur la loop !
+
+
+La reprise >>>
+attention c'est vrai que je ne l'ai pas programmé comme ça à la base !
+quand ça rebounce 
+pgm change channel 16 value 45 > matrix
+cc channel 15 control 4 value 25 > stripes, rainbow speed
+cc channel 10 control 15 value 127 > hx stomp
+
+
+
+
+repeaaaaat >>>>>
+cc channel 11 control 80 value 127 > puis value 0 > clear loop
+cc channel 15 control 4 value 2 > stripes, rainbow speed
+
+
+
+
+La pause >>
+pgm change channel 16 value 35 > matrix (blank)
+pgm change channel 10 value 39 > hx stomp
+pgm change channel 11 value 19 > looper
+
+
+
+Avec les hats >>
+cc channel 12 control 10 value 4 > bar count sur le midi looper
+cc channel 15 control 3 value 109 > decay sur les led stripes (pour aller avec la bass)
+
+Avec le kick après >> 
+cc channel 5 control 19 value 3 > cutoff sur le poly
+
+
+climax >
+cc channel 15 control 3 value 44 > pour aller avec les cymbales
+

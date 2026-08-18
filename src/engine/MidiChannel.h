@@ -19,6 +19,6 @@ namespace MidiChannel
     constexpr uint8_t kCommon = 12;     // 13
     constexpr uint8_t kVJ = 13;         // 14
     constexpr uint8_t kLedStripes = 14; // 15
-    constexpr uint8_t KMatrixe = 15;    // 16
+    constexpr uint8_t KMatrix = 15;    // 16
 
 } // namespace MidiChannel
