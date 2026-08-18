@@ -11,6 +11,11 @@
 namespace
 {
 
+//For together, maybe but it elsewhere after
+constexpr tick_t oneBarTick = 384;
+constexpr tick_t vocoderLength = 32*oneBarTick;
+constexpr tick_t repeatPartLength = 4*oneBarTick;
+
 struct SequenceDesc
 {
     std::vector<std::vector<uint8_t>> notes;
@@ -22,7 +27,8 @@ struct SequenceDesc
 void makeSequenceTrack(
     SequenceTrack& track,
     const SequenceDesc& desc,
-    tick_t lengthInTicks)
+    tick_t lengthInTicks,
+    tick_t startTick = 0)
 {
     const int barDuration = Sequence::kTicksPerQuarterNote * 4;
     const int stepDuration = barDuration / desc.rate;
@@ -36,7 +42,7 @@ void makeSequenceTrack(
     const int durationSize = static_cast<int>(desc.durations.size());
     int durIdx = 0;
 
-    for (tick_t tick = 0; tick < lengthInTicks; tick = static_cast<tick_t>(tick + stepDuration))
+    for (tick_t tick = startTick; tick < (startTick + lengthInTicks); tick = static_cast<tick_t>(tick + stepDuration))
     {
         int noteDuration = stepDuration;
         const std::vector<uint8_t>& stepNotes = desc.notes[seqIdx];
@@ -202,42 +208,98 @@ SequenceTrack SequenceTrackFactory::togetherVocoder(tick_t lengthInTicks)
     };
     desc.rate = 8;
     desc.durations = {3, 11};
-    const tick_t oneBarTick = 384;
+    
     makeSequenceTrack(track, desc, oneBarTick*16);
 
     return track;
 }
 
+SequenceTrack SequenceTrackFactory::togetherVocoderPartArp(tick_t lengthInTicks) {
+    auto original = SequenceTrackFactory::togetherArp(vocoderLength + repeatPartLength);
+
+    return original;
+}
+
+SequenceTrack SequenceTrackFactory::togetherVocoderPartDX7(tick_t lengthInTicks) {
+    auto original = SequenceTrackFactory::togetherDX7(vocoderLength + repeatPartLength);
+    
+    return original;
+}
 
 SequenceTrack SequenceTrackFactory::togetherVocoderPartSample(tick_t lengthInTicks)
 {
-    auto original = SequenceTrackFactory::togetherSample(lengthInTicks);
-
-    const tick_t oneBarTick = 384;
+    auto original = SequenceTrackFactory::togetherSample(vocoderLength);
         
     original.addControlChange(0, 13, 70);
     original.addControlChange(24 * oneBarTick, 13, 127);
+
+    SequenceDesc desc;
+    desc.notes = {{52}};
+    desc.rate = 4;
+    makeSequenceTrack(original, desc, 3*oneBarTick, vocoderLength);
+
+    desc.rate = 8;
+    makeSequenceTrack(original, desc, oneBarTick, vocoderLength + 3*oneBarTick);
+
+    original.addNote(vocoderLength + repeatPartLength, 24, 54, 127);
 
     return original;
 }
 
 SequenceTrack SequenceTrackFactory::togetherVocoderPartKick(tick_t lengthInTicks)
 {
-    auto original = SequenceTrackFactory::kickFour(lengthInTicks);
-    const tick_t oneBarTick = 384;
+    auto original = SequenceTrackFactory::kickFour(vocoderLength + 3*oneBarTick);
     original.removeEvents(oneBarTick*16, oneBarTick*8);
+
+    SequenceDesc desc;
+    desc.notes = {{36}};
+    desc.rate = 8;
+    makeSequenceTrack(original, desc, oneBarTick, vocoderLength + 3*oneBarTick);
+
     return original;
 }
 
 SequenceTrack SequenceTrackFactory::togetherVocoderPartHiDrum(tick_t lengthInTicks)
 {
-    auto original = SequenceTrackFactory::togetherHiDrum(lengthInTicks);
-    const tick_t oneBarTick = 384;
+    auto original = SequenceTrackFactory::togetherHiDrum(vocoderLength);
     original.removeNotes(oneBarTick*16, oneBarTick*8, {56,37,38});
+
+    SequenceDesc desc;
+    desc.notes = {{40}};
+    desc.velocities = {127, 56};
+    desc.rate = 8;
+    makeSequenceTrack(original, desc, 4*oneBarTick, vocoderLength);
+
+    SequenceDesc hiKickDesc;
+    hiKickDesc.notes = {{37}};
+    hiKickDesc.rate = 4;
+    makeSequenceTrack(original, hiKickDesc, 3*oneBarTick, vocoderLength);
+
+    hiKickDesc.rate = 8;
+    makeSequenceTrack(original, hiKickDesc, 1*oneBarTick, vocoderLength + 3*oneBarTick);
 
     return original;
 }
 
+SequenceTrack SequenceTrackFactory::togetherVocoderPartExtraBass(tick_t lengthInTicks)
+{
+    SequenceTrack track("Extra Bass", MidiChannel::kDrums);
+
+    SequenceDesc desc;
+    desc.notes = {{57}};
+    desc.rate = 4;
+    makeSequenceTrack(track, desc, 4*oneBarTick, vocoderLength);
+
+    return track;
+}
+
+SequenceTrack SequenceTrackFactory::togetherVocoderPartRiser(tick_t lengthInTicks)
+{
+    SequenceTrack track("Riser", MidiChannel::kDrums);
+    track.addNote(34*oneBarTick, 2*oneBarTick, 60, 127);
+
+    return track;
+}
 
 SequenceTrack SequenceTrackFactory::kickFour(tick_t lengthInTicks)
 {

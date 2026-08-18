@@ -14,6 +14,10 @@ public:
     static SequenceTrack togetherVocoderPartSample(tick_t lengthInTicks);
     static SequenceTrack togetherVocoderPartKick(tick_t lengthInTicks);
     static SequenceTrack togetherVocoderPartHiDrum(tick_t lengthInTicks);
+    static SequenceTrack togetherVocoderPartArp(tick_t lengthInTicks);
+    static SequenceTrack togetherVocoderPartDX7(tick_t lengthInTicks);
+    static SequenceTrack togetherVocoderPartExtraBass(tick_t lengthInTicks);
+    static SequenceTrack togetherVocoderPartRiser(tick_t lengthInTicks);
 
 
 

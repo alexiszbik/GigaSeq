@@ -61,14 +61,16 @@ Sequence SequenceFactory::togetherKick()
 Sequence SequenceFactory::togetherVocoder()
 {
     return buildSequence(
-        40, 4, 0, "Vocoder", 130,
+        38, 4, 36, "Vocoder", 130,
         {
-            SequenceTrackFactory::togetherArp,
+            SequenceTrackFactory::togetherVocoderPartArp,
             SequenceTrackFactory::togetherVocoderPartHiDrum,
             SequenceTrackFactory::togetherVocoderPartSample,
-            SequenceTrackFactory::togetherDX7,
+            SequenceTrackFactory::togetherVocoderPartDX7,
             SequenceTrackFactory::togetherVocoderPartKick,
-            SequenceTrackFactory::togetherVocoder
+            SequenceTrackFactory::togetherVocoder,
+            SequenceTrackFactory::togetherVocoderPartExtraBass,
+            SequenceTrackFactory::togetherVocoderPartRiser
         });
 }
 
