@@ -44,6 +44,8 @@ public:
     void processTick();
     void allNotesOff();
 
+    void sendProgramChange();
+
     void setOnSequenceChanged(SequenceChangedCallback callback);
     void setOnTrackMuteChanged(MuteChangedCallback callback);
     void setOnTempoChanged(TempoChangedCallback callback);

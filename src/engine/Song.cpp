@@ -4,7 +4,7 @@
 
 #include <utility>
 
-Song::Song(const char* name)
+Song::Song(const char* name, uint8_t programChange) : programChange_(programChange)
 {
     StringHelper::copyName(name_, name, kNameMaxLength + 1);
 }

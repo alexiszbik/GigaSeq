@@ -1,4 +1,5 @@
 #include "SequencePool.h"
+#include "MidiChannel.h"
 
 #include "factories/SequenceFactory.h"
 #include "factories/together/TogetherSong.h"
@@ -293,8 +294,14 @@ void SequencePool::advanceToNext()
         currentSequenceIndex_ = 0;
     }
 
+    sendProgramChange();
+
     current().reset();
     notifySequenceChanged();
+}
+
+void SequencePool::sendProgramChange() {
+     midi_.sendProgramChange(MidiChannel::kSampler, currentSong().programChange());
 }
 
 void SequencePool::advanceToPrevious()
@@ -315,6 +322,8 @@ void SequencePool::advanceToPrevious()
         currentSequenceIndex_ = currentSong().size() - 1;
     }
 
+    sendProgramChange();
+
     current().reset();
     notifySequenceChanged();
 }
@@ -325,7 +334,7 @@ SequencePool SequencePool::createDefault(MidiInOut& midi, Logger& logger)
 
     using Builder = Sequence (*)();
     auto addSong = [&pool](const char* name, std::vector<Builder> builders) {
-        Song song(name);
+        Song song(name, 2); //temporary
         for (auto& b : builders) {
             song.add(b());
         }
@@ -403,6 +412,8 @@ SequencePool SequencePool::createDefault(MidiInOut& midi, Logger& logger)
         SequenceFactory::createSequenceSix,
         SequenceFactory::createSequenceSeven,
     });
+
+    pool.sendProgramChange();
 
     return pool;
 }
