@@ -33,6 +33,9 @@ public:
     void setOnMuteChanged(MuteChangedCallback callback);
 
     void setStartMuted() { startMuted_ = true; }
+    void setFill();
+
+    bool getFill() { return isFill_; }
 
     void addNote(
         tick_t startTick,
@@ -80,6 +83,7 @@ private:
 
     bool muted_ = false;
     bool startMuted_ = false;
+    bool isFill_ = false;
 
     MidiInOut* midi_ = nullptr;
     MuteChangedCallback onMuteChanged_ = nullptr;

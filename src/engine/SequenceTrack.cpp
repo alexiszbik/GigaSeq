@@ -119,6 +119,11 @@ void SequenceTrack::notifyMuteChanged()
     }
 }
 
+void SequenceTrack::setFill() {
+    isFill_ = true; 
+    setStartMuted();
+}
+
 void SequenceTrack::setMuted(bool muted)
 {
     if (muted == muted_) {

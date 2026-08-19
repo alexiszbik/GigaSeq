@@ -160,5 +160,6 @@ Sequence TogetherSequenceFactory::togetherPartBClimax()
         });
 
     seq.track(7).addMuteEvent(0);
+    seq.track(7).setFill();
     return seq;
 }

@@ -46,6 +46,8 @@ public:
     void addTrack(SequenceTrack track);
     void clearTracks();
 
+    void unMuteFills();
+
     std::size_t trackCount() const noexcept { return tracks_.size(); }
     SequenceTrack& track(std::size_t index);
     const SequenceTrack& track(std::size_t index) const;

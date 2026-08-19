@@ -127,6 +127,10 @@ void SequencePool::queueSwitch(PendingSwitch direction)
 
 void SequencePool::setPending(PendingSwitch sw) {
     pendingSwitch_ = sw;
+
+    if (sw == PendingSwitch::Next) {
+        current().unMuteFills();
+    }
     
     if (onPendingChanged_) {
         onPendingChanged_(sw);

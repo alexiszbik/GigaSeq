@@ -82,6 +82,14 @@ void Sequence::clearTracks()
     tracks_.clear();
 }
 
+void Sequence::unMuteFills() {
+    for (auto& t : tracks_) {
+        if (t.getFill()) {
+            t.setMuted(false);
+        }
+    }
+}
+
 SequenceTrack& Sequence::track(std::size_t index)
 {
     return tracks_.at(index);
