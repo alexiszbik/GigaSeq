@@ -27,8 +27,13 @@ add_executable(GigaSeq
     src/engine/Song.cpp
     src/engine/SequencePool.cpp
     src/engine/SequenceTrack.cpp
+    src/factories/SequenceBuilder.cpp
     src/factories/SequenceFactory.cpp
     src/factories/SequenceTrackFactory.cpp
+    src/factories/TrackPatternBuilder.cpp
+    src/factories/together/TogetherSequenceFactory.cpp
+    src/factories/together/TogetherSong.cpp
+    src/factories/together/TogetherTrackFactory.cpp
 )
 
 target_include_directories(GigaSeq PRIVATE src src/engine src/desktop)

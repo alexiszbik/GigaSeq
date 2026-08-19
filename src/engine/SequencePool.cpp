@@ -1,6 +1,7 @@
 #include "SequencePool.h"
 
 #include "factories/SequenceFactory.h"
+#include "factories/together/TogetherSong.h"
 
 #include <cstdio>
 #include <utility>
@@ -326,19 +327,7 @@ SequencePool SequencePool::createDefault(MidiInOut& midi, Logger& logger)
         pool.add(std::move(song));
     };
 
-    addSong("Together", {
-        SequenceFactory::togetherIntro,
-        SequenceFactory::togetherSample,
-        SequenceFactory::togetherKick,
-        SequenceFactory::togetherVocoder,
-        SequenceFactory::togetherPause,
-        SequenceFactory::togetherClimax,
-        SequenceFactory::togetherRepeat,
-        SequenceFactory::togetherPartB,
-        SequenceFactory::togetherPartBWithHats,
-        SequenceFactory::togetherPartBDrums,
-        SequenceFactory::togetherPartBClimax,
-    });
+    addTogetherSong(pool);
 
     addSong("Intro", {
         SequenceFactory::createSequenceOne,
