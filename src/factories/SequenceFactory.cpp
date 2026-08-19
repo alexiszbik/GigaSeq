@@ -2,6 +2,8 @@
 
 #include "SequenceTrackFactory.h"
 
+#include "MidiChannel.h"
+
 namespace
 {
 using TrackBuilder = SequenceTrack (*)(tick_t lengthInTicks);
@@ -24,15 +26,48 @@ Sequence buildSequence(
     
     return sequence;
 }
+
+void addProgramChangeTrack(
+    Sequence& seq,
+    const char* name,
+    uint8_t channel, 
+    uint8_t value
+) {
+    SequenceTrack st = SequenceTrack(name, channel);
+    st.addProgramChange(0, value);
+    seq.addTrack(st);
+}
+
+struct CCPair {
+    uint8_t control;
+    uint8_t value;
+};
+
+void addControlChangesTrack(
+    Sequence& seq,
+    const char* name,
+    uint8_t channel, 
+    std::vector<CCPair> controlChanges
+) {
+    SequenceTrack st = SequenceTrack(name, channel);
+    for (auto& cc : controlChanges) {
+        st.addControlChange(0, cc.control, cc.value);
+    }
+    seq.addTrack(st);
+}
+
 } // namespace
 
 Sequence SequenceFactory::togetherIntro()
 {
-    return buildSequence(
+    Sequence seq = buildSequence(
         8, 4, 0, "Intro", 130, true,
         {
             SequenceTrackFactory::togetherArp
         });
+    
+    addProgramChangeTrack(seq, "Poly pgm", MidiChannel::kPoly, 1);
+    return seq;
 }
 
 Sequence SequenceFactory::togetherSample()
