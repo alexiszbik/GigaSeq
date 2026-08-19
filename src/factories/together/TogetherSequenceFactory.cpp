@@ -24,12 +24,9 @@ Sequence TogetherSequenceFactory::togetherSample()
         {
             TogetherTrackFactory::togetherArp,
             TogetherTrackFactory::togetherHiDrum,
-            TogetherTrackFactory::togetherSample,
-            TogetherTrackFactory::togetherDX7
+            {TogetherTrackFactory::togetherSample, true},
+            {TogetherTrackFactory::togetherDX7, true}
         });
-
-    seq.track(2).setStartMuted();
-    seq.track(3).setStartMuted();
 
     return seq;
 }
@@ -54,13 +51,11 @@ Sequence TogetherSequenceFactory::togetherVocoder()
         {
             TogetherTrackFactory::togetherArp,
             TogetherTrackFactory::togetherHiDrum,
-            TogetherTrackFactory::togetherSample,
+            {TogetherTrackFactory::togetherSample, false, {{13,63}}},
             TogetherTrackFactory::togetherDX7,
             SequenceTrackFactory::kickFour,
             TogetherTrackFactory::togetherVocoder,
         });
-
-    seq.track(2).addControlChange(0, 13, 68);
     return seq;
 }
 
@@ -83,12 +78,10 @@ Sequence TogetherSequenceFactory::togetherClimax()
         {
             TogetherTrackFactory::togetherArp,
             TogetherTrackFactory::togetherHiDrum,
-            TogetherTrackFactory::togetherSample,
+            {TogetherTrackFactory::togetherSample, false, {{13,127}}},
             TogetherTrackFactory::togetherDX7,
             SequenceTrackFactory::kickFour,
         });
-
-    seq.track(2).addControlChange(0, 13, 127);
     return seq;
 }
 
@@ -114,12 +107,10 @@ Sequence TogetherSequenceFactory::togetherPartB()
         {
             TogetherTrackFactory::togetherPartBSampleCut,
             TogetherTrackFactory::togetherPartBSynth,
-            TogetherTrackFactory::togetherPartBAh,
-            TogetherTrackFactory::togetherPartBDaDaDa,
+            {TogetherTrackFactory::togetherPartBAh, true},
+            {TogetherTrackFactory::togetherPartBDaDaDa, true}
         });
 
-    seq.track(2).setStartMuted();
-    seq.track(3).setStartMuted();
 
     return seq;
 }
@@ -146,12 +137,9 @@ Sequence TogetherSequenceFactory::togetherPartBDrums()
             TogetherTrackFactory::togetherPartBAh,
             TogetherTrackFactory::togetherHiDrum,
             SequenceTrackFactory::kickFour,
-            TogetherTrackFactory::togetherPartBJC,
-            TogetherTrackFactory::togetherPartBTambourin
+            {TogetherTrackFactory::togetherPartBJC, true},
+            {TogetherTrackFactory::togetherPartBTambourin, true}
         });
-
-    seq.track(4).setStartMuted();
-    seq.track(5).setStartMuted();
 
     return seq;
 }

@@ -8,12 +8,14 @@
 namespace
 {
 constexpr tick_t oneBarTick = 384;
-} // namespace
+
+}
 
 SequenceTrack TogetherTrackFactory::togetherArp(tick_t lengthInTicks) {
     SequenceTrack track("Modular", MidiChannel::kModularA);
 
     SequenceDesc desc;
+    //TODO : might be a better way to do it
     desc.notes = {
         {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3},
         {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3},
@@ -72,6 +74,7 @@ SequenceTrack TogetherTrackFactory::togetherDX7(tick_t lengthInTicks)
     SequenceTrack track("DX7", MidiChannel::kSampler);
 
     SequenceDesc desc;
+    //TODO : might be a better way to do itw
     desc.notes = {
         {58}, {58}, {58}, {58}, {58}, {58}, {58}, {58},
         {58}, {58}, {58}, {58}, {58}, {58}, {58}, {58},

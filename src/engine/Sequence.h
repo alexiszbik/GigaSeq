@@ -49,6 +49,8 @@ public:
     std::size_t trackCount() const noexcept { return tracks_.size(); }
     SequenceTrack& track(std::size_t index);
     const SequenceTrack& track(std::size_t index) const;
+    SequenceTrack& lastTrack();
+    const SequenceTrack& lastTrack() const;
 
     void setTrackMuted(std::size_t index, bool muted);
 

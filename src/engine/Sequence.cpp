@@ -92,6 +92,16 @@ const SequenceTrack& Sequence::track(std::size_t index) const
     return tracks_.at(index);
 }
 
+SequenceTrack& Sequence::lastTrack()
+{
+    return track(tracks_.size() - 1);
+}
+
+const SequenceTrack& Sequence::lastTrack() const
+{
+    return track(tracks_.size() - 1);
+}
+
 void Sequence::setTrackMuted(std::size_t index, bool muted)
 {
     tracks_.at(index).setMuted(muted);

@@ -127,6 +127,7 @@ void SequencePool::queueSwitch(PendingSwitch direction)
 
 void SequencePool::setPending(PendingSwitch sw) {
     pendingSwitch_ = sw;
+    
     if (onPendingChanged_) {
         onPendingChanged_(sw);
     }

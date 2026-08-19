@@ -7,13 +7,25 @@ Sequence buildSequence(
     const char* name,
     uint8_t tempo,
     bool isLooping,
-    std::vector<TrackBuilder> builders)
+    std::vector<SequenceBuilderData> buildersData)
 {
     Sequence sequence(name, tempo, barCount, beatsPerBar, barLoop, isLooping);
     const tick_t length = sequence.lengthInTicks();
 
-    for (auto& builder : builders) {
-        sequence.addTrack(builder(length));
+    for (const auto& b : buildersData) {
+        sequence.addTrack(b.builder(length));
+
+        SequenceTrack& t = sequence.lastTrack();
+
+        if (b.startAsMuted) {
+            t.setStartMuted();
+        }
+        if (b.hasProgramChange) {
+            t.addProgramChange(0, b.programChange);
+        }
+        for (const CCPair& cc : b.controlChanges) {
+            t.addControlChange(0, cc.control, cc.value);
+        }
     }
 
     return sequence;
