@@ -313,6 +313,8 @@ int main()
         logger.info(
             "Commands: [p]lay  [s]top  [n]ext  [b]ack  pos  [t]empo <bpm>  [m]ute <index>  [q]uit\n");
 
+            pool.sendProgramChange();
+
         while (gKeepRunning)
         {
             if (clock.isPlaying()) {

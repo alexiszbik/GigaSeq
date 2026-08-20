@@ -34,6 +34,9 @@ add_executable(GigaSeq
     src/factories/together/TogetherSequenceFactory.cpp
     src/factories/together/TogetherSong.cpp
     src/factories/together/TogetherTrackFactory.cpp
+    src/factories/water/WaterSequenceFactory.cpp
+    src/factories/water/WaterSong.cpp
+    src/factories/water/WaterTrackFactory.cpp
 )
 
 target_include_directories(GigaSeq PRIVATE src src/engine src/desktop)

@@ -3,6 +3,7 @@
 
 #include "factories/SequenceFactory.h"
 #include "factories/together/TogetherSong.h"
+#include "factories/water/WaterSong.h"
 
 #include <cstdio>
 #include <utility>
@@ -301,7 +302,7 @@ void SequencePool::advanceToNext()
 }
 
 void SequencePool::sendProgramChange() {
-     midi_.sendProgramChange(MidiChannel::kSampler, currentSong().programChange());
+    midi_.sendProgramChange(MidiChannel::kSampler, currentSong().programChange());
 }
 
 void SequencePool::advanceToPrevious()
@@ -341,6 +342,7 @@ SequencePool SequencePool::createDefault(MidiInOut& midi, Logger& logger)
         pool.add(std::move(song));
     };
 
+    addWaterSong(pool);
     addTogetherSong(pool);
 
     addSong("Intro", {
@@ -412,8 +414,6 @@ SequencePool SequencePool::createDefault(MidiInOut& midi, Logger& logger)
         SequenceFactory::createSequenceSix,
         SequenceFactory::createSequenceSeven,
     });
-
-    pool.sendProgramChange();
 
     return pool;
 }

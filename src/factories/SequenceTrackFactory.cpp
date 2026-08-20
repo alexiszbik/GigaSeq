@@ -17,6 +17,19 @@ SequenceTrack SequenceTrackFactory::kickFour(tick_t lengthInTicks)
     return track;
 }
 
+SequenceTrack SequenceTrackFactory::snareFour(tick_t lengthInTicks)
+{
+    SequenceTrack track("Clap", MidiChannel::kDrums);
+
+    SequenceDesc desc;
+    desc.notes = {{}, {38}, {}, {38}};
+    desc.rate = 4;
+    makeSequenceTrack(track, desc, lengthInTicks);
+
+    return track;
+}
+
+
 SequenceTrack SequenceTrackFactory::createCMaj7Arpeggio(tick_t lengthInTicks)
 {
     SequenceTrack track("abcdefghijklmnopqrstuvwxyz123456789", MidiChannel::kModularA);
