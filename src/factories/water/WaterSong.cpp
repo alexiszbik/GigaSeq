@@ -13,6 +13,7 @@ void addWaterSong(SequencePool& pool)
     const Builder sequences[] = {
         WaterSequenceFactory::waterIntro,
   
+        WaterSequenceFactory::waterChorus,
     };
 
     for (Builder builder : sequences) {

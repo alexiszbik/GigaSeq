@@ -5,15 +5,33 @@
 #include "factories/water/WaterTrackFactory.h"
 #include "MidiChannel.h"
 
+constexpr uint8_t songTempo = 125;
+
 Sequence WaterSequenceFactory::waterIntro()
 {
     Sequence seq = buildSequence(
-        8, 4, 0, "Intro", 125, true,
+        8, 4, 0, "Intro", songTempo, true,
         {
             SequenceTrackFactory::kickFour,
             SequenceTrackFactory::snareFour,
             WaterTrackFactory::waterHats,
-            WaterTrackFactory::waterArp,
+            WaterTrackFactory::waterMarimba,
+            WaterTrackFactory::waterFreak,
+            WaterTrackFactory::waterBass,
+        });
+    return seq;
+}
+
+Sequence WaterSequenceFactory::waterChorus()
+{
+    Sequence seq = buildSequence(
+        8, 4, 0, "Chorus", songTempo, true,
+        {
+            SequenceTrackFactory::snareFour,
+            WaterTrackFactory::waterHats,
+            WaterTrackFactory::waterChorus,
+            WaterTrackFactory::waterMarimba,
+            WaterTrackFactory::waterXmas,
         });
     return seq;
 }
