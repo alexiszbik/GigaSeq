@@ -30,3 +30,10 @@ TrackSpec& TrackSpec::withLength(tick_t tick)
     hasCustomLength_ = true;
     return *this;
 }
+
+TrackSpec& TrackSpec::withStart(tick_t start)
+{
+    startInTicks_ = start;
+    hasCustomStart_ = true;
+    return *this;
+}

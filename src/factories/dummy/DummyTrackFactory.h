@@ -5,6 +5,6 @@
 class DummyTrackFactory
 {
 public:
- static SequenceTrack dummyArp(tick_t lengthInTicks);
+ static SequenceTrack dummyArp(tick_t lengthInTicks, tick_t startInTicks);
 
 };

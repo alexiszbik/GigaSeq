@@ -11,7 +11,7 @@ constexpr tick_t oneBarTick = 384;
 
 }
 
-SequenceTrack DummyTrackFactory::dummyArp(tick_t lengthInTicks) {
+SequenceTrack DummyTrackFactory::dummyArp(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Modular", MidiChannel::kModularA);
 
     SequenceDesc desc;
@@ -19,7 +19,7 @@ SequenceTrack DummyTrackFactory::dummyArp(tick_t lengthInTicks) {
     desc.notes = {{C3}
     };
     desc.rate = 16;
-    makeSequenceTrack(track, desc, lengthInTicks);
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
 
     return track;
 }

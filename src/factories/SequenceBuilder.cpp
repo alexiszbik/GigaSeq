@@ -18,7 +18,12 @@ Sequence buildSequence(
             trackLength = spec.customLength();
         }
 
-        sequence.addTrack(spec.builder()(trackLength));
+        tick_t startInTicks = 0;
+        if (spec.hasCustomStart()) {
+            startInTicks = spec.startInTicks();
+        }
+
+        sequence.addTrack(spec.builder()(trackLength, startInTicks));
 
         SequenceTrack& t = sequence.lastTrack();
 

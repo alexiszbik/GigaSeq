@@ -6,7 +6,7 @@
 #include <cstdint>
 #include <vector>
 
-using TrackBuilder = SequenceTrack (*)(tick_t lengthInTicks);
+using TrackBuilder = SequenceTrack (*)(tick_t lengthInTicks, tick_t startInTicks);
 
 struct CCPair
 {
@@ -37,6 +37,7 @@ public:
     TrackSpec& withMuteEvent(tick_t tick);
     TrackSpec& asFill();
     TrackSpec& withLength(tick_t length);
+    TrackSpec& withStart(tick_t start);
 
     TrackBuilder builder() const noexcept { return builder_; }
     bool startMuted() const noexcept { return startMuted_; }
@@ -47,6 +48,8 @@ public:
     bool isFill() const noexcept { return isFill_; }
     bool hasCustomLength() const noexcept { return hasCustomLength_; }
     tick_t customLength() const noexcept { return customLength_; }
+    bool hasCustomStart() const noexcept { return hasCustomStart_; }
+    tick_t startInTicks() const noexcept { return startInTicks_; }
 
 private:
     TrackBuilder builder_;
@@ -59,6 +62,8 @@ private:
 
     bool hasCustomLength_ = false;
     tick_t customLength_ = 0;
+    bool hasCustomStart_ = false;
+    tick_t startInTicks_ = 0;
 };
 
 // Ergonomic helper to start a fluent TrackSpec from a builder.

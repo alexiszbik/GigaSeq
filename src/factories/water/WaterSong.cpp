@@ -14,6 +14,7 @@ void addWaterSong(SequencePool& pool)
         WaterSequenceFactory::waterIntro,
         WaterSequenceFactory::waterPrechorus,
         WaterSequenceFactory::waterChorus,
+        WaterSequenceFactory::waterPartB,
         WaterSequenceFactory::waterChorus2,
     };
 

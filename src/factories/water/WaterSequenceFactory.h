@@ -9,5 +9,6 @@ public:
     static Sequence waterPrechorus();
     static Sequence waterChorus();
     static Sequence waterFull();
+    static Sequence waterPartB();
     static Sequence waterChorus2();
 };

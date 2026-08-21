@@ -112,21 +112,21 @@ fi
 
 if [[ "$(uname)" == "Darwin" ]]; then
     sed -i '' "/^};/i\\
-    static SequenceTrack ${FUNCTION_NAME}(tick_t lengthInTicks);
+    static SequenceTrack ${FUNCTION_NAME}(tick_t lengthInTicks, tick_t startInTicks);
 " "$TRACK_H"
 else
-    sed -i "/^};/i\\    static SequenceTrack ${FUNCTION_NAME}(tick_t lengthInTicks);" "$TRACK_H"
+    sed -i "/^};/i\\    static SequenceTrack ${FUNCTION_NAME}(tick_t lengthInTicks, tick_t startInTicks);" "$TRACK_H"
 fi
 
 cat >> "$TRACK_CPP" <<EOF
 
-SequenceTrack ${CLASS_NAME}::${FUNCTION_NAME}(tick_t lengthInTicks) {
+SequenceTrack ${CLASS_NAME}::${FUNCTION_NAME}(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("${TRACK_LABEL}", MidiChannel::${SELECTED_CHANNEL});
 
     SequenceDesc desc;
     desc.notes = {{C3}};
     desc.rate = 16;
-    makeSequenceTrack(track, desc, lengthInTicks);
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
 
     return track;
 }

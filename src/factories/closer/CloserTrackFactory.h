@@ -5,6 +5,6 @@
 class CloserTrackFactory
 {
 public:
- static SequenceTrack closerArp(tick_t lengthInTicks);
+ static SequenceTrack closerArp(tick_t lengthInTicks, tick_t startInTicks);
 
 };
