@@ -283,3 +283,49 @@ SequenceTrack WaterTrackFactory::waterFreakChorusB(tick_t lengthInTicks, tick_t 
 
     return track;
 }
+
+SequenceTrack WaterTrackFactory::waterKickPartC(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("KickPartC", MidiChannel::kDrums);
+
+    tick_t len = 7*oneBarTick + 2*96;
+
+    uint8_t note = 36;
+
+    SequenceDesc desc;
+    desc.notes = {{note}};
+    desc.rate = 4;
+    makeSequenceTrack(track, desc, len, startInTicks);
+
+    track.addNote(len + 48, 24, note, 127);
+    track.addNote(len + 96 + 24, 24, note, 127);
+
+    return track;
+}
+
+SequenceTrack WaterTrackFactory::waterEventsPartC(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("EventsPartC", MidiChannel::kSampler);
+    track.addNote(4*oneBarTick, 24, 66, 127);
+
+    return track;
+}
+
+SequenceTrack WaterTrackFactory::waterEventsEnd(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("EventsEnd", MidiChannel::kSampler);
+    track.addNote(16*oneBarTick, 24, 67, 127);
+
+    return track;
+}
+
+SequenceTrack WaterTrackFactory::waterChorusEnd(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("ChorusEnd", MidiChannel::kSampler);
+
+    SequenceDesc desc;
+    desc.notes = {{56}};
+    desc.rate = 0.125;
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
+
+    tick_t lastNote = (oneBarTick*28 + 96*3 + 48);
+    track.addNote(startInTicks + lastNote, 24, 57, 127);
+
+    return track;
+}

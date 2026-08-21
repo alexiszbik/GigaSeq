@@ -24,4 +24,8 @@ public:
     static SequenceTrack waterKickPartB(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack waterEventsPartB(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack waterFreakChorusB(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack waterKickPartC(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack waterEventsPartC(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack waterEventsEnd(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack waterChorusEnd(tick_t lengthInTicks, tick_t startInTicks);
 };
