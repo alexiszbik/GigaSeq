@@ -7,6 +7,7 @@
 #include "midi/EngineMidiBridge.h"
 #include "midi/GigaMidiInOut.h"
 #include "platform/ArduinoLogger.h"
+#include "platform/MemoryMonitor.h"
 #include "task/TimedTask.h"
 #include "view/SequencerView.h"
 
@@ -146,6 +147,9 @@ void muxCallback() {
 }
 
 void displayCallback() {
+    if (sequencerView.isOverlayActive()) {
+        return;
+    }
     sequencerView.processOne();
 }
 
@@ -189,6 +193,14 @@ void setup() {
 
     sequencerView.begin(display);
     refreshViewFromPool();
+    while (sequencerView.processOne()) {}
+
+    HeapStats heapStats{};
+    if (getHeapStats(heapStats)) {
+        char memoryText[48];
+        formatHeapStatsForDisplay(heapStats, memoryText, sizeof(memoryText));
+        sequencerView.showTemporaryMessage(memoryText, 2000, millis());
+    }
 
     gigaMidi.begin();
     transportClock.begin(sequencePool.current().getTempo());
@@ -206,6 +218,10 @@ void loop() {
     if (gigaMidi.flush()) return;
 
     currentTime = millis();
+
+    if (sequencerView.updateOverlay(currentTime)) {
+        refreshViewFromPool();
+    }
 
     if (inputCheck.update(currentTime)) return;
     if (muxCheck.update(currentTime)) return;

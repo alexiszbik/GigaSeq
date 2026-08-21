@@ -148,6 +148,56 @@ namespace GigaSeq
         enqueueAction(action);
     }
 
+    void SequencerView::showTemporaryMessage(const char *text, uint32_t durationMs, unsigned long nowMs)
+    {
+        if (!display_ || !text || durationMs == 0)
+        {
+            return;
+        }
+
+        overlayUntilMs_ = nowMs + durationMs;
+        overlayActive_ = true;
+        drawOverlay(text);
+    }
+
+    bool SequencerView::updateOverlay(unsigned long nowMs)
+    {
+        if (!overlayActive_)
+        {
+            return false;
+        }
+
+        if (nowMs < overlayUntilMs_)
+        {
+            return false;
+        }
+
+        overlayActive_ = false;
+        overlayUntilMs_ = 0;
+        return true;
+    }
+
+    void SequencerView::drawOverlay(const char *text)
+    {
+        if (!display_ || !text)
+        {
+            return;
+        }
+
+        static constexpr int kOverlayWidth = 520;
+        static constexpr int kOverlayHeight = 100;
+        static constexpr uint8_t kOverlayTextSize = 3;
+        static constexpr uint8_t kOverlayCharsPerLine = 24;
+
+        const int boxX = (kWidth - kOverlayWidth) / 2;
+        const int boxY = kHeaderHeight + (kTracksHeight - kOverlayHeight) / 2;
+
+        display_->fillRect(boxX, boxY, kOverlayWidth, kOverlayHeight, kWhite);
+        display_->drawRect(boxX, boxY, kOverlayWidth, kOverlayHeight, kBlack);
+        display_->setTextColor(kBlack, kWhite);
+        printTextInRect(*display_, boxX, boxY, kOverlayWidth, kOverlayHeight, text, kOverlayTextSize, kOverlayCharsPerLine);
+    }
+
     bool SequencerView::processOne()
     {
         ViewAction action;

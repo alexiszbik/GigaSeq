@@ -1,7 +1,6 @@
 #include "SequencePool.h"
 #include "MidiChannel.h"
 
-#include "factories/SequenceFactory.h"
 #include "factories/together/TogetherSong.h"
 #include "factories/water/WaterSong.h"
 
@@ -333,87 +332,13 @@ SequencePool SequencePool::createDefault(MidiInOut& midi, Logger& logger)
 {
     SequencePool pool(midi, logger);
 
-    using Builder = Sequence (*)();
-    auto addSong = [&pool](const char* name, std::vector<Builder> builders) {
-        Song song(name, 2); //temporary
-        for (auto& b : builders) {
-            song.add(b());
-        }
-        pool.add(std::move(song));
-    };
-
     addWaterSong(pool);
     addTogetherSong(pool);
-
-    addSong("Intro", {
-        SequenceFactory::createSequenceOne,
-        SequenceFactory::createSequenceTwo,
-    });
-    addSong("Main", {
-        SequenceFactory::createSequenceThree,
-        SequenceFactory::createSequenceFour,
-        SequenceFactory::createSequenceFive,
-    });
-    addSong("Outro", {
-        SequenceFactory::createSequenceSix,
-        SequenceFactory::createSequenceSeven,
-    });
-
-    addSong("Intro 2", {
-        SequenceFactory::createSequenceOne,
-        SequenceFactory::createSequenceTwo,
-    });
-    addSong("Main 2", {
-        SequenceFactory::createSequenceThree,
-        SequenceFactory::createSequenceFour,
-        SequenceFactory::createSequenceFive,
-    });
-    addSong("Outro 2", {
-        SequenceFactory::createSequenceSix,
-        SequenceFactory::createSequenceSeven,
-    });
-
-    addSong("Intro 3", {
-        SequenceFactory::createSequenceOne,
-        SequenceFactory::createSequenceTwo,
-    });
-    addSong("Main 3", {
-        SequenceFactory::createSequenceThree,
-        SequenceFactory::createSequenceFour,
-        SequenceFactory::createSequenceFive,
-    });
-    addSong("Outro 3", {
-        SequenceFactory::createSequenceSix,
-        SequenceFactory::createSequenceSeven,
-    });
-
-    addSong("Intro 4", {
-        SequenceFactory::createSequenceOne,
-        SequenceFactory::createSequenceTwo,
-    });
-    addSong("Main 4", {
-        SequenceFactory::createSequenceThree,
-        SequenceFactory::createSequenceFour,
-        SequenceFactory::createSequenceFive,
-    });
-    addSong("Outro 4", {
-        SequenceFactory::createSequenceSix,
-        SequenceFactory::createSequenceSeven,
-    });
-
-    addSong("Intro 5", {
-        SequenceFactory::createSequenceOne,
-        SequenceFactory::createSequenceTwo,
-    });
-    addSong("Main 5", {
-        SequenceFactory::createSequenceThree,
-        SequenceFactory::createSequenceFour,
-        SequenceFactory::createSequenceFive,
-    });
-    addSong("Outro 5", {
-        SequenceFactory::createSequenceSix,
-        SequenceFactory::createSequenceSeven,
-    });
+    addWaterSong(pool);
+    addTogetherSong(pool);
+    addWaterSong(pool);
+    addTogetherSong(pool);
+    addWaterSong(pool);
 
     return pool;
 }

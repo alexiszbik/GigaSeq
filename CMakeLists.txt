@@ -32,6 +32,7 @@ add_executable(GigaSeq
     src/factories/SequenceTrackFactory.cpp
     src/factories/TrackPatternBuilder.cpp
     src/factories/TrackSpec.cpp
+    src/platform/MemoryMonitor.cpp
     src/factories/together/TogetherSequenceFactory.cpp
     src/factories/together/TogetherSong.cpp
     src/factories/together/TogetherTrackFactory.cpp

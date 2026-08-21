@@ -27,7 +27,7 @@ Sequence WaterSequenceFactory::waterIntro()
 Sequence WaterSequenceFactory::waterPrechorus()
 {
     return buildSequence(
-        8, 4, 0, "Intro", songTempo, false,
+        8, 4, 0, "PreChorus", songTempo, false,
         {
             WaterTrackFactory::waterKickPreChorus,
             SequenceTrackFactory::snareFour,
@@ -102,7 +102,7 @@ Sequence WaterSequenceFactory::waterChorus2()
     tick_t len2 = 7*384 + 2*96 + 48;
 
     Sequence seq = buildSequence(
-        16, 4, 0, "Chorus", songTempo, false,
+        16, 4, 0, "ChorusB", songTempo, false,
         {
             track(SequenceTrackFactory::snareFour).withLength(len),
             track(WaterTrackFactory::waterHats).withLength(len),
@@ -174,7 +174,7 @@ Sequence WaterSequenceFactory::waterChorusEnd()
     tick_t len4 = 32*384;
 
     Sequence seq = buildSequence(
-        33, 4, 32, "Chorus", songTempo, true,
+        33, 4, 32, "ChorusEnd", songTempo, true,
         {
             track(SequenceTrackFactory::snareFour).withLength(len2),
             track(WaterTrackFactory::waterHats).withLength(len2),
