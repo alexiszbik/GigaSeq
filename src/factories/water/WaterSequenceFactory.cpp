@@ -16,8 +16,14 @@ Sequence WaterSequenceFactory::waterIntro()
             SequenceTrackFactory::snareFour,
             WaterTrackFactory::waterHats,
             WaterTrackFactory::waterMarimba,
+            WaterTrackFactory::waterFm,
+            WaterTrackFactory::waterBalafon,
             WaterTrackFactory::waterFreak,
             WaterTrackFactory::waterBass,
+            WaterTrackFactory::waterClaves,
+            WaterTrackFactory::waterCongas,
+            WaterTrackFactory::waterShakes,
+            WaterTrackFactory::waterFmbass,
         });
     return seq;
 }
@@ -32,6 +38,7 @@ Sequence WaterSequenceFactory::waterChorus()
             WaterTrackFactory::waterChorus,
             WaterTrackFactory::waterMarimba,
             WaterTrackFactory::waterXmas,
+            WaterTrackFactory::waterCongas,
         });
     return seq;
 }
