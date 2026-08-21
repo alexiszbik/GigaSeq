@@ -69,6 +69,21 @@ SequenceTrack WaterTrackFactory::waterChorus(tick_t lengthInTicks) {
     return track;
 }
 
+SequenceTrack WaterTrackFactory::waterChorus2(tick_t lengthInTicks) {
+    SequenceTrack track("Chorus2", MidiChannel::kSampler);
+
+    SequenceDesc desc;
+    desc.notes = {{56}};
+    desc.rate = 0.125;
+    makeSequenceTrack(track, desc, lengthInTicks);
+
+    tick_t lastNote = (oneBarTick*4 + 96*3 + 48);
+    track.addNote(lastNote, 24, 57, 127);
+
+    return track;
+}
+
+
 SequenceTrack WaterTrackFactory::waterXmas(tick_t lengthInTicks) {
     SequenceTrack track("Xmas", MidiChannel::kSampler);
 
@@ -203,6 +218,58 @@ SequenceTrack WaterTrackFactory::waterFmbass(tick_t lengthInTicks) {
 
     return track;
 }
+
+SequenceTrack WaterTrackFactory::waterChorusFMBass(tick_t lengthInTicks) {
+    SequenceTrack track("Fmbass", MidiChannel::kModularB);
+
+    SequenceDesc desc;
+    desc.notes = {
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {Gd2}, {Gd2},
+        {Ad2}, {Ad2}, {Cd3}, {Cd3},
+        };
+    desc.rate = 16;
+    makeSequenceTrack(track, desc, lengthInTicks);
+
+    return track;
+}
+
 
 SequenceTrack WaterTrackFactory::waterKickPreChorus(tick_t lengthInTicks) {
     SequenceTrack track("KickPreChorus", MidiChannel::kDrums);

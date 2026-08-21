@@ -9,25 +9,24 @@ constexpr uint8_t songTempo = 125;
 
 Sequence WaterSequenceFactory::waterIntro()
 {
-    Sequence seq = buildSequence(
+    return buildSequence(
         8, 4, 0, "Intro", songTempo, true,
         {
             SequenceTrackFactory::kickFour,
             SequenceTrackFactory::snareFour,
-            {WaterTrackFactory::waterHats, false},
-            {WaterTrackFactory::waterMarimba, false},
+            track(WaterTrackFactory::waterHats).muted(),
+            track(WaterTrackFactory::waterMarimba).muted(),
             WaterTrackFactory::waterFreak,
-            {WaterTrackFactory::waterBass, false},
-            {WaterTrackFactory::waterClaves, false},
-            {WaterTrackFactory::waterCongas, false},
-            {WaterTrackFactory::waterFmbass, false}
+            track(WaterTrackFactory::waterBass).muted(),
+            track(WaterTrackFactory::waterClaves).muted(),
+            track(WaterTrackFactory::waterCongas).muted(),
+            track(WaterTrackFactory::waterFmbass).muted(),
         });
-    return seq;
 }
 
 Sequence WaterSequenceFactory::waterPrechorus()
 {
-    Sequence seq = buildSequence(
+    return buildSequence(
         8, 4, 0, "Intro", songTempo, false,
         {
             WaterTrackFactory::waterKickPreChorus,
@@ -40,29 +39,44 @@ Sequence WaterSequenceFactory::waterPrechorus()
             WaterTrackFactory::waterCongas,
             WaterTrackFactory::waterFmbass,
         });
-    return seq;
 }
-
-
 
 Sequence WaterSequenceFactory::waterChorus()
 {
-    Sequence seq = buildSequence(
-        8, 4, 0, "Chorus", songTempo, true,
+    return buildSequence(
+        8, 4, 0, "Chorus", songTempo, false,
         {
             SequenceTrackFactory::snareFour,
             WaterTrackFactory::waterHats,
             WaterTrackFactory::waterChorus,
             WaterTrackFactory::waterMarimba,
-            WaterTrackFactory::waterXmas,
-            WaterTrackFactory::waterCongas,
         });
+}
+
+Sequence WaterSequenceFactory::waterChorus2()
+{
+    tick_t len = 7*384 + 2*96;
+
+    Sequence seq = buildSequence(
+        8, 4, 0, "Chorus2", songTempo, false,
+        {
+            track(SequenceTrackFactory::snareFour).withLength(len),
+            track(WaterTrackFactory::waterHats).withLength(len),
+            WaterTrackFactory::waterChorus2,
+            WaterTrackFactory::waterMarimba,
+            track(WaterTrackFactory::waterXmas).withLength(len),
+            WaterTrackFactory::waterChorusFMBass
+        });
+    seq.track(3).addNote(len, 24, 68, 127); // note to stop the marimba
+    seq.track(3).addNote(len, 24, 69, 127); // note to stop the juno
+
     return seq;
 }
 
+
 Sequence WaterSequenceFactory::waterFull()
 {
-    Sequence seq = buildSequence(
+    return buildSequence(
         8, 4, 0, "Intro", songTempo, true,
         {
             SequenceTrackFactory::kickFour,
@@ -78,16 +92,4 @@ Sequence WaterSequenceFactory::waterFull()
             WaterTrackFactory::waterShakes,
             WaterTrackFactory::waterFmbass,
         });
-    return seq;
-}
-
-
-Sequence WaterSequenceFactory::waterChorus2()
-{
-    Sequence seq = buildSequence(
-        8, 4, 0, "Chorus2", 130, true,
-        {
-            SequenceTrackFactory::kickFour,
-        });
-    return seq;
 }

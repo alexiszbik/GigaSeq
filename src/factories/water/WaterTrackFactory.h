@@ -19,4 +19,6 @@ public:
     static SequenceTrack waterShakes(tick_t lengthInTicks);
     static SequenceTrack waterFmbass(tick_t lengthInTicks);
     static SequenceTrack waterKickPreChorus(tick_t lengthInTicks);
+    static SequenceTrack waterChorus2(tick_t lengthInTicks);
+    static SequenceTrack waterChorusFMBass(tick_t lengthInTicks);
 };

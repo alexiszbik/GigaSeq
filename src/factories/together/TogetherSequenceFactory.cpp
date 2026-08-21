@@ -10,7 +10,7 @@ Sequence TogetherSequenceFactory::togetherIntro()
     Sequence seq = buildSequence(
         8, 4, 0, "Intro", 130, true,
         {
-            TogetherTrackFactory::togetherArp
+            TogetherTrackFactory::togetherArp,
         });
 
     addProgramChangeTrack(seq, "Poly pgm", MidiChannel::kPoly, 1);
@@ -19,16 +19,14 @@ Sequence TogetherSequenceFactory::togetherIntro()
 
 Sequence TogetherSequenceFactory::togetherSample()
 {
-    Sequence seq = buildSequence(
+    return buildSequence(
         8, 4, 0, "Sample", 130, true,
         {
             TogetherTrackFactory::togetherArp,
             TogetherTrackFactory::togetherHiDrum,
-            {TogetherTrackFactory::togetherSample, true},
-            {TogetherTrackFactory::togetherDX7, true}
+            track(TogetherTrackFactory::togetherSample).muted(),
+            track(TogetherTrackFactory::togetherDX7).muted(),
         });
-
-    return seq;
 }
 
 Sequence TogetherSequenceFactory::togetherKick()
@@ -40,23 +38,22 @@ Sequence TogetherSequenceFactory::togetherKick()
             TogetherTrackFactory::togetherHiDrum,
             TogetherTrackFactory::togetherSample,
             TogetherTrackFactory::togetherDX7,
-            SequenceTrackFactory::kickFour
+            SequenceTrackFactory::kickFour,
         });
 }
 
 Sequence TogetherSequenceFactory::togetherVocoder()
 {
-    Sequence seq = buildSequence(
+    return buildSequence(
         16, 4, 16, "Vocoder", 130, false,
         {
             TogetherTrackFactory::togetherArp,
             TogetherTrackFactory::togetherHiDrum,
-            {TogetherTrackFactory::togetherSample, false, {{13,63}}},
+            track(TogetherTrackFactory::togetherSample).withCC(13, 63),
             TogetherTrackFactory::togetherDX7,
             SequenceTrackFactory::kickFour,
             TogetherTrackFactory::togetherVocoder,
         });
-    return seq;
 }
 
 Sequence TogetherSequenceFactory::togetherPause()
@@ -73,16 +70,15 @@ Sequence TogetherSequenceFactory::togetherPause()
 
 Sequence TogetherSequenceFactory::togetherClimax()
 {
-    Sequence seq = buildSequence(
+    return buildSequence(
         8, 4, 0, "Climax", 130, false,
         {
             TogetherTrackFactory::togetherArp,
             TogetherTrackFactory::togetherHiDrum,
-            {TogetherTrackFactory::togetherSample, false, {{13,127}}},
+            track(TogetherTrackFactory::togetherSample).withCC(13, 127),
             TogetherTrackFactory::togetherDX7,
             SequenceTrackFactory::kickFour,
         });
-    return seq;
 }
 
 Sequence TogetherSequenceFactory::togetherRepeat()
@@ -96,23 +92,20 @@ Sequence TogetherSequenceFactory::togetherRepeat()
             TogetherTrackFactory::togetherDX7,
             TogetherTrackFactory::togetherKickRepeat,
             TogetherTrackFactory::togetherExtraBass,
-            TogetherTrackFactory::togetherEndRiser
+            TogetherTrackFactory::togetherEndRiser,
         });
 }
 
 Sequence TogetherSequenceFactory::togetherPartB()
 {
-    Sequence seq = buildSequence(
+    return buildSequence(
         8, 4, 0, "Part B", 130, true,
         {
             TogetherTrackFactory::togetherPartBSampleCut,
             TogetherTrackFactory::togetherPartBSynth,
-            {TogetherTrackFactory::togetherPartBAh, true},
-            {TogetherTrackFactory::togetherPartBDaDaDa, true}
+            track(TogetherTrackFactory::togetherPartBAh).muted(),
+            track(TogetherTrackFactory::togetherPartBDaDaDa).muted(),
         });
-
-
-    return seq;
 }
 
 Sequence TogetherSequenceFactory::togetherPartBWithHats()
@@ -124,29 +117,27 @@ Sequence TogetherSequenceFactory::togetherPartBWithHats()
             TogetherTrackFactory::togetherPartBSynth,
             TogetherTrackFactory::togetherPartBAh,
             TogetherTrackFactory::togetherPartBDaDaDa,
-            TogetherTrackFactory::togetherHatsOnly
+            TogetherTrackFactory::togetherHatsOnly,
         });
 }
 
 Sequence TogetherSequenceFactory::togetherPartBDrums()
 {
-    Sequence seq = buildSequence(
+    return buildSequence(
         8, 4, 0, "Part B Drums", 130, true,
         {
             TogetherTrackFactory::togetherPartBSynth,
             TogetherTrackFactory::togetherPartBAh,
             TogetherTrackFactory::togetherHiDrum,
             SequenceTrackFactory::kickFour,
-            {TogetherTrackFactory::togetherPartBJC, true},
-            {TogetherTrackFactory::togetherPartBTambourin, true}
+            track(TogetherTrackFactory::togetherPartBJC).muted(),
+            track(TogetherTrackFactory::togetherPartBTambourin).muted(),
         });
-
-    return seq;
 }
 
 Sequence TogetherSequenceFactory::togetherPartBClimax()
 {
-    Sequence seq = buildSequence(
+    return buildSequence(
         8, 4, 0, "Part B Climax", 130, true,
         {
             TogetherTrackFactory::togetherPartBSynth,
@@ -156,10 +147,6 @@ Sequence TogetherSequenceFactory::togetherPartBClimax()
             TogetherTrackFactory::togetherPartBJC,
             TogetherTrackFactory::togetherPartBTambourin,
             TogetherTrackFactory::togetherPartBCymbal,
-            TogetherTrackFactory::togetherEndRiser
+            track(TogetherTrackFactory::togetherEndRiser).withMuteEvent(0).asFill(),
         });
-
-    seq.track(7).addMuteEvent(0);
-    seq.track(7).setFill();
-    return seq;
 }

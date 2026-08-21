@@ -7,24 +7,35 @@ Sequence buildSequence(
     const char* name,
     uint8_t tempo,
     bool isLooping,
-    std::vector<SequenceBuilderData> buildersData)
+    std::vector<TrackSpec> tracks)
 {
     Sequence sequence(name, tempo, barCount, beatsPerBar, barLoop, isLooping);
     const tick_t length = sequence.lengthInTicks();
 
-    for (const auto& b : buildersData) {
-        sequence.addTrack(b.builder(length));
+    for (const TrackSpec& spec : tracks) {
+        tick_t trackLength = length;
+        if (spec.hasCustomLength()) {
+            trackLength = spec.customLength();
+        }
+
+        sequence.addTrack(spec.builder()(trackLength));
 
         SequenceTrack& t = sequence.lastTrack();
 
-        if (b.startAsMuted) {
+        if (spec.startMuted()) {
             t.setStartMuted();
         }
-        if (b.hasProgramChange) {
-            t.addProgramChange(0, b.programChange);
+        if (spec.hasProgramChange()) {
+            t.addProgramChange(0, spec.programChange());
         }
-        for (const CCPair& cc : b.controlChanges) {
+        for (const CCPair& cc : spec.controlChanges()) {
             t.addControlChange(0, cc.control, cc.value);
+        }
+        for (tick_t tick : spec.muteEvents()) {
+            t.addMuteEvent(tick);
+        }
+        if (spec.isFill()) {
+            t.setFill();
         }
     }
 
