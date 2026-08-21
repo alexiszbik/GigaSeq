@@ -10,6 +10,7 @@ SEQUENCE_FILE_CPP="$UPPERCASE_SONG"SequenceFactory.cpp
 SONG_FILE_H="$UPPERCASE_SONG"Song.h
 TRACK_FILE_H="$UPPERCASE_SONG"TrackFactory.h
 SEQUENCE_FILE_H="$UPPERCASE_SONG"SequenceFactory.h
+PATTERNS_FILE_H="$UPPERCASE_SONG"Patterns.h
 
 cd src/factories/
 
@@ -40,5 +41,7 @@ _replace_words $SEQUENCE_FILE_CPP
 cp dummy/DummySequenceFactory.h $SONG_NAME/$SEQUENCE_FILE_H
 _replace_words $SEQUENCE_FILE_H
 
+cp dummy/DummyPatterns.h $SONG_NAME/$PATTERNS_FILE_H
+_replace_words $PATTERNS_FILE_H
 
 

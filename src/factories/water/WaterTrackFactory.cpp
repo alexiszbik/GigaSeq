@@ -1,5 +1,6 @@
 #include "WaterTrackFactory.h"
 
+#include "factories/DrumPatterns.h"
 #include "factories/SequenceTrackFactory.h"
 #include "factories/water/WaterPatterns.h"
 #include "factories/TrackPatternBuilder.h"
@@ -117,20 +118,14 @@ SequenceTrack WaterTrackFactory::waterChorusFMBass(tick_t lengthInTicks, tick_t 
 SequenceTrack WaterTrackFactory::waterKickPreChorus(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("KickPreChorus", MidiChannel::kDrums);
 
-    SequenceDesc desc;
-    desc.notes = {
-        {36}, {36}, {36}, {36},
-        {36}, {36}, {36}, {36},
-        {36}, {36}, {36}, {36},
-        {36}, {36}, {36}, {36},
+    constexpr uint8_t kick = 36;
+    const tick_t patternLen = 7 * oneBarTick;
 
-        {36}, {36}, {36}, {36},
-        {36}, {36}, {36}, {36},
-        {36}, {36}, {36}, {36},
-        {36}, {}, {}, {36},
-    };
-    desc.rate = 4;
-    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
+    track.setPattern(DrumPatterns::kKickFour, patternLen, startInTicks);
+
+    const tick_t lastBar = startInTicks + patternLen;
+    track.addNote(lastBar, 24, kick, 127);
+    track.addNote(lastBar + 3 * 96, 24, kick, 127);
 
     return track;
 }
@@ -138,19 +133,16 @@ SequenceTrack WaterTrackFactory::waterKickPreChorus(tick_t lengthInTicks, tick_t
 SequenceTrack WaterTrackFactory::waterKickPartB(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("KickPartB", MidiChannel::kDrums);
 
-    tick_t len = 31*oneBarTick;
+    constexpr uint8_t kick = 36;
+    const tick_t patternLen = 31 * oneBarTick;
 
-    uint8_t note = 36;
+    track.setPattern(DrumPatterns::kKickFour, patternLen, startInTicks);
 
-    SequenceDesc desc;
-    desc.notes = {{note}};
-    desc.rate = 4;
-    makeSequenceTrack(track, desc, len, startInTicks);
-
-    track.addNote(len, 24, note, 127);
-    track.addNote(len + 96 + 48, 24, note, 127);
-    track.addNote(len + 2*96 + 24, 24, note, 127);
-    track.addNote(len + 3*96, 24, note, 127);
+    const tick_t fillStart = startInTicks + patternLen;
+    track.addNote(fillStart, 24, kick, 127);
+    track.addNote(fillStart + 96 + 48, 24, kick, 127);
+    track.addNote(fillStart + 2 * 96 + 24, 24, kick, 127);
+    track.addNote(fillStart + 3 * 96, 24, kick, 127);
 
     return track;
 }
@@ -176,17 +168,14 @@ SequenceTrack WaterTrackFactory::waterFreakChorusB(tick_t lengthInTicks, tick_t 
 SequenceTrack WaterTrackFactory::waterKickPartC(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("KickPartC", MidiChannel::kDrums);
 
-    tick_t len = 7*oneBarTick + 2*96;
+    constexpr uint8_t kick = 36;
+    const tick_t patternLen = 7 * oneBarTick + 2 * 96;
 
-    uint8_t note = 36;
+    track.setPattern(DrumPatterns::kKickFour, patternLen, startInTicks);
 
-    SequenceDesc desc;
-    desc.notes = {{note}};
-    desc.rate = 4;
-    makeSequenceTrack(track, desc, len, startInTicks);
-
-    track.addNote(len + 48, 24, note, 127);
-    track.addNote(len + 96 + 24, 24, note, 127);
+    const tick_t fillStart = startInTicks + patternLen;
+    track.addNote(fillStart + 48, 24, kick, 127);
+    track.addNote(fillStart + 96 + 24, 24, kick, 127);
 
     return track;
 }
