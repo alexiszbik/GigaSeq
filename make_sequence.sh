@@ -1,4 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+if [ -z "${BASH_VERSION:-}" ]; then
+    exec bash "$0" "$@"
+fi
 
 set -euo pipefail
 
@@ -25,12 +29,10 @@ UPPERCASE_SEQUENCE="$(tr '[:lower:]' '[:upper:]' <<< "${SEQUENCE_NAME:0:1}")${SE
 FUNCTION_NAME="${SONG_NAME}${UPPERCASE_SEQUENCE}"
 SEQUENCE_LABEL="${UPPERCASE_SEQUENCE}"
 CLASS_NAME="${UPPERCASE_SONG}SequenceFactory"
-TRACK_CLASS="${UPPERCASE_SONG}TrackFactory"
 FACTORY_DIR="src/factories/${SONG_NAME}"
 SEQUENCE_H="${FACTORY_DIR}/${CLASS_NAME}.h"
 SEQUENCE_CPP="${FACTORY_DIR}/${CLASS_NAME}.cpp"
 SONG_CPP="${FACTORY_DIR}/${UPPERCASE_SONG}Song.cpp"
-TRACK_H="${FACTORY_DIR}/${UPPERCASE_SONG}TrackFactory.h"
 
 if [[ ! -d "$FACTORY_DIR" ]]; then
     echo "Song folder not found: ${FACTORY_DIR}" >&2
@@ -53,11 +55,6 @@ if grep -q "${FUNCTION_NAME}()" "$SEQUENCE_H"; then
     exit 1
 fi
 
-FIRST_TRACK=""
-if [[ -f "$TRACK_H" ]]; then
-    FIRST_TRACK="$(grep -oE "static SequenceTrack ${SONG_NAME}[A-Za-z0-9_]+\(tick_t" "$TRACK_H" | head -1 | sed -E 's/static SequenceTrack ([^(]+).*/\1/' || true)"
-fi
-
 if [[ "$(uname)" == "Darwin" ]]; then
     sed -i '' "/^};/i\\
     static Sequence ${FUNCTION_NAME}();
@@ -73,7 +70,7 @@ Sequence ${CLASS_NAME}::${FUNCTION_NAME}()
     Sequence seq = buildSequence(
         8, 4, 0, "${SEQUENCE_LABEL}", 130, true,
         {
-${TRACK_ENTRIES}
+            SequenceTrackFactory::kickFour,
         });
     return seq;
 }

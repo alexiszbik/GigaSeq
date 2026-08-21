@@ -18,4 +18,5 @@ public:
     static SequenceTrack waterBalafon(tick_t lengthInTicks);
     static SequenceTrack waterShakes(tick_t lengthInTicks);
     static SequenceTrack waterFmbass(tick_t lengthInTicks);
+    static SequenceTrack waterKickPreChorus(tick_t lengthInTicks);
 };

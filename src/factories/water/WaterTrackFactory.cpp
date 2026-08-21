@@ -38,7 +38,7 @@ SequenceTrack WaterTrackFactory::waterFreak(tick_t lengthInTicks) {
     SequenceTrack track("Freak", MidiChannel::kMicrofreak);
 
     SequenceDesc desc;
-    uint8_t note = Eb2;
+    uint8_t note = Eb1;
     desc.notes = {{}, {note}, {}, {note}, {}, {}, {}, {}};
     desc.rate = 16;
     makeSequenceTrack(track, desc, lengthInTicks);
@@ -50,7 +50,7 @@ SequenceTrack WaterTrackFactory::waterBass(tick_t lengthInTicks) {
     SequenceTrack track("Bass", MidiChannel::kBass);
 
     SequenceDesc desc;
-    uint8_t note = Eb1;
+    uint8_t note = Eb2;
     desc.notes = {{}, {}, {note}, {note}};
     desc.rate = 16;
     makeSequenceTrack(track, desc, lengthInTicks);
@@ -199,6 +199,27 @@ SequenceTrack WaterTrackFactory::waterFmbass(tick_t lengthInTicks) {
         {Ad2}, {Ad2}, {Cd3}, {Cd3},
         };
     desc.rate = 16;
+    makeSequenceTrack(track, desc, lengthInTicks);
+
+    return track;
+}
+
+SequenceTrack WaterTrackFactory::waterKickPreChorus(tick_t lengthInTicks) {
+    SequenceTrack track("KickPreChorus", MidiChannel::kDrums);
+
+    SequenceDesc desc;
+    desc.notes = {
+        {36}, {36}, {36}, {36},
+        {36}, {36}, {36}, {36},
+        {36}, {36}, {36}, {36},
+        {36}, {36}, {36}, {36},
+
+        {36}, {36}, {36}, {36},
+        {36}, {36}, {36}, {36},
+        {36}, {36}, {36}, {36},
+        {36}, {}, {}, {36},
+    };
+    desc.rate = 4;
     makeSequenceTrack(track, desc, lengthInTicks);
 
     return track;

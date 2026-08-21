@@ -14,6 +14,59 @@ Sequence WaterSequenceFactory::waterIntro()
         {
             SequenceTrackFactory::kickFour,
             SequenceTrackFactory::snareFour,
+            {WaterTrackFactory::waterHats, false},
+            {WaterTrackFactory::waterMarimba, false},
+            WaterTrackFactory::waterFreak,
+            {WaterTrackFactory::waterBass, false},
+            {WaterTrackFactory::waterClaves, false},
+            {WaterTrackFactory::waterCongas, false},
+            {WaterTrackFactory::waterFmbass, false}
+        });
+    return seq;
+}
+
+Sequence WaterSequenceFactory::waterPrechorus()
+{
+    Sequence seq = buildSequence(
+        8, 4, 0, "Intro", songTempo, false,
+        {
+            WaterTrackFactory::waterKickPreChorus,
+            SequenceTrackFactory::snareFour,
+            WaterTrackFactory::waterHats,
+            WaterTrackFactory::waterMarimba,
+            WaterTrackFactory::waterFreak,
+            WaterTrackFactory::waterBass,
+            WaterTrackFactory::waterClaves,
+            WaterTrackFactory::waterCongas,
+            WaterTrackFactory::waterFmbass,
+        });
+    return seq;
+}
+
+
+
+Sequence WaterSequenceFactory::waterChorus()
+{
+    Sequence seq = buildSequence(
+        8, 4, 0, "Chorus", songTempo, true,
+        {
+            SequenceTrackFactory::snareFour,
+            WaterTrackFactory::waterHats,
+            WaterTrackFactory::waterChorus,
+            WaterTrackFactory::waterMarimba,
+            WaterTrackFactory::waterXmas,
+            WaterTrackFactory::waterCongas,
+        });
+    return seq;
+}
+
+Sequence WaterSequenceFactory::waterFull()
+{
+    Sequence seq = buildSequence(
+        8, 4, 0, "Intro", songTempo, true,
+        {
+            SequenceTrackFactory::kickFour,
+            SequenceTrackFactory::snareFour,
             WaterTrackFactory::waterHats,
             WaterTrackFactory::waterMarimba,
             WaterTrackFactory::waterFm,
@@ -28,17 +81,13 @@ Sequence WaterSequenceFactory::waterIntro()
     return seq;
 }
 
-Sequence WaterSequenceFactory::waterChorus()
+
+Sequence WaterSequenceFactory::waterChorus2()
 {
     Sequence seq = buildSequence(
-        8, 4, 0, "Chorus", songTempo, true,
+        8, 4, 0, "Chorus2", 130, true,
         {
-            SequenceTrackFactory::snareFour,
-            WaterTrackFactory::waterHats,
-            WaterTrackFactory::waterChorus,
-            WaterTrackFactory::waterMarimba,
-            WaterTrackFactory::waterXmas,
-            WaterTrackFactory::waterCongas,
+            SequenceTrackFactory::kickFour,
         });
     return seq;
 }
