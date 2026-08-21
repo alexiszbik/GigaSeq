@@ -1,7 +1,5 @@
 #include "Sequence.h"
 
-#include "StringHelper.h"
-
 #include <stdexcept>
 #include <utility>
 
@@ -12,13 +10,13 @@ Sequence::Sequence(
     uint8_t beatsPerBar,
     uint8_t barLoop,
     bool loop)
-    : tempo_(tempo),
+    : name_(name ? name : ""),
+      tempo_(tempo),
       activeTempo_(tempo),
       barCount_(barCount),
       beatsPerBar_(beatsPerBar),
       loop_(loop)
 {
-    StringHelper::copyName(name_, name, kNameMaxLength + 1);
 
     const uint32_t length = static_cast<uint32_t>(barCount_) * beatsPerBar_ * kTicksPerQuarterNote;
     if (!fitsInTickRange(length)) {

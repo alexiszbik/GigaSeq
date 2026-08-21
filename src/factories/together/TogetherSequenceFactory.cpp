@@ -99,7 +99,7 @@ Sequence TogetherSequenceFactory::togetherRepeat()
 Sequence TogetherSequenceFactory::togetherPartB()
 {
     return buildSequence(
-        8, 4, 0, "Part B", 130, true,
+        8, 4, 0, "PartB", 130, true,
         {
             TogetherTrackFactory::togetherPartBSampleCut,
             TogetherTrackFactory::togetherPartBSynth,
@@ -111,7 +111,7 @@ Sequence TogetherSequenceFactory::togetherPartB()
 Sequence TogetherSequenceFactory::togetherPartBWithHats()
 {
     return buildSequence(
-        16, 4, 0, "Part B Hats", 130, false,
+        16, 4, 0, "PartBHats", 130, false,
         {
             TogetherTrackFactory::togetherPartBSampleCut,
             TogetherTrackFactory::togetherPartBSynth,
@@ -124,7 +124,7 @@ Sequence TogetherSequenceFactory::togetherPartBWithHats()
 Sequence TogetherSequenceFactory::togetherPartBDrums()
 {
     return buildSequence(
-        8, 4, 0, "Part B Drums", 130, true,
+        8, 4, 0, "PartBDrums", 130, true,
         {
             TogetherTrackFactory::togetherPartBSynth,
             TogetherTrackFactory::togetherPartBAh,
@@ -138,7 +138,7 @@ Sequence TogetherSequenceFactory::togetherPartBDrums()
 Sequence TogetherSequenceFactory::togetherPartBClimax()
 {
     return buildSequence(
-        8, 4, 0, "Part B Climax", 130, true,
+        8, 4, 0, "PartBClimax", 130, true,
         {
             TogetherTrackFactory::togetherPartBSynth,
             TogetherTrackFactory::togetherPartBAh,

@@ -2,7 +2,6 @@
 
 #include "MidiInOut.h"
 #include "SequenceTrack.h"
-#include "StringHelper.h"
 #include "TempoEvent.h"
 #include "Tick.h"
 #include "TimedEventList.h"
@@ -16,7 +15,6 @@ class Sequence
 {
 public:
     static constexpr int kTicksPerQuarterNote = 96;
-    static constexpr std::size_t kNameMaxLength = 12;
 
     Sequence(
         const char* name,
@@ -70,7 +68,7 @@ private:
     void notifyTempoChanged();
 
     MidiInOut* midi_ = nullptr;
-    char name_[kNameMaxLength + 1] = {};
+    const char* name_ = "";
     MuteChangedCallback onTrackMuteChanged_ = nullptr;
     TempoChangedCallback onTempoChanged_ = nullptr;
 

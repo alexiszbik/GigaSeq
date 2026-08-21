@@ -1,15 +1,13 @@
 #include "SequenceTrack.h"
 
-#include "StringHelper.h"
-
 #include <algorithm>
 #include <cstddef>
 #include <stdexcept>
 
 SequenceTrack::SequenceTrack(const char* name, uint8_t channel)
-    : channel_(channel)
+    : name_(name ? name : ""),
+      channel_(channel)
 {
-    StringHelper::copyName(name_, name, kNameMaxLength + 1);
 }
 
 void SequenceTrack::attachMidi(MidiInOut& midi)
@@ -34,7 +32,7 @@ void SequenceTrack::addNote(
     }
     */
 
-    notes_.add({ startTick, durationTicks, note, velocity });
+    notes_.add({ startTick, durationTicks, { note, velocity } });
 }
 
 void SequenceTrack::addControlChange(
@@ -58,6 +56,13 @@ void SequenceTrack::addMuteEvent(
     muteEvents_.add({ tick });
 }
 
+void SequenceTrack::setPattern(const TrackPattern& pattern, tick_t lengthInTicks, tick_t startInTicks)
+{
+    pattern_ = &pattern;
+    patternStart_ = startInTicks;
+    patternLength_ = lengthInTicks;
+}
+
 void SequenceTrack::removeEvents(tick_t tick, tick_t durationTicks)
 {
     if (durationTicks == 0) {
@@ -79,11 +84,11 @@ void SequenceTrack::removeNotes(
         return;
     }
 
-    notes_.removeInRangeIf(tick, durationTicks, [&pitches](const Note& note) {
+    notes_.removeInRangeIf(tick, durationTicks, [&pitches](const ScheduledNote& scheduledNote) {
         if (pitches.empty()) {
             return true;
         }
-        return std::find(pitches.begin(), pitches.end(), note.note) != pitches.end();
+        return std::find(pitches.begin(), pitches.end(), scheduledNote.note.note) != pitches.end();
     });
 }
 
@@ -143,11 +148,11 @@ void SequenceTrack::setMuted(bool muted)
     notifyMuteChanged();
 }
 
-void SequenceTrack::startNote(const Note& note)
+void SequenceTrack::startNote(const ScheduledNote& scheduledNote)
 {
-    midi_->sendNoteOn(channel_, note.note, note.velocity);
+    midi_->sendNoteOn(channel_, scheduledNote.note.note, scheduledNote.note.velocity);
     if (activeNoteCount_ < kMaxActiveNotes) {
-        activeNotes_[activeNoteCount_++] = { note.note, note.durationTicks };
+        activeNotes_[activeNoteCount_++] = { scheduledNote.note.note, scheduledNote.durationTicks };
     }
     // Pool full: drop the note-on silently rather than allocating in ISR.
 }
@@ -177,6 +182,40 @@ void SequenceTrack::releaseActiveNotes()
     activeNoteCount_ = 0;
 }
 
+void SequenceTrack::processPatternTick(tick_t position)
+{
+    if (!pattern_ || muted_ || pattern_->stepCount == 0) {
+        return;
+    }
+
+    const tick_t stepDuration = patternStepDuration(*pattern_);
+    if (stepDuration == 0) {
+        return;
+    }
+
+    const tick_t local = position - patternStart_;
+    if (local < 0 || local >= patternLength_) {
+        return;
+    }
+
+    if (local % stepDuration != 0) {
+        return;
+    }
+
+    const uint16_t stepIndex = static_cast<uint16_t>(
+        (local / stepDuration) % pattern_->stepCount);
+    const PatternStep& step = pattern_->steps[stepIndex];
+
+    if (step.noteCount == 0) {
+        return;
+    }
+
+    const tick_t noteDuration = stepDuration * step.durationMul;
+    for (uint8_t i = 0; i < step.noteCount; ++i) {
+        startNote({ position, noteDuration, step.notes[i] });
+    }
+}
+
 void SequenceTrack::processTick(tick_t position, bool loopWrap)
 {
     // we will just mute the notes, control changes & program changes will not be affected
@@ -194,11 +233,13 @@ void SequenceTrack::processTick(tick_t position, bool loopWrap)
         setMuted(true);
     });
 
-    notes_.process(position, loopWrap, [this](const Note& note) {
+    notes_.process(position, loopWrap, [this](const ScheduledNote& scheduledNote) {
         if (!muted_) {
-            startNote(note);
+            startNote(scheduledNote);
         }
     });
+
+    processPatternTick(position);
 
     tickActiveNotes();
 }

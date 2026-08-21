@@ -1,6 +1,7 @@
 #include "WaterTrackFactory.h"
 
 #include "factories/SequenceTrackFactory.h"
+#include "factories/water/WaterPatterns.h"
 #include "factories/TrackPatternBuilder.h"
 #include "MidiChannel.h"
 #include "factories/MidiNotes.h"
@@ -12,49 +13,25 @@ constexpr tick_t oneBarTick = 384;
 
 SequenceTrack WaterTrackFactory::waterMarimba(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Marimba", MidiChannel::kDrums);
-
-    SequenceDesc desc;
-    //TODO : might be a better way to do it
-    desc.notes = {{55}};
-    desc.rate = 0.25;
-    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
-
+    track.setPattern(WaterPatterns::kWaterMarimba, lengthInTicks, startInTicks);
     return track;
 }
 
 SequenceTrack WaterTrackFactory::waterHats(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Hats", MidiChannel::kDrums);
-
-    SequenceDesc desc;
-    desc.notes = {{}, {40}, {40}, {40}};
-    desc.velocities = {55, 127, 55};
-    desc.rate = 16;
-    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
-
+    track.setPattern(WaterPatterns::kWaterHats, lengthInTicks, startInTicks);
     return track;
 }
 
 SequenceTrack WaterTrackFactory::waterFreak(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Freak", MidiChannel::kMicrofreak);
-
-    SequenceDesc desc;
-    uint8_t note = Eb1;
-    desc.notes = {{}, {note}, {}, {note}, {}, {}, {}, {}};
-    desc.rate = 16;
-    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
-
+    track.setPattern(WaterPatterns::kWaterFreak, lengthInTicks, startInTicks);
     return track;
 }
 
 SequenceTrack WaterTrackFactory::waterBass(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Bass", MidiChannel::kBass);
-
-    SequenceDesc desc;
-    uint8_t note = Eb2;
-    desc.notes = {{}, {}, {note}, {note}};
-    desc.rate = 16;
-    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
-
+    track.setPattern(WaterPatterns::kWaterBass, lengthInTicks, startInTicks);
     return track;
 }
 
@@ -75,51 +52,19 @@ SequenceTrack WaterTrackFactory::waterChorus(tick_t lengthInTicks, tick_t startI
 
 SequenceTrack WaterTrackFactory::waterXmas(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Xmas", MidiChannel::kSampler);
-
-    SequenceDesc desc;
-    uint8_t note = 45;
-    desc.notes = {
-        {}, {}, {note}, {},
-        {}, {}, {note}, {},
-        {}, {}, {note}, {},
-        {}, {note}, {note}, {},
-    };
-    desc.velocities = {127, 127, 127, 60, 127};
-    desc.rate = 16;
-    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
-
+    track.setPattern(WaterPatterns::kWaterXmas, lengthInTicks, startInTicks);
     return track;
 }
 
 SequenceTrack WaterTrackFactory::waterCongas(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Congas", MidiChannel::kDrums);
-
-    SequenceDesc desc;
-    desc.notes = {
-        {}, {43}, {44}, {44},
-        {44}, {44}, {43}, {43}
-    };
-    desc.velocities = {55, 127, 112, 45, 30, 112, 28};
-    desc.rate = 16;
-    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
-
+    track.setPattern(WaterPatterns::kWaterCongas, lengthInTicks, startInTicks);
     return track;
 }
 
 SequenceTrack WaterTrackFactory::waterClaves(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Claves", MidiChannel::kDrums);
-
-    SequenceDesc desc;
-    uint8_t note = 46;
-    desc.notes = {
-        {}, {note}, {}, {}, 
-        {}, {}, {}, {},
-        {}, {}, {}, {},
-        {}, {}, {}, {},
-    };
-    desc.rate = 4;
-    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
-
+    track.setPattern(WaterPatterns::kWaterClaves, lengthInTicks, startInTicks);
     return track;
 }
 
@@ -136,75 +81,19 @@ SequenceTrack WaterTrackFactory::waterFm(tick_t lengthInTicks, tick_t startInTic
 
 SequenceTrack WaterTrackFactory::waterBalafon(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Balafon", MidiChannel::kSampler);
-
-    SequenceDesc desc;
-    desc.notes = {{62}, {63}, {64}};
-    desc.rate = 16;
-    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
-
+    track.setPattern(WaterPatterns::kWaterBalafon, lengthInTicks, startInTicks);
     return track;
 }
 
 SequenceTrack WaterTrackFactory::waterShakes(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Shakes", MidiChannel::kSampler);
-
-    SequenceDesc desc;
-    desc.notes = {{}, {41}, {41}, {41}};
-    desc.velocities = {55, 127, 55};
-    desc.rate = 16;
-    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
-
+    track.setPattern(WaterPatterns::kWaterShakes, lengthInTicks, startInTicks);
     return track;
 }
 
 SequenceTrack WaterTrackFactory::waterFmbass(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Fmbass", MidiChannel::kModularB);
-
-    SequenceDesc desc;
-    desc.notes = {
-        {}, {}, {}, {},
-        {}, {}, {}, {},
-        {}, {}, {}, {},
-        {}, {}, {}, {},
-
-        {}, {}, {}, {},
-        {}, {}, {}, {},
-        {}, {}, {Gd2}, {Gd2},
-        {Ad2}, {Ad2}, {Cd3}, {Cd3},
-
-        {}, {}, {}, {},
-        {}, {}, {}, {},
-        {}, {}, {}, {},
-        {}, {}, {}, {},
-
-        {}, {}, {}, {},
-        {}, {}, {}, {},
-        {}, {}, {Gd2}, {Gd2},
-        {Ad2}, {Ad2}, {Cd3}, {Cd3},
-
-        {}, {}, {}, {},
-        {}, {}, {}, {},
-        {}, {}, {}, {},
-        {}, {}, {}, {},
-
-        {}, {}, {}, {},
-        {}, {}, {}, {},
-        {}, {}, {Cd3}, {Cd3},
-        {Ad2}, {Ad2}, {Cd3}, {Cd3},
-
-        {}, {}, {}, {},
-        {}, {}, {}, {},
-        {}, {}, {}, {},
-        {}, {}, {}, {},
-
-        {}, {}, {}, {},
-        {}, {}, {}, {},
-        {}, {}, {Gd2}, {Gd2},
-        {Ad2}, {Ad2}, {Cd3}, {Cd3},
-        };
-    desc.rate = 16;
-    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
-
+    track.setPattern(WaterPatterns::kWaterFmbass, lengthInTicks, startInTicks);
     return track;
 }
 

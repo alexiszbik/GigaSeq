@@ -1,13 +1,13 @@
 #pragma once
 
 #include "ControlChange.h"
-#include "StringHelper.h"
 #include "MidiInOut.h"
 #include "Note.h"
 #include "MuteEvent.h"
 #include "ProgramChange.h"
 #include "TimedEventList.h"
 #include "Tick.h"
+#include "TrackPattern.h"
 
 #include <cstdint>
 #include <vector>
@@ -17,8 +17,6 @@ using MuteChangedCallback = void (*)(uint8_t trackIndex, bool muted);
 class SequenceTrack
 {
 public:
-    static constexpr uint8_t kNameMaxLength = 30;
-
     SequenceTrack(const char* name = "", uint8_t channel = 0);
 
     const char* name() const noexcept { return name_; }
@@ -55,6 +53,9 @@ public:
     void addMuteEvent(
         tick_t tick);
 
+    void setPattern(const TrackPattern& pattern, tick_t lengthInTicks, tick_t startInTicks);
+    bool hasPattern() const noexcept { return pattern_ != nullptr; }
+
     void removeEvents(tick_t tick, tick_t duration);
 
     void removeNotes(
@@ -73,11 +74,12 @@ private:
         tick_t remainingTicks = 0;
     };
 
-    void startNote(const Note& note);
+    void startNote(const ScheduledNote& scheduledNote);
+    void processPatternTick(tick_t position);
     void tickActiveNotes();
     void notifyMuteChanged();
 
-    char name_[kNameMaxLength + 1] = {};
+    const char* name_ = "";
     uint8_t channel_ = 0;
     uint8_t trackIndex_ = 0;
 
@@ -94,7 +96,11 @@ private:
     ActiveNote activeNotes_[kMaxActiveNotes];
     uint8_t activeNoteCount_ = 0;
 
-    TimedEventList<Note> notes_;
+    const TrackPattern* pattern_ = nullptr;
+    tick_t patternStart_ = 0;
+    tick_t patternLength_ = 0;
+
+    TimedEventList<ScheduledNote> notes_;
     TimedEventList<ControlChange> controlChanges_;
     TimedEventList<ProgramChange> programChanges_;
     TimedEventList<MuteEvent> muteEvents_;

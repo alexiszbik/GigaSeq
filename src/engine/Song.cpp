@@ -1,12 +1,11 @@
 #include "Song.h"
 
-#include "StringHelper.h"
-
 #include <utility>
 
-Song::Song(const char* name, uint8_t programChange) : programChange_(programChange)
+Song::Song(const char* name, uint8_t programChange)
+    : name_(name ? name : ""),
+      programChange_(programChange)
 {
-    StringHelper::copyName(name_, name, kNameMaxLength + 1);
 }
 
 void Song::add(Sequence sequence)

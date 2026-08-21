@@ -1,6 +1,7 @@
 #include "TogetherTrackFactory.h"
 
 #include "factories/SequenceTrackFactory.h"
+#include "factories/together/TogetherPatterns.h"
 #include "factories/TrackPatternBuilder.h"
 #include "MidiChannel.h"
 #include "factories/MidiNotes.h"
@@ -13,81 +14,28 @@ constexpr tick_t oneBarTick = 384;
 
 SequenceTrack TogetherTrackFactory::togetherArp(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Modular", MidiChannel::kModularA);
-
-    SequenceDesc desc;
-    //TODO : might be a better way to do it
-    desc.notes = {
-        {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3},
-        {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3},
-        {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3},
-        {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3}, {Gd4}, {Gd3}, {Gd2}, {Gd3},
-        {C4}, {C3}, {C2}, {C3}, {C4}, {C3}, {C2}, {C3}, {C4}, {C3}, {C2}, {C3}, {C4}, {C3}, {C2}, {C3}, 
-        {C4}, {C3}, {C2}, {C3}, {C4}, {C3}, {C2}, {C3}, {C4}, {C3}, {C2}, {C3}, {C4}, {C3}, {C2}, {C3}, 
-        {C4}, {C3}, {C2}, {C3}, {C4}, {C3}, {C2}, {C3}, {C4}, {C3}, {C2}, {C3}, {C4}, {C3}, {C2}, {C3}, 
-        {C4}, {C3}, {C2}, {C3}, {C4}, {C3}, {C2}, {C3}, {C4}, {C3}, {C2}, {C3}, {C4}, {C3}, {C2}, {C3}
-    };
-    desc.rate = 16;
-    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
-
+    track.setPattern(TogetherPatterns::kTogetherArp, lengthInTicks, startInTicks);
     return track;
 }
 
 SequenceTrack TogetherTrackFactory::togetherHiDrum(tick_t lengthInTicks, tick_t startInTicks)
 {
     SequenceTrack track("Hi Drum", MidiChannel::kDrums);
-
-    SequenceDesc desc;
-    desc.notes = {{56}};
-    desc.rate = 2;
-    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
-
-    desc.notes = {{37}};
-    desc.rate = 4;
-    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
-
-    desc.notes = {{}, {38}};
-    desc.rate = 4;
-    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
-
-    desc.notes = {{40}};
-    desc.velocities = {127, 56};
-    desc.rate = 8;
-    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
-
+    track.setPattern(TogetherPatterns::kTogetherHiDrum, lengthInTicks, startInTicks);
     return track;
 }
 
 SequenceTrack TogetherTrackFactory::togetherSample(tick_t lengthInTicks, tick_t startInTicks)
 {
     SequenceTrack track("Sample", MidiChannel::kSampler);
-
-    SequenceDesc desc;
-    desc.notes = {{52}, {52}, {53}, {53}};
-    desc.rate = 0.5;
-    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
-
+    track.setPattern(TogetherPatterns::kTogetherSample, lengthInTicks, startInTicks);
     return track;
 }
 
 SequenceTrack TogetherTrackFactory::togetherDX7(tick_t lengthInTicks, tick_t startInTicks)
 {
     SequenceTrack track("DX7", MidiChannel::kSampler);
-
-    SequenceDesc desc;
-    //TODO : might be a better way to do itw
-    desc.notes = {
-        {58}, {58}, {58}, {58}, {58}, {58}, {58}, {58},
-        {58}, {58}, {58}, {58}, {58}, {58}, {58}, {58},
-        {58}, {58}, {58}, {58}, {58}, {58}, {58}, {58},
-        {58}, {58}, {58}, {58}, {58}, {58}, {58}, {58},
-        {59}, {59}, {59}, {59}, {59}, {59}, {59}, {59},
-        {59}, {59}, {59}, {59}, {59}, {59}, {59}, {59},
-        {59}, {59}, {59}, {59}, {59}, {59}, {59}, {59},
-        {59}, {59}, {59}, {59}, {59}, {59}, {59}, {59},
-    };
-    desc.rate = 8;
-    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
-
+    track.setPattern(TogetherPatterns::kTogetherDX7, lengthInTicks, startInTicks);
     return track;
 }
 
@@ -167,58 +115,30 @@ SequenceTrack TogetherTrackFactory::togetherEndRiser(tick_t lengthInTicks, tick_
 }
 
 SequenceTrack TogetherTrackFactory::togetherPartBSynth(tick_t lengthInTicks, tick_t startInTicks)
-{   
+{
     SequenceTrack track("Poly Synth", MidiChannel::kPoly);
-
-    SequenceDesc desc;
-    desc.notes = {
-        {Ab2, C4, Eb4, Bb4}, {}, {}, {Ab2, C4, Eb4, Ab4}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, 
-        {G2, B3, D4, Bb4}, {}, {}, {G2, B3, D4, G4}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-        {Bb2, Bb3, D4, F4}, {}, {}, {Bb2, Bb3, D4, G4},  {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-        {C3, C4, Eb4, Ab4}, {}, {}, {C3, C4, Eb4, G4},  {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}
-    };
-    desc.rate = 8;
-    desc.durations = {2, 9};
-    
-    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
-
+    track.setPattern(TogetherPatterns::kTogetherPartBSynth, lengthInTicks, startInTicks);
     return track;
 }
 
 SequenceTrack TogetherTrackFactory::togetherPartBAh(tick_t lengthInTicks, tick_t startInTicks)
 {
     SequenceTrack track("Ah", MidiChannel::kSampler);
-
-    SequenceDesc desc;
-    desc.notes = {{39}};
-    desc.rate = 4;
-    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
-
+    track.setPattern(TogetherPatterns::kTogetherPartBAh, lengthInTicks, startInTicks);
     return track;
 }
 
 SequenceTrack TogetherTrackFactory::togetherPartBDaDaDa(tick_t lengthInTicks, tick_t startInTicks)
 {
     SequenceTrack track("DaDaDa", MidiChannel::kDrums);
-
-    SequenceDesc desc;
-    desc.notes = {{41}, {42}, {43}, {42}, {41}, {42}, {43}, {43}};
-    desc.rate = 8;
-    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
-
+    track.setPattern(TogetherPatterns::kTogetherPartBDaDaDa, lengthInTicks, startInTicks);
     return track;
 }
 
 SequenceTrack TogetherTrackFactory::togetherHatsOnly(tick_t lengthInTicks, tick_t startInTicks)
 {
     SequenceTrack track("Hats", MidiChannel::kDrums);
-
-    SequenceDesc desc;
-    desc.notes = {{40}};
-    desc.velocities = {127, 56};
-    desc.rate = 8;
-    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
-
+    track.setPattern(TogetherPatterns::kTogetherHatsOnly, lengthInTicks, startInTicks);
     return track;
 }
 
@@ -241,22 +161,12 @@ SequenceTrack TogetherTrackFactory::togetherPartBJC(tick_t lengthInTicks, tick_t
 
 SequenceTrack TogetherTrackFactory::togetherPartBTambourin(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Tambourin", MidiChannel::kSampler);
-
-    SequenceDesc desc;
-    desc.notes = {{48, 50}};
-    desc.rate = 4;
-    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
-
+    track.setPattern(TogetherPatterns::kTogetherPartBTambourin, lengthInTicks, startInTicks);
     return track;
 }
+
 SequenceTrack TogetherTrackFactory::togetherPartBCymbal(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Cymbal", MidiChannel::kSampler);
-
-    SequenceDesc desc;
-    desc.notes = {{51}};
-    desc.velocities = {127, 56};
-    desc.rate = 8;
-    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
-
+    track.setPattern(TogetherPatterns::kTogetherPartBCymbal, lengthInTicks, startInTicks);
     return track;
 }

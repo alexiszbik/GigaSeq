@@ -28,7 +28,6 @@ add_executable(GigaSeq
     src/engine/SequencePool.cpp
     src/engine/SequenceTrack.cpp
     src/factories/SequenceBuilder.cpp
-    src/factories/SequenceFactory.cpp
     src/factories/SequenceTrackFactory.cpp
     src/factories/TrackPatternBuilder.cpp
     src/factories/TrackSpec.cpp

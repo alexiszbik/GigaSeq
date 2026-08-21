@@ -37,7 +37,7 @@ Sequence WaterSequenceFactory::waterPrechorus()
             WaterTrackFactory::waterBass,
             WaterTrackFactory::waterClaves,
             WaterTrackFactory::waterCongas,
-            WaterTrackFactory::waterFmbass,
+            track(WaterTrackFactory::waterFmbass).withLength(7*384),
         });
 }
 
