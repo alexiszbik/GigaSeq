@@ -11,7 +11,8 @@ constexpr uint8_t hatO = 42;
 constexpr uint8_t pads = 66;
 constexpr uint8_t kick = 36;
 
-constexpr uint8_t riz = 52;
+//constexpr uint8_t riz = 52;
+constexpr uint8_t bigClap = 39;
 
 constexpr PatternStep kFallingHatsSteps[] = {
     _NO_STEP,
@@ -180,6 +181,76 @@ constexpr PatternStep kFallingBassSteps[] = {
 
 MAKE_PATTERN(kFallingBass, kFallingBassSteps, 16);
 
+constexpr PatternStep kFallingHarpSteps[] = {
+    NOTE(Fd2),
+    NOTE(A2 ),
+    NOTE(Cd3), 
+    NOTE(A2 ),
+    NOTE(Cd3), 
+    NOTE(E3 ),
+    NOTE(Cd3), 
+    NOTE(E3 ),
+    NOTE(Fd3), 
+    NOTE(E3 ),
+    NOTE(Fd3), 
+    NOTE(A3 ),
+    NOTE(Fd3), 
+    NOTE(A3 ),
+    NOTE(Cd4), 
+    NOTE(A3 ),
+    NOTE(Cd4), 
+    NOTE(E4 ),
+    NOTE(Cd4), 
+    NOTE(E4 ),
+    NOTE(Fd4), 
+    NOTE(E4 ),
+    NOTE(Fd4), 
+    NOTE(A4 ),
+    NOTE(Fd4), 
+    NOTE(A4 ),
+    NOTE(Cd5), 
+    NOTE(A4 ),
+    NOTE(Cd5), 
+    NOTE(E5 ),
+    NOTE(Cd5), 
+    NOTE(E5 ),
+    NOTE(Fd5), 
+    NOTE(Fd4), 
+    NOTE(Fd5), 
+    NOTE(A5 ),
+    NOTE(Fd5), 
+    NOTE(A5 ),
+    NOTE(Cd6), 
+    NOTE(A5 ),
+    NOTE(Cd6), 
+    NOTE(E6 ),
+    NOTE(Cd6), 
+    NOTE(A5 ),
+    NOTE(Cd6), 
+    NOTE(A5 ),
+    NOTE(Fd5), 
+    NOTE(A5 ),
+    NOTE(Fd5), 
+    NOTE(E5 ),
+    NOTE(Fd5), 
+    NOTE(E5 ),
+    NOTE(Cd5), 
+    NOTE(E5 ),
+    NOTE(Cd5), 
+    NOTE(A4 ),
+    NOTE(Cd5), 
+    NOTE(A4 ),
+    NOTE(Fd4), 
+    NOTE(A4 ),
+    NOTE(Fd4), 
+    NOTE(E4 ),
+    NOTE(Fd4), 
+    NOTE(E4 )
+};
+
+MAKE_PATTERN(kFallingHarp, kFallingHarpSteps, 16);
+
 } // namespace FallingPatterns
 
 #undef KICK_STEP
+#undef NOTE

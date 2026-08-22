@@ -10,4 +10,6 @@ public:
     static SequenceTrack fallingKick(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack fallingRiser(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack fallingBass(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack fallingBigClap(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack fallingHarp(tick_t lengthInTicks, tick_t startInTicks);
 };
