@@ -7,4 +7,6 @@ class FallingSequenceFactory
 public:
     static Sequence fallingIntro();
 
+    static Sequence fallingIntro2();
+    static Sequence fallingBassSeq();
 };

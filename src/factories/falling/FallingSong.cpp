@@ -12,7 +12,9 @@ void addFallingSong(SequencePool& pool)
     Song song("Falling", 2);
     const Builder sequences[] = {
         FallingSequenceFactory::fallingIntro,
-  
+        FallingSequenceFactory::fallingIntro2,
+        FallingSequenceFactory::fallingBassSeq,
+        
     };
 
     for (Builder builder : sequences) {
