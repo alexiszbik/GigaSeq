@@ -12,4 +12,5 @@ public:
     static SequenceTrack fallingBass(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack fallingBigClap(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack fallingHarp(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack fallingTambourin(tick_t lengthInTicks, tick_t startInTicks);
 };

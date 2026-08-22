@@ -13,7 +13,7 @@ SequenceTrack SequenceTrackFactory::kickFour(tick_t lengthInTicks, tick_t startI
     return track;
 }
 
-SequenceTrack SequenceTrackFactory::snareFour(tick_t lengthInTicks, tick_t startInTicks)
+SequenceTrack SequenceTrackFactory::clapFour(tick_t lengthInTicks, tick_t startInTicks)
 {
     SequenceTrack track("Clap", MidiChannel::kDrums);
     track.setPattern(DrumPatterns::kSnareFour, lengthInTicks, startInTicks);

@@ -47,12 +47,13 @@ Sequence FallingSequenceFactory::fallingBassSeq()
         {
             FallingTrackFactory::fallingKick,
             track(FallingTrackFactory::fallingBigClap).withStart(len2),
-            track(SequenceTrackFactory::snareFour).startMuted(),
+            track(SequenceTrackFactory::clapFour).muted(),
             track(FallingTrackFactory::fallingHats).withStart(len1),
             FallingTrackFactory::fallingBass,
             track(FallingTrackFactory::fallingPads).withStart(len1), //add automation !!!
             track(FallingTrackFactory::fallingRiser).withStart(len3),
-            track(FallingTrackFactory::fallingHarp).startMuted(),
+            track(FallingTrackFactory::fallingHarp).muted(),
+            FallingTrackFactory::fallingTambourin,
         });
 
     seq.track(1).addMuteEvent(len3);

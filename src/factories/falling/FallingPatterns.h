@@ -12,7 +12,9 @@ constexpr uint8_t pads = 66;
 constexpr uint8_t kick = 36;
 
 //constexpr uint8_t riz = 52;
-constexpr uint8_t bigClap = 39;
+//constexpr uint8_t bigClap = 39;
+
+constexpr uint8_t tamb = 43;
 
 constexpr PatternStep kFallingHatsSteps[] = {
     _NO_STEP,
@@ -249,6 +251,32 @@ constexpr PatternStep kFallingHarpSteps[] = {
 };
 
 MAKE_PATTERN(kFallingHarp, kFallingHarpSteps, 16);
+
+#define TAMB_STEP {1, {tamb}, 127, 1}
+
+constexpr PatternStep kFallingTambourinSteps[] = {
+    _NO_STEP,
+    TAMB_STEP,
+    TAMB_STEP,
+    _NO_STEP,
+
+    TAMB_STEP,
+    _NO_STEP,
+    TAMB_STEP,
+    _NO_STEP,
+
+    TAMB_STEP,
+    _NO_STEP,
+    TAMB_STEP,
+    _NO_STEP,
+
+    TAMB_STEP,
+    TAMB_STEP,
+    _NO_STEP,
+    TAMB_STEP
+};
+
+MAKE_PATTERN(kFallingTambourin, kFallingTambourinSteps, 16);
 
 } // namespace FallingPatterns
 

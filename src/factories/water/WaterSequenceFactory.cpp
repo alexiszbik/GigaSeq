@@ -13,7 +13,7 @@ Sequence WaterSequenceFactory::waterIntro()
         8, 4, 0, "Intro", songTempo, true,
         {
             SequenceTrackFactory::kickFour,
-            SequenceTrackFactory::snareFour,
+            SequenceTrackFactory::clapFour,
             track(WaterTrackFactory::waterHats).muted(),
             track(WaterTrackFactory::waterMarimba).muted(),
             WaterTrackFactory::waterFreak,
@@ -30,7 +30,7 @@ Sequence WaterSequenceFactory::waterPrechorus()
         8, 4, 0, "PreChorus", songTempo, false,
         {
             WaterTrackFactory::waterKickPreChorus,
-            SequenceTrackFactory::snareFour,
+            SequenceTrackFactory::clapFour,
             WaterTrackFactory::waterHats,
             WaterTrackFactory::waterMarimba,
             WaterTrackFactory::waterFreak,
@@ -49,7 +49,7 @@ Sequence WaterSequenceFactory::waterChorus()
     Sequence seq = buildSequence(
         16, 4, 0, "Chorus", songTempo, false,
         {
-            track(SequenceTrackFactory::snareFour).withLength(len),
+            track(SequenceTrackFactory::clapFour).withLength(len),
             track(WaterTrackFactory::waterHats).withLength(len),
             WaterTrackFactory::waterChorus,
             WaterTrackFactory::waterMarimba,
@@ -78,7 +78,7 @@ Sequence WaterSequenceFactory::waterPartB()
         32, 4, 0, "PartB", songTempo, false,
         {
             WaterTrackFactory::waterKickPartB,
-            track(SequenceTrackFactory::snareFour).withLength(len1),
+            track(SequenceTrackFactory::clapFour).withLength(len1),
             track(WaterTrackFactory::waterHats).withLength(len1),
             track(WaterTrackFactory::waterFm).withLength(len1),
             track(WaterTrackFactory::waterFreak).withLength(len1),
@@ -104,7 +104,7 @@ Sequence WaterSequenceFactory::waterChorus2()
     Sequence seq = buildSequence(
         16, 4, 0, "ChorusB", songTempo, false,
         {
-            track(SequenceTrackFactory::snareFour).withLength(len),
+            track(SequenceTrackFactory::clapFour).withLength(len),
             track(WaterTrackFactory::waterHats).withLength(len),
             WaterTrackFactory::waterChorus,
             track(WaterTrackFactory::waterBalafon).withLength(len),
@@ -125,7 +125,7 @@ Sequence WaterSequenceFactory::waterPartC()
         24, 4, 16, "PartC", songTempo, true,
         {
             SequenceTrackFactory::kickFour,
-            track(SequenceTrackFactory::snareFour).muted(),
+            track(SequenceTrackFactory::clapFour).muted(),
             track(WaterTrackFactory::waterHats).muted(),
             WaterTrackFactory::waterMarimba,
             WaterTrackFactory::waterFreak,
@@ -148,7 +148,7 @@ Sequence WaterSequenceFactory::waterPartCEnd()
         8, 4, 0, "PartCEnd", songTempo, false,
         {
             WaterTrackFactory::waterKickPartC,
-            SequenceTrackFactory::snareFour,
+            SequenceTrackFactory::clapFour,
             WaterTrackFactory::waterHats,
             WaterTrackFactory::waterMarimba,
             track(WaterTrackFactory::waterFreak).withLength(len),
@@ -176,7 +176,7 @@ Sequence WaterSequenceFactory::waterChorusEnd()
     Sequence seq = buildSequence(
         33, 4, 32, "ChorusEnd", songTempo, true,
         {
-            track(SequenceTrackFactory::snareFour).withLength(len2),
+            track(SequenceTrackFactory::clapFour).withLength(len2),
             track(WaterTrackFactory::waterHats).withLength(len2),
             track(WaterTrackFactory::waterChorusEnd).withLength(len4),
             track(WaterTrackFactory::waterMarimba).withLength(len4),

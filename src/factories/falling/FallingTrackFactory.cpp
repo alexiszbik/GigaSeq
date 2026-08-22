@@ -70,3 +70,10 @@ SequenceTrack FallingTrackFactory::fallingHarp(tick_t lengthInTicks, tick_t star
 
     return track;
 }
+
+SequenceTrack FallingTrackFactory::fallingTambourin(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Tambourin", MidiChannel::kDrums);
+    track.setPattern(FallingPatterns::kFallingTambourin, lengthInTicks, startInTicks);
+
+    return track;
+}
