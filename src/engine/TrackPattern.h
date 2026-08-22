@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Note.h"
 #include "Tick.h"
 
 #include <cstdint>
@@ -13,11 +12,12 @@ static constexpr uint8_t kMaxNotesPerPatternStep = 4;
 struct PatternStep
 {
     uint8_t noteCount = 0;
-    Note notes[kMaxNotesPerPatternStep] = {};
+    uint8_t notes[kMaxNotesPerPatternStep] = {};
+    uint8_t velocity = 127;
     uint8_t durationMul = 1;
 };
 
-#define _NO_STEP {0, {}, 1}
+#define _NO_STEP {0, {}, 127, 1}
 
 #define MAKE_PATTERN(NAME, STEPS_ARRAY, RATE) \
 constexpr TrackPattern NAME = { \

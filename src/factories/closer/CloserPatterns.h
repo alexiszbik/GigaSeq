@@ -7,7 +7,7 @@ namespace CloserPatterns
 {
 
 constexpr PatternStep kCloserArpSteps[] = {
-    {1, {{C3, 127}}, 1},
+    {1, {C3}, 127, 1},
 };
 
 MAKE_PATTERN(kCloserArp, kCloserArpSteps, 16);
