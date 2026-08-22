@@ -3,6 +3,7 @@
 
 #include "factories/together/TogetherSong.h"
 #include "factories/water/WaterSong.h"
+#include "factories/falling/FallingSong.h"
 
 #include <cstdio>
 #include <utility>
@@ -332,8 +333,10 @@ SequencePool SequencePool::createDefault(MidiInOut& midi, Logger& logger)
 {
     SequencePool pool(midi, logger);
 
+    addFallingSong(pool);
     addWaterSong(pool);
     addTogetherSong(pool);
+    
 
     return pool;
 }

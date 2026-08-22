@@ -32,12 +32,20 @@ add_executable(GigaSeq
     src/factories/TrackPatternBuilder.cpp
     src/factories/TrackSpec.cpp
     src/platform/MemoryMonitor.cpp
+
     src/factories/together/TogetherSequenceFactory.cpp
     src/factories/together/TogetherSong.cpp
     src/factories/together/TogetherTrackFactory.cpp
+
     src/factories/water/WaterSequenceFactory.cpp
     src/factories/water/WaterSong.cpp
     src/factories/water/WaterTrackFactory.cpp
+
+    src/factories/falling/FallingSequenceFactory.cpp
+    src/factories/falling/FallingSong.cpp
+    src/factories/falling/FallingTrackFactory.cpp
+
+
 )
 
 target_include_directories(GigaSeq PRIVATE src src/engine src/desktop)
