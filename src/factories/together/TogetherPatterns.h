@@ -59,7 +59,7 @@ MAKE_PATTERN(kTogetherDX7, kTogetherDX7Steps, 8);
 constexpr PatternStep kTogetherHiDrumSteps[] = {
     {3, {56, 37, 40}, 127, 1},
     {2, {40}, 56, 1},
-    {2, {37, 38, 40}, 127, 1},
+    {3, {37, 38, 40}, 127, 1},
     {2, {40}, 56, 1},
 };
 MAKE_PATTERN(kTogetherHiDrum, kTogetherHiDrumSteps, 8);

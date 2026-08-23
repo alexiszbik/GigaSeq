@@ -5,10 +5,14 @@
 #include "factories/together/TogetherTrackFactory.h"
 #include "MidiChannel.h"
 
+namespace {
+constexpr uint8_t songTempo = 130;
+}
+
 Sequence TogetherSequenceFactory::togetherIntro()
 {
     Sequence seq = buildSequence(
-        8, 4, 0, "Intro", 130, true,
+        8, 4, 0, "Intro", songTempo, true,
         {
             TogetherTrackFactory::togetherArp,
         });
@@ -20,7 +24,7 @@ Sequence TogetherSequenceFactory::togetherIntro()
 Sequence TogetherSequenceFactory::togetherSample()
 {
     return buildSequence(
-        8, 4, 0, "Sample", 130, true,
+        8, 4, 0, "Sample", songTempo, true,
         {
             TogetherTrackFactory::togetherArp,
             TogetherTrackFactory::togetherHiDrum,
@@ -32,7 +36,7 @@ Sequence TogetherSequenceFactory::togetherSample()
 Sequence TogetherSequenceFactory::togetherKick()
 {
     return buildSequence(
-        8, 4, 0, "Kick", 130, true,
+        8, 4, 0, "Kick", songTempo, true,
         {
             TogetherTrackFactory::togetherArp,
             TogetherTrackFactory::togetherHiDrum,
@@ -45,7 +49,7 @@ Sequence TogetherSequenceFactory::togetherKick()
 Sequence TogetherSequenceFactory::togetherVocoder()
 {
     return buildSequence(
-        16, 4, 16, "Vocoder", 130, false,
+        16, 4, 16, "Vocoder", songTempo, false,
         {
             TogetherTrackFactory::togetherArp,
             TogetherTrackFactory::togetherHiDrum,
@@ -59,7 +63,7 @@ Sequence TogetherSequenceFactory::togetherVocoder()
 Sequence TogetherSequenceFactory::togetherPause()
 {
     return buildSequence(
-        8, 4, 0, "Pause", 130, true,
+        8, 4, 0, "Pause", songTempo, true,
         {
             TogetherTrackFactory::togetherArp,
             TogetherTrackFactory::togetherHatsOnly,
@@ -71,7 +75,7 @@ Sequence TogetherSequenceFactory::togetherPause()
 Sequence TogetherSequenceFactory::togetherClimax()
 {
     return buildSequence(
-        8, 4, 0, "Climax", 130, false,
+        8, 4, 0, "Climax", songTempo, false,
         {
             TogetherTrackFactory::togetherArp,
             TogetherTrackFactory::togetherHiDrum,
@@ -84,7 +88,7 @@ Sequence TogetherSequenceFactory::togetherClimax()
 Sequence TogetherSequenceFactory::togetherRepeat()
 {
     return buildSequence(
-        4, 4, 0, "Climax", 130, false,
+        4, 4, 0, "Climax", songTempo, false,
         {
             TogetherTrackFactory::togetherArp,
             TogetherTrackFactory::togetherHatsOnly,
@@ -111,7 +115,7 @@ Sequence TogetherSequenceFactory::togetherPartB()
 Sequence TogetherSequenceFactory::togetherPartBWithHats()
 {
     return buildSequence(
-        16, 4, 0, "PartBHats", 130, false,
+        16, 4, 0, "PartBHats", songTempo, false,
         {
             TogetherTrackFactory::togetherPartBSampleCut,
             TogetherTrackFactory::togetherPartBSynth,
@@ -124,7 +128,7 @@ Sequence TogetherSequenceFactory::togetherPartBWithHats()
 Sequence TogetherSequenceFactory::togetherPartBDrums()
 {
     return buildSequence(
-        8, 4, 0, "PartBDrums", 130, true,
+        8, 4, 0, "PartBDrums", songTempo, true,
         {
             TogetherTrackFactory::togetherPartBSynth,
             TogetherTrackFactory::togetherPartBAh,
@@ -138,7 +142,7 @@ Sequence TogetherSequenceFactory::togetherPartBDrums()
 Sequence TogetherSequenceFactory::togetherPartBClimax()
 {
     return buildSequence(
-        8, 4, 0, "PartBClimax", 130, true,
+        8, 4, 0, "PartBClimax", songTempo, true,
         {
             TogetherTrackFactory::togetherPartBSynth,
             TogetherTrackFactory::togetherPartBAh,

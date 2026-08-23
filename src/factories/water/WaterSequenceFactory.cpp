@@ -5,7 +5,9 @@
 #include "factories/water/WaterTrackFactory.h"
 #include "MidiChannel.h"
 
+namespace {
 constexpr uint8_t songTempo = 125;
+}
 
 Sequence WaterSequenceFactory::waterIntro()
 {

@@ -5,10 +5,15 @@
 #include "factories/dummy/DummyTrackFactory.h"
 #include "MidiChannel.h"
 
+namespace {
+constexpr uint8_t songTempo = 130;
+}
+
+
 Sequence DummySequenceFactory::dummyIntro()
 {
     Sequence seq = buildSequence(
-        8, 4, 0, "Intro", 130, true,
+        8, 4, 0, "Intro", songTempo, true,
         {
             SequenceTrackFactory::kickFour,
             DummyTrackFactory::dummyArp,
