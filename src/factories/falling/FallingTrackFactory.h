@@ -13,4 +13,5 @@ public:
     static SequenceTrack fallingBigClap(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack fallingHarp(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack fallingTambourin(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack fallingPreInterlude(tick_t lengthInTicks, tick_t startInTicks);
 };

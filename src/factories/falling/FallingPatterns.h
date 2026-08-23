@@ -18,23 +18,23 @@ constexpr uint8_t tamb = 43;
 
 constexpr PatternStep kFallingHatsSteps[] = {
     _NO_STEP,
-    {1, {hatC}, 127, 1},
-    {2, {hatC, hatO}, 127, 1},
-    {1, {hatC}, 127, 1},
+    {{hatC}, 127, 1},
+    {{hatC, hatO}, 127, 1},
+    {{hatC}, 127, 1},
 
-    {1, {hatC}, 90, 1},
+    {{hatC}, 90, 1},
     _NO_STEP,
-    {1, {hatO}, 127, 1},
+    {{hatO}, 127, 1},
     _NO_STEP,
-
-    _NO_STEP,
-    {1, {hatC}, 127, 1},
-    {2, {hatC, hatO}, 127, 1},
-    {1, {hatC}, 127, 1},
 
     _NO_STEP,
+    {{hatC}, 127, 1},
+    {{hatC, hatO}, 127, 1},
+    {{hatC}, 127, 1},
+
     _NO_STEP,
-    {1, {hatO}, 127, 1},
+    _NO_STEP,
+    {{hatO}, 127, 1},
     _NO_STEP,
 };
 
@@ -42,7 +42,12 @@ MAKE_PATTERN(kFallingHats, kFallingHatsSteps, 16);
 
 
 constexpr PatternStep kFallingPadsSteps[] = {
-    {1, {pads}, 127, 1},
+    {{pads}, 127, 1},
+    _NO_STEP,
+    _NO_STEP,
+    _NO_STEP,
+    
+    _NO_STEP,
     _NO_STEP,
     _NO_STEP,
     _NO_STEP,
@@ -51,7 +56,7 @@ constexpr PatternStep kFallingPadsSteps[] = {
 MAKE_PATTERN(kFallingPads, kFallingPadsSteps, 1);
 
 
-#define KICK_STEP {1, {kick}, 127, 1}
+#define KICK_STEP {{kick}, 127, 1}
 
 constexpr PatternStep kFallingKickSteps[] = {
     KICK_STEP, _NO_STEP, _NO_STEP, _NO_STEP,
@@ -97,7 +102,7 @@ constexpr PatternStep kFallingKickSteps[] = {
 
 MAKE_PATTERN(kFallingKick, kFallingKickSteps, 16);
 
-#define NOTE(pitch) {1, {pitch}, 127, 1}
+#define NOTE(pitch) {{pitch}, 127, 1}
 
 constexpr PatternStep kFallingBassSteps[] = {
     NOTE(Fd1),
@@ -252,7 +257,7 @@ constexpr PatternStep kFallingHarpSteps[] = {
 
 MAKE_PATTERN(kFallingHarp, kFallingHarpSteps, 16);
 
-#define TAMB_STEP {1, {tamb}, 127, 1}
+#define TAMB_STEP {{tamb}, 127, 1}
 
 constexpr PatternStep kFallingTambourinSteps[] = {
     _NO_STEP,

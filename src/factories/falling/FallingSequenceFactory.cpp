@@ -31,7 +31,7 @@ Sequence FallingSequenceFactory::fallingIntro2()
             FallingTrackFactory::fallingHats,
             FallingTrackFactory::fallingPads,
             track(FallingTrackFactory::fallingKick).withLength(7*oneBarTick),
-            track(FallingTrackFactory::fallingRiser).withLength(4*oneBarTick),
+            FallingTrackFactory::fallingRiser,
         });
     return seq;
 }
@@ -39,23 +39,36 @@ Sequence FallingSequenceFactory::fallingIntro2()
 Sequence FallingSequenceFactory::fallingBassSeq()
 {
     tick_t len1 = 8*oneBarTick;
-    tick_t len2 = 12*oneBarTick;
-    tick_t len3 = 16*oneBarTick;
+    uint8_t loopPoint = 16;
+    tick_t len3 = loopPoint*oneBarTick;
 
     Sequence seq = buildSequence(
-        20, 4, 16, "BassSeq", songTempo, true,
+        24, 4, loopPoint, "BassSeq", songTempo, true,
         {
             FallingTrackFactory::fallingKick,
-            track(FallingTrackFactory::fallingBigClap).withStart(len2),
+            track(FallingTrackFactory::fallingBigClap).withStart(len1).muted().withMuteEvent(len3),
             track(SequenceTrackFactory::clapFour).muted(),
             track(FallingTrackFactory::fallingHats).withStart(len1),
             FallingTrackFactory::fallingBass,
             track(FallingTrackFactory::fallingPads).withStart(len1), //add automation !!!
-            track(FallingTrackFactory::fallingRiser).withStart(len3),
+            track(FallingTrackFactory::fallingRiser).withMuteEvent(len3).asFill(),
             track(FallingTrackFactory::fallingHarp).muted(),
-            FallingTrackFactory::fallingTambourin,
+            track(FallingTrackFactory::fallingTambourin).muted(),
         });
 
-    seq.track(1).addMuteEvent(len3);
+    return seq;
+}
+
+Sequence FallingSequenceFactory::fallingPreInterlude()
+{
+    tick_t length = oneBarTick*7 + 2*96 + 24;
+
+    Sequence seq = buildSequence(
+        8, 4, 0, "PreInterlude", songTempo, false,
+        {
+            track(FallingTrackFactory::fallingKick).withLength(length),
+            track(FallingTrackFactory::fallingBass).withLength(length),
+            FallingTrackFactory::fallingPreInterlude,
+        });
     return seq;
 }

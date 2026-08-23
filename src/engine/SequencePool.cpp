@@ -336,7 +336,6 @@ SequencePool SequencePool::createDefault(MidiInOut& midi, Logger& logger)
     addFallingSong(pool);
     addWaterSong(pool);
     addTogetherSong(pool);
-    
 
     return pool;
 }

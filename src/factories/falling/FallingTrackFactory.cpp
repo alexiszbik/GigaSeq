@@ -14,10 +14,15 @@ constexpr tick_t oneBarTick = 384;
 constexpr uint8_t riz = 52;
 constexpr uint8_t bigClap = 39;
 
+constexpr uint8_t riz2 = 53;
+constexpr uint8_t tomFill = 55;
+
+constexpr uint8_t pianoLow = 68;
+
 }
 
 SequenceTrack FallingTrackFactory::fallingHats(tick_t lengthInTicks, tick_t startInTicks) {
-    SequenceTrack track("Modular", MidiChannel::kDrums);
+    SequenceTrack track("Hats", MidiChannel::kDrums);
     track.setPattern(FallingPatterns::kFallingHats, lengthInTicks, startInTicks);
     return track;
 }
@@ -56,6 +61,11 @@ SequenceTrack FallingTrackFactory::fallingBigClap(tick_t lengthInTicks, tick_t s
         {}, {}, {}, {}, {}, {}, {}, {},
         {}, {}, {}, {}, {}, {}, {}, {},
         {}, {}, {}, {}, {}, {}, {}, {},
+        {}, {}, {}, {}, {}, {}, {}, {},
+
+        {}, {}, {}, {}, {}, {}, {}, {},
+        {}, {}, {}, {}, {}, {}, {}, {},
+        {}, {}, {}, {}, {}, {}, {}, {},
         {}, {}, {}, {}, {}, {}, {bigClap}, {bigClap}
     };
     desc.rate = 8;
@@ -75,5 +85,14 @@ SequenceTrack FallingTrackFactory::fallingTambourin(tick_t lengthInTicks, tick_t
     SequenceTrack track("Tambourin", MidiChannel::kDrums);
     track.setPattern(FallingPatterns::kFallingTambourin, lengthInTicks, startInTicks);
 
+    return track;
+}
+
+SequenceTrack FallingTrackFactory::fallingPreInterlude(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("PreInterlude", MidiChannel::kSampler);
+
+    track.addNote(0, 24, pianoLow, 127);
+    track.addNote(oneBarTick*3, 24, riz2, 127);
+    track.addNote(oneBarTick*3 + 2*96 + 3*24, 24, tomFill, 127);
     return track;
 }

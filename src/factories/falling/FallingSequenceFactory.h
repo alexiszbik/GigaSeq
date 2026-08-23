@@ -9,4 +9,5 @@ public:
 
     static Sequence fallingIntro2();
     static Sequence fallingBassSeq();
+    static Sequence fallingPreInterlude();
 };

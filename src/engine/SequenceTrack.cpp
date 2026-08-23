@@ -206,12 +206,12 @@ void SequenceTrack::processPatternTick(tick_t position)
         (local / stepDuration) % pattern_->stepCount);
     const PatternStep& step = pattern_->steps[stepIndex];
 
-    if (step.noteCount == 0) {
+    if (step.notes[0] == 0) {
         return;
     }
 
     const tick_t noteDuration = stepDuration * step.durationMul;
-    for (uint8_t i = 0; i < step.noteCount; ++i) {
+    for (uint8_t i = 0; i < kMaxNotesPerPatternStep && step.notes[i] != 0; ++i) {
         startNote({ position, noteDuration, { step.notes[i], step.velocity } });
     }
 }

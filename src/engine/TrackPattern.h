@@ -9,15 +9,16 @@ static constexpr tick_t kPatternTicksPerBar = kPatternTicksPerQuarterNote * 4;
 
 static constexpr uint8_t kMaxNotesPerPatternStep = 4;
 
+// notes[] is a zero-terminated pitch list (0 = end / empty step; MIDI note 0 is not used).
 struct PatternStep
 {
-    uint8_t noteCount = 0;
     uint8_t notes[kMaxNotesPerPatternStep] = {};
     uint8_t velocity = 127;
     uint8_t durationMul = 1;
 };
 
-#define _NO_STEP {0, {}, 127, 1}
+#define _NO_STEP {{}, 127, 1}
+#define STEP(notes...) {{ notes }, 127, 1}
 
 #define MAKE_PATTERN(NAME, STEPS_ARRAY, RATE) \
 constexpr TrackPattern NAME = { \
