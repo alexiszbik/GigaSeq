@@ -25,12 +25,52 @@ constexpr TrackPattern NAME = { \
     RATE \
 };
 
+#define MAKE_PATTERN_GROOVE(NAME, STEPS_ARRAY, RATE, GROOVE) \
+constexpr TrackPattern NAME = { \
+    STEPS_ARRAY, \
+    sizeof(STEPS_ARRAY) / sizeof(STEPS_ARRAY[0]), \
+    RATE, \
+    GROOVE \
+};
+
+static constexpr uint8_t kPatternGrooveStraight = 0;
+static constexpr uint8_t kPatternGrooveMax = 25;
+static constexpr uint8_t kPatternGrooveRate = 16;
+
 struct TrackPattern
 {
     const PatternStep* steps = nullptr;
     uint16_t stepCount = 0;
     uint8_t rate = 4;
+    uint8_t groove = kPatternGrooveStraight;
 };
+
+inline uint8_t patternEffectiveGroove(uint8_t rate, uint8_t groove) noexcept
+{
+    return rate == kPatternGrooveRate ? groove : kPatternGrooveStraight;
+}
+
+inline tick_t patternStepGrooveOffset(
+    tick_t stepDuration,
+    uint8_t groove,
+    uint16_t gridIndex) noexcept
+{
+    if ((gridIndex & 1u) == 0u || groove == kPatternGrooveStraight) {
+        return 0;
+    }
+
+    return static_cast<tick_t>(
+        (static_cast<uint32_t>(groove) * stepDuration + 25) / 50);
+}
+
+inline tick_t patternStepTick(
+    uint16_t gridIndex,
+    tick_t stepDuration,
+    uint8_t groove) noexcept
+{
+    return static_cast<tick_t>(gridIndex) * stepDuration
+        + patternStepGrooveOffset(stepDuration, groove, gridIndex);
+}
 
 inline tick_t patternStepDuration(const TrackPattern& pattern)
 {

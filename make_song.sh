@@ -59,9 +59,10 @@ add_to_cmake() {
     fi
 
     local close_line
-    close_line="$(grep -n '^)$' "$CMAKE_FILE" | head -1 | cut -d: -f1)"
-    if [[ -z "$close_line" ]]; then
-        echo "Could not find add_executable closing parenthesis in ${CMAKE_FILE}" >&2
+    close_line="$(grep -n '^target_include_directories' "$CMAKE_FILE" | head -1 | cut -d: -f1)"
+    close_line=$((close_line - 2))
+    if [[ -z "$close_line" || "$close_line" -lt 1 ]]; then
+        echo "Could not find add_executable block in ${CMAKE_FILE}" >&2
         exit 1
     fi
 

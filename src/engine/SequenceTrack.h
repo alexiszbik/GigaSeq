@@ -64,8 +64,6 @@ public:
     void setPattern(const TrackPattern& pattern, tick_t lengthInTicks, tick_t startInTicks);
     bool hasPattern() const noexcept { return pattern_ != nullptr; }
 
-    void removeEvents(tick_t tick, tick_t duration);
-
     void removeNotes(
         tick_t tick,
         tick_t durationTicks,

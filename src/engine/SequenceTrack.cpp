@@ -84,34 +84,6 @@ void SequenceTrack::setPattern(const TrackPattern& pattern, tick_t lengthInTicks
     patternLength_ = lengthInTicks;
 }
 
-void SequenceTrack::removeEvents(tick_t tick, tick_t durationTicks)
-{
-    if (durationTicks == 0) {
-        return;
-    }
-
-    notes_.removeInRange(tick, durationTicks);
-    controlChanges_.removeInRange(tick, durationTicks);
-
-    const uint32_t rangeStart = static_cast<uint32_t>(tick);
-    const uint32_t rangeEnd = rangeStart + static_cast<uint32_t>(durationTicks);
-
-    for (std::size_t i = controlAutomations_.size(); i > 0; --i) {
-        const std::size_t index = i - 1;
-        const ControlAutomation& automation = controlAutomations_[index];
-        const uint32_t automationStart = static_cast<uint32_t>(automation.startTick);
-        const uint32_t automationEnd = static_cast<uint32_t>(automation.endTick);
-
-        if (automationStart < rangeEnd && automationEnd >= rangeStart) {
-            controlAutomations_.erase(controlAutomations_.begin() + static_cast<std::ptrdiff_t>(index));
-            automationLastSent_.erase(automationLastSent_.begin() + static_cast<std::ptrdiff_t>(index));
-        }
-    }
-
-    programChanges_.removeInRange(tick, durationTicks);
-    muteEvents_.removeInRange(tick, durationTicks);
-}
-
 void SequenceTrack::removeNotes(
     tick_t tick,
     tick_t durationTicks,
@@ -237,21 +209,26 @@ void SequenceTrack::processPatternTick(tick_t position)
         return;
     }
 
-    if (local % stepDuration != 0) {
-        return;
-    }
+    const tick_t cycleLen = stepDuration * pattern_->rate;
+    const tick_t cyclePos = local % cycleLen;
+    const uint8_t groove = patternEffectiveGroove(pattern_->rate, pattern_->groove);
 
-    const uint16_t stepIndex = static_cast<uint16_t>(
-        (local / stepDuration) % pattern_->stepCount);
-    const PatternStep& step = pattern_->steps[stepIndex];
+    for (uint16_t gridIndex = 0; gridIndex < pattern_->rate; ++gridIndex) {
+        if (cyclePos != patternStepTick(gridIndex, stepDuration, groove)) {
+            continue;
+        }
 
-    if (step.notes[0] == 0) {
-        return;
-    }
+        const uint16_t stepIndex = static_cast<uint16_t>(gridIndex % pattern_->stepCount);
+        const PatternStep& step = pattern_->steps[stepIndex];
 
-    const tick_t noteDuration = stepDuration * step.durationMul;
-    for (uint8_t i = 0; i < kMaxNotesPerPatternStep && step.notes[i] != 0; ++i) {
-        startNote({ position, noteDuration, { step.notes[i], step.velocity } });
+        if (step.notes[0] == 0) {
+            continue;
+        }
+
+        const tick_t noteDuration = stepDuration * step.durationMul;
+        for (uint8_t i = 0; i < kMaxNotesPerPatternStep && step.notes[i] != 0; ++i) {
+            startNote({ position, noteDuration, { step.notes[i], step.velocity } });
+        }
     }
 }
 

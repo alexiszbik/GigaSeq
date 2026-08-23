@@ -11,11 +11,6 @@ FetchContent_Declare(
     rtmidi
     GIT_REPOSITORY https://github.com/thestk/rtmidi.git
     GIT_TAG 6.0.0
-
-    src/factories/fantasy/FantasySequenceFactory.cpp
-    src/factories/fantasy/FantasySong.cpp
-    src/factories/fantasy/FantasyTrackFactory.cpp
-
 )
 
 set(RTMIDI_BUILD_TESTING OFF CACHE BOOL "" FORCE)
@@ -54,6 +49,9 @@ add_executable(GigaSeq
     src/factories/closer/CloserSong.cpp
     src/factories/closer/CloserTrackFactory.cpp
 
+    src/factories/fantasy/FantasySequenceFactory.cpp
+    src/factories/fantasy/FantasySong.cpp
+    src/factories/fantasy/FantasyTrackFactory.cpp
 
 )
 
