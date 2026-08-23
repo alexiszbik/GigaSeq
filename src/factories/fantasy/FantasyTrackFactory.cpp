@@ -10,6 +10,18 @@ SequenceTrack FantasyTrackFactory::fantasyArp(tick_t lengthInTicks, tick_t start
     return track;
 }
 
+SequenceTrack FantasyTrackFactory::fantasyArpPoly(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("ArpPoly", MidiChannel::kPoly);
+    track.setPattern(FantasyPatterns::kFantasyArp, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack FantasyTrackFactory::fantasyArpBass(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("ArpBass", MidiChannel::kBass);
+    track.setPattern(FantasyPatterns::kFantasyArp, lengthInTicks, startInTicks, -12);
+    return track;
+}
+
 SequenceTrack FantasyTrackFactory::fantasySnare909(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Snare909", MidiChannel::kDrums);
     track.setPattern(FantasyPatterns::kFantasySnare909, lengthInTicks, startInTicks);
@@ -104,3 +116,29 @@ SequenceTrack FantasyTrackFactory::fantasyChordOffset(tick_t lengthInTicks, tick
 
     return track;
 }
+
+SequenceTrack FantasyTrackFactory::fantasyBigRiz1(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("BigRiz1", MidiChannel::kSampler);
+    track.addNote(TICK(32), TickHelper::kStepLen, Fantasy::bigriz1, 127);
+    return track;
+}
+
+SequenceTrack FantasyTrackFactory::fantasyBigRiz2(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("BigRiz2", MidiChannel::kSampler);
+    track.addNote(0, TickHelper::kStepLen, Fantasy::bigriz2, 127);
+    return track;
+}
+
+SequenceTrack FantasyTrackFactory::fantasyBigClap(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("BigClap", MidiChannel::kDrums);
+    track.setPattern(FantasyPatterns::kFantasyBigClap, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack FantasyTrackFactory::fantasyShakeEnd(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("ShakeEnd", MidiChannel::kDrums);
+    track.setPattern(FantasyPatterns::kFantasyShakeEnd, lengthInTicks, startInTicks);
+    return track;
+}
+
+

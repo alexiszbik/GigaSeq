@@ -16,7 +16,7 @@ Sequence CloserSequenceFactory::closerIntro()
         8, 4, 0, "Intro", songTempo, true,
         {
             SequenceTrackFactory::kickFour,
-            CloserTrackFactory::closerHats,
+            track(CloserTrackFactory::closerHats).muted(),
             track(CloserTrackFactory::closerLoopHat).muted(),
             track(CloserTrackFactory::closerTambourin).muted(),
             track(CloserTrackFactory::closerClapTom).muted(),

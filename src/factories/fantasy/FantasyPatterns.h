@@ -21,6 +21,8 @@ constexpr uint8_t v3 = Fantasy::fantVoc3;
 constexpr uint8_t v4 = Fantasy::fantVoc4;
 constexpr uint8_t v5 = Fantasy::fantVoc5;
 
+constexpr uint8_t bgClp = Fantasy::fantBigclp;
+
 constexpr PatternStep kFantasyArpSteps[] = {
     STEP(C2), STEP(E2), STEP(C3), STEP(B2), STEP(G2), STEP(C3), STEP(E2), STEP(G2),
     STEP(E3), STEP(C3), STEP(B2), STEP(E3), STEP(G2), STEP(B2), STEP(Fd3), STEP(D3),
@@ -139,5 +141,21 @@ constexpr PatternStep kFantasyVocalsSteps[] = {
 };
 
 MAKE_PATTERN(kFantasyVocals, kFantasyVocalsSteps, 8);
+
+
+constexpr PatternStep kFantasyBigClapSteps[] = {
+    _NO_STEP,
+    {{bgClp}, 127, 1},
+};
+
+MAKE_PATTERN(kFantasyBigClap, kFantasyBigClapSteps, 4);
+
+
+constexpr PatternStep kFantasyShakeEndSteps[] = {
+    _NO_STEP,
+    {{Fantasy::fminishake}, 127, 1},
+};
+
+MAKE_PATTERN(kFantasyShakeEnd, kFantasyShakeEndSteps, 8);
 
 } // namespace FantasyPatterns

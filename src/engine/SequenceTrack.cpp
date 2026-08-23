@@ -77,11 +77,12 @@ void SequenceTrack::addMuteEvent(
     muteEvents_.add({ tick });
 }
 
-void SequenceTrack::setPattern(const TrackPattern& pattern, tick_t lengthInTicks, tick_t startInTicks)
+void SequenceTrack::setPattern(const TrackPattern& pattern, tick_t lengthInTicks, tick_t startInTicks, int pitchOffset)
 {
     pattern_ = &pattern;
     patternStart_ = startInTicks;
     patternLength_ = lengthInTicks;
+    patternPitchOffset_ = pitchOffset;
 }
 
 void SequenceTrack::removeNotes(
@@ -220,7 +221,8 @@ void SequenceTrack::processPatternTick(tick_t position)
 
         const tick_t noteDuration = stepDuration * step.durationMul;
         for (uint8_t i = 0; i < kMaxNotesPerPatternStep && step.notes[i] != 0; ++i) {
-            startNote({ position, noteDuration, { step.notes[i], step.velocity } });
+            uint8_t pitch = static_cast<uint8_t>(patternPitchOffset_ + step.notes[i]);
+            startNote({ position, noteDuration, { pitch , step.velocity } });
         }
     };
 

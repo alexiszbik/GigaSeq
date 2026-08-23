@@ -36,10 +36,12 @@ constexpr uint8_t ftsyRiz = 53;
 
 constexpr uint8_t ftsySample = 54;
 
-constexpr uint8_t fantDrop = 60;
-
 constexpr uint8_t ftsySampleFade = 61;
 
 constexpr uint8_t ftsySampleCut = 62;
+
+constexpr uint8_t bigriz1 = 63;
+
+constexpr uint8_t bigriz2 = 64;
 
 }

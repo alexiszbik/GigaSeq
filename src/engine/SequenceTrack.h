@@ -61,7 +61,7 @@ public:
     void addMuteEvent(
         tick_t tick);
 
-    void setPattern(const TrackPattern& pattern, tick_t lengthInTicks, tick_t startInTicks);
+    void setPattern(const TrackPattern& pattern, tick_t lengthInTicks, tick_t startInTicks, int pitchOffset = 0);
     bool hasPattern() const noexcept { return pattern_ != nullptr; }
 
     void removeNotes(
@@ -106,6 +106,7 @@ private:
     const TrackPattern* pattern_ = nullptr;
     tick_t patternStart_ = 0;
     tick_t patternLength_ = 0;
+    int patternPitchOffset_ = 0;
 
     TimedEventList<ScheduledNote> notes_;
     TimedEventList<ControlChange> controlChanges_;

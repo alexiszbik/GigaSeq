@@ -17,4 +17,10 @@ public:
     static SequenceTrack fantasySampleFadeCut(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack fantasyRiser(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack fantasyChordOffset(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack fantasyArpPoly(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack fantasyArpBass(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack fantasyBigRiz1(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack fantasyBigClap(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack fantasyShakeEnd(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack fantasyBigRiz2(tick_t lengthInTicks, tick_t startInTicks);
 };

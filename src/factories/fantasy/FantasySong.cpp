@@ -16,6 +16,9 @@ void addFantasySong(SequencePool& pool)
         FantasySequenceFactory::fantasyBreak,
         FantasySequenceFactory::fantasyBack,
         FantasySequenceFactory::fantasyRave,
+        FantasySequenceFactory::fantasyGuitar,
+        FantasySequenceFactory::fantasyGuitarRiz,
+        FantasySequenceFactory::fantasyClimax,
     };
 
     for (Builder builder : sequences) {
