@@ -9,4 +9,7 @@ public:
 
     static Sequence closerChords();
     static Sequence closerBass();
+    static Sequence closerBlast();
+    static Sequence closerBackKick();
+    static Sequence closerClimax();
 };

@@ -23,6 +23,10 @@ constexpr uint8_t topA = Closer::tricotTop;
 constexpr uint8_t topB = Closer::tricotTop2;
 
 constexpr uint8_t dsnr = Closer::discoSnr;
+constexpr uint8_t cymb = Closer::triBlast;
+constexpr uint8_t openhat = Closer::avHat;
+
+constexpr uint8_t tb = Closer::tri303;
 
 constexpr uint8_t songGroove = 6;
 
@@ -196,5 +200,14 @@ constexpr PatternStep kCloserTopSteps[] = {
 };
 
 MAKE_PATTERN(kCloserTop, kCloserTopSteps, 16);
+
+
+constexpr PatternStep kCloserBlastCymbSteps[] = {
+    {{cymb}, 127, 1},
+    {{openhat}, 127, 1},
+};
+
+MAKE_PATTERN(kCloserBlastCymb, kCloserBlastCymbSteps, 8);
+
 
 } // namespace CloserPatterns

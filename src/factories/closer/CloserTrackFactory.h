@@ -13,8 +13,14 @@ public:
     static SequenceTrack closerRiser(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack closerModular(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack closerStab(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack closerArp(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack closerFill808(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack closerChords(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack closerSing(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack closerTop(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack closerBlastCymb(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack closerBlastKick(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack closerBlastSnare(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack closer303(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack closerDrumix(tick_t lengthInTicks, tick_t startInTicks);
 };

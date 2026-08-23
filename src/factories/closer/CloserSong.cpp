@@ -14,6 +14,9 @@ void addCloserSong(SequencePool& pool)
         CloserSequenceFactory::closerIntro,
         CloserSequenceFactory::closerChords,
         CloserSequenceFactory::closerBass,
+        CloserSequenceFactory::closerBlast,
+        CloserSequenceFactory::closerBackKick,
+        CloserSequenceFactory::closerClimax,
     };
 
     for (Builder builder : sequences) {
