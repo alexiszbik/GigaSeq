@@ -209,26 +209,42 @@ void SequenceTrack::processPatternTick(tick_t position)
         return;
     }
 
-    const tick_t cycleLen = stepDuration * pattern_->rate;
-    const tick_t cyclePos = local % cycleLen;
     const uint8_t groove = patternEffectiveGroove(pattern_->rate, pattern_->groove);
 
-    for (uint16_t gridIndex = 0; gridIndex < pattern_->rate; ++gridIndex) {
-        if (cyclePos != patternStepTick(gridIndex, stepDuration, groove)) {
-            continue;
-        }
-
-        const uint16_t stepIndex = static_cast<uint16_t>(gridIndex % pattern_->stepCount);
+    auto playStep = [&](uint16_t stepIndex) {
         const PatternStep& step = pattern_->steps[stepIndex];
 
         if (step.notes[0] == 0) {
-            continue;
+            return;
         }
 
         const tick_t noteDuration = stepDuration * step.durationMul;
         for (uint8_t i = 0; i < kMaxNotesPerPatternStep && step.notes[i] != 0; ++i) {
             startNote({ position, noteDuration, { step.notes[i], step.velocity } });
         }
+    };
+
+    if (groove == 0) {
+        if (local % stepDuration != 0) {
+            return;
+        }
+
+        const uint16_t stepIndex = static_cast<uint16_t>(
+            (local / stepDuration) % pattern_->stepCount);
+        playStep(stepIndex);
+        
+        return;
+    }
+
+    const tick_t cycleLen = stepDuration * pattern_->rate;
+    const tick_t cyclePos = local % cycleLen;
+
+    for (uint16_t gridIndex = 0; gridIndex < pattern_->rate; ++gridIndex) {
+        if (cyclePos != patternStepTick(gridIndex, stepDuration, groove)) {
+            continue;
+        }
+
+        playStep(static_cast<uint16_t>(gridIndex % pattern_->stepCount));
     }
 }
 

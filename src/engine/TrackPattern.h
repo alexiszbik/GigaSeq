@@ -25,11 +25,11 @@ constexpr TrackPattern NAME = { \
     RATE \
 };
 
-#define MAKE_PATTERN_GROOVE(NAME, STEPS_ARRAY, RATE, GROOVE) \
+#define MAKE_PATTERN_GROOVE(NAME, STEPS_ARRAY, GROOVE) \
 constexpr TrackPattern NAME = { \
     STEPS_ARRAY, \
     sizeof(STEPS_ARRAY) / sizeof(STEPS_ARRAY[0]), \
-    RATE, \
+    kPatternGrooveRate, \
     GROOVE \
 };
 
@@ -74,8 +74,5 @@ inline tick_t patternStepTick(
 
 inline tick_t patternStepDuration(const TrackPattern& pattern)
 {
-    if (pattern.rate == 0) {
-        return 0;
-    }
     return TickHelper::kOneBarTick4_4 / pattern.rate;
 }
