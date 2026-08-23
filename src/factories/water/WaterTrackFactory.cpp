@@ -152,12 +152,7 @@ SequenceTrack WaterTrackFactory::waterEventsPartB(tick_t lengthInTicks, tick_t s
 
 SequenceTrack WaterTrackFactory::waterFreakChorusB(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("FreakChorusB", MidiChannel::kMicrofreak);
-
-    SequenceDesc desc;
-    desc.notes = {{Gd2}, {Dd3}, {F3}};
-    desc.rate = 16;
-    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
-
+    track.setPattern(WaterPatterns::kWaterChorusBFreak, lengthInTicks, startInTicks);
     return track;
 }
 

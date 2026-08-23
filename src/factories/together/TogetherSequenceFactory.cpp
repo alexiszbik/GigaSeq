@@ -75,7 +75,7 @@ Sequence TogetherSequenceFactory::togetherPause()
 Sequence TogetherSequenceFactory::togetherClimax()
 {
     return buildSequence(
-        8, 4, 0, "Climax", songTempo, false,
+        16, 4, 0, "Climax", songTempo, false,
         {
             TogetherTrackFactory::togetherArp,
             TogetherTrackFactory::togetherHiDrum,
@@ -88,7 +88,7 @@ Sequence TogetherSequenceFactory::togetherClimax()
 Sequence TogetherSequenceFactory::togetherRepeat()
 {
     return buildSequence(
-        4, 4, 0, "Climax", songTempo, false,
+        4, 4, 0, "Repeat", songTempo, false,
         {
             TogetherTrackFactory::togetherArp,
             TogetherTrackFactory::togetherHatsOnly,
