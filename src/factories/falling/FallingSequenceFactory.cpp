@@ -88,3 +88,39 @@ Sequence FallingSequenceFactory::fallingInterlude()
         });
     return seq;
 }
+
+Sequence FallingSequenceFactory::fallingPreClimax()
+{
+    Sequence seq = buildSequence(
+        16, 4, 0, "PreClimax", songTempo, false,
+        {
+            track(FallingTrackFactory::fallingKick).withLength(TICK(15,0,0)),
+            SequenceTrackFactory::clapFour,
+            FallingTrackFactory::fallingHats,
+            FallingTrackFactory::fallingBass,
+            FallingTrackFactory::fallingHandTamb,
+            FallingTrackFactory::fallingPads,
+            FallingTrackFactory::fallingPiano,
+            FallingTrackFactory::fallingRiser,
+            FallingTrackFactory::fallingSnareFill,
+        });
+    return seq;
+}
+
+Sequence FallingSequenceFactory::fallingClimax()
+{
+    Sequence seq = buildSequence(
+        8, 4, 0, "Climax", songTempo, true,
+        {
+            SequenceTrackFactory::kickFour,
+            SequenceTrackFactory::clapFour,
+            FallingTrackFactory::fallingHats,
+            FallingTrackFactory::fallingBass,
+            FallingTrackFactory::fallingHandTamb,
+            FallingTrackFactory::fallingPads,
+            FallingTrackFactory::fallingPiano,
+            SequenceTrackFactory::rideOff,
+            track(FallingTrackFactory::fallingRiser).withMuteEvent(0).asFill(),
+        });
+    return seq;
+}

@@ -18,4 +18,5 @@ public:
     static SequenceTrack fallingSnareFill(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack fallingHandTamb(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack fallingKickFill(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack fallingPiano(tick_t lengthInTicks, tick_t startInTicks);
 };

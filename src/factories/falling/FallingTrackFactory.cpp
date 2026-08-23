@@ -2,6 +2,7 @@
 
 #include "factories/falling/FallingPatterns.h"
 
+#include "factories/DrumPatterns.h"
 #include "factories/TrackPatternBuilder.h"
 #include "MidiChannel.h"
 #include "TickHelper.h"
@@ -19,7 +20,7 @@ constexpr uint8_t tomFill = 55;
 constexpr uint8_t interlude = 65;
 
 constexpr uint8_t pianoLow = 68;
-constexpr uint8_t pianoHi = 69;
+constexpr uint8_t pianoHi = 67;
 
 }
 
@@ -149,6 +150,36 @@ SequenceTrack FallingTrackFactory::fallingKickFill(tick_t lengthInTicks, tick_t 
 
     tick_t fillLen = desc.notes.size() * TickHelper::kStepLen;
     makeSequenceTrack(track, desc, fillLen, lengthInTicks - fillLen);
+
+    return track;
+}
+
+SequenceTrack FallingTrackFactory::fallingPiano(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Piano", MidiChannel::kSampler);
+
+    SequenceDesc desc;
+    desc.notes = {
+        {pianoLow}, {}, 
+        {}, {},
+        {}, {},
+        {}, {pianoHi},
+    
+        {}, {}, {}, {}, {}, {}, {}, {},
+        {}, {}, {}, {}, {}, {}, {}, {},
+        {}, {}, {}, {}, {}, {}, {}, {},
+    
+        {pianoLow}, {}, 
+        {}, {},
+        {}, {},
+        {}, {},
+
+        {}, {}, {}, {}, {}, {}, {}, {},
+        {}, {}, {}, {}, {}, {}, {}, {},
+        {}, {}, {}, {}, {}, {}, {}, {},
+
+    };
+    desc.rate = 8;
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
 
     return track;
 }

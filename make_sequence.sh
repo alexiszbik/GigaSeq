@@ -6,8 +6,28 @@ fi
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+MAKE_TRACK="${SCRIPT_DIR}/make_track.sh"
+
 SONG_NAME="${1:-}"
 SEQUENCE_NAME="${2:-}"
+
+prompt_yes_no() {
+    local prompt="$1"
+    local default="${2:-n}"
+    local answer
+
+    while true; do
+        read -r -p "${prompt} [y/N] : " answer
+        answer="${answer:-$default}"
+        answer="$(printf '%s' "$answer" | tr '[:upper:]' '[:lower:]')"
+        case "$answer" in
+            y|yes) return 0 ;;
+            n|no) return 1 ;;
+            *) echo "Please answer y or n." >&2 ;;
+        esac
+    done
+}
 
 if [[ -z "$SONG_NAME" ]]; then
     read -r -p "Which song? : " SONG_NAME
@@ -29,6 +49,7 @@ UPPERCASE_SEQUENCE="$(tr '[:lower:]' '[:upper:]' <<< "${SEQUENCE_NAME:0:1}")${SE
 FUNCTION_NAME="${SONG_NAME}${UPPERCASE_SEQUENCE}"
 SEQUENCE_LABEL="${UPPERCASE_SEQUENCE}"
 CLASS_NAME="${UPPERCASE_SONG}SequenceFactory"
+TRACK_CLASS_NAME="${UPPERCASE_SONG}TrackFactory"
 FACTORY_DIR="src/factories/${SONG_NAME}"
 SEQUENCE_H="${FACTORY_DIR}/${CLASS_NAME}.h"
 SEQUENCE_CPP="${FACTORY_DIR}/${CLASS_NAME}.cpp"
@@ -50,9 +71,56 @@ if [[ ! -f "$SONG_CPP" ]]; then
     exit 1
 fi
 
+if [[ ! -x "$MAKE_TRACK" ]]; then
+    echo "make_track.sh not found or not executable: ${MAKE_TRACK}" >&2
+    exit 1
+fi
+
 if grep -q "${FUNCTION_NAME}()" "$SEQUENCE_H"; then
     echo "Sequence function '${FUNCTION_NAME}' already exists." >&2
     exit 1
+fi
+
+TRACK_LINES=()
+
+while prompt_yes_no "Add a track to this sequence?"; do
+    read -r -p "Track name (e.g. bass, hiDrum) : " TRACK_NAME
+    if [[ -z "$TRACK_NAME" ]]; then
+        echo "Track name is required." >&2
+        continue
+    fi
+
+    bash "$MAKE_TRACK" "$SONG_NAME" "$TRACK_NAME"
+
+    UPPERCASE_TRACK="$(tr '[:lower:]' '[:upper:]' <<< "${TRACK_NAME:0:1}")${TRACK_NAME:1}"
+    TRACK_FUNCTION="${SONG_NAME}${UPPERCASE_TRACK}"
+    TRACK_LINES+=("            ${TRACK_CLASS_NAME}::${TRACK_FUNCTION},")
+done
+
+if [[ ${#TRACK_LINES[@]} -eq 0 ]]; then
+    TRACK_LINES=("            SequenceTrackFactory::kickFour,")
+fi
+
+ensure_track_factory_include() {
+  local include_line="#include \"factories/${SONG_NAME}/${TRACK_CLASS_NAME}.h\""
+
+  if grep -qF "$include_line" "$SEQUENCE_CPP"; then
+    return
+  fi
+
+  if grep -q '#include "factories/SequenceTrackFactory.h"' "$SEQUENCE_CPP"; then
+    if [[ "$(uname)" == "Darwin" ]]; then
+      sed -i '' "/#include \"factories\/SequenceTrackFactory.h\"/a\\
+${include_line}
+" "$SEQUENCE_CPP"
+    else
+      sed -i "/#include \"factories\/SequenceTrackFactory.h\"/a\\${include_line}" "$SEQUENCE_CPP"
+    fi
+  fi
+}
+
+if [[ ${#TRACK_LINES[@]} -gt 0 && "${TRACK_LINES[0]}" != *"SequenceTrackFactory"* ]]; then
+    ensure_track_factory_include
 fi
 
 if [[ "$(uname)" == "Darwin" ]]; then
@@ -63,18 +131,16 @@ else
     sed -i "/^};/i\\    static Sequence ${FUNCTION_NAME}();" "$SEQUENCE_H"
 fi
 
-cat >> "$SEQUENCE_CPP" <<EOF
-
-Sequence ${CLASS_NAME}::${FUNCTION_NAME}()
 {
-    Sequence seq = buildSequence(
-        8, 4, 0, "${SEQUENCE_LABEL}", songTempo, true,
-        {
-            SequenceTrackFactory::kickFour,
-        });
-    return seq;
-}
-EOF
+    printf '\nSequence %s::%s()\n{\n' "$CLASS_NAME" "$FUNCTION_NAME"
+    printf '    Sequence seq = buildSequence(\n'
+    printf '        8, 4, 0, "%s", songTempo, true,\n' "$SEQUENCE_LABEL"
+    printf '        {\n'
+    printf '%s\n' "${TRACK_LINES[@]}"
+    printf '        });\n'
+    printf '    return seq;\n'
+    printf '}\n'
+} >> "$SEQUENCE_CPP"
 
 ARRAY_CLOSE_LINE="$(grep -n '^    };$' "$SONG_CPP" | head -1 | cut -d: -f1)"
 if [[ -z "$ARRAY_CLOSE_LINE" ]]; then
@@ -91,6 +157,14 @@ else
 fi
 
 echo "Added ${CLASS_NAME}::${FUNCTION_NAME}"
+if [[ ${#TRACK_LINES[@]} -gt 0 && "${TRACK_LINES[0]}" != *"SequenceTrackFactory"* ]]; then
+    echo "  tracks  :"
+    for line in "${TRACK_LINES[@]}"; do
+        echo "    ${line//[[:space:]]/}"
+    done
+else
+    echo "  tracks  : SequenceTrackFactory::kickFour (default)"
+fi
 echo "  - ${SEQUENCE_H}"
 echo "  - ${SEQUENCE_CPP}"
 echo "  - ${SONG_CPP}"

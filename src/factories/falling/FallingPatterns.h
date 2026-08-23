@@ -17,6 +17,7 @@ constexpr uint8_t handTamb = 54;
 //constexpr uint8_t bigClap = 39;
 
 constexpr uint8_t tamb = 43;
+constexpr uint8_t ride = 51;
 
 constexpr PatternStep kFallingHatsSteps[] = {
     _NO_STEP,
@@ -292,7 +293,7 @@ constexpr PatternStep kFallingHandTambSteps[] = {
 
 MAKE_PATTERN(kFallingHandTamb, kFallingHandTambSteps, 1);
 
-} // namespace FallingPatterns
-
 #undef KICK_STEP
 #undef NOTE
+
+} // namespace FallingPatterns
