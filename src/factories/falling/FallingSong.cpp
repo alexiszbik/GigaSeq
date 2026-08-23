@@ -14,7 +14,6 @@ void addFallingSong(SequencePool& pool)
         FallingSequenceFactory::fallingIntro,
         FallingSequenceFactory::fallingIntro2,
         FallingSequenceFactory::fallingBassSeq,
-        
         FallingSequenceFactory::fallingPreInterlude,
         FallingSequenceFactory::fallingInterlude,
     };

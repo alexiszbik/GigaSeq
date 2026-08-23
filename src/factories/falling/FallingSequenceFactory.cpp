@@ -63,7 +63,7 @@ Sequence FallingSequenceFactory::fallingPreInterlude()
     tick_t length = TICK(7, 2, 1);
 
     Sequence seq = buildSequence(
-        9 /* 8 bars + 1 bar pause */, 4, 0, "PreInterlude", songTempo, false,
+        10 /* 8 bars + 2 bars pause */, 4, 0, "PreInterlude", songTempo, false,
         {
             track(FallingTrackFactory::fallingKick).withLength(length),
             track(FallingTrackFactory::fallingBass).withLength(length),
@@ -74,11 +74,17 @@ Sequence FallingSequenceFactory::fallingPreInterlude()
 
 Sequence FallingSequenceFactory::fallingInterlude()
 {
+    tick_t len1 = TickHelper::bars(8);
+
     Sequence seq = buildSequence(
-        8, 4, 0, "Interlude", songTempo, false,
+        24, 4, 0, "Interlude", songTempo, false,
         {
             FallingTrackFactory::fallingInterlude,
+            track(FallingTrackFactory::fallingHats).withStart(len1),
+            track(FallingTrackFactory::fallingHandTamb).withStart(len1),
             FallingTrackFactory::fallingRiser,
+            FallingTrackFactory::fallingSnareFill,
+            FallingTrackFactory::fallingKickFill,
         });
     return seq;
 }

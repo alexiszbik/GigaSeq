@@ -62,7 +62,7 @@ trap 'rm -f "$TMPFILE"' EXIT
     cat <<EOF
 
 constexpr PatternStep ${STEPS_CONST}[] = {
-    {1, {C3}, 127, 1},
+    {{C3}, 127, 1},
 };
 
 MAKE_PATTERN(${PATTERN_CONST}, ${STEPS_CONST}, ${PATTERN_RATE});

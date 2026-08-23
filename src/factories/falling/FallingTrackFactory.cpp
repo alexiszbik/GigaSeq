@@ -104,3 +104,51 @@ SequenceTrack FallingTrackFactory::fallingInterlude(tick_t lengthInTicks, tick_t
     track.addNote(0, TickHelper::kStepLen, interlude, 127);
     return track;
 }
+
+SequenceTrack FallingTrackFactory::fallingSnareFill(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("SnareFill", MidiChannel::kDrums);
+
+    uint8_t snr = 37;
+
+    SequenceDesc desc;
+    desc.notes = {
+        {snr}, {snr},
+        {snr}, {}, {}, {snr},
+        {}, {}, {snr}, {snr}, 
+        {}, {}, {snr}, {},
+        {snr}, {snr}, {}, {}};
+    desc.rate = 16;
+
+    desc.velocities = {
+        60,90,
+        127,127,
+        127,127,
+        127,
+        127,127};
+
+    tick_t fillLen = desc.notes.size() * TickHelper::kStepLen;
+    makeSequenceTrack(track, desc, fillLen, lengthInTicks - fillLen);
+
+    return track;
+}
+
+SequenceTrack FallingTrackFactory::fallingHandTamb(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("HandTamb", MidiChannel::kSampler);
+    track.setPattern(FallingPatterns::kFallingHandTamb, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack FallingTrackFactory::fallingKickFill(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("KickFill", MidiChannel::kDrums);
+
+    uint8_t kick = 36;
+
+    SequenceDesc desc;
+    desc.notes = {{kick}, {}};
+    desc.rate = 16;
+
+    tick_t fillLen = desc.notes.size() * TickHelper::kStepLen;
+    makeSequenceTrack(track, desc, fillLen, lengthInTicks - fillLen);
+
+    return track;
+}

@@ -11,6 +11,8 @@ constexpr uint8_t hatO = 42;
 constexpr uint8_t pads = 66;
 constexpr uint8_t kick = 36;
 
+constexpr uint8_t handTamb = 54;
+
 //constexpr uint8_t riz = 52;
 //constexpr uint8_t bigClap = 39;
 
@@ -282,6 +284,13 @@ constexpr PatternStep kFallingTambourinSteps[] = {
 };
 
 MAKE_PATTERN(kFallingTambourin, kFallingTambourinSteps, 16);
+
+
+constexpr PatternStep kFallingHandTambSteps[] = {
+    {{handTamb}, 127, 1},
+};
+
+MAKE_PATTERN(kFallingHandTamb, kFallingHandTambSteps, 1);
 
 } // namespace FallingPatterns
 
