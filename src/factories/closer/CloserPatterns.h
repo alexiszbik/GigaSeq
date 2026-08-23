@@ -17,7 +17,14 @@ constexpr uint8_t distom = Closer::triTomdist;
 constexpr uint8_t voice = Closer::triVoi;
 constexpr uint8_t tom808 = Closer::tri808tom;
 
-constexpr uint8_t songGroove = 5;
+constexpr uint8_t sing = Closer::triSing;
+
+constexpr uint8_t topA = Closer::tricotTop;
+constexpr uint8_t topB = Closer::tricotTop2;
+
+constexpr uint8_t dsnr = Closer::discoSnr;
+
+constexpr uint8_t songGroove = 6;
 
 constexpr PatternStep kCloserHatSteps[] = {
     {{hat}, 50, 1},
@@ -118,5 +125,76 @@ constexpr PatternStep kCloserModularSteps[] = {
 };
 
 MAKE_PATTERN(kCloserModular, kCloserModularSteps, 16);
+
+
+constexpr PatternStep kCloserChordsSteps[] = {
+    {{A3, Cd4, A2, E4 }, 127, 2},
+    _NO_STEP, 
+
+    {{Fd2, Cd4, E4, A3 }, 127, 2},
+    _NO_STEP, 
+
+    {{E2, B3, Gd3, E4  }, 127, 2},
+    _NO_STEP, 
+
+    {{Cd2, Cd4, E4, Gd3 }, 127, 2},
+    _NO_STEP, 
+};
+
+MAKE_PATTERN(kCloserChords, kCloserChordsSteps, 1);
+
+
+constexpr PatternStep kCloserSingSteps[] = {
+    {{sing}, 127, 2},
+    _NO_STEP, 
+};
+
+MAKE_PATTERN(kCloserSing, kCloserSingSteps, 1);
+
+
+constexpr PatternStep kCloserTopSteps[] = {
+    {{topA}, 127, 1},
+    _NO_STEP, 
+    _NO_STEP, 
+    _NO_STEP, 
+
+    {{dsnr}, 127, 1},
+    _NO_STEP, 
+    _NO_STEP, 
+    _NO_STEP, 
+
+
+    {{topA}, 127, 1},
+    _NO_STEP, 
+    _NO_STEP, 
+    _NO_STEP, 
+
+    {{dsnr}, 127, 1},
+    _NO_STEP, 
+    _NO_STEP, 
+    _NO_STEP,
+
+    {{topA}, 127, 1},
+    _NO_STEP, 
+    _NO_STEP, 
+    _NO_STEP, 
+
+    {{dsnr}, 127, 1},
+    _NO_STEP, 
+    _NO_STEP, 
+    _NO_STEP,
+
+    {{topB}, 127, 1},
+    {{dsnr}, 127, 1}, 
+    _NO_STEP, 
+    _NO_STEP, 
+
+    {{dsnr}, 127, 1},
+    _NO_STEP, 
+    _NO_STEP, 
+    _NO_STEP,
+};
+
+MAKE_PATTERN(kCloserTop, kCloserTopSteps, 16);
 
 } // namespace CloserPatterns

@@ -79,10 +79,40 @@ SequenceTrack CloserTrackFactory::closerStab(tick_t lengthInTicks, tick_t startI
 SequenceTrack CloserTrackFactory::closerFill808(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Fill808", MidiChannel::kDrums);
 
-    SequenceDesc desc;
-    desc.notes = {{C3}};
-    desc.rate = 16;
-    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
+    uint8_t snr = Closer::sd1050;
 
+    tick_t fillStart = lengthInTicks - TickHelper::bars(2);
+
+    tick_t grooveLen = TICK(1,2);
+
+    SequenceDesc desc;
+    desc.notes = {{snr}};
+    desc.rate = 16;
+    desc.groove = 10;
+    makeSequenceTrack(track, desc, grooveLen, fillStart);
+
+    SequenceDesc descTri;
+    descTri.notes = {{snr}};
+    descTri.rate = 24;
+    makeSequenceTrack(track, descTri, TICK(0,2), fillStart + grooveLen);
+
+    return track;
+}
+
+SequenceTrack CloserTrackFactory::closerChords(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Chords", MidiChannel::kMicrofreak);
+    track.setPattern(CloserPatterns::kCloserChords, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack CloserTrackFactory::closerSing(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Sing", MidiChannel::kSampler);
+    track.setPattern(CloserPatterns::kCloserSing, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack CloserTrackFactory::closerTop(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Top", MidiChannel::kSampler);
+    track.setPattern(CloserPatterns::kCloserTop, lengthInTicks, startInTicks);
     return track;
 }

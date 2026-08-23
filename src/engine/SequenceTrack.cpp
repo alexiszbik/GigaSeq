@@ -233,7 +233,7 @@ void SequenceTrack::processPatternTick(tick_t position)
         return;
     }
 
-    const tick_t offBeatDelay = patternStepGrooveOffset(stepDuration, groove, 1);
+    const tick_t offBeatDelay = patternStepGrooveOffset(stepDuration, groove);
 
     if (local % stepDuration == 0) { 
         const uint16_t stepIndex = static_cast<uint16_t>((local / stepDuration) % pattern_->stepCount);

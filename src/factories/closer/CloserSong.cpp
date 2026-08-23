@@ -12,7 +12,8 @@ void addCloserSong(SequencePool& pool)
     Song song("Closer", 3);
     const Builder sequences[] = {
         CloserSequenceFactory::closerIntro,
-  
+        CloserSequenceFactory::closerChords,
+        CloserSequenceFactory::closerBass,
     };
 
     for (Builder builder : sequences) {

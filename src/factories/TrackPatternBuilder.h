@@ -12,6 +12,7 @@ struct SequenceDesc
     std::vector<uint8_t> velocities;
     std::vector<uint8_t> durations;
     double rate = 4;
+    uint8_t groove = 0;
 };
 
 void makeSequenceTrack(

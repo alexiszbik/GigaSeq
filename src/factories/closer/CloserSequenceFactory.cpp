@@ -27,3 +27,31 @@ Sequence CloserSequenceFactory::closerIntro()
         });
     return seq;
 }
+
+Sequence CloserSequenceFactory::closerChords()
+{
+    Sequence seq = buildSequence(
+        8, 4, 0, "Chords", songTempo, true,
+        {
+            CloserTrackFactory::closerChords,
+            CloserTrackFactory::closerModular,
+            CloserTrackFactory::closerTambourin,
+        });
+    return seq;
+}
+
+Sequence CloserSequenceFactory::closerBass()
+{
+    Sequence seq = buildSequence(
+        8, 4, 0, "Bass", songTempo, true,
+        {
+            CloserTrackFactory::closerChords,
+            CloserTrackFactory::closerModular,
+            CloserTrackFactory::closerTambourin,
+            SequenceTrackFactory::clapFour,
+            SequenceTrackFactory::kickFour,
+            CloserTrackFactory::closerSing,
+            CloserTrackFactory::closerTop,
+        });
+    return seq;
+}

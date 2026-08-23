@@ -1,6 +1,7 @@
 #include "TrackPatternBuilder.h"
 
 #include "TickHelper.h"
+#include "TrackPattern.h"
 
 void makeSequenceTrack(
     SequenceTrack& track,
@@ -20,10 +21,19 @@ void makeSequenceTrack(
     const int durationSize = static_cast<int>(desc.durations.size());
     int durIdx = 0;
 
+    const uint8_t groove = patternEffectiveGroove(static_cast<uint8_t>(desc.rate), desc.groove);
+
+    bool isOddBeat = false;
+
     for (tick_t tick = startTick; tick < (startTick + lengthInTicks); tick = static_cast<tick_t>(tick + stepDuration))
     {
         int noteDuration = stepDuration;
         const std::vector<uint8_t>& stepNotes = desc.notes[seqIdx];
+
+        tick_t noteTick = tick;
+        if (groove > 0 && isOddBeat) {
+            noteTick += patternStepGrooveOffset(stepDuration, groove);
+        }
 
         uint8_t velocity = 127;
         if (velIdx < velSize) {
@@ -37,7 +47,7 @@ void makeSequenceTrack(
         bool noteExists = false;
 
         for (uint8_t note : stepNotes) {
-            track.addNote(tick, noteDuration, note, velocity);
+            track.addNote(noteTick, noteDuration, note, velocity);
             noteExists = true;
         }
 
@@ -52,5 +62,7 @@ void makeSequenceTrack(
                 durIdx = (durIdx + 1) % durationSize;
             }
         }
+
+        isOddBeat = !isOddBeat;
     }
 }
