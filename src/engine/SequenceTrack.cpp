@@ -211,7 +211,7 @@ void SequenceTrack::processPatternTick(tick_t position)
 
     const uint8_t groove = patternEffectiveGroove(pattern_->rate, pattern_->groove);
 
-    auto playStep = [&](uint16_t stepIndex) {
+    auto playStepAt = [&](uint16_t stepIndex) {
         const PatternStep& step = pattern_->steps[stepIndex];
 
         if (step.notes[0] == 0) {
@@ -229,22 +229,31 @@ void SequenceTrack::processPatternTick(tick_t position)
             return;
         }
 
-        const uint16_t stepIndex = static_cast<uint16_t>(
-            (local / stepDuration) % pattern_->stepCount);
-        playStep(stepIndex);
-        
+        playStepAt(static_cast<uint16_t>((local / stepDuration) % pattern_->stepCount));
         return;
     }
 
-    const tick_t cycleLen = stepDuration * pattern_->rate;
-    const tick_t cyclePos = local % cycleLen;
+    const tick_t offBeatDelay = patternStepGrooveOffset(stepDuration, groove, 1);
 
-    for (uint16_t gridIndex = 0; gridIndex < pattern_->rate; ++gridIndex) {
-        if (cyclePos != patternStepTick(gridIndex, stepDuration, groove)) {
-            continue;
+    if (local % stepDuration == 0) { 
+        const uint16_t stepIndex = static_cast<uint16_t>((local / stepDuration) % pattern_->stepCount);
+
+        if ((stepIndex & 1u) == 0u) { //not off beat
+            playStepAt(stepIndex);
         }
+    }
 
-        playStep(static_cast<uint16_t>(gridIndex % pattern_->stepCount));
+    if (local >= offBeatDelay) {
+        const tick_t adjustedLocal = local - offBeatDelay;
+
+        if (adjustedLocal % stepDuration == 0) {
+            const uint16_t stepIndex = static_cast<uint16_t>(
+                (adjustedLocal / stepDuration) % pattern_->stepCount);
+
+            if ((stepIndex & 1u) != 0u) { //off beat
+                playStepAt(stepIndex);
+            }
+        }
     }
 }
 

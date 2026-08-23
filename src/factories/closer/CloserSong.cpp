@@ -9,7 +9,7 @@ void addCloserSong(SequencePool& pool)
 {
     using Builder = Sequence (*)();
 
-    Song song("Closer", 1);
+    Song song("Closer", 3);
     const Builder sequences[] = {
         CloserSequenceFactory::closerIntro,
   

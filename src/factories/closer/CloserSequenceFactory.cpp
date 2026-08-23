@@ -16,7 +16,10 @@ Sequence CloserSequenceFactory::closerIntro()
         8, 4, 0, "Intro", songTempo, true,
         {
             SequenceTrackFactory::kickFour,
-            CloserTrackFactory::closerArp,
+            CloserTrackFactory::closerHats,
+            CloserTrackFactory::closerLoopHat,
+            CloserTrackFactory::closerTambourin,
+            CloserTrackFactory::closerClapTom,
         });
     return seq;
 }

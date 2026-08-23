@@ -53,23 +53,14 @@ inline uint8_t patternEffectiveGroove(uint8_t rate, uint8_t groove) noexcept
 inline tick_t patternStepGrooveOffset(
     tick_t stepDuration,
     uint8_t groove,
-    uint16_t gridIndex) noexcept
+    uint16_t stepIndex) noexcept
 {
-    if ((gridIndex & 1u) == 0u || groove == kPatternGrooveStraight) {
+    if ((stepIndex & 1u) == 0u || groove == kPatternGrooveStraight) {
         return 0;
     }
 
     return static_cast<tick_t>(
         (static_cast<uint32_t>(groove) * stepDuration + 25) / 50);
-}
-
-inline tick_t patternStepTick(
-    uint16_t gridIndex,
-    tick_t stepDuration,
-    uint8_t groove) noexcept
-{
-    return static_cast<tick_t>(gridIndex) * stepDuration
-        + patternStepGrooveOffset(stepDuration, groove, gridIndex);
 }
 
 inline tick_t patternStepDuration(const TrackPattern& pattern)
