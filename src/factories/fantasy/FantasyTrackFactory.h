@@ -16,4 +16,5 @@ public:
     static SequenceTrack fantasyVocals(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack fantasySampleFadeCut(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack fantasyRiser(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack fantasyChordOffset(tick_t lengthInTicks, tick_t startInTicks);
 };

@@ -77,3 +77,30 @@ SequenceTrack FantasyTrackFactory::fantasyRiser(tick_t lengthInTicks, tick_t sta
     track.addNote(lengthInTicks - TICK(0,2), TickHelper::kStepLen, Fantasy::ftsyRiz, 127);
     return track;
 }
+
+SequenceTrack FantasyTrackFactory::fantasyChordOffset(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("ChordOffset", MidiChannel::kPoly);
+
+    SequenceDesc desc;
+    desc.notes = {
+        {}, {G3, B3, E3, C3}, {}, {}, 
+        {}, {}, {}, {A3, B3, Fd3, D3},
+
+        {}, {}, {}, {},
+        {}, {}, {}, {A3, B3, E3, C3}, 
+        
+        {}, {}, {}, {},
+        {}, {}, {}, {G3, B3, E3, D3},
+
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+    };
+
+    desc.durations = {6, 8, 8, 9};
+    desc.rate = 8;
+    makeSequenceTrack(track, desc, TICK(4), startInTicks);
+
+    track.setPattern(FantasyPatterns::kFantasyChords, TICK(4), startInTicks + TICK(4));
+
+    return track;
+}
