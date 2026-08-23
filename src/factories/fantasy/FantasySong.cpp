@@ -9,10 +9,13 @@ void addFantasySong(SequencePool& pool)
 {
     using Builder = Sequence (*)();
 
-    Song song("Fantasy", 1);
+    Song song("Fantasy", 4);
     const Builder sequences[] = {
         FantasySequenceFactory::fantasyIntro,
-  
+        FantasySequenceFactory::fantasyStart,
+        FantasySequenceFactory::fantasyBreak,
+        FantasySequenceFactory::fantasyBack,
+        FantasySequenceFactory::fantasyRave,
     };
 
     for (Builder builder : sequences) {

@@ -5,6 +5,10 @@
 class FantasySequenceFactory
 {
 public:
-    static Sequence fantasyIntro();
+    static Sequence fantasyRave();
 
+    static Sequence fantasyIntro();
+    static Sequence fantasyStart();
+    static Sequence fantasyBreak();
+    static Sequence fantasyBack();
 };
