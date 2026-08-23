@@ -120,7 +120,20 @@ Sequence FallingSequenceFactory::fallingClimax()
             FallingTrackFactory::fallingPads,
             FallingTrackFactory::fallingPiano,
             SequenceTrackFactory::rideOff,
+            FallingTrackFactory::fallingRimTom,
             track(FallingTrackFactory::fallingRiser).withMuteEvent(0).asFill(),
+        });
+    return seq;
+}
+
+Sequence FallingSequenceFactory::fallingEnd()
+{
+    Sequence seq = buildSequence(
+        20, 4, 16, "End", songTempo, true,
+        {
+            FallingTrackFactory::fallingHandTamb,
+            track(FallingTrackFactory::fallingSynthEnd).withLength(TickHelper::bars(16)),
+            FallingTrackFactory::fallingHarp,
         });
     return seq;
 }

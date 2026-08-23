@@ -14,6 +14,9 @@ namespace
 constexpr uint8_t riz = 52;
 constexpr uint8_t bigClap = 39;
 
+constexpr uint8_t rim = 45;
+constexpr uint8_t tom = 44;
+
 constexpr uint8_t riz2 = 53;
 constexpr uint8_t tomFill = 55;
 
@@ -176,6 +179,88 @@ SequenceTrack FallingTrackFactory::fallingPiano(tick_t lengthInTicks, tick_t sta
         {}, {}, {}, {}, {}, {}, {}, {},
         {}, {}, {}, {}, {}, {}, {}, {},
         {}, {}, {}, {}, {}, {}, {}, {},
+
+    };
+    desc.rate = 8;
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
+
+    return track;
+}
+SequenceTrack FallingTrackFactory::fallingRimTom(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("RimTom", MidiChannel::kDrums);
+
+    SequenceDesc desc;
+    desc.notes = {
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {rim},
+        {}, {}, {rim}, {},
+
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {rim},
+        {}, {}, {rim}, {},
+
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {rim},
+        {}, {}, {rim}, {},
+
+        {}, {}, {}, {},
+        {}, {}, {rim}, {rim},
+        {}, {rim}, {rim}, {rim, tom},
+        {}, {}, {rim, tom}, {}
+    };
+    desc.rate = 16;
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
+
+    return track;
+}
+
+SequenceTrack FallingTrackFactory::fallingSynthEnd(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("SynthEnd", MidiChannel::kPoly);
+
+    SequenceDesc desc;
+    desc.notes = {
+        {B4}, {},
+        {}, {},
+        {A4}, {},
+        {}, {},
+
+        {Gd4}, {},
+        {}, {},
+        {E4}, {},
+        {}, {},
+
+        {B3}, {},
+        {}, {},
+        {}, {},
+        {B3}, {Fd4},
+
+        {}, {},
+        {}, {},
+        {}, {},
+        {}, {},
+
+        {B4}, {},
+        {}, {},
+        {A4}, {},
+        {}, {},
+
+        {Gd4}, {},
+        {}, {},
+        {E4}, {},
+        {}, {},
+
+        {B3}, {},
+        {}, {},
+        {}, {},
+        {Gd4}, {Fd4},
+
+        {}, {},
+        {}, {},
+        {}, {},
+        {}, {},
 
     };
     desc.rate = 8;

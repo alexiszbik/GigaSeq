@@ -18,6 +18,7 @@ void addFallingSong(SequencePool& pool)
         FallingSequenceFactory::fallingInterlude,
         FallingSequenceFactory::fallingPreClimax,
         FallingSequenceFactory::fallingClimax,
+        FallingSequenceFactory::fallingEnd,
     };
 
     for (Builder builder : sequences) {

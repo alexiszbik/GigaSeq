@@ -13,4 +13,5 @@ public:
     static Sequence fallingInterlude();
     static Sequence fallingPreClimax();
     static Sequence fallingClimax();
+    static Sequence fallingEnd();
 };
