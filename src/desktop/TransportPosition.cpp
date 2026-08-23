@@ -5,15 +5,15 @@ TransportPosition TransportPosition::fromTickIndex(
     int beatsPerBar,
     tick_t lengthInTicks)
 {
-    const int ticksPerBar = beatsPerBar * kTicksPerQuarterNote;
+    const int ticksPerBar = beatsPerBar * TickHelper::kTicksPerQuarterNote;
     const tick_t clampedTick = tickIndex >= lengthInTicks ? lengthInTicks - 1 : tickIndex;
 
     TransportPosition position;
     position.bar = clampedTick / ticksPerBar + 1;
 
     const int tickInBar = clampedTick % ticksPerBar;
-    position.beat = tickInBar / kTicksPerQuarterNote + 1;
-    position.tick = tickInBar % kTicksPerQuarterNote;
+    position.beat = tickInBar / TickHelper::kTicksPerQuarterNote + 1;
+    position.tick = tickInBar % TickHelper::kTicksPerQuarterNote;
 
     return position;
 }

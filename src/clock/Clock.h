@@ -3,6 +3,7 @@
 #include <Arduino.h>
 #include <cstdint>
 
+#include "TickHelper.h"
 #include "drivers/Ticker.h"
 #include "platform/Callback.h"
 
@@ -14,7 +15,7 @@ using TickCallback = void (*)(void* context);
 // The tick callback runs in ISR context: anything it calls must be IRQ-safe.
 class TransportClock {
 public:
-    static constexpr uint16_t kPpqn = 96;
+    static constexpr uint16_t kPpqn = TickHelper::kTicksPerQuarterNote;
     static constexpr uint8_t kBeatsPerBar = 4;
 
     void begin(uint16_t bpm = 120);

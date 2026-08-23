@@ -18,18 +18,18 @@ Sequence::Sequence(
       loop_(loop)
 {
 
-    const uint32_t length = static_cast<uint32_t>(barCount_) * beatsPerBar_ * kTicksPerQuarterNote;
+    const uint32_t length = static_cast<uint32_t>(barCount_) * beatsPerBar_ * TickHelper::kTicksPerQuarterNote;
     if (!fitsInTickRange(length)) {
         throw std::invalid_argument("Sequence length exceeds maximum tick range");
     }
 
-    const uint32_t loopInPoint = static_cast<uint32_t>(barLoop) * beatsPerBar_ * kTicksPerQuarterNote;
+    const uint32_t loopInPoint = static_cast<uint32_t>(barLoop) * beatsPerBar_ * TickHelper::kTicksPerQuarterNote;
     loopInPoint_ = static_cast<tick_t>(loopInPoint);
 }
 
 tick_t Sequence::lengthInTicks() const noexcept
 {
-    return static_cast<tick_t>(barCount_ * beatsPerBar_ * kTicksPerQuarterNote);
+    return static_cast<tick_t>(barCount_ * beatsPerBar_ * TickHelper::kTicksPerQuarterNote);
 }
 
 void Sequence::attachMidi(MidiInOut& midi)

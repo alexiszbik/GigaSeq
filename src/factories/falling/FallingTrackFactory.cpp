@@ -4,13 +4,12 @@
 
 #include "factories/TrackPatternBuilder.h"
 #include "MidiChannel.h"
+#include "TickHelper.h"
 #include "factories/MidiNotes.h"
 
 
 namespace
 {
-constexpr tick_t oneBarTick = 384;
-
 constexpr uint8_t riz = 52;
 constexpr uint8_t bigClap = 39;
 
@@ -42,7 +41,7 @@ SequenceTrack FallingTrackFactory::fallingKick(tick_t lengthInTicks, tick_t star
 SequenceTrack FallingTrackFactory::fallingRiser(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Riser", MidiChannel::kSampler);
 
-    track.addNote(lengthInTicks - 2*oneBarTick, 24, riz, 127);
+    track.addNote(lengthInTicks - 2 * TickHelper::kOneBarTick4_4, TickHelper::kStepLen, riz, 127);
 
     return track;
 }
@@ -91,8 +90,8 @@ SequenceTrack FallingTrackFactory::fallingTambourin(tick_t lengthInTicks, tick_t
 SequenceTrack FallingTrackFactory::fallingPreInterlude(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("PreInterlude", MidiChannel::kSampler);
 
-    track.addNote(0, 24, pianoLow, 127);
-    track.addNote(oneBarTick*3, 24, riz2, 127);
-    track.addNote(oneBarTick*3 + 2*96 + 3*24, 24, tomFill, 127);
+    track.addNote(0, TickHelper::kStepLen, pianoLow, 127);
+    track.addNote(TickHelper::bars(3), TickHelper::kStepLen, riz2, 127);
+    track.addNote(TICK(3, 2, 3), TickHelper::kStepLen, tomFill, 127);
     return track;
 }

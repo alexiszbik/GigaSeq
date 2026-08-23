@@ -5,12 +5,8 @@
 #include "factories/water/WaterPatterns.h"
 #include "factories/TrackPatternBuilder.h"
 #include "MidiChannel.h"
+#include "TickHelper.h"
 #include "factories/MidiNotes.h"
-
-namespace
-{
-constexpr tick_t oneBarTick = 384;
-}
 
 SequenceTrack WaterTrackFactory::waterMarimba(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Marimba", MidiChannel::kDrums);
@@ -44,8 +40,8 @@ SequenceTrack WaterTrackFactory::waterChorus(tick_t lengthInTicks, tick_t startI
     desc.rate = 0.125;
     makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
 
-    tick_t lastNote = (oneBarTick*12 + 96*3 + 48);
-    track.addNote(startInTicks + lastNote, 24, 57, 127);
+    tick_t lastNote = TICK(12, 3, 2);
+    track.addNote(startInTicks + lastNote, TickHelper::kStepLen, 57, 127);
 
     return track;
 }
@@ -119,13 +115,13 @@ SequenceTrack WaterTrackFactory::waterKickPreChorus(tick_t lengthInTicks, tick_t
     SequenceTrack track("KickPreChorus", MidiChannel::kDrums);
 
     constexpr uint8_t kick = 36;
-    const tick_t patternLen = 7 * oneBarTick;
+    const tick_t patternLen = TickHelper::bars(7);
 
     track.setPattern(DrumPatterns::kKickFour, patternLen, startInTicks);
 
     const tick_t lastBar = startInTicks + patternLen;
-    track.addNote(lastBar, 24, kick, 127);
-    track.addNote(lastBar + 3 * 96, 24, kick, 127);
+    track.addNote(lastBar, TickHelper::kStepLen, kick, 127);
+    track.addNote(lastBar + TickHelper::quarters(3), TickHelper::kStepLen, kick, 127);
 
     return track;
 }
@@ -134,22 +130,22 @@ SequenceTrack WaterTrackFactory::waterKickPartB(tick_t lengthInTicks, tick_t sta
     SequenceTrack track("KickPartB", MidiChannel::kDrums);
 
     constexpr uint8_t kick = 36;
-    const tick_t patternLen = 31 * oneBarTick;
+    const tick_t patternLen = TickHelper::bars(31);
 
     track.setPattern(DrumPatterns::kKickFour, patternLen, startInTicks);
 
     const tick_t fillStart = startInTicks + patternLen;
-    track.addNote(fillStart, 24, kick, 127);
-    track.addNote(fillStart + 96 + 48, 24, kick, 127);
-    track.addNote(fillStart + 2 * 96 + 24, 24, kick, 127);
-    track.addNote(fillStart + 3 * 96, 24, kick, 127);
+    track.addNote(fillStart, TickHelper::kStepLen, kick, 127);
+    track.addNote(fillStart + TickHelper::kTicksPerQuarterNote + TickHelper::kTicksPerEighthNote, TickHelper::kStepLen, kick, 127);
+    track.addNote(fillStart + 2 * TickHelper::kTicksPerQuarterNote + TickHelper::kStepLen, TickHelper::kStepLen, kick, 127);
+    track.addNote(fillStart + TickHelper::quarters(3), TickHelper::kStepLen, kick, 127);
 
     return track;
 }
 
 SequenceTrack WaterTrackFactory::waterEventsPartB(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("EventsPartB", MidiChannel::kSampler);
-    track.addNote(28*oneBarTick, 24, 61, 127);
+    track.addNote(TickHelper::bars(28), TickHelper::kStepLen, 61, 127);
 
     return track;
 }
@@ -169,27 +165,27 @@ SequenceTrack WaterTrackFactory::waterKickPartC(tick_t lengthInTicks, tick_t sta
     SequenceTrack track("KickPartC", MidiChannel::kDrums);
 
     constexpr uint8_t kick = 36;
-    const tick_t patternLen = 7 * oneBarTick + 2 * 96;
+    const tick_t patternLen = TickHelper::bars(7) + TickHelper::quarters(2);
 
     track.setPattern(DrumPatterns::kKickFour, patternLen, startInTicks);
 
     const tick_t fillStart = startInTicks + patternLen;
-    track.addNote(fillStart + 48, 24, kick, 127);
-    track.addNote(fillStart + 96 + 24, 24, kick, 127);
+    track.addNote(fillStart + TickHelper::kTicksPerEighthNote, TickHelper::kStepLen, kick, 127);
+    track.addNote(fillStart + TickHelper::kTicksPerQuarterNote + TickHelper::kStepLen, TickHelper::kStepLen, kick, 127);
 
     return track;
 }
 
 SequenceTrack WaterTrackFactory::waterEventsPartC(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("EventsPartC", MidiChannel::kSampler);
-    track.addNote(4*oneBarTick, 24, 66, 127);
+    track.addNote(TickHelper::bars(4), TickHelper::kStepLen, 66, 127);
 
     return track;
 }
 
 SequenceTrack WaterTrackFactory::waterEventsEnd(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("EventsEnd", MidiChannel::kSampler);
-    track.addNote(16*oneBarTick, 24, 67, 127);
+    track.addNote(TickHelper::bars(16), TickHelper::kStepLen, 67, 127);
 
     return track;
 }
@@ -202,8 +198,8 @@ SequenceTrack WaterTrackFactory::waterChorusEnd(tick_t lengthInTicks, tick_t sta
     desc.rate = 0.125;
     makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
 
-    tick_t lastNote = (oneBarTick*28 + 96*3 + 48);
-    track.addNote(startInTicks + lastNote, 24, 57, 127);
+    tick_t lastNote = TICK(28, 3, 2);
+    track.addNote(startInTicks + lastNote, TickHelper::kStepLen, 57, 127);
 
     return track;
 }

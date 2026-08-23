@@ -4,11 +4,10 @@
 #include "factories/SequenceTrackFactory.h"
 #include "factories/falling/FallingTrackFactory.h"
 #include "MidiChannel.h"
+#include "TickHelper.h"
 
 namespace {
     constexpr uint8_t songTempo = 125;
-
-    constexpr tick_t oneBarTick = 384;
 }
 
 Sequence FallingSequenceFactory::fallingIntro()
@@ -30,7 +29,7 @@ Sequence FallingSequenceFactory::fallingIntro2()
         {
             FallingTrackFactory::fallingHats,
             FallingTrackFactory::fallingPads,
-            track(FallingTrackFactory::fallingKick).withLength(7*oneBarTick),
+            track(FallingTrackFactory::fallingKick).withLength(TickHelper::bars(7)),
             FallingTrackFactory::fallingRiser,
         });
     return seq;
@@ -38,9 +37,9 @@ Sequence FallingSequenceFactory::fallingIntro2()
 
 Sequence FallingSequenceFactory::fallingBassSeq()
 {
-    tick_t len1 = 8*oneBarTick;
+    tick_t len1 = TickHelper::bars(8);
     uint8_t loopPoint = 16;
-    tick_t len3 = loopPoint*oneBarTick;
+    tick_t len3 = TickHelper::bars(loopPoint);
 
     Sequence seq = buildSequence(
         24, 4, loopPoint, "BassSeq", songTempo, true,
@@ -61,7 +60,7 @@ Sequence FallingSequenceFactory::fallingBassSeq()
 
 Sequence FallingSequenceFactory::fallingPreInterlude()
 {
-    tick_t length = oneBarTick*7 + 2*96 + 24;
+    tick_t length = TICK(7, 2, 1);
 
     Sequence seq = buildSequence(
         8, 4, 0, "PreInterlude", songTempo, false,

@@ -31,8 +31,8 @@ MAKE_PATTERN(kWaterFreak, kWaterFreakSteps, 16);
 constexpr PatternStep kWaterBassSteps[] = {
     _NO_STEP,
     _NO_STEP,
-    {{Eb1}, 127, 1},
-    {{Eb1}, 127, 1},
+    {{Eb2}, 127, 1},
+    {{Eb2}, 127, 1},
 };
 
 MAKE_PATTERN(kWaterBass, kWaterBassSteps, 16);

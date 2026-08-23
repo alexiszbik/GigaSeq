@@ -4,13 +4,8 @@
 #include "factories/together/TogetherPatterns.h"
 #include "factories/TrackPatternBuilder.h"
 #include "MidiChannel.h"
+#include "TickHelper.h"
 #include "factories/MidiNotes.h"
-
-namespace
-{
-constexpr tick_t oneBarTick = 384;
-
-}
 
 SequenceTrack TogetherTrackFactory::togetherArp(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Modular", MidiChannel::kModularA);
@@ -53,7 +48,7 @@ SequenceTrack TogetherTrackFactory::togetherVocoder(tick_t lengthInTicks, tick_t
     desc.rate = 8;
     desc.durations = {3, 11};
     
-    makeSequenceTrack(track, desc, oneBarTick*16, startInTicks);
+    makeSequenceTrack(track, desc, TickHelper::bars(16), startInTicks);
 
     return track;
 }
@@ -65,10 +60,10 @@ SequenceTrack TogetherTrackFactory::togetherSampleRepeat(tick_t lengthInTicks, t
     SequenceDesc desc;
     desc.notes = {{52}};
     desc.rate = 4;
-    makeSequenceTrack(track, desc, 3*oneBarTick, startInTicks);
+    makeSequenceTrack(track, desc, TickHelper::bars(3), startInTicks);
 
     desc.rate = 8;
-    makeSequenceTrack(track, desc, oneBarTick, startInTicks + 3*oneBarTick);
+    makeSequenceTrack(track, desc, TickHelper::kOneBarTick4_4, startInTicks + TickHelper::bars(3));
 
     return track;
 }
@@ -76,19 +71,19 @@ SequenceTrack TogetherTrackFactory::togetherSampleRepeat(tick_t lengthInTicks, t
 SequenceTrack TogetherTrackFactory::togetherPartBSampleCut(tick_t lengthInTicks, tick_t startInTicks)
 {
     SequenceTrack track("Sample Cut", MidiChannel::kDrums);
-    track.addNote(startInTicks, 24, 54, 127);
+    track.addNote(startInTicks, TickHelper::kStepLen, 54, 127);
 
     return track;
 }
 
 SequenceTrack TogetherTrackFactory::togetherKickRepeat(tick_t lengthInTicks, tick_t startInTicks)
 {
-    auto track = SequenceTrackFactory::kickFour(3*oneBarTick, startInTicks);
+    auto track = SequenceTrackFactory::kickFour(TickHelper::bars(3), startInTicks);
 
     SequenceDesc desc;
     desc.notes = {{36, 37}};
     desc.rate = 8;
-    makeSequenceTrack(track, desc, oneBarTick, startInTicks + 3*oneBarTick);
+    makeSequenceTrack(track, desc, TickHelper::kOneBarTick4_4, startInTicks + TickHelper::bars(3));
 
     return track;
 }
@@ -100,7 +95,7 @@ SequenceTrack TogetherTrackFactory::togetherExtraBass(tick_t lengthInTicks, tick
     SequenceDesc desc;
     desc.notes = {{57}};
     desc.rate = 4;
-    makeSequenceTrack(track, desc, 4*oneBarTick, startInTicks);
+    makeSequenceTrack(track, desc, TickHelper::bars(4), startInTicks);
 
     return track;
 }
@@ -108,7 +103,7 @@ SequenceTrack TogetherTrackFactory::togetherExtraBass(tick_t lengthInTicks, tick
 SequenceTrack TogetherTrackFactory::togetherEndRiser(tick_t lengthInTicks, tick_t startInTicks)
 {
     SequenceTrack track("Riser", MidiChannel::kDrums);
-    tick_t riserLength = 2*oneBarTick;
+    tick_t riserLength = TickHelper::bars(2);
     track.addNote(startInTicks + lengthInTicks - riserLength, riserLength, 60, 127);
 
     return track;

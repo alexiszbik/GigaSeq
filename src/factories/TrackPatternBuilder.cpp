@@ -1,6 +1,6 @@
 #include "TrackPatternBuilder.h"
 
-#include "Sequence.h"
+#include "TickHelper.h"
 
 void makeSequenceTrack(
     SequenceTrack& track,
@@ -8,7 +8,7 @@ void makeSequenceTrack(
     tick_t lengthInTicks,
     tick_t startTick)
 {
-    const int barDuration = Sequence::kTicksPerQuarterNote * 4;
+    const int barDuration = TickHelper::kOneBarTick4_4;
     const int stepDuration = barDuration / desc.rate;
 
     const int seqSize = static_cast<int>(desc.notes.size());

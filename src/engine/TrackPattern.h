@@ -1,11 +1,9 @@
 #pragma once
 
 #include "Tick.h"
+#include "TickHelper.h"
 
 #include <cstdint>
-
-static constexpr tick_t kPatternTicksPerQuarterNote = 96;
-static constexpr tick_t kPatternTicksPerBar = kPatternTicksPerQuarterNote * 4;
 
 static constexpr uint8_t kMaxNotesPerPatternStep = 4;
 
@@ -39,5 +37,5 @@ inline tick_t patternStepDuration(const TrackPattern& pattern)
     if (pattern.rate == 0) {
         return 0;
     }
-    return kPatternTicksPerBar / pattern.rate;
+    return TickHelper::kOneBarTick4_4 / pattern.rate;
 }

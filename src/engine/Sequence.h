@@ -4,6 +4,7 @@
 #include "SequenceTrack.h"
 #include "TempoEvent.h"
 #include "Tick.h"
+#include "TickHelper.h"
 #include "TimedEventList.h"
 
 #include <cstddef>
@@ -14,8 +15,6 @@ using TempoChangedCallback = void (*)(uint8_t bpm);
 class Sequence
 {
 public:
-    static constexpr int kTicksPerQuarterNote = 96;
-
     Sequence(
         const char* name,
         uint8_t tempo,
@@ -34,8 +33,8 @@ public:
     tick_t lengthInTicks() const noexcept;
     tick_t position() const noexcept { return position_; }
 
-    int currentBar () const noexcept { return position_ / (beatsPerBar_ * kTicksPerQuarterNote); }
-    int currentBeat () const noexcept { return (position_ / kTicksPerQuarterNote) % beatsPerBar_; }
+    int currentBar () const noexcept { return position_ / (beatsPerBar_ * TickHelper::kTicksPerQuarterNote); }
+    int currentBeat () const noexcept { return (position_ / TickHelper::kTicksPerQuarterNote) % beatsPerBar_; }
 
     uint8_t getTempo() const noexcept { return activeTempo_; }
 

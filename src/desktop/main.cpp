@@ -190,7 +190,7 @@ void printPosition(const Sequence& sequence, Logger& logger)
         time.beat,
         sequence.beatsPerBar(),
         time.tick,
-        TransportPosition::kTicksPerQuarterNote,
+        TickHelper::kTicksPerQuarterNote,
         time.toString().c_str());
     logger.info(buffer);
 }
@@ -198,7 +198,7 @@ void printPosition(const Sequence& sequence, Logger& logger)
 void maybePrintBarPosition(const Sequence& sequence, Logger& logger)
 {
     const tick_t tickIndex = sequence.position();
-    const int ticksPerBar = sequence.beatsPerBar() * TransportPosition::kTicksPerQuarterNote;
+    const int ticksPerBar = sequence.beatsPerBar() * TickHelper::kTicksPerQuarterNote;
 
     if (tickIndex % ticksPerBar != 0) {
         return;
