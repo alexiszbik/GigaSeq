@@ -1,6 +1,7 @@
 #include "DummyTrackFactory.h"
 
 #include "factories/dummy/DummyPatterns.h"
+#include "factories/TrackPatternBuilder.h"
 #include "MidiChannel.h"
 
 SequenceTrack DummyTrackFactory::dummyArp(tick_t lengthInTicks, tick_t startInTicks) {

@@ -74,4 +74,49 @@ constexpr PatternStep kCloserClapTomSteps[] = {
 
 MAKE_PATTERN_GROOVE(kCloserClapTom, kCloserClapTomSteps, songGroove);
 
+
+constexpr PatternStep kCloserModularSteps[] = {
+    _NO_STEP,
+    _NO_STEP,
+    STEP(E3),
+    _NO_STEP,
+
+    STEP(Dd3),
+    _NO_STEP,
+    STEP(Gd2), 
+    STEP(B2),
+
+    _NO_STEP,
+    STEP(Cd3),
+    _NO_STEP, 
+    _NO_STEP,
+
+    STEP(B2),
+    _NO_STEP,
+    STEP(Gd3),
+    _NO_STEP,
+
+    _NO_STEP,
+    _NO_STEP,
+    STEP(E3),
+    _NO_STEP,
+
+    STEP(Dd3),
+    _NO_STEP,
+    STEP(Gd2), 
+    STEP(B2),
+
+    _NO_STEP,
+    STEP(Gd3),
+    _NO_STEP,
+    _NO_STEP,
+
+    STEP(Cd3),
+    _NO_STEP, 
+    STEP(Dd3),
+    _NO_STEP, 
+};
+
+MAKE_PATTERN(kCloserModular, kCloserModularSteps, 16);
+
 } // namespace CloserPatterns

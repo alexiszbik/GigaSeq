@@ -20,6 +20,10 @@ Sequence CloserSequenceFactory::closerIntro()
             CloserTrackFactory::closerLoopHat,
             CloserTrackFactory::closerTambourin,
             CloserTrackFactory::closerClapTom,
+            CloserTrackFactory::closerModular,
+            CloserTrackFactory::closerStab,
+            CloserTrackFactory::closerFill808,
+            CloserTrackFactory::closerRiser,
         });
     return seq;
 }

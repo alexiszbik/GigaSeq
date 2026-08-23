@@ -1,5 +1,6 @@
 #include "CloserTrackFactory.h"
 
+#include "factories/TrackPatternBuilder.h"
 #include "factories/closer/CloserPatterns.h"
 #include "MidiChannel.h"
 
@@ -29,11 +30,59 @@ SequenceTrack CloserTrackFactory::closerClapTom(tick_t lengthInTicks, tick_t sta
 
 SequenceTrack CloserTrackFactory::closerRiser(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Riser", MidiChannel::kSampler);
-/*
+
+    SequenceDesc desc;
+    desc.notes = {{Closer::triRizstr}};
+    desc.rate = 16;
+    makeSequenceTrack(track, desc, lengthInTicks - TickHelper::bars(2) , startInTicks);
+
+    return track;
+}
+
+SequenceTrack CloserTrackFactory::closerModular(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Modular", MidiChannel::kModularA);
+    track.setPattern(CloserPatterns::kCloserModular, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack CloserTrackFactory::closerStab(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Stab", MidiChannel::kPoly);
+
+    SequenceDesc desc;
+    desc.notes = {
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {Cd3, E3, Gd3, B3}
+    };
+    desc.rate = 16;
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
+
+    return track;
+}
+
+SequenceTrack CloserTrackFactory::closerFill808(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Fill808", MidiChannel::kDrums);
+
     SequenceDesc desc;
     desc.notes = {{C3}};
     desc.rate = 16;
-    makeSequenceTrack(track, desc, lengthInTicks 2 , startInTicks);
-*/
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
+
     return track;
 }
