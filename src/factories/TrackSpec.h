@@ -34,6 +34,12 @@ public:
     TrackSpec& withProgramChange(uint8_t program) { hasProgramChange_ = true; programChange_ = program; return *this; }
     TrackSpec& withCC(uint8_t control, uint8_t value);
     TrackSpec& withCCs(std::vector<CCPair> controlChanges);
+    TrackSpec& withAutomation(
+        tick_t startTick,
+        tick_t endTick,
+        uint8_t controller,
+        uint8_t startValue,
+        uint8_t endValue);
     TrackSpec& withMuteEvent(tick_t tick);
     TrackSpec& asFill();
     TrackSpec& withLength(tick_t length);
@@ -44,6 +50,7 @@ public:
     bool hasProgramChange() const noexcept { return hasProgramChange_; }
     uint8_t programChange() const noexcept { return programChange_; }
     const std::vector<CCPair>& controlChanges() const noexcept { return controlChanges_; }
+    const std::vector<ControlAutomation>& controlAutomations() const noexcept { return controlAutomations_; }
     const std::vector<tick_t>& muteEvents() const noexcept { return muteEvents_; }
     bool isFill() const noexcept { return isFill_; }
     bool hasCustomLength() const noexcept { return hasCustomLength_; }
@@ -57,6 +64,7 @@ private:
     bool hasProgramChange_ = false;
     uint8_t programChange_ = 0;
     std::vector<CCPair> controlChanges_;
+    std::vector<ControlAutomation> controlAutomations_;
     std::vector<tick_t> muteEvents_;
     bool isFill_ = false;
 

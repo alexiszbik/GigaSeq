@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ControlAutomation.h"
 #include "ControlChange.h"
 #include "MidiInOut.h"
 #include "Note.h"
@@ -46,6 +47,13 @@ public:
         uint8_t controller,
         uint8_t value);
 
+    void addControlAutomation(
+        tick_t startTick,
+        tick_t endTick,
+        uint8_t controller,
+        uint8_t startValue,
+        uint8_t endValue);
+
     void addProgramChange(
         tick_t tick,
         uint8_t program);
@@ -76,6 +84,7 @@ private:
 
     void startNote(const ScheduledNote& scheduledNote);
     void processPatternTick(tick_t position);
+    void processControlAutomations(tick_t position, bool loopWrap);
     void tickActiveNotes();
     void notifyMuteChanged();
 
@@ -102,6 +111,8 @@ private:
 
     TimedEventList<ScheduledNote> notes_;
     TimedEventList<ControlChange> controlChanges_;
+    std::vector<ControlAutomation> controlAutomations_;
+    std::vector<uint8_t> automationLastSent_;
     TimedEventList<ProgramChange> programChanges_;
     TimedEventList<MuteEvent> muteEvents_;
 };

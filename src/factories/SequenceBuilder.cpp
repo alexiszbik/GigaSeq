@@ -36,6 +36,14 @@ Sequence buildSequence(
         for (const CCPair& cc : spec.controlChanges()) {
             t.addControlChange(0, cc.control, cc.value);
         }
+        for (const ControlAutomation& automation : spec.controlAutomations()) {
+            t.addControlAutomation(
+                automation.startTick,
+                automation.endTick,
+                automation.controller,
+                automation.startValue,
+                automation.endValue);
+        }
         for (tick_t tick : spec.muteEvents()) {
             t.addMuteEvent(tick);
         }

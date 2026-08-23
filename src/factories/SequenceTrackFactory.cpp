@@ -20,7 +20,6 @@ SequenceTrack SequenceTrackFactory::clapFour(tick_t lengthInTicks, tick_t startI
     return track;
 }
 
-
 SequenceTrack SequenceTrackFactory::rideOff(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Ride", MidiChannel::kDrums);
     track.setPattern(DrumPatterns::kRideOff, lengthInTicks, startInTicks);

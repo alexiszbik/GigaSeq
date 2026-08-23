@@ -49,7 +49,7 @@ Sequence FallingSequenceFactory::fallingBassSeq()
             track(SequenceTrackFactory::clapFour).muted(),
             track(FallingTrackFactory::fallingHats).withStart(len1),
             FallingTrackFactory::fallingBass,
-            track(FallingTrackFactory::fallingPads).withStart(len1), //add automation !!!
+            track(FallingTrackFactory::fallingPads).withStart(len1).withCC(12,127).withAutomation(len1, len3, 12, 127, 0), //add automation !!!
             track(FallingTrackFactory::fallingRiser).withMuteEvent(len3).asFill(),
             track(FallingTrackFactory::fallingHarp).muted(),
             track(FallingTrackFactory::fallingTambourin).muted(),

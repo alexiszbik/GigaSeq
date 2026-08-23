@@ -43,6 +43,27 @@ void SequenceTrack::addControlChange(
     controlChanges_.add({ tick, controller, value });
 }
 
+void SequenceTrack::addControlAutomation(
+    tick_t startTick,
+    tick_t endTick,
+    uint8_t controller,
+    uint8_t startValue,
+    uint8_t endValue)
+{
+    if (startTick > endTick) {
+        return;
+    }
+
+    controlAutomations_.push_back({
+        startTick,
+        endTick,
+        controller,
+        startValue,
+        endValue,
+    });
+    automationLastSent_.push_back(kAutomationNotSent);
+}
+
 void SequenceTrack::addProgramChange(
     tick_t tick,
     uint8_t program)
@@ -71,6 +92,22 @@ void SequenceTrack::removeEvents(tick_t tick, tick_t durationTicks)
 
     notes_.removeInRange(tick, durationTicks);
     controlChanges_.removeInRange(tick, durationTicks);
+
+    const uint32_t rangeStart = static_cast<uint32_t>(tick);
+    const uint32_t rangeEnd = rangeStart + static_cast<uint32_t>(durationTicks);
+
+    for (std::size_t i = controlAutomations_.size(); i > 0; --i) {
+        const std::size_t index = i - 1;
+        const ControlAutomation& automation = controlAutomations_[index];
+        const uint32_t automationStart = static_cast<uint32_t>(automation.startTick);
+        const uint32_t automationEnd = static_cast<uint32_t>(automation.endTick);
+
+        if (automationStart < rangeEnd && automationEnd >= rangeStart) {
+            controlAutomations_.erase(controlAutomations_.begin() + static_cast<std::ptrdiff_t>(index));
+            automationLastSent_.erase(automationLastSent_.begin() + static_cast<std::ptrdiff_t>(index));
+        }
+    }
+
     programChanges_.removeInRange(tick, durationTicks);
     muteEvents_.removeInRange(tick, durationTicks);
 }
@@ -98,6 +135,7 @@ void SequenceTrack::reset()
     controlChanges_.reset();
     programChanges_.reset();
     muteEvents_.reset();
+    std::fill(automationLastSent_.begin(), automationLastSent_.end(), kAutomationNotSent);
     activeNoteCount_ = 0;
 
     const bool wasMuted = muted_;
@@ -143,6 +181,7 @@ void SequenceTrack::setMuted(bool muted)
         controlChanges_.reset();
         programChanges_.reset();
         muteEvents_.reset();
+        std::fill(automationLastSent_.begin(), automationLastSent_.end(), kAutomationNotSent);
     }
 
     notifyMuteChanged();
@@ -216,6 +255,33 @@ void SequenceTrack::processPatternTick(tick_t position)
     }
 }
 
+void SequenceTrack::processControlAutomations(tick_t position, bool loopWrap)
+{
+    if (controlAutomations_.empty()) {
+        return;
+    }
+
+    if (loopWrap) {
+        std::fill(automationLastSent_.begin(), automationLastSent_.end(), kAutomationNotSent);
+    }
+
+    for (std::size_t i = 0; i < controlAutomations_.size(); ++i) {
+        const ControlAutomation& automation = controlAutomations_[i];
+
+        if (position < automation.startTick || position > automation.endTick) {
+            continue;
+        }
+
+        const uint8_t value = automationValueAt(automation, position);
+        if (automationLastSent_[i] == value) {
+            continue;
+        }
+
+        midi_->sendControlChange(channel_, automation.controller, value);
+        automationLastSent_[i] = value;
+    }
+}
+
 void SequenceTrack::processTick(tick_t position, bool loopWrap)
 {
     // we will just mute the notes, control changes & program changes will not be affected
@@ -228,6 +294,8 @@ void SequenceTrack::processTick(tick_t position, bool loopWrap)
     controlChanges_.process(position, loopWrap, [this](const ControlChange& change) {
         midi_->sendControlChange(channel_, change.controller, change.value);
     });
+
+    processControlAutomations(position, loopWrap);
 
     muteEvents_.process(position, loopWrap, [this](const MuteEvent& e) {
         setMuted(true);

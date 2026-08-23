@@ -12,6 +12,23 @@ TrackSpec& TrackSpec::withCCs(std::vector<CCPair> controlChanges)
     return *this;
 }
 
+TrackSpec& TrackSpec::withAutomation(
+    tick_t startTick,
+    tick_t endTick,
+    uint8_t controller,
+    uint8_t startValue,
+    uint8_t endValue)
+{
+    controlAutomations_.push_back({
+        startTick,
+        endTick,
+        controller,
+        startValue,
+        endValue,
+    });
+    return *this;
+}
+
 TrackSpec& TrackSpec::withMuteEvent(tick_t tick)
 {
     muteEvents_.push_back(tick);
