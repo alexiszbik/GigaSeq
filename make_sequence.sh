@@ -68,7 +68,7 @@ cat >> "$SEQUENCE_CPP" <<EOF
 Sequence ${CLASS_NAME}::${FUNCTION_NAME}()
 {
     Sequence seq = buildSequence(
-        8, 4, 0, "${SEQUENCE_LABEL}", 130, true,
+        8, 4, 0, "${SEQUENCE_LABEL}", songTempo, true,
         {
             SequenceTrackFactory::kickFour,
         });

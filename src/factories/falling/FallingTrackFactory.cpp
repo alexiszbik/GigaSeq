@@ -16,7 +16,10 @@ constexpr uint8_t bigClap = 39;
 constexpr uint8_t riz2 = 53;
 constexpr uint8_t tomFill = 55;
 
+constexpr uint8_t interlude = 65;
+
 constexpr uint8_t pianoLow = 68;
+constexpr uint8_t pianoHi = 69;
 
 }
 
@@ -93,5 +96,11 @@ SequenceTrack FallingTrackFactory::fallingPreInterlude(tick_t lengthInTicks, tic
     track.addNote(0, TickHelper::kStepLen, pianoLow, 127);
     track.addNote(TickHelper::bars(3), TickHelper::kStepLen, riz2, 127);
     track.addNote(TICK(3, 2, 3), TickHelper::kStepLen, tomFill, 127);
+    return track;
+}
+
+SequenceTrack FallingTrackFactory::fallingInterlude(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Interlude", MidiChannel::kSampler);
+    track.addNote(0, TickHelper::kStepLen, interlude, 127);
     return track;
 }

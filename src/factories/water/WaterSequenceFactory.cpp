@@ -177,7 +177,7 @@ Sequence WaterSequenceFactory::waterChorusEnd()
     tick_t len4 = TickHelper::bars(32);
 
     Sequence seq = buildSequence(
-        33, 4, 32, "ChorusEnd", songTempo, true,
+        36, 4, 32, "ChorusEnd", songTempo, true,
         {
             track(SequenceTrackFactory::clapFour).withLength(len2),
             track(WaterTrackFactory::waterHats).withLength(len2),
