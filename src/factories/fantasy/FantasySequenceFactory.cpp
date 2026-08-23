@@ -71,10 +71,19 @@ Sequence FantasySequenceFactory::fantasyBack()
             track(FantasyTrackFactory::fantasySampleFadeCut).withLength(TICK(8)),
             track(FantasyTrackFactory::fantasyDrums).withStart(TICK(4)),
             track(FantasyTrackFactory::fantasyShake).withStart(TICK(4)),
-            track(FantasyTrackFactory::fantasyChords).withStart(TICK(4)),
+            track(FantasyTrackFactory::fantasyChords).withStart(TICK(4)).muted(),
             track(FantasyTrackFactory::fantasyHiDrum).withLength(TICK(4)),
             track(FantasyTrackFactory::fantasyFreak),
             track(FantasyTrackFactory::fantasyVocals),
+            track(FantasyTrackFactory::fantasyRiser).withMuteEvent(TICK(8)).asFill(),
         });
+
+
+    seq.track(2).addControlChange(0, 37, 0);
+    seq.track(2).addControlChange(TICK(4,0,2), 37, 127);
+
+    seq.track(2).addControlChange(0, 34, 0);
+    seq.track(2).addControlChange(TICK(4,0,2), 34, 127);
+
     return seq;
 }

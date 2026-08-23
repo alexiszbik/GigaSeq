@@ -70,3 +70,10 @@ SequenceTrack FantasyTrackFactory::fantasyVocals(tick_t lengthInTicks, tick_t st
     track.setPattern(FantasyPatterns::kFantasyVocals, lengthInTicks, startInTicks);
     return track;
 }
+
+SequenceTrack FantasyTrackFactory::fantasyRiser(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Riser", MidiChannel::kSampler);
+
+    track.addNote(lengthInTicks - TICK(0,2), TickHelper::kStepLen, Fantasy::ftsyRiz, 127);
+    return track;
+}
