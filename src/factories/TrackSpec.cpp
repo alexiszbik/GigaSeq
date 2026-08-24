@@ -1,8 +1,8 @@
 #include "TrackSpec.h"
 
-TrackSpec& TrackSpec::withCC(uint8_t control, uint8_t value)
+TrackSpec& TrackSpec::withCC(uint8_t control, uint8_t value, tick_t tick)
 {
-    controlChanges_.push_back({control, value});
+    controlChanges_.push_back({control, value, tick});
     return *this;
 }
 

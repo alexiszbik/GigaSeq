@@ -59,7 +59,7 @@ Sequence TogetherSequenceFactory::togetherVocoder()
             SequenceTrackFactory::kickFour,
             TogetherTrackFactory::togetherVocoder,
             track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kTogetherChorus)
-            .withCC(HXStomp::kTogetherChorus_ccVolume, 0)
+            .withCC(HXStomp::kTogetherChorus_ccVolume, 0, TICK(0,1))
         });
 }
 
@@ -107,14 +107,18 @@ Sequence TogetherSequenceFactory::togetherRepeat()
 
 Sequence TogetherSequenceFactory::togetherPartB()
 {
-    return buildSequence(
+    Sequence seq = buildSequence(
         8, 4, 0, "PartB", 130, true,
         {
             TogetherTrackFactory::togetherPartBSampleCut,
             TogetherTrackFactory::togetherPartBSynth,
             track(TogetherTrackFactory::togetherPartBAh).muted(),
             track(TogetherTrackFactory::togetherPartBDaDaDa).muted(),
+            track(SequenceTrackFactory::gtrPedal).withCC(HXStomp::kTogetherChorus_ccDrive, 0)
         });
+    seq.track(4).addProgramChange(TICK(5), HXStomp::kTogetherEnd);
+
+    return seq;
 }
 
 Sequence TogetherSequenceFactory::togetherPartBWithHats()

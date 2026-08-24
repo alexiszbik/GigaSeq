@@ -10,8 +10,9 @@ using TrackBuilder = SequenceTrack (*)(tick_t lengthInTicks, tick_t startInTicks
 
 struct CCPair
 {
-    uint8_t control;
-    uint8_t value;
+    uint8_t control = 0;
+    uint8_t value = 0;
+    tick_t tick = 0;
 };
 
 // Fluent description of a track to add to a sequence.
@@ -32,7 +33,7 @@ public:
 
     TrackSpec& muted() { startMuted_ = true; return *this; }
     TrackSpec& withProgramChange(uint8_t program) { hasProgramChange_ = true; programChange_ = program; return *this; }
-    TrackSpec& withCC(uint8_t control, uint8_t value);
+    TrackSpec& withCC(uint8_t control, uint8_t value, tick_t tick = 0);
     TrackSpec& withCCs(std::vector<CCPair> controlChanges);
     TrackSpec& withAutomation(
         tick_t startTick,

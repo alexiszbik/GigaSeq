@@ -34,7 +34,7 @@ Sequence buildSequence(
             t.addProgramChange(0, spec.programChange());
         }
         for (const CCPair& cc : spec.controlChanges()) {
-            t.addControlChange(0, cc.control, cc.value);
+            t.addControlChange(cc.tick, cc.control, cc.value);
         }
         for (const ControlAutomation& automation : spec.controlAutomations()) {
             t.addControlAutomation(
@@ -77,7 +77,7 @@ void addControlChangesTrack(
 {
     SequenceTrack track(name, channel);
     for (const CCPair& cc : controlChanges) {
-        track.addControlChange(0, cc.control, cc.value);
+        track.addControlChange(cc.tick, cc.control, cc.value);
     }
     sequence.addTrack(track);
 }
