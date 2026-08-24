@@ -14,6 +14,11 @@ void addUandiSong(SequencePool& pool)
         UandiSequenceFactory::uandiIntro,
   
         UandiSequenceFactory::uandiIntroB,
+        UandiSequenceFactory::uandiMain,
+        UandiSequenceFactory::uandiBreak,
+        UandiSequenceFactory::uandiBack,
+        UandiSequenceFactory::uandiClimax,
+        UandiSequenceFactory::uandiEnd,
     };
 
     for (Builder builder : sequences) {
