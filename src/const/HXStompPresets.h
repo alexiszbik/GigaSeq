@@ -4,7 +4,7 @@
 
 namespace HXStomp {
 #define _HX_PRESET(preset, nbr, letter) constexpr uint8_t k##preset = ((nbr - 1) * 3 + letter)
-#define _HX_CC(preset, ccName, nbr) constexpr uint8_t  k##preset##_cc##ccName = nbr;
+#define _HX_CC(preset, ccName, nbr) constexpr uint8_t  k##preset##_cc##ccName = nbr
 
 #define A 0
 #define B 1

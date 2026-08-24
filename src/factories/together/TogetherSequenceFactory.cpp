@@ -15,7 +15,8 @@ Sequence TogetherSequenceFactory::togetherIntro()
         8, 4, 0, "Intro", songTempo, true,
         {
             TogetherTrackFactory::togetherArp,
-            track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kBass)
+            track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kBass),
+            track(SequenceTrackFactory::gtrLoop).withProgramChange(BossRC::kTogetherA)
         });
 
     addProgramChangeTrack(seq, "Poly pgm", MidiChannel::kPoly, 1);
@@ -72,7 +73,8 @@ Sequence TogetherSequenceFactory::togetherPause()
             TogetherTrackFactory::togetherHatsOnly,
             TogetherTrackFactory::togetherSample,
             TogetherTrackFactory::togetherDX7,
-            track(SequenceTrackFactory::gtrPedal).withCC(HXStomp::kTogetherChorus_ccVolume, 127)
+            track(SequenceTrackFactory::gtrPedal).withCC(HXStomp::kTogetherChorus_ccVolume, 127),
+            SequenceTrackFactory::gtrLoopMute
         });
 }
 
@@ -86,7 +88,8 @@ Sequence TogetherSequenceFactory::togetherClimax()
             track(TogetherTrackFactory::togetherSample).withCC(13, 127),
             TogetherTrackFactory::togetherDX7,
             SequenceTrackFactory::kickFour,
-            track(SequenceTrackFactory::gtrPedal).withCC(HXStomp::kTogetherChorus_ccDrive, 127)
+            track(SequenceTrackFactory::gtrPedal).withCC(HXStomp::kTogetherChorus_ccDrive, 127),
+            SequenceTrackFactory::gtrLoopUnmute
         });
 }
 
@@ -102,21 +105,24 @@ Sequence TogetherSequenceFactory::togetherRepeat()
             TogetherTrackFactory::togetherKickRepeat,
             TogetherTrackFactory::togetherExtraBass,
             TogetherTrackFactory::togetherEndRiser,
+            SequenceTrackFactory::gtrLoopErase
         });
 }
 
 Sequence TogetherSequenceFactory::togetherPartB()
 {
     Sequence seq = buildSequence(
-        8, 4, 0, "PartB", 130, true,
+        16, 4, 8, "PartB", 130, true,
         {
             TogetherTrackFactory::togetherPartBSampleCut,
             TogetherTrackFactory::togetherPartBSynth,
             track(TogetherTrackFactory::togetherPartBAh).muted(),
             track(TogetherTrackFactory::togetherPartBDaDaDa).muted(),
-            track(SequenceTrackFactory::gtrPedal).withCC(HXStomp::kTogetherChorus_ccDrive, 0)
+            track(SequenceTrackFactory::gtrPedal).withCC(HXStomp::kTogetherChorus_ccDrive, 0),
+            SequenceTrackFactory::gtrLoop
         });
     seq.track(4).addProgramChange(TICK(5), HXStomp::kTogetherEnd);
+    seq.track(5).addProgramChange(TICK(5), BossRC::kTogetherB);
 
     return seq;
 }

@@ -11,4 +11,9 @@ public:
     static SequenceTrack rideOff(tick_t lengthInTicks, tick_t startInTicks);
 
     static SequenceTrack gtrPedal(tick_t lengthInTicks, tick_t startInTicks);
+
+    static SequenceTrack gtrLoop(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack gtrLoopMute(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack gtrLoopUnmute(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack gtrLoopErase(tick_t lengthInTicks, tick_t startInTicks);
 };
