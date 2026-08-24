@@ -58,6 +58,11 @@ add_executable(GigaSeq
     src/factories/uandi/UandiSong.cpp
     src/factories/uandi/UandiTrackFactory.cpp
 
+
+    src/factories/tired/TiredSequenceFactory.cpp
+    src/factories/tired/TiredSong.cpp
+    src/factories/tired/TiredTrackFactory.cpp
+
 )
 
 target_include_directories(GigaSeq PRIVATE src src/engine src/desktop)
