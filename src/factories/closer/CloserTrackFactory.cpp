@@ -32,12 +32,7 @@ SequenceTrack CloserTrackFactory::closerClapTom(tick_t lengthInTicks, tick_t sta
 
 SequenceTrack CloserTrackFactory::closerRiser(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Riser", MidiChannel::kSampler);
-
-    SequenceDesc desc;
-    desc.notes = {{Closer::triRizstr}};
-    desc.rate = 16;
-    makeSequenceTrack(track, desc, lengthInTicks - TickHelper::bars(2) , startInTicks);
-
+    makeRiser(track, Closer::triRizstr, lengthInTicks, TickHelper::bars(2));
     return track;
 }
 

@@ -66,3 +66,23 @@ void makeSequenceTrack(
         isOddBeat = !isOddBeat;
     }
 }
+
+
+void addSingleNote(
+    SequenceTrack& track,
+    uint8_t note,
+    tick_t startTick)
+{
+    track.addNote(startTick, TickHelper::kStepLen, note, 127);
+
+}
+
+void makeRiser(
+    SequenceTrack& track,
+    uint8_t note,
+    tick_t lengthInTicks,
+    tick_t riserLength) 
+{
+    track.addNote(lengthInTicks - riserLength, riserLength, note, 127);
+
+}

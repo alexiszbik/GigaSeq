@@ -13,7 +13,7 @@ Sequence CloserSequenceFactory::closerIntro()
 {
 
     Sequence seq = buildSequence(
-        8, 4, 0, "Intro", songTempo, true,
+        4, 4, 0, "Intro", songTempo, true,
         {
             SequenceTrackFactory::kickFour,
             track(CloserTrackFactory::closerHats).muted(),
