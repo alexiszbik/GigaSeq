@@ -53,6 +53,11 @@ add_executable(GigaSeq
     src/factories/fantasy/FantasySong.cpp
     src/factories/fantasy/FantasyTrackFactory.cpp
 
+
+    src/factories/uandi/UandiSequenceFactory.cpp
+    src/factories/uandi/UandiSong.cpp
+    src/factories/uandi/UandiTrackFactory.cpp
+
 )
 
 target_include_directories(GigaSeq PRIVATE src src/engine src/desktop)
