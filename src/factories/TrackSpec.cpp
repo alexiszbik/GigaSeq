@@ -54,3 +54,10 @@ TrackSpec& TrackSpec::withStart(tick_t start)
     hasCustomStart_ = true;
     return *this;
 }
+
+TrackSpec& TrackSpec::withPitchOffset(int offset)
+{
+    pitchOffset_ = offset;
+    hasPitchOffset_ = true;
+    return *this;
+}

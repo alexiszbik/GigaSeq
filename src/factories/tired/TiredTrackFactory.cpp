@@ -58,3 +58,63 @@ SequenceTrack TiredTrackFactory::tiredRiserA(tick_t lengthInTicks, tick_t startI
 
     return track;
 }
+
+SequenceTrack TiredTrackFactory::tiredFreak(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Freak", MidiChannel::kMicrofreak);
+    track.setPattern(TiredPatterns::kTiredFreak, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack TiredTrackFactory::tiredFreakArp(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("FreakArp", MidiChannel::kMicrofreak);
+    track.setPattern(TiredPatterns::kTiredFreakArp, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack TiredTrackFactory::tiredStabs(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Stabs", MidiChannel::kPoly);
+    track.setPattern(TiredPatterns::kTiredStabs, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack TiredTrackFactory::tiredBass(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Bass", MidiChannel::kBass);
+    track.setPattern(TiredPatterns::kTiredBass, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack TiredTrackFactory::tiredTechHats(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("TechHats", MidiChannel::kDrums);
+    track.setPattern(TiredPatterns::kTiredTechHats, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack TiredTrackFactory::tiredImpacts(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Impacts", MidiChannel::kDrums);
+    track.setPattern(TiredPatterns::kTiredImpacts, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack TiredTrackFactory::tiredImpactsKick(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Long Kick", MidiChannel::kDrums);
+    track.setPattern(TiredPatterns::kTiredKickImpacts, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack TiredTrackFactory::tiredTechKick(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("TechKick", MidiChannel::kDrums);
+    track.setPattern(TiredPatterns::kTiredTechKick, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack TiredTrackFactory::tiredBigDrums(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("BigDrums", MidiChannel::kDrums);
+    track.setPattern(TiredPatterns::kTiredBigDrums, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack TiredTrackFactory::tiredClapRoll(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("ClapRoll", MidiChannel::kDrums);
+    track.setPattern(TiredPatterns::kTiredClapRoll, lengthInTicks, startInTicks);
+    return track;
+}

@@ -8,6 +8,10 @@ constexpr uint8_t tiredKick = 36;
 
 constexpr uint8_t tiredKick2 = 37;
 
+constexpr uint8_t clap = 38;
+
+constexpr uint8_t handclp1 = 39;
+
 constexpr uint8_t tiredHat = 40;
 
 constexpr uint8_t tiredShake = 41;

@@ -15,6 +15,7 @@ Sequence TiredSequenceFactory::tiredIntro()
         8, 4, 0, "Intro", songTempo, true,
         {
             SequenceTrackFactory::kickFour,
+            TiredTrackFactory::tiredFreak,
             TiredTrackFactory::tiredHats,
             TiredTrackFactory::tiredIntro,
             TiredTrackFactory::tiredHatSolo,
@@ -33,6 +34,34 @@ Sequence TiredSequenceFactory::tiredDropA()
             TiredTrackFactory::tiredPhazeHat,
             TiredTrackFactory::tiredUpRising,
             TiredTrackFactory::tiredRiserA,
+            TiredTrackFactory::tiredFreak
+        });
+    return seq;
+}
+
+Sequence TiredSequenceFactory::tiredFreakArp()
+{
+    Sequence seq = buildSequence(
+        8, 4, 0, "FreakArp", songTempo, true,
+        {
+            TiredTrackFactory::tiredFreakArp,
+            TiredTrackFactory::tiredStabs,
+            TiredTrackFactory::tiredBass,
+            TiredTrackFactory::tiredTechHats,
+            TiredTrackFactory::tiredImpacts,
+            TiredTrackFactory::tiredImpactsKick,
+            TiredTrackFactory::tiredTechKick
+        });
+    return seq;
+}
+
+Sequence TiredSequenceFactory::tiredBigEnd()
+{
+    Sequence seq = buildSequence(
+        8, 4, 0, "BigEnd", songTempo, true,
+        {
+            TiredTrackFactory::tiredBigDrums,
+            TiredTrackFactory::tiredClapRoll,
         });
     return seq;
 }

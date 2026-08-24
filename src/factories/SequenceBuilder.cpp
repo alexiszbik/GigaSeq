@@ -50,6 +50,9 @@ Sequence buildSequence(
         if (spec.isFill()) {
             t.setFill();
         }
+        if (spec.hasPitchOffset()) {
+            t.setPitchOffset(spec.pitchOffset());
+        }
     }
 
     return sequence;

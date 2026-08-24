@@ -14,4 +14,14 @@ public:
     static SequenceTrack tiredPhazeHat(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack tiredUpRising(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack tiredRiserA(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack tiredFreak(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack tiredFreakArp(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack tiredStabs(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack tiredBass(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack tiredTechHats(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack tiredImpacts(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack tiredImpactsKick(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack tiredTechKick(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack tiredBigDrums(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack tiredClapRoll(tick_t lengthInTicks, tick_t startInTicks);
 };

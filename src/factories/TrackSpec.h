@@ -44,6 +44,7 @@ public:
     TrackSpec& asFill();
     TrackSpec& withLength(tick_t length);
     TrackSpec& withStart(tick_t start);
+    TrackSpec& withPitchOffset(int offset);
 
     TrackBuilder builder() const noexcept { return builder_; }
     bool startMuted() const noexcept { return startMuted_; }
@@ -57,6 +58,8 @@ public:
     tick_t customLength() const noexcept { return customLength_; }
     bool hasCustomStart() const noexcept { return hasCustomStart_; }
     tick_t startInTicks() const noexcept { return startInTicks_; }
+    bool hasPitchOffset() const noexcept { return hasPitchOffset_; }
+    int pitchOffset() const noexcept { return pitchOffset_; }
 
 private:
     TrackBuilder builder_;
@@ -72,6 +75,8 @@ private:
     tick_t customLength_ = 0;
     bool hasCustomStart_ = false;
     tick_t startInTicks_ = 0;
+    bool hasPitchOffset_ = false;
+    int pitchOffset_ = 0;
 };
 
 // Ergonomic helper to start a fluent TrackSpec from a builder.

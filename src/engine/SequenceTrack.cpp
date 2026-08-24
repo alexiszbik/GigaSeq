@@ -77,12 +77,11 @@ void SequenceTrack::addMuteEvent(
     muteEvents_.add({ tick });
 }
 
-void SequenceTrack::setPattern(const TrackPattern& pattern, tick_t lengthInTicks, tick_t startInTicks, int pitchOffset)
+void SequenceTrack::setPattern(const TrackPattern& pattern, tick_t lengthInTicks, tick_t startInTicks)
 {
     pattern_ = &pattern;
     patternStart_ = startInTicks;
     patternLength_ = lengthInTicks;
-    patternPitchOffset_ = pitchOffset;
 }
 
 void SequenceTrack::removeNotes(
@@ -162,9 +161,11 @@ void SequenceTrack::setMuted(bool muted)
 
 void SequenceTrack::startNote(const ScheduledNote& scheduledNote)
 {
-    midi_->sendNoteOn(channel_, scheduledNote.note.note, scheduledNote.note.velocity);
+    const uint8_t pitch = static_cast<uint8_t>(
+        pitchOffset_ + static_cast<int>(scheduledNote.note.note));
+    midi_->sendNoteOn(channel_, pitch, scheduledNote.note.velocity);
     if (activeNoteCount_ < kMaxActiveNotes) {
-        activeNotes_[activeNoteCount_++] = { scheduledNote.note.note, scheduledNote.durationTicks };
+        activeNotes_[activeNoteCount_++] = { pitch, scheduledNote.durationTicks };
     }
     // Pool full: drop the note-on silently rather than allocating in ISR.
 }
@@ -221,8 +222,7 @@ void SequenceTrack::processPatternTick(tick_t position)
 
         const tick_t noteDuration = stepDuration * step.durationMul;
         for (uint8_t i = 0; i < kMaxNotesPerPatternStep && step.notes[i] != 0; ++i) {
-            uint8_t pitch = static_cast<uint8_t>(patternPitchOffset_ + step.notes[i]);
-            startNote({ position, noteDuration, { pitch , step.velocity } });
+            startNote({ position, noteDuration, { step.notes[i], step.velocity } });
         }
     };
 

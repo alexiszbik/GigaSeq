@@ -18,7 +18,8 @@ SequenceTrack FantasyTrackFactory::fantasyArpPoly(tick_t lengthInTicks, tick_t s
 
 SequenceTrack FantasyTrackFactory::fantasyArpBass(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("ArpBass", MidiChannel::kBass);
-    track.setPattern(FantasyPatterns::kFantasyArp, lengthInTicks, startInTicks, -12);
+    track.setPitchOffset(-12);
+    track.setPattern(FantasyPatterns::kFantasyArp, lengthInTicks, startInTicks);
     return track;
 }
 
