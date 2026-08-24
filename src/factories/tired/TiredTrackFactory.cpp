@@ -2,7 +2,7 @@
 
 #include "factories/tired/TiredPatterns.h"
 #include "factories/TrackPatternBuilder.h"
-#include "MidiChannel.h"
+#include "MidiConst.h"
 
 SequenceTrack TiredTrackFactory::tiredIntro(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Intro", MidiChannel::kSampler);

@@ -3,7 +3,7 @@
 #include "factories/SequenceBuilder.h"
 #include "factories/SequenceTrackFactory.h"
 #include "factories/closer/CloserTrackFactory.h"
-#include "MidiChannel.h"
+#include "MidiConst.h"
 
 namespace {
     constexpr uint8_t songTempo = 130;

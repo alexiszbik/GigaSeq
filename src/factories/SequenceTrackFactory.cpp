@@ -3,7 +3,7 @@
 #include "DrumPatterns.h"
 #include "TrackPatternBuilder.h"
 
-#include "MidiChannel.h"
+#include "MidiConst.h"
 #include "MidiNotes.h"
 
 SequenceTrack SequenceTrackFactory::kickFour(tick_t lengthInTicks, tick_t startInTicks)
@@ -30,5 +30,10 @@ SequenceTrack SequenceTrackFactory::snareFour(tick_t lengthInTicks, tick_t start
 SequenceTrack SequenceTrackFactory::rideOff(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Ride", MidiChannel::kDrums);
     track.setPattern(DrumPatterns::kRideOff, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack SequenceTrackFactory::gtrPedal(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("HXStomp", MidiChannel::kGtrPedal);
     return track;
 }

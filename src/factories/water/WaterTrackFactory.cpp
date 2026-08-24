@@ -4,7 +4,7 @@
 #include "factories/SequenceTrackFactory.h"
 #include "factories/water/WaterPatterns.h"
 #include "factories/TrackPatternBuilder.h"
-#include "MidiChannel.h"
+#include "MidiConst.h"
 #include "TickHelper.h"
 #include "factories/MidiNotes.h"
 

@@ -3,7 +3,7 @@
 #include "UandiSamples.h"
 #include "factories/uandi/UandiPatterns.h"
 #include "factories/TrackPatternBuilder.h"
-#include "MidiChannel.h"
+#include "MidiConst.h"
 
 SequenceTrack UandiTrackFactory::uandiWavetableA(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("WavetableA", MidiChannel::kSampler);

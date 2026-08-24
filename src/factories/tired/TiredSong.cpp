@@ -4,6 +4,7 @@
 #include "Sequence.h"
 #include "SequencePool.h"
 #include "Song.h"
+#include "MidiConst.h"
 
 void addTiredSong(SequencePool& pool)
 {

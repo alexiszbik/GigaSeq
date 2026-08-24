@@ -2,7 +2,7 @@
 
 #include "factories/TrackPatternBuilder.h"
 #include "factories/fantasy/FantasyPatterns.h"
-#include "MidiChannel.h"
+#include "MidiConst.h"
 
 SequenceTrack FantasyTrackFactory::fantasyArp(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Arp", MidiChannel::kModularA);

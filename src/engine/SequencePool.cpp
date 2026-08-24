@@ -1,5 +1,5 @@
 #include "SequencePool.h"
-#include "MidiChannel.h"
+#include "MidiConst.h"
 
 #include "factories/together/TogetherSong.h"
 #include "factories/water/WaterSong.h"
@@ -337,13 +337,14 @@ SequencePool SequencePool::createDefault(MidiInOut& midi, Logger& logger)
 {
     SequencePool pool(midi, logger);
 
+    addTogetherSong(pool);
     addTiredSong(pool);
     addUandiSong(pool);
     addFantasySong(pool);
     addCloserSong(pool);
     addFallingSong(pool);
     addWaterSong(pool);
-    addTogetherSong(pool);
+    
 
     return pool;
 }

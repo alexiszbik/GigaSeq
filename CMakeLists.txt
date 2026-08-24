@@ -65,7 +65,7 @@ add_executable(GigaSeq
 
 )
 
-target_include_directories(GigaSeq PRIVATE src src/engine src/desktop)
+target_include_directories(GigaSeq PRIVATE src src/engine src/desktop src/const)
 target_compile_definitions(GigaSeq PRIVATE GIGASEQ_LOCAL)
 target_link_libraries(GigaSeq PRIVATE rtmidi)
 

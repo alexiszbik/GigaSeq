@@ -3,7 +3,7 @@
 #include "factories/SequenceBuilder.h"
 #include "factories/SequenceTrackFactory.h"
 #include "factories/together/TogetherTrackFactory.h"
-#include "MidiChannel.h"
+#include "MidiConst.h"
 
 namespace {
 constexpr uint8_t songTempo = 130;
@@ -15,6 +15,7 @@ Sequence TogetherSequenceFactory::togetherIntro()
         8, 4, 0, "Intro", songTempo, true,
         {
             TogetherTrackFactory::togetherArp,
+            track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kBass)
         });
 
     addProgramChangeTrack(seq, "Poly pgm", MidiChannel::kPoly, 1);
@@ -40,7 +41,7 @@ Sequence TogetherSequenceFactory::togetherKick()
         {
             TogetherTrackFactory::togetherArp,
             TogetherTrackFactory::togetherHiDrum,
-            TogetherTrackFactory::togetherSample,
+            track(TogetherTrackFactory::togetherSample).withCC(13, 127),
             TogetherTrackFactory::togetherDX7,
             SequenceTrackFactory::kickFour,
         });
@@ -57,6 +58,8 @@ Sequence TogetherSequenceFactory::togetherVocoder()
             TogetherTrackFactory::togetherDX7,
             SequenceTrackFactory::kickFour,
             TogetherTrackFactory::togetherVocoder,
+            track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kTogetherChorus)
+            .withCC(HXStomp::kTogetherChorus_ccVolume, 0)
         });
 }
 
@@ -69,6 +72,7 @@ Sequence TogetherSequenceFactory::togetherPause()
             TogetherTrackFactory::togetherHatsOnly,
             TogetherTrackFactory::togetherSample,
             TogetherTrackFactory::togetherDX7,
+            track(SequenceTrackFactory::gtrPedal).withCC(HXStomp::kTogetherChorus_ccVolume, 127)
         });
 }
 
@@ -82,6 +86,7 @@ Sequence TogetherSequenceFactory::togetherClimax()
             track(TogetherTrackFactory::togetherSample).withCC(13, 127),
             TogetherTrackFactory::togetherDX7,
             SequenceTrackFactory::kickFour,
+            track(SequenceTrackFactory::gtrPedal).withCC(HXStomp::kTogetherChorus_ccDrive, 127)
         });
 }
 

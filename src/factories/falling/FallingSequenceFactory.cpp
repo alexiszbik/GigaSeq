@@ -3,7 +3,7 @@
 #include "factories/SequenceBuilder.h"
 #include "factories/SequenceTrackFactory.h"
 #include "factories/falling/FallingTrackFactory.h"
-#include "MidiChannel.h"
+#include "MidiConst.h"
 #include "TickHelper.h"
 
 namespace {

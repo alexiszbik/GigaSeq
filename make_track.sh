@@ -7,7 +7,7 @@ fi
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-MIDI_CHANNEL_FILE="${SCRIPT_DIR}/src/engine/MidiChannel.h"
+MIDI_CHANNEL_FILE="${SCRIPT_DIR}/src/const/MidiChannel.h"
 
 SONG_NAME="${1:-}"
 TRACK_NAME="${2:-}"
@@ -124,13 +124,13 @@ ensure_patterns_include() {
         return
     fi
 
-    if grep -q '#include "MidiChannel.h"' "$track_cpp"; then
+    if grep -q '#include "MidiConst.h"' "$track_cpp"; then
         if [[ "$(uname)" == "Darwin" ]]; then
-            sed -i '' "/#include \"MidiChannel.h\"/i\\
+            sed -i '' "/#include \"MidiConst.h\"/i\\
 ${include_line}
 " "$track_cpp"
         else
-            sed -i "/#include \"MidiChannel.h\"/i\\${include_line}" "$track_cpp"
+            sed -i "/#include \"MidiConst.h\"/i\\${include_line}" "$track_cpp"
         fi
         return
     fi

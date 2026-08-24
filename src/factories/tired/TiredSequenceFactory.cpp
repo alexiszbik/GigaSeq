@@ -3,7 +3,7 @@
 #include "factories/SequenceBuilder.h"
 #include "factories/SequenceTrackFactory.h"
 #include "factories/tired/TiredTrackFactory.h"
-#include "MidiChannel.h"
+#include "MidiConst.h"
 
 namespace {
 constexpr uint8_t songTempo = 145;
@@ -21,6 +21,7 @@ Sequence TiredSequenceFactory::tiredIntro()
             TiredTrackFactory::tiredHatSolo,
             TiredTrackFactory::tiredCongas,
             TiredTrackFactory::tiredRoboto,
+            track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kWater)
         });
     return seq;
 }
@@ -34,7 +35,8 @@ Sequence TiredSequenceFactory::tiredDropA()
             TiredTrackFactory::tiredPhazeHat,
             TiredTrackFactory::tiredUpRising,
             TiredTrackFactory::tiredRiserA,
-            TiredTrackFactory::tiredFreak
+            TiredTrackFactory::tiredFreak,
+            track(SequenceTrackFactory::gtrPedal).withProgramChange(1)
         });
     return seq;
 }
@@ -50,7 +52,8 @@ Sequence TiredSequenceFactory::tiredFreakArp()
             TiredTrackFactory::tiredTechHats,
             TiredTrackFactory::tiredImpacts,
             TiredTrackFactory::tiredImpactsKick,
-            TiredTrackFactory::tiredTechKick
+            TiredTrackFactory::tiredTechKick,
+            track(SequenceTrackFactory::gtrPedal).withProgramChange(2)
         });
     return seq;
 }
@@ -62,6 +65,7 @@ Sequence TiredSequenceFactory::tiredBigEnd()
         {
             TiredTrackFactory::tiredBigDrums,
             TiredTrackFactory::tiredClapRoll,
+            track(SequenceTrackFactory::gtrPedal).withProgramChange(3)
         });
     return seq;
 }

@@ -4,7 +4,7 @@
 #include "factories/MidiNotes.h"
 #include "factories/closer/CloserPatterns.h"
 #include "factories/DrumPatterns.h"
-#include "MidiChannel.h"
+#include "MidiConst.h"
 
 SequenceTrack CloserTrackFactory::closerHats(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Hats", MidiChannel::kSampler);
