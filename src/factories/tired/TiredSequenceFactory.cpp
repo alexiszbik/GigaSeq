@@ -107,13 +107,54 @@ Sequence TiredSequenceFactory::tiredMainB()
             TiredTrackFactory::tiredPhazeHat,
             TiredTrackFactory::tiredShake,
             TiredTrackFactory::tiredClapEcho,
-            TiredTrackFactory::tiredWhiteNoise,
-            TiredTrackFactory::tiredRiserA,
+            track(TiredTrackFactory::tiredWhiteNoise).withMuteEvent(TICK(1)),
+            TiredTrackFactory::tiredRiserB,
             TiredTrackFactory::tiredCymbal,
         });
     return seq;
 }
 
+Sequence TiredSequenceFactory::tiredMainBBass()
+{
+    Sequence seq = buildSequence(
+        36, 4, 32, "MainBBass", songTempo, true,
+        {
+            track(SequenceTrackFactory::kickFour).withLength(TICK(32)),
+            track(TiredTrackFactory::tiredFreak).withLength(TICK(32)),
+            track(TiredTrackFactory::tiredSync).withLength(TICK(32)),
+            track(TiredTrackFactory::tiredRoboto).withLength(TICK(32)),
+            track(TiredTrackFactory::tiredPhazeHat).withLength(TICK(32)),
+            track(TiredTrackFactory::tiredShake).withLength(TICK(32)),
+            track(TiredTrackFactory::tiredClave).withLength(TICK(32)),
+            track(TiredTrackFactory::tiredRide).withStart(TICK(16)).withLength(TICK(16)),
+            TiredTrackFactory::tiredMainBBassEvents
+        });
+    return seq;
+}
+
+Sequence TiredSequenceFactory::tiredPartBStart()
+{
+    Sequence seq = buildSequence(
+        4, 4, 0, "PartBStart", songTempo, true,
+        {
+            TiredTrackFactory::tiredStabs,
+        });
+    return seq;
+}
+
+Sequence TiredSequenceFactory::tiredPartBSolo()
+{
+    Sequence seq = buildSequence(
+        20, 12, 0, "PartBSolo", songTempo, true,
+        {
+            TiredTrackFactory::tiredStabs,
+            TiredTrackFactory::tiredRollHat,
+            track(TiredTrackFactory::tiredImpacts).withMuteEvent(0).withMuteEvent(TICK(3,3,2), false),
+            track(TiredTrackFactory::tiredImpactsKick).withMuteEvent(0).withMuteEvent(TICK(3,3,2), false),
+            track(TiredTrackFactory::tiredTechHats).withStart(TICK(12)),
+        });
+    return seq;
+}
 
 Sequence TiredSequenceFactory::tiredFreakArp()
 {

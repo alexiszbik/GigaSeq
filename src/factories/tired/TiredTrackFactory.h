@@ -30,4 +30,8 @@ public:
     static SequenceTrack tiredCymbal(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack tiredSnareRoll(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack tiredRiserB(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack tiredClave(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack tiredRide(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack tiredMainBBassEvents(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack tiredRollHat(tick_t lengthInTicks, tick_t startInTicks);
 };

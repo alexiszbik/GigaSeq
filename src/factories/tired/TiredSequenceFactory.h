@@ -14,10 +14,11 @@ public:
 
     static Sequence tiredDropB();
     static Sequence tiredMainB();
+    static Sequence tiredMainBBass();
 
+    static Sequence tiredPartBStart();
+    static Sequence tiredPartBSolo();
     static Sequence tiredFreakArp();
     static Sequence tiredBigEnd();
-   
-
 
 };

@@ -283,4 +283,38 @@ constexpr PatternStep kTiredShakeSteps[] = {
 
 MAKE_PATTERN(kTiredShake, kTiredShakeSteps, 8);
 
+#define CLAVE {{Tired::clave, Tired::tiredHat}, 127, 1}
+
+constexpr PatternStep kTiredClaveSteps[] = {
+    CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP,
+    CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP,
+    CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP,
+    CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP,
+
+    CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP,
+    CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP,
+    CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP,
+    CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP,
+
+    CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP,
+    CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP,
+    CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP,
+    CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP,
+
+    CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP,
+    CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP,
+    CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP, CLAVE, _NO_STEP,
+    CLAVE, CLAVE, CLAVE, CLAVE, CLAVE, CLAVE, CLAVE, CLAVE,
+};
+
+MAKE_PATTERN(kTiredClave, kTiredClaveSteps, 32);
+
+
+constexpr PatternStep kTiredRideSteps[] = {
+    _NO_STEP,
+    {{Tired::cy0000}, 127, 1},
+};
+
+MAKE_PATTERN(kTiredRide, kTiredRideSteps, 8);
+
 } // namespace TiredPatterns

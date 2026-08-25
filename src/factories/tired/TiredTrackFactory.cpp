@@ -159,3 +159,43 @@ SequenceTrack TiredTrackFactory::tiredRiserB(tick_t lengthInTicks, tick_t startI
 
     return track;
 }
+
+SequenceTrack TiredTrackFactory::tiredClave(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Clave", MidiChannel::kDrums);
+    track.setPattern(TiredPatterns::kTiredClave, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack TiredTrackFactory::tiredRide(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Ride", MidiChannel::kDrums);
+    track.setPattern(TiredPatterns::kTiredRide, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack TiredTrackFactory::tiredMainBBassEvents(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("MainBBassEvents", MidiChannel::kSampler);
+
+    addSingleNote(track, Tired::tClapecho, TICK(7,3));
+    addSingleNote(track, Tired::tRiz2bar, TICK(14));
+
+    addSingleNote(track, Tired::cymb, TICK(16));
+    addSingleNote(track, Tired::tClapecho, TICK(23,3));
+
+    addSingleNote(track, Tired::cymb, TICK(28));
+    addSingleNote(track, Tired::tired3briz, TICK(29));
+    return track;
+}
+
+SequenceTrack TiredTrackFactory::tiredRollHat(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("RollHat", MidiChannel::kDrums);
+
+    SequenceDesc desc;
+    desc.notes = {{Tired::tiredHat}};
+    desc.rate = 16;
+    makeSequenceTrack(track, desc, TICK(3,2), 0);
+
+    desc.rate = 32;
+    makeSequenceTrack(track, desc, TICK(0,2), TICK(3,2));
+
+    return track;
+}

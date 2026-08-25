@@ -16,16 +16,20 @@ void addTiredSong(SequencePool& pool)
         TiredSequenceFactory::tiredDropA,
         TiredSequenceFactory::tiredMain,
 
-         TiredSequenceFactory::tiredPause,
+        TiredSequenceFactory::tiredPause,
 
         TiredSequenceFactory::tiredDropB,
         TiredSequenceFactory::tiredMainB,
+
+        TiredSequenceFactory::tiredMainBBass,
+        
+        TiredSequenceFactory::tiredPartBStart,
+        TiredSequenceFactory::tiredPartBSolo,
         
         TiredSequenceFactory::tiredFreakArp,
         TiredSequenceFactory::tiredBigEnd,
         
-       
-        
+
     };
 
     for (Builder builder : sequences) {
