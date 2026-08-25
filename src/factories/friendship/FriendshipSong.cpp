@@ -15,11 +15,10 @@ void addFriendshipSong(SequencePool& pool)
         FriendshipSequenceFactory::friendshipIntro,
         FriendshipSequenceFactory::friendshipChill,
         FriendshipSequenceFactory::friendshipBack,
+        FriendshipSequenceFactory::friendshipMain,
         FriendshipSequenceFactory::friendshipBreak,
         FriendshipSequenceFactory::friendshipRising,
         FriendshipSequenceFactory::friendshipClimax,
-
-        FriendshipSequenceFactory::friendshipMain,
         FriendshipSequenceFactory::friendshipEnd,
     };
 
