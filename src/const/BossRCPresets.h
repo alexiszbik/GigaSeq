@@ -8,13 +8,16 @@ namespace BossRC
 _BOSS_PRESET(TogetherA, 19);
 _BOSS_PRESET(TogetherB, 20);
 
+_BOSS_PRESET(Closer, 23);
+
 _BOSS_PRESET(Tired, 25);
-_BOSS_PRESET(Tired, 25);
-_BOSS_PRESET(Closer, 25);
-_BOSS_PRESET(Tired, 25);
+
 _BOSS_PRESET(TiredEnd, 26);
+
 _BOSS_PRESET(Friendship, 27);
+
 _BOSS_PRESET(Water, 28);
+
 _BOSS_PRESET(BiBimBap, 29);
 
 

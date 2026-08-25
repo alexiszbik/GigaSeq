@@ -63,6 +63,11 @@ add_executable(GigaSeq
     src/factories/tired/TiredSong.cpp
     src/factories/tired/TiredTrackFactory.cpp
 
+
+    src/factories/friendship/FriendshipSequenceFactory.cpp
+    src/factories/friendship/FriendshipSong.cpp
+    src/factories/friendship/FriendshipTrackFactory.cpp
+
 )
 
 target_include_directories(GigaSeq PRIVATE src src/engine src/desktop src/const)
