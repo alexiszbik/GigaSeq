@@ -60,4 +60,6 @@ constexpr uint8_t wnDown = 65;
 
 constexpr uint8_t up = 66;
 
+constexpr uint8_t shortsnr = 67;
+
 }

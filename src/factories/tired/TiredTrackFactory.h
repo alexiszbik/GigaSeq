@@ -24,4 +24,10 @@ public:
     static SequenceTrack tiredTechKick(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack tiredBigDrums(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack tiredClapRoll(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack tiredShake(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack tiredClapEcho(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack tiredWhiteNoise(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack tiredCymbal(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack tiredSnareRoll(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack tiredRiserB(tick_t lengthInTicks, tick_t startInTicks);
 };

@@ -271,11 +271,16 @@ constexpr PatternStep kTiredBigDrumsSteps[] = {
 
 MAKE_PATTERN(kTiredBigDrums, kTiredBigDrumsSteps, 16);
 
-
 constexpr PatternStep kTiredClapRollSteps[] = {
     {{Tired::clap}, 127, 1},
 };
 
 MAKE_PATTERN(kTiredClapRoll, kTiredClapRollSteps, 16);
+
+constexpr PatternStep kTiredShakeSteps[] = {
+    _NO_STEP, {{Tired::tiredShake}, 127, 1}
+};
+
+MAKE_PATTERN(kTiredShake, kTiredShakeSteps, 8);
 
 } // namespace TiredPatterns

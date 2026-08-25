@@ -118,3 +118,44 @@ SequenceTrack TiredTrackFactory::tiredClapRoll(tick_t lengthInTicks, tick_t star
     track.setPattern(TiredPatterns::kTiredClapRoll, lengthInTicks, startInTicks);
     return track;
 }
+
+SequenceTrack TiredTrackFactory::tiredShake(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Shake", MidiChannel::kDrums);
+    track.setPattern(TiredPatterns::kTiredShake, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack TiredTrackFactory::tiredClapEcho(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("ClapEcho", MidiChannel::kSampler);
+    addSingleNote(track, Tired::tClapecho, lengthInTicks - TICK(0,1));
+    return track;
+}
+
+SequenceTrack TiredTrackFactory::tiredWhiteNoise(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("WhiteNoise", MidiChannel::kSampler);
+    addSingleNote(track, Tired::wnDown);
+    return track;
+}
+
+SequenceTrack TiredTrackFactory::tiredCymbal(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Cymbal", MidiChannel::kDrums);
+    addSingleNote(track, Tired::cymb);
+
+    return track;
+}
+
+SequenceTrack TiredTrackFactory::tiredSnareRoll(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("SnareRoll", MidiChannel::kDrums);
+
+    makeRoll(track, Tired::shortsnr, TICK(7), 0, 10, 127, {1, 0.87, 0.75});
+
+    return track;
+}
+
+SequenceTrack TiredTrackFactory::tiredRiserB(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("RiserB", MidiChannel::kSampler);
+
+    makeRiser(track, Tired::tRiz2bar, lengthInTicks, TICK(2));
+
+    return track;
+}

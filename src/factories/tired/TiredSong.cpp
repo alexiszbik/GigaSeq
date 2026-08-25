@@ -14,8 +14,18 @@ void addTiredSong(SequencePool& pool)
     const Builder sequences[] = {
         TiredSequenceFactory::tiredIntro,
         TiredSequenceFactory::tiredDropA,
+        TiredSequenceFactory::tiredMain,
+
+         TiredSequenceFactory::tiredPause,
+
+        TiredSequenceFactory::tiredDropB,
+        TiredSequenceFactory::tiredMainB,
+        
         TiredSequenceFactory::tiredFreakArp,
         TiredSequenceFactory::tiredBigEnd,
+        
+       
+        
     };
 
     for (Builder builder : sequences) {

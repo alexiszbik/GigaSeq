@@ -38,4 +38,5 @@ void makeRoll(
     tick_t lengthInTicks,
     tick_t startTIck,
     uint8_t startVelocity,
-    uint8_t endVelocity);
+    uint8_t endVelocity,
+    std::vector<double> velocityPattern = {1});

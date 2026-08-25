@@ -93,13 +93,17 @@ void makeRoll(
     tick_t lengthInTicks,
     tick_t startTick,
     uint8_t startVelocity,
-    uint8_t endVelocity) 
+    uint8_t endVelocity,
+    std::vector<double> velocityPattern) 
 {
     const tick_t stepDuration = TickHelper::kStepLen;
 
     if (lengthInTicks < stepDuration) {
         return;
     }
+
+    int velocityIdx = 0;
+    size_t velocityCount = velocityPattern.size();
     
     const int stepCount = static_cast<int>(lengthInTicks / stepDuration);
 
@@ -107,11 +111,18 @@ void makeRoll(
     
     for (int step = 0; step < stepCount; ++step) {
 
+        double velocityRatio = velocityPattern.at(velocityIdx);
+
         const tick_t tick = startTick + step * stepDuration;
 
         const int velocity = startVelocity + (velocityDelta * step) / (stepCount - 1);
 
-        track.addNote(tick, stepDuration, note, static_cast<uint8_t>(velocity));
+        track.addNote(tick, stepDuration, note, static_cast<uint8_t>(velocity * velocityRatio));
+
+        velocityIdx++;
+        if (velocityIdx >= velocityCount) {
+            velocityIdx = 0;
+        }
     }
 
 }
