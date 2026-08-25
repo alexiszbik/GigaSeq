@@ -29,9 +29,9 @@ TrackSpec& TrackSpec::withAutomation(
     return *this;
 }
 
-TrackSpec& TrackSpec::withMuteEvent(tick_t tick)
+TrackSpec& TrackSpec::withMuteEvent(tick_t tick, bool mute)
 {
-    muteEvents_.push_back(tick);
+    muteEvents_.push_back({tick, mute});
     return *this;
 }
 

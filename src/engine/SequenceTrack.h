@@ -59,7 +59,7 @@ public:
         uint8_t program);
 
     void addMuteEvent(
-        tick_t tick);
+        tick_t tick, bool state = true);
 
     void setPattern(const TrackPattern& pattern, tick_t lengthInTicks, tick_t startInTicks);
     bool hasPattern() const noexcept { return pattern_ != nullptr; }

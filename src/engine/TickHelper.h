@@ -7,6 +7,7 @@ public:
     static constexpr tick_t kTicksPerQuarterNote = 96;
     static constexpr tick_t kOneBarTick4_4 = kTicksPerQuarterNote * 4;
     static constexpr tick_t kStepLen = kTicksPerQuarterNote / 4;
+    static constexpr tick_t kHalfStepLen = kStepLen / 2;
     static constexpr tick_t kTicksPerEighthNote = kTicksPerQuarterNote / 2;
 
     static constexpr tick_t bars(uint8_t count) noexcept

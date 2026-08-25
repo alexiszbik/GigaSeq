@@ -44,8 +44,8 @@ Sequence buildSequence(
                 automation.startValue,
                 automation.endValue);
         }
-        for (tick_t tick : spec.muteEvents()) {
-            t.addMuteEvent(tick);
+        for (MuteEvent e : spec.muteEvents()) {
+            t.addMuteEvent(e.tick, e.mute);
         }
         if (spec.isFill()) {
             t.setFill();

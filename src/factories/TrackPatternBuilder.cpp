@@ -86,3 +86,32 @@ void makeRiser(
     track.addNote(lengthInTicks - riserLength, riserLength, note, 127);
 
 }
+
+void makeRoll(
+    SequenceTrack& track,
+    uint8_t note,
+    tick_t lengthInTicks,
+    tick_t startTick,
+    uint8_t startVelocity,
+    uint8_t endVelocity) 
+{
+    const tick_t stepDuration = TickHelper::kStepLen;
+
+    if (lengthInTicks < stepDuration) {
+        return;
+    }
+    
+    const int stepCount = static_cast<int>(lengthInTicks / stepDuration);
+
+    const int velocityDelta = static_cast<int>(endVelocity) - static_cast<int>(startVelocity);
+    
+    for (int step = 0; step < stepCount; ++step) {
+
+        const tick_t tick = startTick + step * stepDuration;
+
+        const int velocity = startVelocity + (velocityDelta * step) / (stepCount - 1);
+
+        track.addNote(tick, stepDuration, note, static_cast<uint8_t>(velocity));
+    }
+
+}

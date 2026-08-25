@@ -59,4 +59,97 @@ constexpr PatternStep kFriendshipTranceSteps[] = {
 
 MAKE_PATTERN(kFriendshipTrance, kFriendshipTranceSteps, 32);
 
+constexpr PatternStep kFriendshipTranceBSteps[] = {
+    STEP(Cd3, Gd3), _NO_STEP, STEP(Cd3, Gd3), _NO_STEP,
+    {{Cd3, Gd3}, 127, 2}, _NO_STEP, _NO_STEP, _NO_STEP,
+
+    _NO_STEP, _NO_STEP, STEP(Cd3, Gd3), _NO_STEP,
+    {{Cd3, Gd3}, 127, 2}, _NO_STEP, _NO_STEP, _NO_STEP,
+};
+
+MAKE_PATTERN(kFriendshipTranceB, kFriendshipTranceBSteps, 32);
+
+
+constexpr PatternStep kFriendshipBassSteps[] = {
+    STEP(Cd2), _NO_STEP, STEP(Cd2), _NO_STEP,
+    _NO_STEP, STEP(Cd2), _NO_STEP, _NO_STEP,
+
+    STEP(Cd2), _NO_STEP, STEP(Cd2), _NO_STEP,
+    _NO_STEP, STEP(Cd2), _NO_STEP, _NO_STEP,
+
+    STEP(Cd2), _NO_STEP, STEP(Cd2), _NO_STEP,
+    _NO_STEP, STEP(Cd2), _NO_STEP, _NO_STEP,
+
+    STEP(Cd2), _NO_STEP, STEP(Cd2), _NO_STEP,
+    _NO_STEP, STEP(Cd2), STEP(Fd2), STEP(Gd2),
+
+
+
+    STEP(Cd2), _NO_STEP, STEP(Cd2), _NO_STEP,
+    _NO_STEP, STEP(Cd2), _NO_STEP, _NO_STEP,
+
+    STEP(Cd2), _NO_STEP, STEP(Cd2), _NO_STEP,
+    _NO_STEP, STEP(Cd2), _NO_STEP, _NO_STEP,
+
+    STEP(Cd2), _NO_STEP, STEP(Cd2), _NO_STEP,
+    _NO_STEP, STEP(Cd2), _NO_STEP, _NO_STEP,
+
+    STEP(Cd2), _NO_STEP, STEP(Cd2), _NO_STEP,
+    _NO_STEP, STEP(Cd2), STEP(Fd2), STEP(Gd2),
+
+
+
+    STEP(Gd1), _NO_STEP, STEP(Gd1), _NO_STEP,
+    _NO_STEP, STEP(Gd1), _NO_STEP, _NO_STEP,
+
+    STEP(Gd1), _NO_STEP, STEP(Gd1), _NO_STEP,
+    _NO_STEP, STEP(Gd1), _NO_STEP, _NO_STEP,
+
+    STEP(Gd1), _NO_STEP, STEP(Gd1), _NO_STEP,
+    _NO_STEP, STEP(Gd1), _NO_STEP, _NO_STEP,
+
+    STEP(Gd1), _NO_STEP, STEP(Gd1), _NO_STEP,
+    _NO_STEP, STEP(Gd1), STEP(Fd2), STEP(Gd2),
+
+
+    STEP(Fd1), _NO_STEP, STEP(Fd1), _NO_STEP,
+    _NO_STEP, STEP(Fd1), _NO_STEP, _NO_STEP,
+
+    STEP(Fd1), _NO_STEP, STEP(Fd1), _NO_STEP,
+    _NO_STEP, STEP(Fd1), _NO_STEP, _NO_STEP,
+
+     STEP(Fd1), _NO_STEP, STEP(Fd1), _NO_STEP,
+    _NO_STEP, STEP(Fd1), _NO_STEP, _NO_STEP,
+
+    STEP(Fd1), STEP(Cd3), STEP(Gd2), STEP(Fd2), 
+    STEP(Gd2), STEP(Cd3), STEP(Fd2), STEP(Fd3)
+
+};
+
+MAKE_PATTERN(kFriendshipBass, kFriendshipBassSteps, 16);
+
+
+constexpr PatternStep kFriendshipJungleSteps[] = {
+    {{Friendship::fbdrummy}, 127, 1},
+};
+
+MAKE_PATTERN(kFriendshipJungle, kFriendshipJungleSteps, 1);
+
+//TODO : well if fact, i might not need _NO_STEP
+
+constexpr PatternStep kFriendshipStabzSteps[] = {
+    {{Friendship::fbstab}}, {}, {}, {}, {}, {}, {}, {}
+};
+
+MAKE_PATTERN(kFriendshipStabz, kFriendshipStabzSteps, 1);
+
+
+
+constexpr PatternStep kFriendshipOpenH909Steps[] = {
+    {}, {{Friendship::openhat}},
+};
+
+MAKE_PATTERN(kFriendshipOpenH909, kFriendshipOpenH909Steps, 8);
+
+
 } // namespace FriendshipPatterns

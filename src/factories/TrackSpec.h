@@ -41,7 +41,7 @@ public:
         uint8_t controller,
         uint8_t startValue,
         uint8_t endValue);
-    TrackSpec& withMuteEvent(tick_t tick);
+    TrackSpec& withMuteEvent(tick_t tick, bool mute = true);
     TrackSpec& asFill();
     TrackSpec& withLength(tick_t length);
     TrackSpec& withStart(tick_t start);
@@ -53,7 +53,7 @@ public:
     uint8_t programChange() const noexcept { return programChange_; }
     const std::vector<CCPair>& controlChanges() const noexcept { return controlChanges_; }
     const std::vector<ControlAutomation>& controlAutomations() const noexcept { return controlAutomations_; }
-    const std::vector<tick_t>& muteEvents() const noexcept { return muteEvents_; }
+    const std::vector<MuteEvent>& muteEvents() const noexcept { return muteEvents_; }
     bool isFill() const noexcept { return isFill_; }
     bool hasCustomLength() const noexcept { return hasCustomLength_; }
     tick_t customLength() const noexcept { return customLength_; }
@@ -69,7 +69,7 @@ private:
     uint8_t programChange_ = 0;
     std::vector<CCPair> controlChanges_;
     std::vector<ControlAutomation> controlAutomations_;
-    std::vector<tick_t> muteEvents_;
+    std::vector<MuteEvent> muteEvents_;
     bool isFill_ = false;
 
     bool hasCustomLength_ = false;

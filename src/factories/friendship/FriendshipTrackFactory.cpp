@@ -92,6 +92,12 @@ SequenceTrack FriendshipTrackFactory::friendshipBravery(tick_t lengthInTicks, ti
     return track;
 }
 
+SequenceTrack FriendshipTrackFactory::friendshipAndBravery(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Bravery", MidiChannel::kDrums);
+    track.setPattern(FriendshipPatterns::kFriendshipAndBravery, lengthInTicks, startInTicks);
+    return track;
+}
+
 SequenceTrack FriendshipTrackFactory::friendshipXylo(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Xylo", MidiChannel::kSampler);
     track.setPattern(FriendshipPatterns::kFriendshipXylo, lengthInTicks, startInTicks);
@@ -149,5 +155,70 @@ SequenceTrack FriendshipTrackFactory::friendshipSeqVoice(tick_t lengthInTicks, t
 SequenceTrack FriendshipTrackFactory::friendshipTrance(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Trance", MidiChannel::kMicrofreak);
     track.setPattern(FriendshipPatterns::kFriendshipTrance, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack FriendshipTrackFactory::friendshipBass(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Bass", MidiChannel::kBass);
+    track.setPattern(FriendshipPatterns::kFriendshipBass, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack FriendshipTrackFactory::friendshipJungle(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Jungle", MidiChannel::kSampler);
+    track.setPattern(FriendshipPatterns::kFriendshipJungle, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack FriendshipTrackFactory::friendshipStabz(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Stabz", MidiChannel::kSampler);
+    track.setPattern(FriendshipPatterns::kFriendshipStabz, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack FriendshipTrackFactory::friendshipVocalHits(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("VocalHits", MidiChannel::kDrums);
+
+    uint8_t a = Friendship::fbV3; 
+    uint8_t b = Friendship::fbV4; 
+    uint8_t c = Friendship::fbV2;
+
+    SequenceDesc desc;
+    desc.notes = {{a}};
+    desc.rate = 16;
+    makeSequenceTrack(track, desc, TICK(2), TICK(4));
+
+    desc.notes = {{b}};
+    makeSequenceTrack(track, desc, TICK(1), TICK(6));
+
+    desc.notes = {{c}};
+    makeSequenceTrack(track, desc, TICK(1), TICK(7));
+
+    return track;
+}
+
+SequenceTrack FriendshipTrackFactory::friendshipOpenH909(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("OpenH909", MidiChannel::kDrums);
+    track.setPattern(FriendshipPatterns::kFriendshipOpenH909, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack FriendshipTrackFactory::friendshipSnareRoll(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("SnareRoll", MidiChannel::kDrums);
+
+    makeRoll(track, Friendship::snr909, TICK(15,0), startInTicks, 1, 127);
+    return track;
+}
+
+SequenceTrack FriendshipTrackFactory::friendshipTranceB(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("TranceB", MidiChannel::kMicrofreak);
+    track.setPattern(FriendshipPatterns::kFriendshipTranceB, lengthInTicks, startInTicks);
+
+    return track;
+}
+
+SequenceTrack FriendshipTrackFactory::friendshipCrash(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Crash", MidiChannel::kDrums);
+    addSingleNote(track, Friendship::cym74);
     return track;
 }

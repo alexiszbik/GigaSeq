@@ -72,9 +72,9 @@ void SequenceTrack::addProgramChange(
 }
 
 void SequenceTrack::addMuteEvent(
-    tick_t tick)
+    tick_t tick, bool state)
 {
-    muteEvents_.add({ tick });
+    muteEvents_.add({ tick, state });
 }
 
 void SequenceTrack::setPattern(const TrackPattern& pattern, tick_t lengthInTicks, tick_t startInTicks)
@@ -302,7 +302,7 @@ void SequenceTrack::processTick(tick_t position, bool loopWrap)
     processControlAutomations(position, loopWrap);
 
     muteEvents_.process(position, loopWrap, [this](const MuteEvent& e) {
-        setMuted(true);
+        setMuted(e.mute);
     });
 
     notes_.process(position, loopWrap, [this](const ScheduledNote& scheduledNote) {

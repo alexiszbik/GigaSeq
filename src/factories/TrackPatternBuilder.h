@@ -31,3 +31,11 @@ void makeRiser(
     uint8_t note,
     tick_t lengthInTicks,
     tick_t riserLength);
+
+void makeRoll(
+    SequenceTrack& track,
+    uint8_t note,
+    tick_t lengthInTicks,
+    tick_t startTIck,
+    uint8_t startVelocity,
+    uint8_t endVelocity);

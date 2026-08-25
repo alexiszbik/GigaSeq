@@ -10,9 +10,13 @@ constexpr uint8_t fbrClp = 37;
 
 constexpr uint8_t fbrSnar = 38;
 
-constexpr uint8_t n707cow = 39;
+constexpr uint8_t snr909 = 39;
 
 constexpr uint8_t shaker = 40;
+
+constexpr uint8_t openhat = 42;
+
+constexpr uint8_t n707cow = 43;
 
 constexpr uint8_t fbV1 = 44;
 
