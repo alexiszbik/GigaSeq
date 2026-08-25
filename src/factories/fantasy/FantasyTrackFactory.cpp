@@ -57,8 +57,8 @@ SequenceTrack FantasyTrackFactory::fantasySampleSidekick(tick_t lengthInTicks, t
 
 SequenceTrack FantasyTrackFactory::fantasySampleFadeCut(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("SampleFade", MidiChannel::kSampler);
-    track.addNote(0, TickHelper::kStepLen, Fantasy::fantasyFiltera, 127);
-    track.addNote(TICK(4), TickHelper::kStepLen, Fantasy::fantasyCut, 127);
+    track.addNote(TICK(4), TickHelper::kStepLen, Fantasy::fantasyFiltera, 127);
+    track.addNote(TICK(8), TickHelper::kStepLen, Fantasy::fantasyCut, 127);
     return track;
 }
 
@@ -167,3 +167,10 @@ SequenceTrack FantasyTrackFactory::fantasyShakeEnd(tick_t lengthInTicks, tick_t 
 }
 
 
+
+SequenceTrack FantasyTrackFactory::fantasyBreakFX(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("BreakFX", MidiChannel::kSampler);
+
+    addSingleNote(track, Fantasy::fantasyBreakfx);
+    return track;
+}

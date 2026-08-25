@@ -48,17 +48,18 @@ Sequence FantasySequenceFactory::fantasyBreak()
 Sequence FantasySequenceFactory::fantasyBack()
 {
     Sequence seq = buildSequence(
-        12, 4, 8, "FadeCut", songTempo, true,
+        16, 4, 12, "FadeCut", songTempo, true,
         {
             track(FantasyTrackFactory::fantasySampleSidekick).withStart(TICK(8)),
             track(FantasyTrackFactory::fantasySampleFadeCut).withLength(TICK(8)),
-            track(FantasyTrackFactory::fantasyDrums).withStart(TICK(4)),
-            track(FantasyTrackFactory::fantasyShake).withStart(TICK(4)),
-            track(FantasyTrackFactory::fantasyChordOffset).withStart(TICK(4)),
-            track(FantasyTrackFactory::fantasyHiDrum).withLength(TICK(4)),
-            track(FantasyTrackFactory::fantasyFreak),
+            track(FantasyTrackFactory::fantasyDrums).withStart(TICK(8)),
+            track(FantasyTrackFactory::fantasyShake).withStart(TICK(8)),
+            track(FantasyTrackFactory::fantasyChordOffset).withStart(TICK(8)),
+            track(FantasyTrackFactory::fantasyHiDrum).withLength(TICK(8)),
+            track(FantasyTrackFactory::fantasyFreak).withMuteEvent(TICK(8)).withMuteEvent(TICK(8,1), false),
             track(FantasyTrackFactory::fantasyVocals),
             track(FantasyTrackFactory::fantasyRiser).withMuteEvent(TICK(8)).asFill(),
+            FantasyTrackFactory::fantasyBreakFX
         });
 
 
