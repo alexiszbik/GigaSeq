@@ -8,7 +8,6 @@ namespace FantasyPatterns
 {
 
 constexpr uint8_t snr = Fantasy::fant909;
-constexpr uint8_t sample = Fantasy::ftsySample;
 
 constexpr uint8_t kk = Fantasy::ftsyKick;
 constexpr uint8_t clp = Fantasy::ftsyClp;
@@ -58,16 +57,6 @@ constexpr PatternStep kFantasySnare909Steps[] = {
 };
 
 MAKE_PATTERN(kFantasySnare909, kFantasySnare909Steps, 16);
-
-constexpr PatternStep kFantasySampleSteps[] = {
-    {{sample}, 127, 1},
-    _NO_STEP,
-    _NO_STEP,
-    _NO_STEP,
-};
-
-MAKE_PATTERN(kFantasySample, kFantasySampleSteps, 1);
-
 
 constexpr PatternStep kFantasyDrumsSteps[] = {
     STEP(kk), STEP(hh),

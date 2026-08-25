@@ -37,7 +37,6 @@ Sequence TiredSequenceFactory::tiredDropA()
             TiredTrackFactory::tiredUpRising,
             TiredTrackFactory::tiredRiserA,
             TiredTrackFactory::tiredFreak,
-            track(SequenceTrackFactory::gtrPedal).withProgramChange(1)
         });
     return seq;
 }
@@ -86,6 +85,7 @@ Sequence TiredSequenceFactory::tiredDropB()
             track(TiredTrackFactory::tiredPhazeHat),
             track(TiredTrackFactory::tiredShake).withLength(TICK(7)),
             track(TiredTrackFactory::tiredClapEcho),
+            TiredTrackFactory::tiredUpRisingB,
             track(TiredTrackFactory::tiredSnareRoll),
             track(TiredTrackFactory::tiredRiserB),
             track(TiredTrackFactory::tiredCymbal),
@@ -145,30 +145,48 @@ Sequence TiredSequenceFactory::tiredPartBStart()
 Sequence TiredSequenceFactory::tiredPartBSolo()
 {
     Sequence seq = buildSequence(
-        20, 12, 0, "PartBSolo", songTempo, true,
+        20, 4, 16, "PartBSolo", songTempo, true,
         {
             TiredTrackFactory::tiredStabs,
-            TiredTrackFactory::tiredRollHat,
             track(TiredTrackFactory::tiredImpacts).withMuteEvent(0).withMuteEvent(TICK(3,3,2), false),
             track(TiredTrackFactory::tiredImpactsKick).withMuteEvent(0).withMuteEvent(TICK(3,3,2), false),
             track(TiredTrackFactory::tiredTechHats).withStart(TICK(12)),
+            track(TiredTrackFactory::tiredFreakArp).muted(),
+            TiredTrackFactory::tiredRollHat,
+            track(TiredTrackFactory::tiredRiserA).withLength(TICK(4)),
         });
     return seq;
 }
 
-Sequence TiredSequenceFactory::tiredFreakArp()
+Sequence TiredSequenceFactory::tiredPartBMain()
 {
     Sequence seq = buildSequence(
-        8, 4, 0, "FreakArp", songTempo, true,
+        8, 4, 0, "FreakArp", songTempo, false,
         {
-            TiredTrackFactory::tiredFreakArp,
             TiredTrackFactory::tiredStabs,
-            TiredTrackFactory::tiredBass,
-            TiredTrackFactory::tiredTechHats,
             TiredTrackFactory::tiredImpacts,
             TiredTrackFactory::tiredImpactsKick,
+            TiredTrackFactory::tiredTechHats,
+            TiredTrackFactory::tiredFreakArp,
+            TiredTrackFactory::tiredBass,
+            TiredTrackFactory::tiredRiserA,
+            //TiredTrackFactory::tiredTechKick,
+        });
+    return seq;
+}
+
+Sequence TiredSequenceFactory::tiredPartBMain_2()
+{
+    Sequence seq = buildSequence(
+        16, 4, 0, "FreakArp", songTempo, false,
+        {
+            TiredTrackFactory::tiredStabs,
+            TiredTrackFactory::tiredImpacts,
             TiredTrackFactory::tiredTechKick,
-            track(SequenceTrackFactory::gtrPedal).withProgramChange(2)
+            TiredTrackFactory::tiredTechHats,
+            TiredTrackFactory::tiredFreakArp,
+            TiredTrackFactory::tiredBass,
+            TiredTrackFactory::tiredRiserA,
         });
     return seq;
 }
@@ -176,11 +194,13 @@ Sequence TiredSequenceFactory::tiredFreakArp()
 Sequence TiredSequenceFactory::tiredBigEnd()
 {
     Sequence seq = buildSequence(
-        8, 4, 0, "BigEnd", songTempo, true,
+        20, 4, 16, "BigEnd", songTempo, true,
         {
-            TiredTrackFactory::tiredBigDrums,
-            TiredTrackFactory::tiredClapRoll,
-            track(SequenceTrackFactory::gtrPedal).withProgramChange(3)
+            track(TiredTrackFactory::tiredStabs).withLength(TICK(16)),
+            track(TiredTrackFactory::tiredBigDrums).withLength(TICK(16)),
+            TiredTrackFactory::tiredFreakArp,
+            track(TiredTrackFactory::tiredBass).withLength(TICK(16)),
+            track(TiredTrackFactory::tiredClapRoll).withStart(TICK(8)).withLength(TICK(8)),
         });
     return seq;
 }

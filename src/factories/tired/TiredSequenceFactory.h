@@ -18,7 +18,8 @@ public:
 
     static Sequence tiredPartBStart();
     static Sequence tiredPartBSolo();
-    static Sequence tiredFreakArp();
+    static Sequence tiredPartBMain();
+    static Sequence tiredPartBMain_2();
     static Sequence tiredBigEnd();
 
 };

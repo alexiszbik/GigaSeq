@@ -13,6 +13,7 @@ public:
     static SequenceTrack tiredSync(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack tiredPhazeHat(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack tiredUpRising(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack tiredUpRisingB(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack tiredRiserA(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack tiredFreak(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack tiredFreakArp(tick_t lengthInTicks, tick_t startInTicks);

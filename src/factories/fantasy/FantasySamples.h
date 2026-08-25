@@ -34,11 +34,15 @@ constexpr uint8_t fantDrumhi = 52;
 
 constexpr uint8_t ftsyRiz = 53;
 
-constexpr uint8_t ftsySample = 54;
+constexpr uint8_t fantasyIntro = 54;
 
-constexpr uint8_t ftsySampleFade = 61;
+constexpr uint8_t fantasySidekick = 55;
 
-constexpr uint8_t ftsySampleCut = 62;
+constexpr uint8_t fantasyCut = 56;
+
+constexpr uint8_t fantasyFiltera = 57;
+
+constexpr uint8_t fantasyFilterb = 58;
 
 constexpr uint8_t bigriz1 = 63;
 

@@ -14,7 +14,7 @@ Sequence FantasySequenceFactory::fantasyIntro()
     Sequence seq = buildSequence(
         4, 4, 0, "Intro", songTempo, true,
         {
-            FantasyTrackFactory::fantasySample,
+            FantasyTrackFactory::fantasySampleIntro,
         });
     return seq;
 }
@@ -25,7 +25,7 @@ Sequence FantasySequenceFactory::fantasyStart()
     Sequence seq = buildSequence(
         4, 4, 0, "Start", songTempo, true,
         {
-            FantasyTrackFactory::fantasySample,
+            FantasyTrackFactory::fantasySampleSidekick,
             FantasyTrackFactory::fantasyDrums,
             FantasyTrackFactory::fantasyShake,
             FantasyTrackFactory::fantasyChords,
@@ -50,7 +50,7 @@ Sequence FantasySequenceFactory::fantasyBack()
     Sequence seq = buildSequence(
         12, 4, 8, "FadeCut", songTempo, true,
         {
-            track(FantasyTrackFactory::fantasySample).withStart(TICK(8)),
+            track(FantasyTrackFactory::fantasySampleSidekick).withStart(TICK(8)),
             track(FantasyTrackFactory::fantasySampleFadeCut).withLength(TICK(8)),
             track(FantasyTrackFactory::fantasyDrums).withStart(TICK(4)),
             track(FantasyTrackFactory::fantasyShake).withStart(TICK(4)),
@@ -73,9 +73,6 @@ Sequence FantasySequenceFactory::fantasyBack()
 
 Sequence FantasySequenceFactory::fantasyRave()
 {
-    tick_t snareStart = TICK(16);
-    tick_t snareLength = TICK(32);
-
     uint8_t len = 48;
 
     Sequence seq = buildSequence(
@@ -108,7 +105,8 @@ Sequence FantasySequenceFactory::fantasyGuitarRiz()
         8, 4, 0, "GuitarRiz", songTempo, false,
         {
             track(FantasyTrackFactory::fantasyBigClap).withLength(TICK(15,2)),
-            FantasyTrackFactory::fantasyBigRiz2
+            FantasyTrackFactory::fantasyBigRiz2,
+            FantasyTrackFactory::fantasySampleFilterB
         });
     return seq;
 }
@@ -118,7 +116,7 @@ Sequence FantasySequenceFactory::fantasyClimax()
     Sequence seq = buildSequence(
         8, 4, 0, "Climax", songTempo, true,
         {
-            FantasyTrackFactory::fantasySample,
+            FantasyTrackFactory::fantasySampleSidekick,
             FantasyTrackFactory::fantasyDrums,
             FantasyTrackFactory::fantasyShake,
             FantasyTrackFactory::fantasyChords,

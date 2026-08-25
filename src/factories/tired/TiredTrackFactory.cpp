@@ -52,6 +52,13 @@ SequenceTrack TiredTrackFactory::tiredUpRising(tick_t lengthInTicks, tick_t star
     return track;
 }
 
+
+SequenceTrack TiredTrackFactory::tiredUpRisingB(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("UpRising", MidiChannel::kSampler);
+    track.addNote(0, TICK(7), Tired::up, 127);
+    return track;
+}
+
 SequenceTrack TiredTrackFactory::tiredRiserA(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("RiserA", MidiChannel::kSampler);
     makeRiser(track, Tired::tired3briz, lengthInTicks, TICK(3));

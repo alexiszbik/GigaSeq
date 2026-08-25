@@ -7,7 +7,12 @@ class FantasyTrackFactory
 public:
     static SequenceTrack fantasyArp(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack fantasySnare909(tick_t lengthInTicks, tick_t startInTicks);
-    static SequenceTrack fantasySample(tick_t lengthInTicks, tick_t startInTicks);
+
+    static SequenceTrack fantasySampleIntro(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack fantasySampleSidekick(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack fantasySampleFilterB(tick_t lengthInTicks, tick_t startInTicks);
+
+
     static SequenceTrack fantasyDrums(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack fantasyShake(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack fantasyChords(tick_t lengthInTicks, tick_t startInTicks);

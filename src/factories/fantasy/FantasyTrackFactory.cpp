@@ -29,20 +29,44 @@ SequenceTrack FantasyTrackFactory::fantasySnare909(tick_t lengthInTicks, tick_t 
     return track;
 }
 
-SequenceTrack FantasyTrackFactory::fantasySample(tick_t lengthInTicks, tick_t startInTicks) {
+SequenceTrack FantasyTrackFactory::fantasySampleIntro(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Sample", MidiChannel::kSampler);
-    track.setPattern(FantasyPatterns::kFantasySample, lengthInTicks, startInTicks);
+    
+    SequenceDesc desc;
+    desc.notes = {
+        {Fantasy::fantasyIntro},
+    };
+    desc.rate = 0.25;
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
+
     return track;
 }
 
+SequenceTrack FantasyTrackFactory::fantasySampleSidekick(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Sample", MidiChannel::kSampler);
+    
+    SequenceDesc desc;
+    desc.notes = {
+        {Fantasy::fantasySidekick},
+    };
+    desc.rate = 0.25;
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
+
+    return track;
+}
 
 SequenceTrack FantasyTrackFactory::fantasySampleFadeCut(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("SampleFade", MidiChannel::kSampler);
-    track.addNote(0, TickHelper::kStepLen, Fantasy::ftsySampleFade, 127);
-    track.addNote(TICK(4), TickHelper::kStepLen, Fantasy::ftsySampleCut, 127);
+    track.addNote(0, TickHelper::kStepLen, Fantasy::fantasyFiltera, 127);
+    track.addNote(TICK(4), TickHelper::kStepLen, Fantasy::fantasyCut, 127);
     return track;
 }
 
+SequenceTrack FantasyTrackFactory::fantasySampleFilterB(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("SampleFade", MidiChannel::kSampler);
+    addSingleNote(track, Fantasy::fantasyFilterb);
+    return track;
+}
 
 SequenceTrack FantasyTrackFactory::fantasyDrums(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Drums", MidiChannel::kDrums);
