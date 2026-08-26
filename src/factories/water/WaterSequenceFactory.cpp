@@ -19,15 +19,16 @@ Sequence WaterSequenceFactory::waterIntro()
             SequenceTrackFactory::clapFour,
             track(WaterTrackFactory::waterHats).muted(),
             track(WaterTrackFactory::waterMarimba).muted(),
-            WaterTrackFactory::waterFreak,
+            track(WaterTrackFactory::waterFreak).withProgramChange(Microfreak::kWaterBass),
             track(WaterTrackFactory::waterBass).muted(),
             track(WaterTrackFactory::waterClaves).muted(),
             track(WaterTrackFactory::waterCongas).muted(),
             track(WaterTrackFactory::waterFmbass).muted(),
             track(SequenceTrackFactory::gtrLoopErase).withProgramChange(BossRC::kWater, TICK(4)),
+            track(SequenceTrackFactory::polySynth).withProgramChange(PolySynth::kWaterSqr),
         });
 
-        return seq;
+    return seq;
 }
 
 Sequence WaterSequenceFactory::waterPrechorus()

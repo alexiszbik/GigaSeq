@@ -16,4 +16,9 @@ public:
     static SequenceTrack gtrLoopMute(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack gtrLoopUnmute(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack gtrLoopErase(tick_t lengthInTicks, tick_t startInTicks);
+
+    static SequenceTrack polySynth(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack bass(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack vocoder(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack microfreak(tick_t lengthInTicks, tick_t startInTicks);
 };

@@ -61,3 +61,24 @@ SequenceTrack SequenceTrackFactory::gtrLoopErase(tick_t lengthInTicks, tick_t st
     track.addControlChange({ static_cast<tick_t>(startInTicks + 2), BossRC::kErase_cc, 127 });
     return track;
 }
+
+SequenceTrack SequenceTrackFactory::polySynth(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("PolySynth", MidiChannel::kPoly);
+    return track;
+}
+
+SequenceTrack SequenceTrackFactory::bass(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Bass", MidiChannel::kBass);
+    return track;
+}
+
+SequenceTrack SequenceTrackFactory::vocoder(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Vocoder", MidiChannel::kVocoder);
+    return track;
+}
+
+SequenceTrack SequenceTrackFactory::microfreak(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Microfreak", MidiChannel::kMicrofreak);
+    return track;
+}
+
