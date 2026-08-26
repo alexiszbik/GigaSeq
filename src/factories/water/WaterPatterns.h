@@ -2,15 +2,16 @@
 
 #include "TrackPattern.h"
 #include "factories/MidiNotes.h"
+#include "WaterSamples.h"
 
 namespace WaterPatterns
 {
 
 constexpr PatternStep kWaterHatsSteps[] = {
     _NO_STEP,
-    {{40}, 55, 1},
-    {{40}, 127, 1},
-    {{40}, 55, 1},
+    {{Water::wtrHat}, 55, 1},
+    {{Water::wtrHat}, 127, 1},
+    {{Water::wtrHat}, 55, 1},
 };
 
 MAKE_PATTERN(kWaterHats, kWaterHatsSteps, 16);
@@ -40,19 +41,19 @@ MAKE_PATTERN(kWaterBass, kWaterBassSteps, 16);
 constexpr PatternStep kWaterXmasSteps[] = {
     _NO_STEP,
     _NO_STEP,
-    {{45}, 127, 1},
+    {{Water::wtrXmas}, 127, 1},
     _NO_STEP,
     _NO_STEP,
     _NO_STEP,
-    {{45}, 127, 1},
+    {{Water::wtrXmas}, 127, 1},
     _NO_STEP,
     _NO_STEP,
     _NO_STEP,
-    {{45}, 127, 1},
+    {{Water::wtrXmas}, 127, 1},
     _NO_STEP,
     _NO_STEP,
-    {{45}, 60, 1},
-    {{45}, 127, 1},
+    {{Water::wtrXmas}, 60, 1},
+    {{Water::wtrXmas}, 127, 1},
     _NO_STEP,
 };
 
@@ -60,36 +61,36 @@ MAKE_PATTERN(kWaterXmas, kWaterXmasSteps, 16);
 
 constexpr PatternStep kWaterCongasSteps[] = {
     _NO_STEP,
-    {{43}, 55, 1},
-    {{44}, 127, 1},
-    {{44}, 112, 1},
-    {{44}, 45, 1},
-    {{44}, 30, 1},
-    {{43}, 112, 1},
-    {{43}, 28, 1},
+    {{Water::wtrCg1}, 55, 1},
+    {{Water::wtrCg2}, 127, 1},
+    {{Water::wtrCg2}, 112, 1},
+    {{Water::wtrCg2}, 45, 1},
+    {{Water::wtrCg2}, 30, 1},
+    {{Water::wtrCg1}, 112, 1},
+    {{Water::wtrCg1}, 28, 1},
 };
 
 MAKE_PATTERN(kWaterCongas, kWaterCongasSteps, 16);
 
 constexpr PatternStep kWaterBalafonSteps[] = {
-    {{D3}, 127, 1},
-    {{Dd3}, 127, 1},
-    {{E3}, 127, 1},
+    {{Water::wtrBlf1}, 127, 1},
+    {{Water::wtrBlf2}, 127, 1},
+    {{Water::wtrBlf3}, 127, 1},
 };
 
 MAKE_PATTERN(kWaterBalafon, kWaterBalafonSteps, 16);
 
 constexpr PatternStep kWaterShakesSteps[] = {
     _NO_STEP,
-    {{F1}, 55, 1},
-    {{F1}, 127, 1},
-    {{F1}, 55, 1},
+    {{Water::wtrShk}, 55, 1},
+    {{Water::wtrShk}, 127, 1},
+    {{Water::wtrShk}, 55, 1},
 };
 
 MAKE_PATTERN(kWaterShakes, kWaterShakesSteps, 16);
 
 constexpr PatternStep kWaterMarimbaSteps[] = {
-    {{G2}, 127, 1},
+    {{Water::wtrMarimba}, 127, 1},
     _NO_STEP,
     _NO_STEP,
     _NO_STEP,
@@ -99,7 +100,7 @@ MAKE_PATTERN(kWaterMarimba, kWaterMarimbaSteps, 1);
 
 constexpr PatternStep kWaterClavesSteps[] = {
     _NO_STEP,
-    {{46}, 127, 1},
+    {{Water::wtrClverb}, 127, 1},
     _NO_STEP,
     _NO_STEP,
     _NO_STEP,
@@ -119,12 +120,12 @@ constexpr PatternStep kWaterClavesSteps[] = {
 MAKE_PATTERN(kWaterClaves, kWaterClavesSteps, 4);
 
 #define FMBASS_MOTIF_GD \
-    _NO_STEP, _NO_STEP, {{Gd2}, 127, 1}, {{Gd2}, 127, 1}, \
-    {{Ad2}, 127, 1}, {{Ad2}, 127, 1}, {{Cd3}, 127, 1}, {{Cd3}, 127, 1}
+    _NO_STEP, _NO_STEP, {{Water::fmbassgd}, 127, 1}, {{Water::fmbassgd}, 127, 1}, \
+    {{Water::fmbassad}, 127, 1}, {{Water::fmbassad}, 127, 1}, {{Water::fmbasscd}, 127, 1}, {{Water::fmbasscd}, 127, 1}
 
 #define FMBASS_MOTIF_CD \
-    _NO_STEP, _NO_STEP, {{Cd3}, 127, 1}, {{Cd3}, 127, 1}, \
-    {{Ad2}, 127, 1}, {{Ad2}, 127, 1}, {{Cd3}, 127, 1}, {{Cd3}, 127, 1}
+    _NO_STEP, _NO_STEP, {{Water::fmbasscd}, 127, 1}, {{Water::fmbasscd}, 127, 1}, \
+    {{Water::fmbassad}, 127, 1}, {{Water::fmbassad}, 127, 1}, {{Water::fmbasscd}, 127, 1}, {{Water::fmbasscd}, 127, 1}
 
 #define FMBASS_24_EMPTY \
     _NO_STEP, _NO_STEP, _NO_STEP, _NO_STEP, \

@@ -32,7 +32,7 @@ public:
     TrackSpec(TrackBuilder builder) : builder_(builder) {}
 
     TrackSpec& muted() { startMuted_ = true; return *this; }
-    TrackSpec& withProgramChange(uint8_t program) { hasProgramChange_ = true; programChange_ = program; return *this; }
+    TrackSpec& withProgramChange(uint8_t program, tick_t tick = 0);
     TrackSpec& withCC(uint8_t control, uint8_t value, tick_t tick = 0);
     TrackSpec& withCCs(std::vector<CCPair> controlChanges);
     TrackSpec& withAutomation(
@@ -50,7 +50,7 @@ public:
     TrackBuilder builder() const noexcept { return builder_; }
     bool startMuted() const noexcept { return startMuted_; }
     bool hasProgramChange() const noexcept { return hasProgramChange_; }
-    uint8_t programChange() const noexcept { return programChange_; }
+    ProgramChange programChange() const noexcept { return programChange_; }
     const std::vector<CCPair>& controlChanges() const noexcept { return controlChanges_; }
     const std::vector<ControlAutomation>& controlAutomations() const noexcept { return controlAutomations_; }
     const std::vector<MuteEvent>& muteEvents() const noexcept { return muteEvents_; }
@@ -66,7 +66,7 @@ private:
     TrackBuilder builder_;
     bool startMuted_ = false;
     bool hasProgramChange_ = false;
-    uint8_t programChange_ = 0;
+    ProgramChange programChange_;
     std::vector<CCPair> controlChanges_;
     std::vector<ControlAutomation> controlAutomations_;
     std::vector<MuteEvent> muteEvents_;

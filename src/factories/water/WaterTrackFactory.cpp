@@ -36,12 +36,12 @@ SequenceTrack WaterTrackFactory::waterChorus(tick_t lengthInTicks, tick_t startI
     SequenceTrack track("Chorus", MidiChannel::kSampler);
 
     SequenceDesc desc;
-    desc.notes = {{56}};
+    desc.notes = {{Water::wtrJunoa}};
     desc.rate = 0.125;
     makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
 
     tick_t lastNote = TICK(12, 3, 2);
-    track.addNote(startInTicks + lastNote, TickHelper::kStepLen, 57, 127);
+    track.addNote(startInTicks + lastNote, TickHelper::kStepLen, Water::wtrJunob, 127);
 
     return track;
 }
@@ -89,20 +89,20 @@ SequenceTrack WaterTrackFactory::waterShakes(tick_t lengthInTicks, tick_t startI
 }
 
 SequenceTrack WaterTrackFactory::waterFmbass(tick_t lengthInTicks, tick_t startInTicks) {
-    SequenceTrack track("Fmbass", MidiChannel::kModularB);
+    SequenceTrack track("Fmbass", MidiChannel::kSampler);
     track.setPattern(WaterPatterns::kWaterFmbass, lengthInTicks, startInTicks);
     return track;
 }
 
 SequenceTrack WaterTrackFactory::waterChorusFMBass(tick_t lengthInTicks, tick_t startInTicks) {
-    SequenceTrack track("Fmbass", MidiChannel::kModularB);
+    SequenceTrack track("Fmbass", MidiChannel::kSampler);
 
     SequenceDesc desc;
     desc.notes = {
         {}, {}, {}, {},
         {}, {}, {}, {},
-        {}, {}, {Gd2}, {Gd2},
-        {Ad2}, {Ad2}, {Cd3}, {Cd3},
+        {}, {}, {Water::fmbassgd}, {Water::fmbassgd},
+        {Water::fmbassad}, {Water::fmbassad}, {Water::fmbasscd}, {Water::fmbasscd},
         };
     desc.rate = 16;
     makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
@@ -189,12 +189,12 @@ SequenceTrack WaterTrackFactory::waterChorusEnd(tick_t lengthInTicks, tick_t sta
     SequenceTrack track("ChorusEnd", MidiChannel::kSampler);
 
     SequenceDesc desc;
-    desc.notes = {{56}};
+    desc.notes = {{Water::wtrJunoa}};
     desc.rate = 0.125;
     makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
 
     tick_t lastNote = TICK(28, 3, 2);
-    track.addNote(startInTicks + lastNote, TickHelper::kStepLen, 57, 127);
+    track.addNote(startInTicks + lastNote, TickHelper::kStepLen, Water::wtrJunob, 127);
 
     return track;
 }

@@ -31,7 +31,7 @@ Sequence buildSequence(
             t.setStartMuted();
         }
         if (spec.hasProgramChange()) {
-            t.addProgramChange(0, spec.programChange());
+            t.addProgramChange(spec.programChange().tick, spec.programChange().program);
         }
         for (const CCPair& cc : spec.controlChanges()) {
             t.addControlChange(cc.tick, cc.control, cc.value);

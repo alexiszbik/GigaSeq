@@ -338,6 +338,8 @@ SequencePool SequencePool::createDefault(MidiInOut& midi, Logger& logger)
 {
     SequencePool pool(midi, logger);
 
+    addWaterSong(pool);
+
     addFantasySong(pool);
     addTiredSong(pool);
     addFriendshipSong(pool);
@@ -347,7 +349,7 @@ SequencePool SequencePool::createDefault(MidiInOut& midi, Logger& logger)
     
     addCloserSong(pool);
     addFallingSong(pool);
-    addWaterSong(pool);
+
     
 
     return pool;

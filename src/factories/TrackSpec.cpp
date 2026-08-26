@@ -12,6 +12,12 @@ TrackSpec& TrackSpec::withCCs(std::vector<CCPair> controlChanges)
     return *this;
 }
 
+TrackSpec& TrackSpec::withProgramChange(uint8_t programChange, tick_t tick) {
+    hasProgramChange_ = true;
+    programChange_ = {tick, programChange}; 
+    return *this; 
+}
+
 TrackSpec& TrackSpec::withAutomation(
     tick_t startTick,
     tick_t endTick,

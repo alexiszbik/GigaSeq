@@ -12,8 +12,8 @@ constexpr uint8_t songTempo = 125;
 
 Sequence WaterSequenceFactory::waterIntro()
 {
-    return buildSequence(
-        8, 4, 0, "Intro", songTempo, true,
+    Sequence seq = buildSequence(
+        16, 4, 8, "Intro", songTempo, true,
         {
             SequenceTrackFactory::kickFour,
             SequenceTrackFactory::clapFour,
@@ -24,7 +24,10 @@ Sequence WaterSequenceFactory::waterIntro()
             track(WaterTrackFactory::waterClaves).muted(),
             track(WaterTrackFactory::waterCongas).muted(),
             track(WaterTrackFactory::waterFmbass).muted(),
+            track(SequenceTrackFactory::gtrLoopErase).withProgramChange(BossRC::kWater, TICK(4)),
         });
+
+        return seq;
 }
 
 Sequence WaterSequenceFactory::waterPrechorus()
