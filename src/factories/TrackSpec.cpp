@@ -6,7 +6,6 @@ TrackSpec& TrackSpec::withProgramChange(uint8_t program, tick_t tick)
     return *this;
 }
 
-
 TrackSpec& TrackSpec::withCC(uint8_t controller, uint8_t value, tick_t tick)
 {
     controlChanges_.push_back({ tick, controller, value });

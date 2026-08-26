@@ -28,4 +28,5 @@ public:
     static SequenceTrack waterEventsPartC(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack waterEventsEnd(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack waterChorusEnd(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack waterFreakWind(tick_t lengthInTicks, tick_t startInTicks);
 };

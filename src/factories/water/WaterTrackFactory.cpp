@@ -198,3 +198,14 @@ SequenceTrack WaterTrackFactory::waterChorusEnd(tick_t lengthInTicks, tick_t sta
 
     return track;
 }
+
+SequenceTrack WaterTrackFactory::waterFreakWind(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("FreakWind", MidiChannel::kMicrofreak);
+
+    SequenceDesc desc;
+    desc.notes = {{C3}};
+    desc.rate = 1;
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
+
+    return track;
+}

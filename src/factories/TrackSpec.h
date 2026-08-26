@@ -33,7 +33,6 @@ public:
     TrackSpec& muted() { startMuted_ = true; return *this; }
     TrackSpec& withProgramChange(uint8_t program, tick_t tick = 0);
     TrackSpec& withCC(uint8_t controller, uint8_t value, tick_t tick = 0);
-    TrackSpec& withCCs(std::vector<ControlChange> controlChanges);
     TrackSpec& withAutomation(
         tick_t startTick,
         tick_t endTick,
@@ -41,7 +40,7 @@ public:
         uint8_t startValue,
         uint8_t endValue);
     TrackSpec& withMuteEvent(tick_t tick, bool mute = true);
-    TrackSpec& withNote(uint8_t pitch, uint8_t velocity, tick_t tick, tick_t duration = TickHelper::kStepLen);
+    TrackSpec& withNote(uint8_t pitch, uint8_t velocity = 127, tick_t tick = 0, tick_t duration = TickHelper::kStepLen);
     TrackSpec& asFill();
     TrackSpec& withLength(tick_t length);
     TrackSpec& withStart(tick_t start);

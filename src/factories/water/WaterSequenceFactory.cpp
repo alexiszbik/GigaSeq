@@ -25,7 +25,12 @@ Sequence WaterSequenceFactory::waterIntro()
             track(WaterTrackFactory::waterCongas).muted(),
             track(WaterTrackFactory::waterFmbass).muted(),
             track(SequenceTrackFactory::gtrLoopErase).withProgramChange(BossRC::kWater, TICK(4)),
+            track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kWater),
             track(SequenceTrackFactory::polySynth).withProgramChange(PolySynth::kWaterSqr),
+            track(SequenceTrackFactory::midiLoop)
+                .withNote(MidiLoop::kEraseAll)
+                .withNote(MidiLoop::kSelectPoly)
+                .withCC(MidiLoop::kArpMode_cc, OFF),
         });
 
     return seq;
@@ -91,6 +96,7 @@ Sequence WaterSequenceFactory::waterPartB()
             track(WaterTrackFactory::waterXmas).withStart(start3).withLength(len3),
             track(WaterTrackFactory::waterShakes).withStart(start4).withLength(len4),
             WaterTrackFactory::waterEventsPartB,
+            track(SequenceTrackFactory::polySynth).withProgramChange(PolySynth::kSlowStr),
         });
 }
 
@@ -109,7 +115,9 @@ Sequence WaterSequenceFactory::waterChorus2()
             track(WaterTrackFactory::waterBalafon).withLength(len),
             track(WaterTrackFactory::waterXmas).withLength(len2).withStart(TickHelper::bars(8)),
             track(WaterTrackFactory::waterChorusFMBass).withStart(TickHelper::bars(15)),
-            track(WaterTrackFactory::waterFreakChorusB).withLength(len),
+            track(WaterTrackFactory::waterFreakChorusB).withLength(len)
+                .withProgramChange(Microfreak::kWaterArp),
+            track(SequenceTrackFactory::polySynth).withProgramChange(PolySynth::kBigLead),
         });
 }
 
@@ -123,7 +131,7 @@ Sequence WaterSequenceFactory::waterPartC()
             track(SequenceTrackFactory::clapFour).muted(),
             track(WaterTrackFactory::waterHats).muted(),
             WaterTrackFactory::waterMarimba,
-            WaterTrackFactory::waterFreak,
+            track(WaterTrackFactory::waterFreak).withProgramChange(Microfreak::kWaterBass),
             WaterTrackFactory::waterBass,
             WaterTrackFactory::waterClaves,
             track(WaterTrackFactory::waterBalafon).muted(),
@@ -174,6 +182,7 @@ Sequence WaterSequenceFactory::waterChorusEnd()
             WaterTrackFactory::waterBalafon,
             track(WaterTrackFactory::waterXmas).withLength(len1).withStart(len1),
             WaterTrackFactory::waterEventsEnd,
+            track(WaterTrackFactory::waterFreakWind).withStart(TICK(8)).withProgramChange(Microfreak::kWind),
         });
 
     return seq;

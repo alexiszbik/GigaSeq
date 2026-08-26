@@ -21,4 +21,6 @@ public:
     static SequenceTrack bass(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack vocoder(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack microfreak(tick_t lengthInTicks, tick_t startInTicks);
+
+    static SequenceTrack midiLoop(tick_t lengthInTicks, tick_t startInTicks);
 };

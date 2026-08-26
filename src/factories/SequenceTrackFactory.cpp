@@ -82,3 +82,9 @@ SequenceTrack SequenceTrackFactory::microfreak(tick_t lengthInTicks, tick_t star
     return track;
 }
 
+SequenceTrack SequenceTrackFactory::midiLoop(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("MidiLoop", MidiChannel::kMidiLoop);
+    return track;
+}
+
+
