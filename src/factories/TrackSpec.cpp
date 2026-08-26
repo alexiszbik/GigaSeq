@@ -1,21 +1,16 @@
 #include "TrackSpec.h"
 
-TrackSpec& TrackSpec::withCC(uint8_t control, uint8_t value, tick_t tick)
+TrackSpec& TrackSpec::withProgramChange(uint8_t program, tick_t tick)
 {
-    controlChanges_.push_back({control, value, tick});
+    programChanges_.push_back({ tick, program });
     return *this;
 }
 
-TrackSpec& TrackSpec::withCCs(std::vector<CCPair> controlChanges)
-{
-    controlChanges_ = std::move(controlChanges);
-    return *this;
-}
 
-TrackSpec& TrackSpec::withProgramChange(uint8_t programChange, tick_t tick) {
-    hasProgramChange_ = true;
-    programChange_ = {tick, programChange}; 
-    return *this; 
+TrackSpec& TrackSpec::withCC(uint8_t controller, uint8_t value, tick_t tick)
+{
+    controlChanges_.push_back({ tick, controller, value });
+    return *this;
 }
 
 TrackSpec& TrackSpec::withAutomation(
@@ -37,7 +32,7 @@ TrackSpec& TrackSpec::withAutomation(
 
 TrackSpec& TrackSpec::withMuteEvent(tick_t tick, bool mute)
 {
-    muteEvents_.push_back({tick, mute});
+    muteEvents_.push_back({ tick, mute });
     return *this;
 }
 

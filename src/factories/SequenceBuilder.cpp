@@ -30,11 +30,11 @@ Sequence buildSequence(
         if (spec.startMuted()) {
             t.setStartMuted();
         }
-        if (spec.hasProgramChange()) {
-            t.addProgramChange(spec.programChange().tick, spec.programChange().program);
+        for (const ProgramChange& change : spec.programChanges()) {
+            t.addProgramChange(change);
         }
-        for (const CCPair& cc : spec.controlChanges()) {
-            t.addControlChange(cc.tick, cc.control, cc.value);
+        for (const ControlChange& change : spec.controlChanges()) {
+            t.addControlChange(change);
         }
         for (const ControlAutomation& automation : spec.controlAutomations()) {
             t.addControlAutomation(
@@ -44,8 +44,8 @@ Sequence buildSequence(
                 automation.startValue,
                 automation.endValue);
         }
-        for (MuteEvent e : spec.muteEvents()) {
-            t.addMuteEvent(e.tick, e.mute);
+        for (const MuteEvent& event : spec.muteEvents()) {
+            t.addMuteEvent(event);
         }
         if (spec.isFill()) {
             t.setFill();
@@ -65,7 +65,7 @@ void addProgramChangeTrack(
     uint8_t value)
 {
     SequenceTrack track(name, channel);
-    track.addProgramChange(0, value);
+    track.addProgramChange({ 0, value });
     sequence.addTrack(track);
 }
 
@@ -73,11 +73,11 @@ void addControlChangesTrack(
     Sequence& sequence,
     const char* name,
     uint8_t channel,
-    std::vector<CCPair> controlChanges)
+    std::vector<ControlChange> controlChanges)
 {
     SequenceTrack track(name, channel);
-    for (const CCPair& cc : controlChanges) {
-        track.addControlChange(cc.tick, cc.control, cc.value);
+    for (const ControlChange& change : controlChanges) {
+        track.addControlChange(change);
     }
     sequence.addTrack(track);
 }

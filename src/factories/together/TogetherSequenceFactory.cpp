@@ -121,8 +121,8 @@ Sequence TogetherSequenceFactory::togetherPartB()
             track(SequenceTrackFactory::gtrPedal).withCC(HXStomp::kTogetherChorus_ccDrive, 0),
             SequenceTrackFactory::gtrLoop
         });
-    seq.track(4).addProgramChange(TICK(5), HXStomp::kTogetherEnd);
-    seq.track(5).addProgramChange(TICK(5), BossRC::kTogetherB);
+    seq.track(4).addProgramChange({ TICK(5), HXStomp::kTogetherEnd });
+    seq.track(5).addProgramChange({ TICK(5), BossRC::kTogetherB });
 
     return seq;
 }

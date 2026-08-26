@@ -25,4 +25,4 @@ void addControlChangesTrack(
     Sequence& sequence,
     const char* name,
     uint8_t channel,
-    std::vector<CCPair> controlChanges);
+    std::vector<ControlChange> controlChanges);

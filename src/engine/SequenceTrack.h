@@ -42,10 +42,7 @@ public:
         uint8_t note,
         uint8_t velocity);
 
-    void addControlChange(
-        tick_t tick,
-        uint8_t controller,
-        uint8_t value);
+    void addControlChange(const ControlChange& change);
 
     void addControlAutomation(
         tick_t startTick,
@@ -54,12 +51,8 @@ public:
         uint8_t startValue,
         uint8_t endValue);
 
-    void addProgramChange(
-        tick_t tick,
-        uint8_t program);
-
-    void addMuteEvent(
-        tick_t tick, bool state = true);
+    void addProgramChange(const ProgramChange& change);
+    void addMuteEvent(const MuteEvent& event);
 
     void setPattern(const TrackPattern& pattern, tick_t lengthInTicks, tick_t startInTicks);
     bool hasPattern() const noexcept { return pattern_ != nullptr; }

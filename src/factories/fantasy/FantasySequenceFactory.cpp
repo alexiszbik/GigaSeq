@@ -63,11 +63,11 @@ Sequence FantasySequenceFactory::fantasyBack()
         });
 
 
-    seq.track(2).addControlChange(0, 37, 0);
-    seq.track(2).addControlChange(TICK(4,0,2), 37, 127);
+    seq.track(2).addControlChange({ 0, 37, 0 });
+    seq.track(2).addControlChange({ TICK(4, 0, 2), 37, 127 });
 
-    seq.track(2).addControlChange(0, 34, 0);
-    seq.track(2).addControlChange(TICK(4,0,2), 34, 127);
+    seq.track(2).addControlChange({ 0, 34, 0 });
+    seq.track(2).addControlChange({ TICK(4, 0, 2), 34, 127 });
 
     return seq;
 }

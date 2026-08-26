@@ -45,19 +45,19 @@ SequenceTrack SequenceTrackFactory::gtrLoop(tick_t lengthInTicks, tick_t startIn
 
 SequenceTrack SequenceTrackFactory::gtrLoopMute(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("GtrLoop Mute", MidiChannel::kGtrLoop);
-    track.addControlChange(startInTicks,  BossRC::kVolume_cc, 0);
+    track.addControlChange({ startInTicks, BossRC::kVolume_cc, 0 });
     return track;
 }
 
 SequenceTrack SequenceTrackFactory::gtrLoopUnmute(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("GtrLoop Unmute", MidiChannel::kGtrLoop);
-    track.addControlChange(startInTicks,  BossRC::kVolume_cc, 65);
+    track.addControlChange({ startInTicks, BossRC::kVolume_cc, 65 });
     return track;
 }
 
 SequenceTrack SequenceTrackFactory::gtrLoopErase(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("GtrLoop Erase", MidiChannel::kGtrLoop);
-    track.addControlChange(startInTicks,  BossRC::kErase_cc, 0);
-    track.addControlChange(startInTicks + 2,  BossRC::kErase_cc, 127);
+    track.addControlChange({ startInTicks, BossRC::kErase_cc, 0 });
+    track.addControlChange({ static_cast<tick_t>(startInTicks + 2), BossRC::kErase_cc, 127 });
     return track;
 }

@@ -35,12 +35,9 @@ void SequenceTrack::addNote(
     notes_.add({ startTick, durationTicks, { note, velocity } });
 }
 
-void SequenceTrack::addControlChange(
-    tick_t tick,
-    uint8_t controller,
-    uint8_t value)
+void SequenceTrack::addControlChange(const ControlChange& change)
 {
-    controlChanges_.add({ tick, controller, value });
+    controlChanges_.add(change);
 }
 
 void SequenceTrack::addControlAutomation(
@@ -64,17 +61,14 @@ void SequenceTrack::addControlAutomation(
     automationLastSent_.push_back(kAutomationNotSent);
 }
 
-void SequenceTrack::addProgramChange(
-    tick_t tick,
-    uint8_t program)
+void SequenceTrack::addProgramChange(const ProgramChange& change)
 {
-    programChanges_.add({ tick, program });
+    programChanges_.add(change);
 }
 
-void SequenceTrack::addMuteEvent(
-    tick_t tick, bool state)
+void SequenceTrack::addMuteEvent(const MuteEvent& event)
 {
-    muteEvents_.add({ tick, state });
+    muteEvents_.add(event);
 }
 
 void SequenceTrack::setPattern(const TrackPattern& pattern, tick_t lengthInTicks, tick_t startInTicks)

@@ -1,5 +1,9 @@
 #pragma once
 
+#include "ControlAutomation.h"
+#include "ControlChange.h"
+#include "MuteEvent.h"
+#include "ProgramChange.h"
 #include "SequenceTrack.h"
 #include "Tick.h"
 
@@ -7,13 +11,6 @@
 #include <vector>
 
 using TrackBuilder = SequenceTrack (*)(tick_t lengthInTicks, tick_t startInTicks);
-
-struct CCPair
-{
-    uint8_t control = 0;
-    uint8_t value = 0;
-    tick_t tick = 0;
-};
 
 // Fluent description of a track to add to a sequence.
 //
@@ -33,8 +30,8 @@ public:
 
     TrackSpec& muted() { startMuted_ = true; return *this; }
     TrackSpec& withProgramChange(uint8_t program, tick_t tick = 0);
-    TrackSpec& withCC(uint8_t control, uint8_t value, tick_t tick = 0);
-    TrackSpec& withCCs(std::vector<CCPair> controlChanges);
+    TrackSpec& withCC(uint8_t controller, uint8_t value, tick_t tick = 0);
+    TrackSpec& withCCs(std::vector<ControlChange> controlChanges);
     TrackSpec& withAutomation(
         tick_t startTick,
         tick_t endTick,
@@ -49,9 +46,8 @@ public:
 
     TrackBuilder builder() const noexcept { return builder_; }
     bool startMuted() const noexcept { return startMuted_; }
-    bool hasProgramChange() const noexcept { return hasProgramChange_; }
-    ProgramChange programChange() const noexcept { return programChange_; }
-    const std::vector<CCPair>& controlChanges() const noexcept { return controlChanges_; }
+    const std::vector<ProgramChange>& programChanges() const noexcept { return programChanges_; }
+    const std::vector<ControlChange>& controlChanges() const noexcept { return controlChanges_; }
     const std::vector<ControlAutomation>& controlAutomations() const noexcept { return controlAutomations_; }
     const std::vector<MuteEvent>& muteEvents() const noexcept { return muteEvents_; }
     bool isFill() const noexcept { return isFill_; }
@@ -65,9 +61,8 @@ public:
 private:
     TrackBuilder builder_;
     bool startMuted_ = false;
-    bool hasProgramChange_ = false;
-    ProgramChange programChange_;
-    std::vector<CCPair> controlChanges_;
+    std::vector<ProgramChange> programChanges_;
+    std::vector<ControlChange> controlChanges_;
     std::vector<ControlAutomation> controlAutomations_;
     std::vector<MuteEvent> muteEvents_;
     bool isFill_ = false;
