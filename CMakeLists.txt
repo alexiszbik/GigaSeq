@@ -68,6 +68,11 @@ add_executable(GigaSeq
     src/factories/friendship/FriendshipSong.cpp
     src/factories/friendship/FriendshipTrackFactory.cpp
 
+
+    src/factories/bibimbap/BibimbapSequenceFactory.cpp
+    src/factories/bibimbap/BibimbapSong.cpp
+    src/factories/bibimbap/BibimbapTrackFactory.cpp
+
 )
 
 target_include_directories(GigaSeq PRIVATE src src/engine src/desktop src/const)

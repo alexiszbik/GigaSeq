@@ -9,6 +9,7 @@
 #include "factories/uandi/UandiSong.h"
 #include "factories/tired/TiredSong.h"
 #include "factories/friendship/FriendshipSong.h"
+#include "factories/bibimbap/BibimbapSong.h"
 
 #include <cstdio>
 #include <utility>
@@ -338,6 +339,7 @@ SequencePool SequencePool::createDefault(MidiInOut& midi, Logger& logger)
 {
     SequencePool pool(midi, logger);
 
+    addBibimbapSong(pool);
     addWaterSong(pool);
 
     addFantasySong(pool);
