@@ -5,7 +5,7 @@
 #include "MidiConst.h"
 
 SequenceTrack BibimbapTrackFactory::bibimbapArp(tick_t lengthInTicks, tick_t startInTicks) {
-    SequenceTrack track("Modular", MidiChannel::kSampler);
+    SequenceTrack track("Arp", MidiChannel::kSampler);
     track.setPattern(BibimbapPatterns::kBibimbapArp, lengthInTicks, startInTicks);
     return track;
 }
@@ -193,5 +193,41 @@ SequenceTrack BibimbapTrackFactory::bibimbapSnareRoll(tick_t lengthInTicks, tick
 
     makeRoll(track, Bibimbap::sd1050, lengthInTicks, startInTicks, 20, 127);
 
+    return track;
+}
+
+SequenceTrack BibimbapTrackFactory::bibimbapSnare(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Snare", MidiChannel::kDrums);
+    uint8_t snr = Bibimbap::bbbSnr;
+    SequenceDesc desc;
+    desc.notes = {
+        {}, {}, {}, {},
+        {snr}, {}, {}, {}, 
+        {}, {}, {}, {}, 
+        {snr}, {}, {}, {}, 
+        {}, {}, {}, {}, 
+        {snr}, {}, {}, {}, 
+        {}, {}, {}, {snr}
+    };
+    desc.rate = 16;
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack BibimbapTrackFactory::bibimbapOpenHat(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("OpenHat", MidiChannel::kDrums);
+    track.setPattern(BibimbapPatterns::kBibimbapOpenHat, TICK(0,7*7 + 4), TICK(0,7*16));
+    SequenceDesc desc;
+    desc.notes = {
+        {Bibimbap::openh}
+    };
+    desc.rate = 32;
+    makeSequenceTrack(track, desc, TICK(0,3,0), TICK(0,7*23 + 4));
+    return track;
+}
+
+SequenceTrack BibimbapTrackFactory::bibimbapFreak(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Freak", MidiChannel::kMicrofreak);
+    track.setPattern(BibimbapPatterns::kBibimbapFreak, lengthInTicks, startInTicks);
     return track;
 }

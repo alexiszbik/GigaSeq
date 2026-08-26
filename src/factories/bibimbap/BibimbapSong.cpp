@@ -16,6 +16,7 @@ void addBibimbapSong(SequencePool& pool)
         BibimbapSequenceFactory::bibimbapBass,
         BibimbapSequenceFactory::bibimbapPause,
         BibimbapSequenceFactory::bibimbapDrop,
+        BibimbapSequenceFactory::bibimbapClimax,
     };
 
     for (Builder builder : sequences) {

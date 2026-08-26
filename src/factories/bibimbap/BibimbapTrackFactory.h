@@ -23,4 +23,7 @@ public:
     static SequenceTrack bibimbapHats(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack bibimbapRiser(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack bibimbapSnareRoll(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack bibimbapSnare(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack bibimbapOpenHat(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack bibimbapFreak(tick_t lengthInTicks, tick_t startInTicks);
 };

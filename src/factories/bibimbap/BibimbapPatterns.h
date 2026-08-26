@@ -8,7 +8,8 @@ namespace BibimbapPatterns
 {
 
 constexpr PatternStep kBibimbapArpSteps[] = {
-    {{Bibimbap::bbbArp}}, {}, {}, {}, {}, {}, {}
+    {{Bibimbap::bbbArp}}, {}, {}, {}, {}, {}, {},
+    {}, {}, {}, {}, {}, {}, {}
 };
 
 MAKE_PATTERN(kBibimbapArp, kBibimbapArpSteps, 4);
@@ -137,5 +138,19 @@ constexpr PatternStep kBibimbapHatsSteps[] = {
 };
 
 MAKE_PATTERN(kBibimbapHats, kBibimbapHatsSteps, 4);
+
+
+constexpr PatternStep kBibimbapOpenHatSteps[] = {
+    {{Bibimbap::openh}, 127, 1},
+};
+
+MAKE_PATTERN(kBibimbapOpenHat, kBibimbapOpenHatSteps, 16);
+
+
+constexpr PatternStep kBibimbapFreakSteps[] = {
+    {{G2}}, {}, {{G2}}, {}, {}, {{G2}}, {}
+};
+
+MAKE_PATTERN(kBibimbapFreak, kBibimbapFreakSteps, 16);
 
 } // namespace BibimbapPatterns

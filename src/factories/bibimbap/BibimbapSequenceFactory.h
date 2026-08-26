@@ -11,4 +11,5 @@ public:
     static Sequence bibimbapBass();
     static Sequence bibimbapPause();
     static Sequence bibimbapDrop();
+    static Sequence bibimbapClimax();
 };
