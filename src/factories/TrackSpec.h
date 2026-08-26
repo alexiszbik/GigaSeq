@@ -3,9 +3,11 @@
 #include "ControlAutomation.h"
 #include "ControlChange.h"
 #include "MuteEvent.h"
+#include "Note.h"
 #include "ProgramChange.h"
 #include "SequenceTrack.h"
 #include "Tick.h"
+#include "TickHelper.h"
 
 #include <cstdint>
 #include <vector>
@@ -39,6 +41,7 @@ public:
         uint8_t startValue,
         uint8_t endValue);
     TrackSpec& withMuteEvent(tick_t tick, bool mute = true);
+    TrackSpec& withNote(uint8_t pitch, uint8_t velocity, tick_t tick, tick_t duration = TickHelper::kStepLen);
     TrackSpec& asFill();
     TrackSpec& withLength(tick_t length);
     TrackSpec& withStart(tick_t start);
@@ -50,6 +53,7 @@ public:
     const std::vector<ControlChange>& controlChanges() const noexcept { return controlChanges_; }
     const std::vector<ControlAutomation>& controlAutomations() const noexcept { return controlAutomations_; }
     const std::vector<MuteEvent>& muteEvents() const noexcept { return muteEvents_; }
+    const std::vector<ScheduledNote>& notes() const noexcept { return notes_; }
     bool isFill() const noexcept { return isFill_; }
     bool hasCustomLength() const noexcept { return hasCustomLength_; }
     tick_t customLength() const noexcept { return customLength_; }
@@ -65,6 +69,7 @@ private:
     std::vector<ControlChange> controlChanges_;
     std::vector<ControlAutomation> controlAutomations_;
     std::vector<MuteEvent> muteEvents_;
+    std::vector<ScheduledNote> notes_;
     bool isFill_ = false;
 
     bool hasCustomLength_ = false;

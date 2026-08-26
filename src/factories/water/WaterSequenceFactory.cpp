@@ -52,21 +52,16 @@ Sequence WaterSequenceFactory::waterChorus()
     tick_t len = TICK(15, 2, 2);
     tick_t len2 = TICK(7, 2, 2);
 
-    Sequence seq = buildSequence(
+    return buildSequence(
         16, 4, 0, "Chorus", songTempo, false,
         {
             track(SequenceTrackFactory::clapFour).withLength(len),
             track(WaterTrackFactory::waterHats).withLength(len),
-            WaterTrackFactory::waterChorus,
-            WaterTrackFactory::waterMarimba,
+            track(WaterTrackFactory::waterChorus).withNote(69, 127, len), // note to stop the juno
+            track(WaterTrackFactory::waterMarimba).withNote(68, 127, len), // note to stop the marimba
             track(WaterTrackFactory::waterXmas).withLength(len2).withStart(TickHelper::bars(8)),
             track(WaterTrackFactory::waterChorusFMBass).withStart(TickHelper::bars(15)),
         });
-
-    seq.track(3).addNote(len, TickHelper::kStepLen, 68, 127); // note to stop the marimba
-    seq.track(2).addNote(len, TickHelper::kStepLen, 69, 127); // note to stop the juno
-
-    return seq;
 }
 
 Sequence WaterSequenceFactory::waterPartB()
@@ -80,13 +75,13 @@ Sequence WaterSequenceFactory::waterPartB()
     tick_t len3 = TICK(15, 3);
     tick_t len4 = TICK(7, 3);
 
-    Sequence seq = buildSequence(
+    return buildSequence(
         32, 4, 0, "PartB", songTempo, false,
         {
             WaterTrackFactory::waterKickPartB,
             track(SequenceTrackFactory::clapFour).withLength(len1),
             track(WaterTrackFactory::waterHats).withLength(len1),
-            track(WaterTrackFactory::waterFm).withLength(len1),
+            track(WaterTrackFactory::waterFm).withLength(len1).withNote(70, 127, len1), // note to stop the juno
             track(WaterTrackFactory::waterFreak).withLength(len1),
             track(WaterTrackFactory::waterFmbass).withLength(TickHelper::bars(31)),
             track(WaterTrackFactory::waterClaves).withStart(start2).withLength(len2),
@@ -96,9 +91,6 @@ Sequence WaterSequenceFactory::waterPartB()
             track(WaterTrackFactory::waterShakes).withStart(start4).withLength(len4),
             WaterTrackFactory::waterEventsPartB,
         });
-
-    seq.track(3).addNote(len1, TickHelper::kStepLen, 70, 127); // note to stop the juno
-    return seq;
 }
 
 
@@ -107,21 +99,17 @@ Sequence WaterSequenceFactory::waterChorus2()
     tick_t len = TICK(15, 2, 2);
     tick_t len2 = TICK(7, 2, 2);
 
-    Sequence seq = buildSequence(
+    return buildSequence(
         16, 4, 0, "ChorusB", songTempo, false,
         {
             track(SequenceTrackFactory::clapFour).withLength(len),
             track(WaterTrackFactory::waterHats).withLength(len),
-            WaterTrackFactory::waterChorus,
+            track(WaterTrackFactory::waterChorus).withNote(69, 127, len), // note to stop the juno
             track(WaterTrackFactory::waterBalafon).withLength(len),
             track(WaterTrackFactory::waterXmas).withLength(len2).withStart(TickHelper::bars(8)),
             track(WaterTrackFactory::waterChorusFMBass).withStart(TickHelper::bars(15)),
             track(WaterTrackFactory::waterFreakChorusB).withLength(len),
         });
-
-    seq.track(2).addNote(len, TickHelper::kStepLen, 69, 127); // note to stop the juno
-
-    return seq;
 }
 
 
@@ -150,13 +138,13 @@ Sequence WaterSequenceFactory::waterPartCEnd()
 {
     tick_t len = TICK(7, 2, 2);
 
-    Sequence seq = buildSequence(
+    return buildSequence(
         8, 4, 0, "PartCEnd", songTempo, false,
         {
             WaterTrackFactory::waterKickPartC,
             SequenceTrackFactory::clapFour,
             WaterTrackFactory::waterHats,
-            WaterTrackFactory::waterMarimba,
+            track(WaterTrackFactory::waterMarimba).withNote(68, 127, len), // note to stop the marimba
             track(WaterTrackFactory::waterFreak).withLength(len),
             track(WaterTrackFactory::waterBass).withLength(len),
             WaterTrackFactory::waterClaves,
@@ -166,10 +154,6 @@ Sequence WaterSequenceFactory::waterPartCEnd()
             track(WaterTrackFactory::waterFmbass).withLength(len),
             WaterTrackFactory::waterEventsPartC,
         });
-
-    seq.track(3).addNote(len, TickHelper::kStepLen, 68, 127); // note to stop the marimba
-    
-    return seq;
 }
 
 

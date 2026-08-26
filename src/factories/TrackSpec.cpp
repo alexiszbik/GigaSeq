@@ -36,6 +36,12 @@ TrackSpec& TrackSpec::withMuteEvent(tick_t tick, bool mute)
     return *this;
 }
 
+TrackSpec& TrackSpec::withNote(uint8_t pitch, uint8_t velocity, tick_t tick, tick_t duration)
+{
+    notes_.push_back({ tick, duration, { pitch, velocity } });
+    return *this;
+}
+
 TrackSpec& TrackSpec::asFill()
 {
     isFill_ = true;

@@ -47,6 +47,9 @@ Sequence buildSequence(
         for (const MuteEvent& event : spec.muteEvents()) {
             t.addMuteEvent(event);
         }
+        for (const ScheduledNote& note : spec.notes()) {
+            t.addNote(note.tick, note.durationTicks, note.note.note, note.note.velocity);
+        }
         if (spec.isFill()) {
             t.setFill();
         }

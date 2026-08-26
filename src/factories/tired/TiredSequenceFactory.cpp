@@ -77,12 +77,12 @@ Sequence TiredSequenceFactory::tiredPause()
 
 Sequence TiredSequenceFactory::tiredDropB()
 {
-    Sequence seq = buildSequence(
+    return buildSequence(
         8, 4, 0, "DropB", songTempo, false,
         {
             track(TiredTrackFactory::tiredFreak).withLength(TICK(7)),
             track(TiredTrackFactory::tiredSync).withLength(TICK(7)),
-            track(TiredTrackFactory::tiredPhazeHat),
+            track(TiredTrackFactory::tiredPhazeHat).withNote(68, 127, TICK(7)),
             track(TiredTrackFactory::tiredShake).withLength(TICK(7)),
             track(TiredTrackFactory::tiredClapEcho),
             TiredTrackFactory::tiredUpRisingB,
@@ -90,9 +90,6 @@ Sequence TiredSequenceFactory::tiredDropB()
             track(TiredTrackFactory::tiredRiserB),
             track(TiredTrackFactory::tiredCymbal),
         });
-
-    seq.track(2).addNote(TICK(7), TickHelper::kStepLen, 68, 127);
-    return seq;
 }
 
 Sequence TiredSequenceFactory::tiredMainB()

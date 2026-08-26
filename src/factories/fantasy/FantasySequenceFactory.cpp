@@ -47,7 +47,7 @@ Sequence FantasySequenceFactory::fantasyBreak()
 
 Sequence FantasySequenceFactory::fantasyBack()
 {
-    Sequence seq = buildSequence(
+    return buildSequence(
         16, 4, 12, "FadeCut", songTempo, true,
         {
             track(FantasyTrackFactory::fantasySampleSidekick).withStart(TICK(8)),
@@ -56,20 +56,15 @@ Sequence FantasySequenceFactory::fantasyBack()
             track(FantasyTrackFactory::fantasyShake).withStart(TICK(8)),
             track(FantasyTrackFactory::fantasyChordOffset).withStart(TICK(8)),
             track(FantasyTrackFactory::fantasyHiDrum).withLength(TICK(8)),
-            track(FantasyTrackFactory::fantasyFreak).withMuteEvent(TICK(8)).withMuteEvent(TICK(8,1), false),
-            track(FantasyTrackFactory::fantasyVocals),
+            track(FantasyTrackFactory::fantasyFreak).withMuteEvent(TICK(8)).withMuteEvent(TICK(8, 1), false),
+            track(FantasyTrackFactory::fantasyVocals)
+                .withCC(37, 0)
+                .withCC(37, 127, TICK(4, 0, 2))
+                .withCC(34, 0)
+                .withCC(34, 127, TICK(4, 0, 2)),
             track(FantasyTrackFactory::fantasyRiser).withMuteEvent(TICK(8)).asFill(),
             FantasyTrackFactory::fantasyBreakFX
         });
-
-
-    seq.track(2).addControlChange({ 0, 37, 0 });
-    seq.track(2).addControlChange({ TICK(4, 0, 2), 37, 127 });
-
-    seq.track(2).addControlChange({ 0, 34, 0 });
-    seq.track(2).addControlChange({ TICK(4, 0, 2), 34, 127 });
-
-    return seq;
 }
 
 Sequence FantasySequenceFactory::fantasyRave()

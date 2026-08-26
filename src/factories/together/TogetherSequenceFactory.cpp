@@ -111,20 +111,18 @@ Sequence TogetherSequenceFactory::togetherRepeat()
 
 Sequence TogetherSequenceFactory::togetherPartB()
 {
-    Sequence seq = buildSequence(
+    return buildSequence(
         16, 4, 8, "PartB", 130, true,
         {
             TogetherTrackFactory::togetherPartBSampleCut,
             TogetherTrackFactory::togetherPartBSynth,
             track(TogetherTrackFactory::togetherPartBAh).muted(),
             track(TogetherTrackFactory::togetherPartBDaDaDa).muted(),
-            track(SequenceTrackFactory::gtrPedal).withCC(HXStomp::kTogetherChorus_ccDrive, 0),
-            SequenceTrackFactory::gtrLoop
+            track(SequenceTrackFactory::gtrPedal)
+                .withCC(HXStomp::kTogetherChorus_ccDrive, 0)
+                .withProgramChange(HXStomp::kTogetherEnd, TICK(5)),
+            track(SequenceTrackFactory::gtrLoop).withProgramChange(BossRC::kTogetherB, TICK(5)),
         });
-    seq.track(4).addProgramChange({ TICK(5), HXStomp::kTogetherEnd });
-    seq.track(5).addProgramChange({ TICK(5), BossRC::kTogetherB });
-
-    return seq;
 }
 
 Sequence TogetherSequenceFactory::togetherPartBWithHats()

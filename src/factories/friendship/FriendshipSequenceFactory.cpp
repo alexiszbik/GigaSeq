@@ -93,7 +93,7 @@ Sequence FriendshipSequenceFactory::friendshipBreak()
 
 Sequence FriendshipSequenceFactory::friendshipRising()
 {
-    Sequence seq = buildSequence(
+    return buildSequence(
         16, 4, 0, "Climax", songTempo, false,
         {
             track(FriendshipTrackFactory::friendshipTrance).withLength(TICK(15)),
@@ -101,16 +101,12 @@ Sequence FriendshipSequenceFactory::friendshipRising()
             track(FriendshipTrackFactory::friendshipBass)
                 .withMuteEvent(TICK(15, 0, 1))
                 .withMuteEvent(TICK(15, 2, 1), false),
-            track(FriendshipTrackFactory::friendshipJungle),
+            track(FriendshipTrackFactory::friendshipJungle).withNote(69, 127, TICK(15), TickHelper::kHalfStepLen),
             track(FriendshipTrackFactory::friendshipStabz),
             track(FriendshipTrackFactory::friendshipOpenH909).withLength(TICK(15)),
             track(FriendshipTrackFactory::friendshipSnareRoll),
             track(FriendshipTrackFactory::friendshipRiser).withLength(TICK(15)),
         });
-
-    seq.track(4).addNote(TICK(15), TickHelper::kHalfStepLen, 69, 127);
-
-    return seq;
 }
 
 Sequence FriendshipSequenceFactory::friendshipClimax()
