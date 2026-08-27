@@ -15,6 +15,16 @@ Sequence FantasySequenceFactory::fantasyIntro()
         4, 4, 0, "Intro", songTempo, true,
         {
             FantasyTrackFactory::fantasySampleIntro,
+            track(SequenceTrackFactory::gtrPedal)
+                .withProgramChange(HXStomp::kBass),
+            track(SequenceTrackFactory::gtrLoopErase)
+                .withProgramChange(BossRC::kFantasy, TICK(2)),
+            track(SequenceTrackFactory::midiLoop)
+                .withNote(MidiLoop::kEraseAll)
+                .withNote(MidiLoop::kSelectVocoder)
+                .withCC(MidiLoop::kArpMode_cc, OFF)
+                .withCC(MidiLoop::kRecord_cc, ON)
+                .withCC(MidiLoop::kBarCount_cc, 4),
         });
     return seq;
 }

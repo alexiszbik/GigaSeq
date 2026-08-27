@@ -30,7 +30,8 @@ _MF_PRESET(FriendshipTrance, 67);
 
 _MF_PRESET(Rizup, 72);
 
-_MF_PRESET(CloserChords, 95);
+_MF_PRESET(CloserHouse, 95);
+_MF_PRESET(CloserChords, 104);
 
 }
 

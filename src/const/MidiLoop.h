@@ -27,6 +27,9 @@ _MIDI_LOOP_CC(MuteBass, 61);
 _MIDI_LOOP_CC(MuteVocoder, 62);
 _MIDI_LOOP_CC(MuteMicrofreak, 63);
 
+_MIDI_LOOP_CC(Copy,74);
+_MIDI_LOOP_CC(Paste,75);
+
 _MIDI_LOOP_NOTE(EraseAll, 70);
 
 

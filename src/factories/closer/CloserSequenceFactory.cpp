@@ -3,6 +3,7 @@
 #include "factories/SequenceBuilder.h"
 #include "factories/SequenceTrackFactory.h"
 #include "factories/closer/CloserTrackFactory.h"
+#include "factories/falling/FallingTrackFactory.h"
 #include "MidiConst.h"
 
 namespace {
@@ -13,7 +14,7 @@ Sequence CloserSequenceFactory::closerIntro()
 {
 
     Sequence seq = buildSequence(
-        4, 4, 0, "Intro", songTempo, true,
+        8, 4, 4, "Intro", songTempo, true,
         {
             SequenceTrackFactory::kickFour,
             track(CloserTrackFactory::closerHats).muted(),
@@ -21,9 +22,17 @@ Sequence CloserSequenceFactory::closerIntro()
             track(CloserTrackFactory::closerTambourin).muted(),
             track(CloserTrackFactory::closerClapTom).muted(),
             track(CloserTrackFactory::closerModular).muted(),
-            CloserTrackFactory::closerStab,
+            track(FallingTrackFactory::fallingHarp).withProgramChange(Microfreak::kFallingHarp),
+            track(CloserTrackFactory::closerStab).withProgramChange(PolySynth::kCloser),
             track(CloserTrackFactory::closerFill808).withMuteEvent(0).asFill(),
             track(CloserTrackFactory::closerRiser).withMuteEvent(0).asFill(),
+            track(SequenceTrackFactory::gtrLoopErase).withProgramChange(BossRC::kCloser, TICK(4)),
+            track(SequenceTrackFactory::midiLoop)
+                .withNote(MidiLoop::kEraseAll)
+                .withNote(MidiLoop::kSelectBass)
+                .withCC(MidiLoop::kArpMode_cc, OFF)
+                .withCC(MidiLoop::kRecord_cc, ON)
+                .withCC(MidiLoop::kBarCount_cc, 4),
         });
     return seq;
 }
@@ -33,9 +42,11 @@ Sequence CloserSequenceFactory::closerChords()
     Sequence seq = buildSequence(
         8, 4, 0, "Chords", songTempo, true,
         {
-            CloserTrackFactory::closerChords,
+            track(CloserTrackFactory::closerChords).withProgramChange(Microfreak::kCloserChords),
             CloserTrackFactory::closerModular,
             track(CloserTrackFactory::closerTambourin).muted(),
+            track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kCloserBassDisto),
+            track(SequenceTrackFactory::midiLoop).withCC(MidiLoop::kMuteBass_cc, ON)
         });
     return seq;
 }
@@ -84,6 +95,10 @@ Sequence CloserSequenceFactory::closerBackKick()
             CloserTrackFactory::closerStab,
             track(CloserTrackFactory::closerFill808).withMuteEvent(0).asFill(),
             track(CloserTrackFactory::closerRiser).withMuteEvent(0).asFill(),
+            track(SequenceTrackFactory::gtrLoopErase),
+            track(SequenceTrackFactory::midiLoop)
+                .withCC(MidiLoop::kMuteBass_cc, OFF)
+                .withCC(MidiLoop::kCopy_cc, 1)
         });
     return seq;
 }
@@ -103,6 +118,21 @@ Sequence CloserSequenceFactory::closerClimax()
             track(CloserTrackFactory::closerRiser).withMuteEvent(TICK(4)).asFill(),
             CloserTrackFactory::closer303,
             track(CloserTrackFactory::closerDrumix).muted(),
+            track(SequenceTrackFactory::microfreak).withProgramChange(Microfreak::kCloserHouse),
+            track(SequenceTrackFactory::midiLoop)
+                .withCC(MidiLoop::kPaste_cc, 3)
         });
     return seq;
 }
+
+
+Sequence CloserSequenceFactory::closerEnd()
+{
+    Sequence seq = buildSequence(
+        4, 4, 0, "Climax", songTempo, true,
+        {
+            track(CloserTrackFactory::closerRiser).withMuteEvent(0).asFill(),
+        });
+    return seq;
+}
+

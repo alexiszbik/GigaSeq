@@ -17,12 +17,12 @@ Sequence FallingSequenceFactory::fallingIntro()
         16, 4, 8, "Intro", songTempo, true,
         {
             FallingTrackFactory::fallingHats,
-            FallingTrackFactory::fallingPads,
-            FallingTrackFactory::fallingKick,
+            track(FallingTrackFactory::fallingPads).muted(),
+            track(FallingTrackFactory::fallingKick).muted(),
             SequenceTrackFactory::gtrLoopErase,
             track(SequenceTrackFactory::polySynth)
                 .withProgramChange(PolySynth::kSlowStr),
-            track(WaterTrackFactory::waterFreakWind).withStart(TICK(8))
+            track(WaterTrackFactory::waterFreakWind)
                 .withProgramChange(Microfreak::kWind),
             track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kFalling),
             track(SequenceTrackFactory::midiLoop)
@@ -68,7 +68,8 @@ Sequence FallingSequenceFactory::fallingBassSeq()
                 .withProgramChange(Microfreak::kFallingHarp),
             track(FallingTrackFactory::fallingTambourin).muted(),
             track(SequenceTrackFactory::modularA)
-                .withCC(ModularA::kMuteClock_cc, ON).withCC(ModularA::kMuteClock_cc, OFF, TICK(8))
+                .withCC(ModularA::kMuteClock_cc, ON).withCC(ModularA::kMuteClock_cc, OFF, TICK(8)),
+            track(SequenceTrackFactory::polySynth).withProgramChange(PolySynth::kFallingEnd)
         });
 
     return seq;
@@ -85,7 +86,7 @@ Sequence FallingSequenceFactory::fallingPreInterlude()
             track(FallingTrackFactory::fallingBass).withLength(length),
             FallingTrackFactory::fallingPreInterlude,
             track(SequenceTrackFactory::modularA)
-                .withCC(ModularA::kMuteClock_cc, ON, TICK(8))
+                .withCC(ModularA::kMuteClock_cc, ON, length)
         });
     return seq;
 }
@@ -142,7 +143,6 @@ Sequence FallingSequenceFactory::fallingClimax()
             SequenceTrackFactory::rideOff,
             FallingTrackFactory::fallingRimTom,
             track(FallingTrackFactory::fallingRiser).withMuteEvent(0).asFill(),
-            track(SequenceTrackFactory::polySynth).withProgramChange(PolySynth::kFallingEnd)
         });
     return seq;
 }

@@ -12,4 +12,6 @@ public:
     static Sequence closerBlast();
     static Sequence closerBackKick();
     static Sequence closerClimax();
+
+    static Sequence closerEnd();
 };
