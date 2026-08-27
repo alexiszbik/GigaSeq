@@ -14,4 +14,5 @@ public:
     static Sequence fantasyGuitar();
     static Sequence fantasyGuitarRiz();
     static Sequence fantasyClimax();
+    static Sequence fantasyEnd();
 };

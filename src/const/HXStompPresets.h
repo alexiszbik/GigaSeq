@@ -32,6 +32,8 @@ _HX_PRESET(TiredEndB, 7, A);
 
 _HX_PRESET(Falling, 9, B);
 
+_HX_PRESET(FantasySolo, 10, A);
+
 _HX_PRESET(Bass, 11, B);
 
 _HX_PRESET(CloserBassDisto, 12, C);

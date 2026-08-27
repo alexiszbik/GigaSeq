@@ -11,8 +11,10 @@ _POLY_PRESET(WaterSqr, 3);
 _POLY_PRESET(SlowStr, 4);
 _POLY_PRESET(FilterStr, 5);
 _POLY_PRESET(BigLead, 6);
+_POLY_PRESET(Rave, 7);
 _POLY_PRESET(FallingEnd, 9);
 _POLY_PRESET(Closer, 12);
+_POLY_PRESET(FantasyChords, 16);
 
 
 // Synth part
