@@ -3,6 +3,7 @@
 #include "factories/SequenceBuilder.h"
 #include "factories/SequenceTrackFactory.h"
 #include "factories/falling/FallingTrackFactory.h"
+#include "factories/water/WaterTrackFactory.h"
 #include "MidiConst.h"
 #include "TickHelper.h"
 
@@ -13,11 +14,22 @@ namespace {
 Sequence FallingSequenceFactory::fallingIntro()
 {
     Sequence seq = buildSequence(
-        8, 4, 0, "Intro", songTempo, true,
+        16, 4, 8, "Intro", songTempo, true,
         {
             FallingTrackFactory::fallingHats,
             FallingTrackFactory::fallingPads,
             FallingTrackFactory::fallingKick,
+            SequenceTrackFactory::gtrLoopErase,
+            track(SequenceTrackFactory::polySynth)
+                .withProgramChange(PolySynth::kSlowStr),
+            track(WaterTrackFactory::waterFreakWind).withStart(TICK(8))
+                .withProgramChange(Microfreak::kWind),
+            track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kFalling),
+            track(SequenceTrackFactory::midiLoop)
+                .withNote(MidiLoop::kEraseAll)
+                .withNote(MidiLoop::kSelectPoly)
+                .withCC(MidiLoop::kArpMode_cc, OFF)
+                .withCC(MidiLoop::kRecord_cc, OFF),
         });
     return seq;
 }
@@ -31,6 +43,7 @@ Sequence FallingSequenceFactory::fallingIntro2()
             FallingTrackFactory::fallingPads,
             track(FallingTrackFactory::fallingKick).withLength(TickHelper::bars(7)),
             FallingTrackFactory::fallingRiser,
+            track(WaterTrackFactory::waterFreakWind)
         });
     return seq;
 }
@@ -51,8 +64,11 @@ Sequence FallingSequenceFactory::fallingBassSeq()
             FallingTrackFactory::fallingBass,
             track(FallingTrackFactory::fallingPads).withStart(len1).withCC(12,127).withAutomation(len1, len3, 12, 127, 0), //add automation !!!
             track(FallingTrackFactory::fallingRiser).withMuteEvent(len3).asFill(),
-            track(FallingTrackFactory::fallingHarp).muted(),
+            track(FallingTrackFactory::fallingHarp).muted()
+                .withProgramChange(Microfreak::kFallingHarp),
             track(FallingTrackFactory::fallingTambourin).muted(),
+            track(SequenceTrackFactory::modularA)
+                .withCC(ModularA::kMuteClock_cc, ON).withCC(ModularA::kMuteClock_cc, OFF, TICK(8))
         });
 
     return seq;
@@ -68,6 +84,8 @@ Sequence FallingSequenceFactory::fallingPreInterlude()
             track(FallingTrackFactory::fallingKick).withLength(length),
             track(FallingTrackFactory::fallingBass).withLength(length),
             FallingTrackFactory::fallingPreInterlude,
+            track(SequenceTrackFactory::modularA)
+                .withCC(ModularA::kMuteClock_cc, ON, TICK(8))
         });
     return seq;
 }
@@ -85,6 +103,8 @@ Sequence FallingSequenceFactory::fallingInterlude()
             FallingTrackFactory::fallingRiser,
             FallingTrackFactory::fallingSnareFill,
             FallingTrackFactory::fallingKickFill,
+            track(SequenceTrackFactory::modularA)
+                .withCC(ModularA::kMuteClock_cc, OFF, TICK(16))
         });
     return seq;
 }
@@ -122,6 +142,7 @@ Sequence FallingSequenceFactory::fallingClimax()
             SequenceTrackFactory::rideOff,
             FallingTrackFactory::fallingRimTom,
             track(FallingTrackFactory::fallingRiser).withMuteEvent(0).asFill(),
+            track(SequenceTrackFactory::polySynth).withProgramChange(PolySynth::kFallingEnd)
         });
     return seq;
 }

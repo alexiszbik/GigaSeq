@@ -123,6 +123,8 @@ namespace GigaSeq
             copyActionText(action.text, "NEXT");
         } else if (sw == PendingSwitch::Previous) {
             copyActionText(action.text, "PREV");
+        } else if (sw == PendingSwitch::JumpToSong) {
+            copyActionText(action.text, "SONG");
         }
         enqueueAction(action);
     }

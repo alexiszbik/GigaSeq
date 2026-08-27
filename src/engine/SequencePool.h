@@ -12,7 +12,8 @@ enum class PendingSwitch
 {
     None,
     Next,
-    Previous
+    Previous,
+    JumpToSong
 };
 
 
@@ -35,12 +36,15 @@ public:
 
     Song& currentSong();
     const Song& currentSong() const;
+    Song& song(std::size_t index);
+    const Song& song(std::size_t index) const;
     Sequence& current();
     const Sequence& current() const;
 
     void resetCurrent();
     void requestNext(bool now = false);
     void requestPrevious(bool now = false);
+    void requestSong(std::size_t songIndex, bool now = false);
     void processTick();
     void allNotesOff();
 
@@ -59,7 +63,9 @@ private:
     bool canAdvancePrevious() const;
     void advanceToNext();
     void advanceToPrevious();
+    void advanceToSong(std::size_t songIndex);
     void queueSwitch(PendingSwitch direction);
+    void queueSongSwitch(std::size_t songIndex);
     void logCurrentSequenceSwitch();
     void notifySequenceChanged();
     void notifyPlaybackStop();
@@ -73,6 +79,7 @@ private:
     std::size_t currentSongIndex_ = 0;
     std::size_t currentSequenceIndex_ = 0;
     PendingSwitch pendingSwitch_ = PendingSwitch::None;
+    std::size_t pendingSongIndex_ = 0;
 
     SequenceChangedCallback onSequenceChanged_ = nullptr;
     MuteChangedCallback onTrackMuteChanged_ = nullptr;

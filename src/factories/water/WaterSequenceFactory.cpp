@@ -121,7 +121,7 @@ Sequence WaterSequenceFactory::waterChorus2()
             track(WaterTrackFactory::waterFreakChorusB).withLength(len)
                 .withProgramChange(Microfreak::kWaterArp),
             track(SequenceTrackFactory::polySynth).withProgramChange(PolySynth::kBigLead),
-            track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, OFF)
+            track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, OFF).withCC(ModularA::kGlobalMute_cc, ON, len)
         });
 }
 
@@ -142,6 +142,7 @@ Sequence WaterSequenceFactory::waterPartC()
             track(WaterTrackFactory::waterShakes).muted(),
             track(WaterTrackFactory::waterXmas).withStart(TickHelper::bars(16)),
             WaterTrackFactory::waterFmbass,
+            track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, OFF)
         });
     return seq;
 }
@@ -166,7 +167,8 @@ Sequence WaterSequenceFactory::waterPartCEnd()
             track(WaterTrackFactory::waterXmas).withLength(len),
             track(WaterTrackFactory::waterFmbass).withLength(len),
             WaterTrackFactory::waterEventsPartC,
-            track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, ON, len)
+            track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, ON, len),
+            track(SequenceTrackFactory::polySynth).withCC(PolySynth::kGlobalMute_cc, ON, len)
         });
 }
 
@@ -188,7 +190,8 @@ Sequence WaterSequenceFactory::waterChorusEnd()
             track(WaterTrackFactory::waterXmas).withLength(len1).withStart(len1),
             WaterTrackFactory::waterEventsEnd,
             track(WaterTrackFactory::waterFreakWind).withStart(TICK(8)).withProgramChange(Microfreak::kWind),
-            track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, OFF)
+            track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, OFF),
+            track(SequenceTrackFactory::polySynth).withCC(PolySynth::kGlobalMute_cc, OFF)
         });
 
     return seq;
