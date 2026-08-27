@@ -87,4 +87,28 @@ SequenceTrack SequenceTrackFactory::midiLoop(tick_t lengthInTicks, tick_t startI
     return track;
 }
 
+SequenceTrack SequenceTrackFactory::modularA(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Modular", MidiChannel::kModularA);
+    return track;
+}
 
+SequenceTrack SequenceTrackFactory::ledStrips(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("LedStrips", MidiChannel::kLedStrips);
+    return track;
+}
+
+SequenceTrack SequenceTrackFactory::ledStripsTest(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("LedStrips", MidiChannel::kLedStrips);
+
+    SequenceDesc desc;
+    desc.notes = {
+        {LedStrips::kRed_A}, {LedStrips::kGreen_A}, {LedStrips::kBlue_A}, {LedStrips::kWhite_A},
+        {LedStrips::kRed_B}, {LedStrips::kGreen_B}, {LedStrips::kBlue_B}, {LedStrips::kWhite_B},
+        {LedStrips::kRed_C}, {LedStrips::kGreen_C}, {LedStrips::kBlue_C}, {LedStrips::kWhite_C},
+        {LedStrips::kRed_D}, {LedStrips::kGreen_D}, {LedStrips::kBlue_D}, {LedStrips::kWhite_D},
+    };
+    desc.rate = 4;
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
+
+    return track;
+}

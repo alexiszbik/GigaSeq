@@ -214,7 +214,9 @@ void SequenceTrack::processPatternTick(tick_t position)
             return;
         }
 
-        const tick_t noteDuration = stepDuration * step.durationMul;
+        //I added - 1 here to correct voice overlap
+        //But what would be awesome would be the ability to have durationMul under 1
+        const tick_t noteDuration = stepDuration * step.durationMul - 1;
         for (uint8_t i = 0; i < kMaxNotesPerPatternStep && step.notes[i] != 0; ++i) {
             startNote({ position, noteDuration, { step.notes[i], step.velocity } });
         }

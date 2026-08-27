@@ -86,10 +86,10 @@ MAKE_PATTERN(kTogetherSample, kTogetherSampleSteps, 1);
     {{n5, n6, n7, n8}, 127, 9}, _PAD12
 
 constexpr PatternStep kTogetherPartBSynthSteps[] = {
-    SYNTH_ROW(Ab2, C4, Eb4, Bb4, Ab2, C4, Eb4, Ab4),
-    SYNTH_ROW(G2, B3, D4, Bb4, G2, B3, D4, G4),
-    SYNTH_ROW(Bb2, Bb3, D4, F4, Bb2, Bb3, D4, G4),
-    SYNTH_ROW(C3, C4, Eb4, Ab4, C3, C4, Eb4, G4),
+    SYNTH_ROW(Ab1, C3, Eb3, Bb3, Ab1, C3, Eb3, Ab3),
+    SYNTH_ROW(G1, B2, D3, Bb3, G1, B2, D3, G3),
+    SYNTH_ROW(Bb1, Bb2, D3, F3, Bb1, Bb2, D3, G3),
+    SYNTH_ROW(C2, C3, Eb3, Ab3, C2, C3, Eb3, G3),
 };
 MAKE_PATTERN(kTogetherPartBSynth, kTogetherPartBSynthSteps, 8);
 

@@ -30,7 +30,8 @@ Sequence WaterSequenceFactory::waterIntro()
             track(SequenceTrackFactory::midiLoop)
                 .withNote(MidiLoop::kEraseAll)
                 .withNote(MidiLoop::kSelectPoly)
-                .withCC(MidiLoop::kArpMode_cc, OFF),
+                .withCC(MidiLoop::kArpMode_cc, OFF)
+                .withCC(MidiLoop::kRecord_cc, OFF),
         });
 
     return seq;
@@ -67,6 +68,7 @@ Sequence WaterSequenceFactory::waterChorus()
             track(WaterTrackFactory::waterMarimba).withNote(68, 127, len), // note to stop the marimba
             track(WaterTrackFactory::waterXmas).withLength(len2).withStart(TickHelper::bars(8)),
             track(WaterTrackFactory::waterChorusFMBass).withStart(TickHelper::bars(15)),
+            track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, ON, len)
         });
 }
 
@@ -97,6 +99,7 @@ Sequence WaterSequenceFactory::waterPartB()
             track(WaterTrackFactory::waterShakes).withStart(start4).withLength(len4),
             WaterTrackFactory::waterEventsPartB,
             track(SequenceTrackFactory::polySynth).withProgramChange(PolySynth::kSlowStr),
+            track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, OFF).withCC(ModularA::kGlobalMute_cc, ON, len1)
         });
 }
 
@@ -118,6 +121,7 @@ Sequence WaterSequenceFactory::waterChorus2()
             track(WaterTrackFactory::waterFreakChorusB).withLength(len)
                 .withProgramChange(Microfreak::kWaterArp),
             track(SequenceTrackFactory::polySynth).withProgramChange(PolySynth::kBigLead),
+            track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, OFF)
         });
 }
 
@@ -162,6 +166,7 @@ Sequence WaterSequenceFactory::waterPartCEnd()
             track(WaterTrackFactory::waterXmas).withLength(len),
             track(WaterTrackFactory::waterFmbass).withLength(len),
             WaterTrackFactory::waterEventsPartC,
+            track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, ON, len)
         });
 }
 
@@ -183,6 +188,7 @@ Sequence WaterSequenceFactory::waterChorusEnd()
             track(WaterTrackFactory::waterXmas).withLength(len1).withStart(len1),
             WaterTrackFactory::waterEventsEnd,
             track(WaterTrackFactory::waterFreakWind).withStart(TICK(8)).withProgramChange(Microfreak::kWind),
+            track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, OFF)
         });
 
     return seq;

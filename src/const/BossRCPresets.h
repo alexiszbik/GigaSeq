@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 namespace BossRC
 {
 #define _BOSS_PRESET(preset, nbr) constexpr uint8_t k##preset = nbr - 1

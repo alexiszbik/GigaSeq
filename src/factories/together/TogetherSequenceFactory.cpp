@@ -16,7 +16,11 @@ Sequence TogetherSequenceFactory::togetherIntro()
         {
             TogetherTrackFactory::togetherArp,
             track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kBass),
-            track(SequenceTrackFactory::gtrLoop).withProgramChange(BossRC::kTogetherA)
+            track(SequenceTrackFactory::gtrLoop).withProgramChange(BossRC::kTogetherA),
+            track(SequenceTrackFactory::microfreak).withProgramChange(Microfreak::kTogetherLead),
+            track(SequenceTrackFactory::midiLoop)
+                .withNote(MidiLoop::kSelectMicrofreak)
+                .withCC(MidiLoop::kBarCount_cc, 8)
         });
 
     addProgramChangeTrack(seq, "Poly pgm", MidiChannel::kPoly, 1);
@@ -32,6 +36,18 @@ Sequence TogetherSequenceFactory::togetherSample()
             TogetherTrackFactory::togetherHiDrum,
             track(TogetherTrackFactory::togetherSample).muted(),
             track(TogetherTrackFactory::togetherDX7).muted(),
+            track(SequenceTrackFactory::midiLoop).withCC(MidiLoop::kRecord_cc, ON),
+            track(SequenceTrackFactory::polySynth).withProgramChange(PolySynth::kTogetherChords),
+            track(SequenceTrackFactory::vocoder)
+                .withCC(Vocoder::kPlayMode_cc, 127)
+                .withCC(Vocoder::kGlide_cc, 0)
+                .withCC(Vocoder::kRelease_cc, 42)
+                .withCC(Vocoder::kOscMix_cc, 89)
+                .withCC(Vocoder::kOscAWaveform_cc, 127)
+                .withCC(Vocoder::kOscBWaveform_cc, 0)
+                .withCC(Vocoder::kOscAPwm_cc, 64)
+                .withCC(Vocoder::kOscBPwm_cc, 64),
+
         });
 }
 
@@ -59,8 +75,11 @@ Sequence TogetherSequenceFactory::togetherVocoder()
             TogetherTrackFactory::togetherDX7,
             SequenceTrackFactory::kickFour,
             TogetherTrackFactory::togetherVocoder,
-            track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kTogetherChorus)
-            .withCC(HXStomp::kTogetherChorus_ccVolume, 0, TICK(0,1))
+            track(SequenceTrackFactory::gtrPedal)
+                .withProgramChange(HXStomp::kTogetherChorus)
+                .withCC(HXStomp::kTogetherChorus_ccVolume, 0, TICK(0,1)),
+            track(SequenceTrackFactory::microfreak).withProgramChange(Microfreak::kWaterBass),
+            track(SequenceTrackFactory::midiLoop).withNote(MidiLoop::kEraseAll)
         });
 }
 
@@ -122,6 +141,9 @@ Sequence TogetherSequenceFactory::togetherPartB()
                 .withCC(HXStomp::kTogetherChorus_ccDrive, 0)
                 .withProgramChange(HXStomp::kTogetherEnd, TICK(5)),
             track(SequenceTrackFactory::gtrLoop).withProgramChange(BossRC::kTogetherB, TICK(5)),
+            track(SequenceTrackFactory::midiLoop)
+                .withNote(MidiLoop::kSelectBass)
+                .withCC(MidiLoop::kBarCount_cc, 4)
         });
 }
 

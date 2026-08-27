@@ -339,20 +339,15 @@ SequencePool SequencePool::createDefault(MidiInOut& midi, Logger& logger)
 {
     SequencePool pool(midi, logger);
 
-    addBibimbapSong(pool);
-    addWaterSong(pool);
-
-    addFantasySong(pool);
-    addTiredSong(pool);
-    addFriendshipSong(pool);
     addTogetherSong(pool);
-    
-    addUandiSong(pool);
-    
-    addCloserSong(pool);
+    addWaterSong(pool);
     addFallingSong(pool);
-
-    
+    addCloserSong(pool);
+    addFantasySong(pool);
+    addBibimbapSong(pool);
+    addUandiSong(pool);
+    addFriendshipSong(pool);
+    addTiredSong(pool);
 
     return pool;
 }

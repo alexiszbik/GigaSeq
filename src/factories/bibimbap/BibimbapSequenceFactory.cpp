@@ -16,6 +16,7 @@ Sequence BibimbapSequenceFactory::bibimbapIntro()
         {
             BibimbapTrackFactory::bibimbapKickHi,
             BibimbapTrackFactory::bibimbapTom,
+            SequenceTrackFactory::ledStripsTest
         });
     return seq;
 }
