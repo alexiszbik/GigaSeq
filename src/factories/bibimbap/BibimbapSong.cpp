@@ -14,6 +14,7 @@ void addBibimbapSong(SequencePool& pool)
         BibimbapSequenceFactory::bibimbapIntro,
         BibimbapSequenceFactory::bibimbapMain,
         BibimbapSequenceFactory::bibimbapBass,
+        BibimbapSequenceFactory::bibimbapBassFull,
         BibimbapSequenceFactory::bibimbapPause,
         BibimbapSequenceFactory::bibimbapDrop,
         BibimbapSequenceFactory::bibimbapClimax,

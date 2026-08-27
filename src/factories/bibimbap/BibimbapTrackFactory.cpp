@@ -191,7 +191,17 @@ SequenceTrack BibimbapTrackFactory::bibimbapRiser(tick_t lengthInTicks, tick_t s
 SequenceTrack BibimbapTrackFactory::bibimbapSnareRoll(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("SnareRoll", MidiChannel::kDrums);
 
-    makeRoll(track, Bibimbap::sd1050, lengthInTicks, startInTicks, 20, 127);
+    makeRoll(track, Bibimbap::sd1050, lengthInTicks, startInTicks, 32, 127);
+
+    return track;
+}
+
+SequenceTrack BibimbapTrackFactory::bibimbapSnareRoll2(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("SnareRoll", MidiChannel::kDrums);
+
+    tick_t len = lengthInTicks - TICK(0,3);
+    makeRoll(track, Bibimbap::sd1050, lengthInTicks - TICK(0,3), startInTicks, 110, 124);
+    makeRoll(track, Bibimbap::sd1050, TICK(0,3), startInTicks + lengthInTicks - TICK(0,3), 124, 127, {1}, 32);
 
     return track;
 }
@@ -216,13 +226,13 @@ SequenceTrack BibimbapTrackFactory::bibimbapSnare(tick_t lengthInTicks, tick_t s
 
 SequenceTrack BibimbapTrackFactory::bibimbapOpenHat(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("OpenHat", MidiChannel::kDrums);
-    track.setPattern(BibimbapPatterns::kBibimbapOpenHat, TICK(0,7*7 + 4), TICK(0,7*16));
+    track.setPattern(BibimbapPatterns::kBibimbapOpenHat, TICK(0,7*7 + 4), TICK(0,7*8));
     SequenceDesc desc;
     desc.notes = {
         {Bibimbap::openh}
     };
     desc.rate = 32;
-    makeSequenceTrack(track, desc, TICK(0,3,0), TICK(0,7*23 + 4));
+    makeSequenceTrack(track, desc, TICK(0,3,0), TICK(0,7*15 + 4));
     return track;
 }
 

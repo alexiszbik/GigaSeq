@@ -94,9 +94,10 @@ void makeRoll(
     tick_t startTick,
     uint8_t startVelocity,
     uint8_t endVelocity,
-    std::vector<double> velocityPattern) 
+    std::vector<double> velocityPattern,
+    uint8_t stepRatio) 
 {
-    const tick_t stepDuration = TickHelper::kStepLen;
+    const tick_t stepDuration = TickHelper::kOneBarTick4_4 / stepRatio;
 
     if (lengthInTicks < stepDuration) {
         return;
