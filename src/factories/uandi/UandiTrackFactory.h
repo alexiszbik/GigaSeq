@@ -24,4 +24,5 @@ public:
     static SequenceTrack uandiRiserCrash(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack uandiRimFill(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack uandiExplode(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack uandiSweep(tick_t lengthInTicks, tick_t startInTicks);
 };

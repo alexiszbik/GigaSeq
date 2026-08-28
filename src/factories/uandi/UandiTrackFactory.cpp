@@ -143,3 +143,14 @@ SequenceTrack UandiTrackFactory::uandiExplode(tick_t lengthInTicks, tick_t start
     addSingleNote(track, Uandi::explode, startInTicks);
     return track;
 }
+
+SequenceTrack UandiTrackFactory::uandiSweep(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Sweep", MidiChannel::kSampler);
+
+    SequenceDesc desc;
+    desc.notes = {{Uandi::uaiSweep7}, {Uandi::uaiSweep7}, {}};
+    desc.rate = 0.25;
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
+
+    return track;
+}

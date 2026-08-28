@@ -19,8 +19,10 @@ Sequence UandiSequenceFactory::uandiIntro()
             track(UandiTrackFactory::uandiHatLoop).muted(),
             track(UandiTrackFactory::uandiWant).muted().withMuteEvent(0),
             track(UandiTrackFactory::uandiBassA).muted(),
-            track(UandiTrackFactory::uandiFreak).muted(),
-            track(UandiTrackFactory::uandiRiser).muted().withMuteEvent(0)
+            track(UandiTrackFactory::uandiFreak).muted().withProgramChange(Microfreak::kUandI),
+            track(UandiTrackFactory::uandiRiser).muted().withMuteEvent(0).asFill(),
+            track(SequenceTrackFactory::polySynth).withProgramChange(PolySynth::kSlowStr),
+            track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kUandI),
         });
     return seq;
 }
@@ -28,7 +30,7 @@ Sequence UandiSequenceFactory::uandiIntro()
 Sequence UandiSequenceFactory::uandiIntroB()
 {
     Sequence seq = buildSequence(
-        4, 4, 0, "IntroB", songTempo, true,
+        4, 4, 0, "IntroB", songTempo, false,
         {
             UandiTrackFactory::uandiWavetableB,
             UandiTrackFactory::uandiBassB,
@@ -80,11 +82,16 @@ Sequence UandiSequenceFactory::uandiBreak()
 Sequence UandiSequenceFactory::uandiBack()
 {
     Sequence seq = buildSequence(
-        4, 4, 0, "Back", songTempo, true,
+        4, 4, 0, "Back", songTempo, false,
         {
             UandiTrackFactory::uandiDiscoB,
             UandiTrackFactory::uandiHatLoop,
-            UandiTrackFactory::uandiRiser
+            UandiTrackFactory::uandiRiser,
+            track(SequenceTrackFactory::modularA).withCC(ModularA::kMuteClock_cc, ON),
+            track(SequenceTrackFactory::bass).withCC(Bass::kGlobalMute_cc, ON),
+            track(SequenceTrackFactory::gtrPedal)
+                .withCC(HXStomp::kUandI_ccShifter, OFF, TICK(3,2)) 
+                .withCC(HXStomp::kUandI_ccDrive, ON),
         });
     return seq;
 }
@@ -104,7 +111,15 @@ Sequence UandiSequenceFactory::uandiClimax()
             UandiTrackFactory::uandiDiscoAB,
             UandiTrackFactory::uandiShaker,
             UandiTrackFactory::uandiFreak,
+            UandiTrackFactory::uandiSweep,
             track(UandiTrackFactory::uandiRimFill).withStart(TICK(24)),
+            track(SequenceTrackFactory::modularA).withCC(ModularA::kMuteClock_cc, OFF),
+            track(SequenceTrackFactory::bass)
+                .withCC(Bass::kHpfCutoff_cc, 0)
+                .withCC(Bass::kHpfResonance_cc, 0)
+                .withCC(Bass::kReverbSend_cc, 0)
+                .withCC(Bass::kGlobalMute_cc, OFF),
+            
         });
     return seq;
 }

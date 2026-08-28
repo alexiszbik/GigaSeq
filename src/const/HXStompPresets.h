@@ -21,8 +21,8 @@ _HX_PRESET(Water, 4, B);
 
 _HX_PRESET(UandI, 5, C);
 _HX_CC(UandI, Drive, 19);
-_HX_CC(UandI, Gain, 12);
-_HX_CC(UandI, Pitch, 10);
+_HX_CC(UandI, Shifter, 12);
+_HX_CC(UandI, Reverb, 10);
 
 
 _HX_PRESET(TiredDelay, 6, A);
