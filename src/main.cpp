@@ -121,7 +121,7 @@ void inputCheckCallback() {
         }
     }
 
-    if (pushNext.isPushed()) {
+    if (pushNext.isPushed() || pushPedal.isPushed()) {
         sequencePool.requestNext(!isPlaying);
     }
 
