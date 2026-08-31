@@ -28,7 +28,6 @@ Sequence CloserSequenceFactory::closerIntro()
             track(CloserTrackFactory::closerRiser).withMuteEvent(0).asFill(),
             track(SequenceTrackFactory::gtrLoopErase).withProgramChange(BossRC::kCloser, TICK(4)),
             track(SequenceTrackFactory::midiLoop)
-                .withNote(MidiLoop::kEraseAll)
                 .withNote(MidiLoop::kSelectBass)
                 .withCC(MidiLoop::kArpMode_cc, OFF)
                 .withCC(MidiLoop::kRecord_cc, ON)

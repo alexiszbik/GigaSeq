@@ -155,6 +155,11 @@ Sequence FallingSequenceFactory::fallingEnd()
             FallingTrackFactory::fallingHandTamb,
             track(FallingTrackFactory::fallingSynthEnd).withLength(TickHelper::bars(16)),
             FallingTrackFactory::fallingHarp,
+            track(SequenceTrackFactory::midiLoop)
+                .withNote(MidiLoop::kSelectBass)
+                .withCC(MidiLoop::kArpMode_cc, OFF)
+                .withCC(MidiLoop::kRecord_cc, ON)
+                .withCC(MidiLoop::kBarCount_cc, 4),
         });
     return seq;
 }

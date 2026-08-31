@@ -171,6 +171,7 @@ Sequence TogetherSequenceFactory::togetherPartBDrums()
             SequenceTrackFactory::kickFour,
             track(TogetherTrackFactory::togetherPartBJC).muted(),
             track(TogetherTrackFactory::togetherPartBTambourin).muted(),
+            track(SequenceTrackFactory::polySynth).withCC(PolySynth::kFilterCutoff_cc, 3)
         });
 }
 

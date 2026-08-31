@@ -14,17 +14,13 @@ constexpr uint8_t songTempo = 125;
 Sequence WaterSequenceFactory::waterIntro()
 {
     Sequence seq = buildSequence(
-        16, 4, 8, "Intro", songTempo, true,
+        8, 4, 4, "Intro", songTempo, true,
         {
             SequenceTrackFactory::kickFour,
             SequenceTrackFactory::clapFour,
             track(WaterTrackFactory::waterHats).muted(),
             track(WaterTrackFactory::waterMarimba).muted(),
             track(WaterTrackFactory::waterFreak).withProgramChange(Microfreak::kWaterBass),
-            track(WaterTrackFactory::waterBass).muted(),
-            track(WaterTrackFactory::waterClaves).muted(),
-            track(WaterTrackFactory::waterCongas).muted(),
-            track(WaterTrackFactory::waterFmbass).muted(),
             track(SequenceTrackFactory::gtrLoopErase).withProgramChange(BossRC::kWater, TICK(4)),
             track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kWater),
             track(SequenceTrackFactory::polySynth).withProgramChange(PolySynth::kWaterSqr),
@@ -33,6 +29,25 @@ Sequence WaterSequenceFactory::waterIntro()
                 .withNote(MidiLoop::kSelectPoly)
                 .withCC(MidiLoop::kArpMode_cc, OFF)
                 .withCC(MidiLoop::kRecord_cc, OFF),
+        });
+
+    return seq;
+}
+
+Sequence WaterSequenceFactory::waterIntroBass()
+{
+    Sequence seq = buildSequence(
+        16, 4, 8, "Intro", songTempo, true,
+        {
+            SequenceTrackFactory::kickFour,
+            SequenceTrackFactory::clapFour,
+            WaterTrackFactory::waterHats,
+            track(WaterTrackFactory::waterMarimba).muted(),
+            WaterTrackFactory::waterFreak,
+            WaterTrackFactory::waterBass,
+            track(WaterTrackFactory::waterClaves).withStart(TICK(8)),
+            track(WaterTrackFactory::waterCongas).muted(),
+            track(WaterTrackFactory::waterFmbass).muted(),
         });
 
     return seq;
@@ -143,7 +158,10 @@ Sequence WaterSequenceFactory::waterPartC()
             track(WaterTrackFactory::waterShakes).muted(),
             track(WaterTrackFactory::waterXmas).withStart(TickHelper::bars(16)),
             WaterTrackFactory::waterFmbass,
-            track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, OFF)
+            track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, OFF),
+            track(SequenceTrackFactory::drumMachine)
+                .withCC(DrumMachine::kPerformMode_cc, OFF)
+                .withNote(Water::wtrCym808)
         });
     return seq;
 }
@@ -171,8 +189,7 @@ Sequence WaterSequenceFactory::waterPartCEnd()
             track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, ON, len),
             track(SequenceTrackFactory::polySynth).withCC(PolySynth::kGlobalMute_cc, ON, len),
             track(SequenceTrackFactory::drumMachine)
-                .withCC(DrumMachine::kPerformMode_cc, OFF)
-                .withNote(Water::wtrCym808)
+                .withCC(DrumMachine::kClearAll_cc, ON, len)
         });
 }
 
@@ -195,9 +212,7 @@ Sequence WaterSequenceFactory::waterChorusEnd()
             WaterTrackFactory::waterEventsEnd,
             track(WaterTrackFactory::waterFreakWind).withStart(TICK(8)).withProgramChange(Microfreak::kWind),
             track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, OFF),
-            track(SequenceTrackFactory::polySynth).withCC(PolySynth::kGlobalMute_cc, OFF),
-            track(SequenceTrackFactory::drumMachine)
-                .withCC(DrumMachine::kClearAll_cc, ON)
+            track(SequenceTrackFactory::polySynth).withCC(PolySynth::kGlobalMute_cc, OFF)
         });
 
     return seq;

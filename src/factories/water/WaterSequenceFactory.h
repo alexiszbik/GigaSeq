@@ -6,6 +6,7 @@ class WaterSequenceFactory
 {
 public:
     static Sequence waterIntro();
+    static Sequence waterIntroBass();
     static Sequence waterPrechorus();
     static Sequence waterChorus();
     static Sequence waterPartB();
