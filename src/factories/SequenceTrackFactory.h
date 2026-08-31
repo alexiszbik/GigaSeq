@@ -25,6 +25,7 @@ public:
     static SequenceTrack midiLoop(tick_t lengthInTicks, tick_t startInTicks);
 
     static SequenceTrack modularA(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack drumMachine(tick_t lengthInTicks, tick_t startInTicks);
 
     static SequenceTrack ledStrips(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack ledStripsTest(tick_t lengthInTicks, tick_t startInTicks);

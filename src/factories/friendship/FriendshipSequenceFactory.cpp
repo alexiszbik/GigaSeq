@@ -22,6 +22,15 @@ Sequence FriendshipSequenceFactory::friendshipIntro()
             track(FriendshipTrackFactory::friendshipVoiceSynth).muted(),
             track(FriendshipTrackFactory::friendshipBravery).muted(),
             track(FriendshipTrackFactory::friendshipRiser).muted().withMuteEvent(0).asFill(),
+            track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kFriendship),
+            track(SequenceTrackFactory::gtrLoop).withProgramChange(BossRC::kFriendship),
+            track(SequenceTrackFactory::midiLoop)
+                .withNote(MidiLoop::kEraseAll)
+                .withNote(MidiLoop::kSelectBass)
+                .withCC(MidiLoop::kArpMode_cc, ON)
+                .withCC(MidiLoop::kRecord_cc, ON)
+                .withCC(MidiLoop::kBarCount_cc, 8),
+            
         });
     return seq;
 }
@@ -36,6 +45,7 @@ Sequence FriendshipSequenceFactory::friendshipChill()
             track(FriendshipTrackFactory::friendshipSeqVoice).withStart(TICK(8)),
             track(FriendshipTrackFactory::friendshipBalafon).muted(),
             track(FriendshipTrackFactory::friendshipHats).muted(),
+            track(SequenceTrackFactory::midiLoop).withCC(MidiLoop::kMuteBass_cc, ON)
         });
     return seq;
 }
@@ -71,6 +81,7 @@ Sequence FriendshipSequenceFactory::friendshipMain()
             FriendshipTrackFactory::friendshipStabs,
             FriendshipTrackFactory::friendshipVoiceSynth,
             track(FriendshipTrackFactory::friendshipRiser).muted().withMuteEvent(0).asFill(),
+            track(SequenceTrackFactory::midiLoop).withCC(MidiLoop::kMuteBass_cc, OFF)
         });
     return seq;
 }
@@ -85,7 +96,12 @@ Sequence FriendshipSequenceFactory::friendshipBreak()
             track(FriendshipTrackFactory::friendshipBass).muted(),
             track(FriendshipTrackFactory::friendshipJungle).withStart(TICK(8)),
             track(FriendshipTrackFactory::friendshipStabz).muted(),
-            track(FriendshipTrackFactory::friendshipOpenH909).muted()
+            track(FriendshipTrackFactory::friendshipOpenH909).muted(),
+            track(SequenceTrackFactory::midiLoop)
+                .withNote(MidiLoop::kEraseAll)
+                .withNote(MidiLoop::kSelectPoly)
+                .withCC(MidiLoop::kArpMode_cc, OFF)
+                .withCC(MidiLoop::kRecord_cc, OFF)
 
         });
     return seq;

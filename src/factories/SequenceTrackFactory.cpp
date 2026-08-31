@@ -92,6 +92,11 @@ SequenceTrack SequenceTrackFactory::modularA(tick_t lengthInTicks, tick_t startI
     return track;
 }
 
+SequenceTrack SequenceTrackFactory::drumMachine(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("DrumMachine", MidiChannel::kDrumMachine);
+    return track;
+}
+
 SequenceTrack SequenceTrackFactory::ledStrips(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("LedStrips", MidiChannel::kLedStrips);
     return track;

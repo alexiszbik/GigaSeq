@@ -9,6 +9,7 @@
 #include "LEDStrips.h"
 #include "Vocoder.h"
 #include "ModularA.h"
+#include "DrumMachine.h"
 #include "Bass.h"
 
 

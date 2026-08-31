@@ -5,6 +5,7 @@
 #include "factories/water/WaterTrackFactory.h"
 #include "MidiConst.h"
 #include "TickHelper.h"
+#include "WaterSamples.h"
 
 namespace {
 constexpr uint8_t songTempo = 125;
@@ -168,7 +169,10 @@ Sequence WaterSequenceFactory::waterPartCEnd()
             track(WaterTrackFactory::waterFmbass).withLength(len),
             WaterTrackFactory::waterEventsPartC,
             track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, ON, len),
-            track(SequenceTrackFactory::polySynth).withCC(PolySynth::kGlobalMute_cc, ON, len)
+            track(SequenceTrackFactory::polySynth).withCC(PolySynth::kGlobalMute_cc, ON, len),
+            track(SequenceTrackFactory::drumMachine)
+                .withCC(DrumMachine::kPerformMode_cc, OFF)
+                .withNote(Water::wtrCym808)
         });
 }
 
@@ -191,7 +195,9 @@ Sequence WaterSequenceFactory::waterChorusEnd()
             WaterTrackFactory::waterEventsEnd,
             track(WaterTrackFactory::waterFreakWind).withStart(TICK(8)).withProgramChange(Microfreak::kWind),
             track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, OFF),
-            track(SequenceTrackFactory::polySynth).withCC(PolySynth::kGlobalMute_cc, OFF)
+            track(SequenceTrackFactory::polySynth).withCC(PolySynth::kGlobalMute_cc, OFF),
+            track(SequenceTrackFactory::drumMachine)
+                .withCC(DrumMachine::kClearAll_cc, ON)
         });
 
     return seq;

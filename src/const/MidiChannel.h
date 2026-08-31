@@ -13,6 +13,8 @@ namespace MidiChannel
     constexpr uint8_t kVocoder = 6;     // 7
     constexpr uint8_t kFM = 7;  constexpr uint8_t kMicrofreak = 7;        // 8
          // 9 maybe some CCs for the drum machine here
+
+    constexpr uint8_t kDrumMachine = 8;    // 10
     constexpr uint8_t kGtrPedal = 9;    // 10
     constexpr uint8_t kGtrLoop = 10;    // 11
     constexpr uint8_t kMidiLoop = 11;   // 12
