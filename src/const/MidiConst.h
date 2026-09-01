@@ -7,6 +7,7 @@
 #include "MicrofreakPresets.h"
 #include "MidiLoop.h"
 #include "LEDStrips.h"
+#include "LEDMatrix.h"
 #include "Vocoder.h"
 #include "ModularA.h"
 #include "DrumMachine.h"
