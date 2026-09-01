@@ -5,15 +5,15 @@
 namespace LedMatrix {
 
 #define _MATRIX_PRESET(song, preset, nbr) constexpr uint8_t k##song##_##preset = nbr - 1
-#define _MATRIX_PRESET_NOTE(song, preset, command, note) constexpr uint8_t k##song##_##preset##_##command##_note = nbr
+#define _MATRIX_PRESET_NOTE(song, preset, command, nbr) constexpr uint8_t k##song##_##preset##_##command##_note = nbr
 
 constexpr uint8_t kKill = 16 - 1; //Maybe prepare a specific program for this ?
 
 // === Together ===
 //TO do ...
-_MATRIX_PRESET(Friendship, vuIntro, 43); //?
-_MATRIX_PRESET(Friendship, circles, 44); //?
-_MATRIX_PRESET(Friendship, vuRainbow, 45); //?
+_MATRIX_PRESET(Together, vuIntro, 43); //?
+_MATRIX_PRESET(Together, circles, 44); //?
+_MATRIX_PRESET(Together, vuRainbow, 45); //?
 
 // === Water ===
 _MATRIX_PRESET(Water, oscBlue, 24);
