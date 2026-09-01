@@ -37,7 +37,7 @@ Sequence WaterSequenceFactory::waterIntro()
 Sequence WaterSequenceFactory::waterIntroBass()
 {
     Sequence seq = buildSequence(
-        16, 4, 8, "Intro", songTempo, true,
+        16, 4, 8, "Intro Bass", songTempo, true,
         {
             SequenceTrackFactory::kickFour,
             SequenceTrackFactory::clapFour,

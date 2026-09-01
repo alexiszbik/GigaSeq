@@ -12,17 +12,25 @@ constexpr uint8_t songTempo = 145;
 Sequence TiredSequenceFactory::tiredIntro()
 {
     Sequence seq = buildSequence(
-        8, 4, 0, "Intro", songTempo, true,
+        16, 4, 8, "Intro", songTempo, true,
         {
-            SequenceTrackFactory::kickFour,
-            TiredTrackFactory::tiredFreak,
-            TiredTrackFactory::tiredHats,
-            TiredTrackFactory::tiredIntro,
-            TiredTrackFactory::tiredHatSolo,
-            TiredTrackFactory::tiredCongas,
-            TiredTrackFactory::tiredRoboto,
-            TiredTrackFactory::tiredShake,
-            track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kTiredSlicer)
+            track(SequenceTrackFactory::kickFour).muted(),
+            track(TiredTrackFactory::tiredFreak).withProgramChange(Microfreak::kTiredBass),
+            track(TiredTrackFactory::tiredHats).muted(),
+            track(TiredTrackFactory::tiredIntro),
+            track(TiredTrackFactory::tiredHatSolo),
+            track(TiredTrackFactory::tiredCongas).muted(),
+            track(TiredTrackFactory::tiredRoboto).muted(),
+            track(TiredTrackFactory::tiredShake).muted(),
+            track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kTiredSlicer),
+            track(SequenceTrackFactory::gtrLoop).withProgramChange(BossRC::kTired),
+             track(SequenceTrackFactory::polySynth).withProgramChange(PolySynth::kFilterStr),
+            track(SequenceTrackFactory::midiLoop)
+                .withNote(MidiLoop::kEraseAll)
+                .withNote(MidiLoop::kSelectPoly)
+                .withCC(MidiLoop::kArpMode_cc, OFF)
+                .withCC(MidiLoop::kRecord_cc, OFF)
+                .withCC(MidiLoop::kBarCount_cc, 8),
         });
     return seq;
 }
@@ -52,8 +60,8 @@ Sequence TiredSequenceFactory::tiredMain()
             TiredTrackFactory::tiredPhazeHat,
             TiredTrackFactory::tiredShake,
             TiredTrackFactory::tiredClapEcho,
-            TiredTrackFactory::tiredWhiteNoise,
-            TiredTrackFactory::tiredRiserA,
+            track(TiredTrackFactory::tiredWhiteNoise).withMuteEvent(TICK(1)),
+            track(TiredTrackFactory::tiredRiserA).muted(),
             TiredTrackFactory::tiredCymbal,
         });
     return seq;
@@ -71,6 +79,7 @@ Sequence TiredSequenceFactory::tiredPause()
             TiredTrackFactory::tiredClapEcho,
             TiredTrackFactory::tiredRiserA,
             TiredTrackFactory::tiredCymbal,
+            track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kTiredDelay),
         });
     return seq;
 }
@@ -89,6 +98,12 @@ Sequence TiredSequenceFactory::tiredDropB()
             track(TiredTrackFactory::tiredSnareRoll),
             track(TiredTrackFactory::tiredRiserB),
             track(TiredTrackFactory::tiredCymbal),
+            track(SequenceTrackFactory::midiLoop)
+                .withNote(MidiLoop::kEraseAll)
+                .withNote(MidiLoop::kSelectBass)
+                .withCC(MidiLoop::kArpMode_cc, ON)
+                .withCC(MidiLoop::kRecord_cc, ON)
+                .withCC(MidiLoop::kBarCount_cc, 8),
         });
 }
 
@@ -114,7 +129,7 @@ Sequence TiredSequenceFactory::tiredMainB()
 Sequence TiredSequenceFactory::tiredMainBBass()
 {
     Sequence seq = buildSequence(
-        36, 4, 32, "MainBBass", songTempo, true,
+        40, 4, 36, "MainBBass", songTempo, true,
         {
             track(SequenceTrackFactory::kickFour).withLength(TICK(32)),
             track(TiredTrackFactory::tiredFreak).withLength(TICK(32)),
@@ -124,7 +139,9 @@ Sequence TiredSequenceFactory::tiredMainBBass()
             track(TiredTrackFactory::tiredShake).withLength(TICK(32)),
             track(TiredTrackFactory::tiredClave).withLength(TICK(32)),
             track(TiredTrackFactory::tiredRide).withStart(TICK(16)).withLength(TICK(16)),
-            TiredTrackFactory::tiredMainBBassEvents
+            TiredTrackFactory::tiredMainBBassEvents,
+            track(SequenceTrackFactory::gtrLoopErase).withStart(TICK(32)),
+            track(TiredTrackFactory::tiredRiserB).muted().asFill(),
         });
     return seq;
 }
@@ -132,9 +149,14 @@ Sequence TiredSequenceFactory::tiredMainBBass()
 Sequence TiredSequenceFactory::tiredPartBStart()
 {
     Sequence seq = buildSequence(
-        4, 4, 0, "PartBStart", songTempo, true,
+        8, 4, 4, "PartBStart", songTempo, true,
         {
-            TiredTrackFactory::tiredStabs,
+            TiredTrackFactory::tiredStabs, //make program change for poly synth
+            track(SequenceTrackFactory::gtrLoop).withProgramChange(BossRC::kTiredEnd),
+            track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kTiredEndA),
+            track(SequenceTrackFactory::microfreak).withProgramChange(Microfreak::kTiredArp),
+            track(SequenceTrackFactory::midiLoop)
+                .withNote(MidiLoop::kEraseAll)
         });
     return seq;
 }
@@ -155,10 +177,10 @@ Sequence TiredSequenceFactory::tiredPartBSolo()
     return seq;
 }
 
-Sequence TiredSequenceFactory::tiredPartBMain()
+Sequence TiredSequenceFactory::tiredPartBPreRoll()
 {
     Sequence seq = buildSequence(
-        8, 4, 0, "FreakArp", songTempo, false,
+        8, 4, 0, "PartBPreRoll", songTempo, false,
         {
             TiredTrackFactory::tiredStabs,
             TiredTrackFactory::tiredImpacts,
@@ -167,15 +189,16 @@ Sequence TiredSequenceFactory::tiredPartBMain()
             TiredTrackFactory::tiredFreakArp,
             TiredTrackFactory::tiredBass,
             TiredTrackFactory::tiredRiserA,
-            //TiredTrackFactory::tiredTechKick,
+            track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kTiredEndB),
+            track(SequenceTrackFactory::polySynth).withProgramChange(PolySynth::kBigLead),
         });
     return seq;
 }
 
-Sequence TiredSequenceFactory::tiredPartBMain_2()
+Sequence TiredSequenceFactory::tiredPartBClimax()
 {
     Sequence seq = buildSequence(
-        16, 4, 0, "FreakArp", songTempo, false,
+        16, 4, 0, "PartBClimax", songTempo, false,
         {
             TiredTrackFactory::tiredStabs,
             TiredTrackFactory::tiredImpacts,
@@ -198,6 +221,8 @@ Sequence TiredSequenceFactory::tiredBigEnd()
             TiredTrackFactory::tiredFreakArp,
             track(TiredTrackFactory::tiredBass).withLength(TICK(16)),
             track(TiredTrackFactory::tiredClapRoll).withStart(TICK(8)).withLength(TICK(8)),
+            track(TiredTrackFactory::tiredRiserB).withLength(TICK(16)),
+            track(TiredTrackFactory::tiredRiserA).withLength(TICK(16)),
         });
     return seq;
 }

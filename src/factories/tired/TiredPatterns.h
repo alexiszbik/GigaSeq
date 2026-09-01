@@ -142,8 +142,8 @@ STEP(note), _NO_STEP, STEP(note), _NO_STEP
 
 constexpr PatternStep kTiredBassSteps[] = {
     NOTE_PATTERN(D2), NOTE_PATTERN(Ad1), NOTE_PATTERN(G1),
-    STEP(D2), _NO_STEP, _NO_STEP, STEP(D3),
-    _NO_STEP, _NO_STEP, STEP(D3), _NO_STEP,
+    STEP(D2), _NO_STEP, _NO_STEP, STEP(D2),
+    _NO_STEP, _NO_STEP, STEP(D2), _NO_STEP,
     _NO_STEP, STEP(D1), _NO_STEP, _NO_STEP,
     STEP(D1), _NO_STEP, STEP(D1), _NO_STEP
 };

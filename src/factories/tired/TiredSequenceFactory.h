@@ -18,8 +18,8 @@ public:
 
     static Sequence tiredPartBStart();
     static Sequence tiredPartBSolo();
-    static Sequence tiredPartBMain();
-    static Sequence tiredPartBMain_2();
+    static Sequence tiredPartBPreRoll();
+    static Sequence tiredPartBClimax();
     static Sequence tiredBigEnd();
 
 };

@@ -40,7 +40,7 @@ Sequence FriendshipSequenceFactory::friendshipChill()
     Sequence seq = buildSequence(
         16, 4, 8, "Chill", songTempo, true,
         {
-            FriendshipTrackFactory::friendshipChords,
+            track(FriendshipTrackFactory::friendshipChords).withProgramChange(Microfreak::kFriendshipChords),
             FriendshipTrackFactory::friendshipXylo,
             track(FriendshipTrackFactory::friendshipSeqVoice).withStart(TICK(8)),
             track(FriendshipTrackFactory::friendshipBalafon).muted(),
@@ -54,7 +54,7 @@ Sequence FriendshipSequenceFactory::friendshipChill()
 Sequence FriendshipSequenceFactory::friendshipBack()
 {
     Sequence seq = buildSequence(
-        8, 4, 0, "Back", songTempo, false,
+        16, 4, 8, "Back", songTempo, false,
         {
             FriendshipTrackFactory::friendshipChords,
             FriendshipTrackFactory::friendshipXylo,
@@ -72,7 +72,7 @@ Sequence FriendshipSequenceFactory::friendshipBack()
 Sequence FriendshipSequenceFactory::friendshipMain()
 {
     Sequence seq = buildSequence(
-        8, 4, 0, "Main", songTempo, true,
+        16, 4, 8, "Main", songTempo, true,
         {
             SequenceTrackFactory::kickFour,
             SequenceTrackFactory::snareFour,
@@ -81,7 +81,10 @@ Sequence FriendshipSequenceFactory::friendshipMain()
             FriendshipTrackFactory::friendshipStabs,
             FriendshipTrackFactory::friendshipVoiceSynth,
             track(FriendshipTrackFactory::friendshipRiser).muted().withMuteEvent(0).asFill(),
-            track(SequenceTrackFactory::midiLoop).withCC(MidiLoop::kMuteBass_cc, OFF)
+            track(SequenceTrackFactory::microfreak).withProgramChange(Microfreak::kFriendshipArp),
+            track(SequenceTrackFactory::midiLoop)
+                .withCC(MidiLoop::kMuteBass_cc, OFF)
+                .withNote(MidiLoop::kSelectMicrofreak)
         });
     return seq;
 }
@@ -91,12 +94,15 @@ Sequence FriendshipSequenceFactory::friendshipBreak()
     Sequence seq = buildSequence(
         16, 4, 8, "Break", songTempo, true,
         {
-            FriendshipTrackFactory::friendshipTrance,
+            track(FriendshipTrackFactory::friendshipTrance).withProgramChange(Microfreak::kFriendshipTrance),
             FriendshipTrackFactory::friendshipBravery,
             track(FriendshipTrackFactory::friendshipBass).muted(),
             track(FriendshipTrackFactory::friendshipJungle).withStart(TICK(8)),
             track(FriendshipTrackFactory::friendshipStabz).muted(),
             track(FriendshipTrackFactory::friendshipOpenH909).muted(),
+            SequenceTrackFactory::gtrLoopMute,
+            track(SequenceTrackFactory::modularA)
+                .withCC(ModularA::kGlobalMute_cc, ON),
             track(SequenceTrackFactory::midiLoop)
                 .withNote(MidiLoop::kEraseAll)
                 .withNote(MidiLoop::kSelectPoly)
@@ -110,25 +116,30 @@ Sequence FriendshipSequenceFactory::friendshipBreak()
 Sequence FriendshipSequenceFactory::friendshipRising()
 {
     return buildSequence(
-        16, 4, 0, "Climax", songTempo, false,
+        16, 4, 0, "Rising", songTempo, false,
         {
             track(FriendshipTrackFactory::friendshipTrance).withLength(TICK(15)),
             track(FriendshipTrackFactory::friendshipBravery).withLength(TICK(15)),
             track(FriendshipTrackFactory::friendshipBass)
                 .withMuteEvent(TICK(15, 0, 1))
                 .withMuteEvent(TICK(15, 2, 1), false),
-            track(FriendshipTrackFactory::friendshipJungle).withNote(69, 127, TICK(15), TickHelper::kHalfStepLen),
+            track(FriendshipTrackFactory::friendshipJungle),
+                //.withNote(69, 127, TICK(15), TickHelper::kHalfStepLen),
             track(FriendshipTrackFactory::friendshipStabz),
             track(FriendshipTrackFactory::friendshipOpenH909).withLength(TICK(15)),
             track(FriendshipTrackFactory::friendshipSnareRoll),
             track(FriendshipTrackFactory::friendshipRiser).withLength(TICK(15)),
+            track(SequenceTrackFactory::polySynth)
+                .withProgramChange(PolySynth::kBigLead),
+            track(SequenceTrackFactory::modularA)
+                .withCC(ModularA::kMuteClock_cc, ON, TICK(15)),
         });
 }
 
 Sequence FriendshipSequenceFactory::friendshipClimax()
 {
     Sequence seq = buildSequence(
-        8, 4, 0, "Climax", songTempo, true,
+        16, 4, 8, "Climax", songTempo, true,
         {
             SequenceTrackFactory::kickFour,
             SequenceTrackFactory::snareFour,
@@ -140,6 +151,10 @@ Sequence FriendshipSequenceFactory::friendshipClimax()
             FriendshipTrackFactory::friendshipStabz,
             track(FriendshipTrackFactory::friendshipOpenH909).muted(),
             track(FriendshipTrackFactory::friendshipRiser).muted().withMuteEvent(0).asFill(),
+            SequenceTrackFactory::gtrLoopUnmute,
+            track(SequenceTrackFactory::modularA)
+                .withCC(ModularA::kMuteClock_cc, OFF)
+                .withCC(ModularA::kGlobalMute_cc, OFF)
         });
     return seq;
 }
@@ -155,6 +170,7 @@ Sequence FriendshipSequenceFactory::friendshipEnd()
             FriendshipTrackFactory::friendshipJungle,
             FriendshipTrackFactory::friendshipStabz,
             track(FriendshipTrackFactory::friendshipCrash).withMuteEvent(TICK(1)),
+            SequenceTrackFactory::gtrLoopErase,
         });
     return seq;
 }

@@ -26,8 +26,8 @@ void addTiredSong(SequencePool& pool)
         TiredSequenceFactory::tiredPartBStart,
         TiredSequenceFactory::tiredPartBSolo,
 
-        TiredSequenceFactory::tiredPartBMain,
-        TiredSequenceFactory::tiredPartBMain_2,
+        TiredSequenceFactory::tiredPartBPreRoll,
+        TiredSequenceFactory::tiredPartBClimax,
         TiredSequenceFactory::tiredBigEnd,
         
 
