@@ -1,12 +1,14 @@
 #include "Clock.h"
 
+#include "ClockCalibration.h"
+
 namespace GigaSeq {
 
 TransportClock* TransportClock::instance_ = nullptr;
 
 uint32_t TransportClock::intervalFor(uint16_t bpm) {
-    // Microseconds per output tick at kPpqn.
-    return 60000000u / (static_cast<uint32_t>(bpm) * kPpqn);
+    const uint32_t intervalUs = 60000000u / (static_cast<uint32_t>(bpm) * kPpqn);
+    return applyHardwareClockPpmCorrection(intervalUs);
 }
 
 void TransportClock::begin(uint16_t bpm) {
