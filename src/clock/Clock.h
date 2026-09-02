@@ -3,6 +3,7 @@
 #include <Arduino.h>
 #include <cstdint>
 
+#include "TempoInterval.h"
 #include "TickHelper.h"
 #include "drivers/Ticker.h"
 #include "platform/Callback.h"
@@ -18,6 +19,8 @@ public:
     static constexpr uint16_t kPpqn = TickHelper::kTicksPerQuarterNote;
     static constexpr uint8_t kBeatsPerBar = 4;
 
+    TransportClock();
+
     void begin(uint16_t bpm = 120);
     void start();
     void stop();
@@ -28,20 +31,30 @@ public:
     bool isPlaying() const;
 
 private:
-    void onTicker();
-    static uint32_t intervalFor(uint16_t bpm);
+    // Overrides Ticker rescheduling so each period is last_deadline + N/N+1 µs
+    // (absolute), never now() + interval. Re-attaching from the ISR was adding
+    // callback latency and pulling the tempo down.
+    class Scheduler : public mbed::Ticker {
+    public:
+        explicit Scheduler(TransportClock& owner);
 
-    static TransportClock* instance_;
+    protected:
+        void handler() override;
+
+    private:
+        TransportClock& owner_;
+    };
+
+    void invokeTick();
 
     TickCallback tickCallback_ = nullptr;
     void* tickContext_ = nullptr;
-    uint32_t intervalUs_ = 0;
-    volatile uint32_t pendingIntervalUs_ = 0;
+    TempoInterval interval_;
     uint16_t bpm_ = 120;
+    volatile uint16_t pendingBpm_ = 120;
     volatile bool playing_ = false;
     volatile bool intervalDirty_ = false;
-
-    mbed::Ticker ticker_;
+    Scheduler scheduler_;
 };
 
 }  // namespace GigaSeq
