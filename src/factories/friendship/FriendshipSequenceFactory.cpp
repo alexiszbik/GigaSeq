@@ -12,7 +12,7 @@ constexpr uint8_t songTempo = 145;
 Sequence FriendshipSequenceFactory::friendshipIntro()
 {
     Sequence seq = buildSequence(
-        8, 4, 0, "Intro", songTempo, true,
+        16, 4, 8, "Intro", songTempo, true,
         {
             track(SequenceTrackFactory::kickFour).muted(),
             track(SequenceTrackFactory::snareFour).muted(),
@@ -21,7 +21,7 @@ Sequence FriendshipSequenceFactory::friendshipIntro()
             FriendshipTrackFactory::friendshipStabs,
             track(FriendshipTrackFactory::friendshipVoiceSynth).muted(),
             track(FriendshipTrackFactory::friendshipBravery).muted(),
-            track(FriendshipTrackFactory::friendshipRiser).muted().withMuteEvent(0).asFill(),
+            track(FriendshipTrackFactory::friendshipRiser).muted().withMuteEvent(TICK(8)).asFill(),
             track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kFriendship),
             track(SequenceTrackFactory::gtrLoop).withProgramChange(BossRC::kFriendship),
             track(SequenceTrackFactory::midiLoop)
@@ -54,7 +54,7 @@ Sequence FriendshipSequenceFactory::friendshipChill()
 Sequence FriendshipSequenceFactory::friendshipBack()
 {
     Sequence seq = buildSequence(
-        16, 4, 8, "Back", songTempo, false,
+        8, 4, 0, "Back", songTempo, false,
         {
             FriendshipTrackFactory::friendshipChords,
             FriendshipTrackFactory::friendshipXylo,
@@ -125,7 +125,7 @@ Sequence FriendshipSequenceFactory::friendshipRising()
                 .withMuteEvent(TICK(15, 2, 1), false),
             track(FriendshipTrackFactory::friendshipJungle),
                 //.withNote(69, 127, TICK(15), TickHelper::kHalfStepLen),
-            track(FriendshipTrackFactory::friendshipStabz),
+            track(FriendshipTrackFactory::friendshipStabz).withNote(69, 137, TICK(15), TickHelper::kHalfStepLen),
             track(FriendshipTrackFactory::friendshipOpenH909).withLength(TICK(15)),
             track(FriendshipTrackFactory::friendshipSnareRoll),
             track(FriendshipTrackFactory::friendshipRiser).withLength(TICK(15)),

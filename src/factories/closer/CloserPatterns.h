@@ -41,10 +41,17 @@ MAKE_PATTERN_GROOVE(kCloserHat, kCloserHatSteps, songGroove);
 
 
 constexpr PatternStep kCloserLoopHatSteps[] = {
-    {{loopHat}, 127, 1}, _NO_STEP
+    {{tambA, loopHat}, 127, 1},
+    {{tambA}, 127, 1},
+    {{tambB}, 127, 1},
+    {{tambA}, 127, 1},
+    {{tambA}, 127, 1},
+    {{tambA}, 127, 1},
+    {{tambB}, 127, 1},
+    {{tambA}, 127, 1},
 };
 
-MAKE_PATTERN(kCloserLoopHat, kCloserLoopHatSteps, 1);
+MAKE_PATTERN(kCloserLoopHat, kCloserLoopHatSteps, 4);
 
 
 constexpr PatternStep kCloserTambourinSteps[] = {

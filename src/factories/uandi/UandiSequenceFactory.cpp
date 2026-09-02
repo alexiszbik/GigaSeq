@@ -130,6 +130,7 @@ Sequence UandiSequenceFactory::uandiEnd()
         4, 4, 3, "End", songTempo, true,
         {
             track(UandiTrackFactory::uandiExplode).withStart(TICK(2)),
+            track(UandiTrackFactory::uandiDust).withStart(TICK(2)).withProgramChange(Microfreak::kUandIDust),
         });
     return seq;
 }

@@ -61,7 +61,7 @@ Sequence TiredSequenceFactory::tiredMain()
             TiredTrackFactory::tiredShake,
             TiredTrackFactory::tiredClapEcho,
             track(TiredTrackFactory::tiredWhiteNoise).withMuteEvent(TICK(1)),
-            track(TiredTrackFactory::tiredRiserA).muted(),
+            track(TiredTrackFactory::tiredRiserA).muted().asFill(),
             TiredTrackFactory::tiredCymbal,
         });
     return seq;
@@ -77,7 +77,6 @@ Sequence TiredSequenceFactory::tiredPause()
             TiredTrackFactory::tiredPhazeHat,
             TiredTrackFactory::tiredShake,
             TiredTrackFactory::tiredClapEcho,
-            TiredTrackFactory::tiredRiserA,
             TiredTrackFactory::tiredCymbal,
             track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kTiredDelay),
         });
@@ -103,7 +102,7 @@ Sequence TiredSequenceFactory::tiredDropB()
                 .withNote(MidiLoop::kSelectBass)
                 .withCC(MidiLoop::kArpMode_cc, ON)
                 .withCC(MidiLoop::kRecord_cc, ON)
-                .withCC(MidiLoop::kBarCount_cc, 8),
+                .withCC(MidiLoop::kBarCount_cc, 1),
         });
 }
 
@@ -151,7 +150,7 @@ Sequence TiredSequenceFactory::tiredPartBStart()
     Sequence seq = buildSequence(
         8, 4, 4, "PartBStart", songTempo, true,
         {
-            TiredTrackFactory::tiredStabs, //make program change for poly synth
+            track(TiredTrackFactory::tiredStabs).withProgramChange(PolySynth::kTiredEnd), //make program change for poly synth
             track(SequenceTrackFactory::gtrLoop).withProgramChange(BossRC::kTiredEnd),
             track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kTiredEndA),
             track(SequenceTrackFactory::microfreak).withProgramChange(Microfreak::kTiredArp),
@@ -190,7 +189,6 @@ Sequence TiredSequenceFactory::tiredPartBPreRoll()
             TiredTrackFactory::tiredBass,
             TiredTrackFactory::tiredRiserA,
             track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kTiredEndB),
-            track(SequenceTrackFactory::polySynth).withProgramChange(PolySynth::kBigLead),
         });
     return seq;
 }

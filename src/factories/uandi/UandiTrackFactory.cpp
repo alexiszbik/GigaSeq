@@ -154,3 +154,14 @@ SequenceTrack UandiTrackFactory::uandiSweep(tick_t lengthInTicks, tick_t startIn
 
     return track;
 }
+
+SequenceTrack UandiTrackFactory::uandiDust(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Dust", MidiChannel::kSampler);
+
+    SequenceDesc desc;
+    desc.notes = {{C4}};
+    desc.rate = 1;
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
+
+    return track;
+}

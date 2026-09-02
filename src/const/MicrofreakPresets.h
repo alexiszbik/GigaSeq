@@ -6,7 +6,7 @@ namespace Microfreak {
 #define _MF_PRESET(preset, nbr) constexpr uint8_t k##preset = nbr - 1
 
 
-_MF_PRESET(FriendshipArp, 2);
+_MF_PRESET(FriendshipArp, 1);
 _MF_PRESET(TiredArp, 3);
 
 _MF_PRESET(FantasyStabs, 12);
@@ -14,6 +14,7 @@ _MF_PRESET(FallingHarp, 13);
 
 _MF_PRESET(FriendshipChords, 33);
 _MF_PRESET(UandI, 34);
+_MF_PRESET(UandIDust, 41);
 
 _MF_PRESET(WaterArp, 36);
 

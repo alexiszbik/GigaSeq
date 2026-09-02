@@ -44,7 +44,7 @@ _HX_CC(TogetherChorus, Volume, 21);
 
 _HX_PRESET(TogetherEnd, 14, A);
 
-_HX_PRESET(Friendship, 15, B);
+_HX_PRESET(Friendship, 14, B);
 
 
 #undef A 
