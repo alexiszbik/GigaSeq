@@ -141,7 +141,7 @@ Sequence BibimbapSequenceFactory::bibimbapClimax()
             track(BibimbapTrackFactory::bibimbapFreak).withLength(len),
             track(BibimbapTrackFactory::bibimbapRiser).withLength(len),
             track(BibimbapTrackFactory::bibimbapSnare).withLength(len),
-            track(BibimbapTrackFactory::bibimbapSnareRoll2).withStart(TICK(0,7*13)).withLength(TICK(0,7*3)),
+            track(BibimbapTrackFactory::bibimbapSnareRoll2).withStart(TICK(0,7*14)).withLength(TICK(0,7*2)),
             track(BibimbapTrackFactory::bibimbapArp).withStart(TICK(0,7*8)),
             BibimbapTrackFactory::bibimbapOpenHat,
             track(SequenceTrackFactory::gtrLoopUnmute),

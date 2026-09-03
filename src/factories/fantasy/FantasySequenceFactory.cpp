@@ -166,11 +166,14 @@ Sequence FantasySequenceFactory::fantasyClimax()
 
 Sequence FantasySequenceFactory::fantasyEnd()
 {
+    tick_t loop = TICK(16);
     Sequence seq = buildSequence(
-        13, 4, 12, "End", songTempo, true,
+        17, 4, 16, "End", songTempo, true,
         {
-            track(FantasyTrackFactory::fantasyArp).withLength(TICK(12)),
-            track(FantasyTrackFactory::fantasySampleIntro).withLength(TICK(12)),
+            track(FantasyTrackFactory::fantasyArp).withLength(loop),
+            track(FantasyTrackFactory::fantasyArpEnd).withStart(loop),
+            track(FantasyTrackFactory::fantasySampleIntro).withLength(loop),
+            track(FantasyTrackFactory::fantasyVocals).withLength(loop),
             FantasyTrackFactory::fantasyBigClap,
             SequenceTrackFactory::gtrLoopErase
         });

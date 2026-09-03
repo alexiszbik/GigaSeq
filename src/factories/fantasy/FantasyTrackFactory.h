@@ -29,4 +29,5 @@ public:
     static SequenceTrack fantasyShakeEnd(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack fantasyBigRiz2(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack fantasyBreakFX(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack fantasyArpEnd(tick_t lengthInTicks, tick_t startInTicks);
 };

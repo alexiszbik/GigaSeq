@@ -16,6 +16,7 @@ using namespace GigaSeq;
 unsigned long currentTime = 0;
 
 #define PUSH_PEDAL 2
+#define PUSH_PEDAL_B 3
 
 #define PUSH_PLAY 43
 #define PUSH_NEXT 45
@@ -25,6 +26,7 @@ unsigned long currentTime = 0;
 #define TOGGLE_SCENE 53
 
 Switch pushPedal(PUSH_PEDAL);
+Switch pushPedal_B(PUSH_PEDAL_B);
 Switch pushPlay(PUSH_PLAY);
 Switch pushNext(PUSH_NEXT);
 Switch pushPrev(PUSH_PREV);
@@ -121,7 +123,7 @@ void inputCheckCallback() {
         }
     }
 
-    if (pushNext.isPushed() || pushPedal.isPushed()) {
+    if (pushNext.isPushed() || pushPedal.isPushed() || pushPedal_B.isPushed()) {
         sequencePool.requestNext(!isPlaying);
     }
 

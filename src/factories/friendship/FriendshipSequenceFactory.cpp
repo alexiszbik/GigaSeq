@@ -3,6 +3,7 @@
 #include "factories/SequenceBuilder.h"
 #include "factories/SequenceTrackFactory.h"
 #include "factories/friendship/FriendshipTrackFactory.h"
+#include "factories/friendship/FriendshipSamples.h"
 #include "MidiConst.h"
 
 namespace {
@@ -30,6 +31,10 @@ Sequence FriendshipSequenceFactory::friendshipIntro()
                 .withCC(MidiLoop::kArpMode_cc, ON)
                 .withCC(MidiLoop::kRecord_cc, ON)
                 .withCC(MidiLoop::kBarCount_cc, 8),
+            track(SequenceTrackFactory::drumMachine)
+                .withCC(DrumMachine::kPerformMode_cc, OFF)
+                .withCC(DrumMachine::kClearAll_cc, ON)
+                .withNote(Friendship::openhat)
             
         });
     return seq;

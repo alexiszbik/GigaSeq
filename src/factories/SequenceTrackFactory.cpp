@@ -6,6 +6,13 @@
 #include "MidiConst.h"
 #include "MidiNotes.h"
 
+SequenceTrack SequenceTrackFactory::sampler(tick_t lengthInTicks, tick_t startInTicks)
+{
+    SequenceTrack track("Sampler", MidiChannel::kSampler);
+    return track;
+}
+
+
 SequenceTrack SequenceTrackFactory::kickFour(tick_t lengthInTicks, tick_t startInTicks)
 {
     SequenceTrack track("Kick", MidiChannel::kDrums);

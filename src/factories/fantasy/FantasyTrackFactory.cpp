@@ -174,3 +174,9 @@ SequenceTrack FantasyTrackFactory::fantasyBreakFX(tick_t lengthInTicks, tick_t s
     addSingleNote(track, Fantasy::fantasyBreakfx);
     return track;
 }
+
+SequenceTrack FantasyTrackFactory::fantasyArpEnd(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("ArpEnd", MidiChannel::kModularA);
+    track.setPattern(FantasyPatterns::kFantasyArpEnd, lengthInTicks, startInTicks);
+    return track;
+}

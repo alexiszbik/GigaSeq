@@ -23,6 +23,10 @@ Sequence UandiSequenceFactory::uandiIntro()
             track(UandiTrackFactory::uandiRiser).muted().withMuteEvent(0).asFill(),
             track(SequenceTrackFactory::polySynth).withProgramChange(PolySynth::kSlowStr),
             track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kUandI),
+            track(SequenceTrackFactory::drumMachine)
+                .withCC(DrumMachine::kClearAll_cc, ON)
+                .withCC(DrumMachine::kPerformMode_cc, ON)
+                .withCC(DrumMachine::kRepeatMode_cc, ON)
         });
     return seq;
 }
@@ -129,7 +133,9 @@ Sequence UandiSequenceFactory::uandiEnd()
     Sequence seq = buildSequence(
         4, 4, 3, "End", songTempo, true,
         {
+            track(SequenceTrackFactory::sampler).withNote(69),
             track(UandiTrackFactory::uandiExplode).withStart(TICK(2)),
+            track(SequenceTrackFactory::microfreak).withProgramChange(Microfreak::kUandIDust),
             track(UandiTrackFactory::uandiDust).withStart(TICK(2)).withProgramChange(Microfreak::kUandIDust),
         });
     return seq;

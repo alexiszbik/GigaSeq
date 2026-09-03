@@ -17,14 +17,14 @@ Sequence CloserSequenceFactory::closerIntro()
         8, 4, 4, "Intro", songTempo, true,
         {
             SequenceTrackFactory::kickFour,
+            track(CloserTrackFactory::closerStab).withProgramChange(PolySynth::kCloser),
             track(CloserTrackFactory::closerHats).muted(),
             track(CloserTrackFactory::closerLoopHat).muted(),
             track(CloserTrackFactory::closerClapTom).muted(),
             track(CloserTrackFactory::closerModular).muted(),
-            track(FallingTrackFactory::fallingHarp).withProgramChange(Microfreak::kFallingHarp),
-            track(CloserTrackFactory::closerStab).withProgramChange(PolySynth::kCloser),
             track(CloserTrackFactory::closerFill808).withMuteEvent(TICK(4)).asFill(),
             track(CloserTrackFactory::closerRiser).withMuteEvent(TICK(4)).asFill(),
+            track(FallingTrackFactory::fallingHarp).withProgramChange(Microfreak::kFallingHarp),
             track(SequenceTrackFactory::gtrLoopErase).withProgramChange(BossRC::kCloser, TICK(4)),
             track(SequenceTrackFactory::midiLoop)
                 .withNote(MidiLoop::kSelectBass)
@@ -54,13 +54,14 @@ Sequence CloserSequenceFactory::closerBass()
     Sequence seq = buildSequence(
         8, 4, 0, "Bass", songTempo, true,
         {
+            track(SequenceTrackFactory::kickFour).muted(),
             CloserTrackFactory::closerChords,
-            CloserTrackFactory::closerModular,
             CloserTrackFactory::closerTambourin,
             SequenceTrackFactory::clapFour,
-            track(SequenceTrackFactory::kickFour).muted(),
             track(CloserTrackFactory::closerSing).muted(),
+            CloserTrackFactory::closerModular,
             track(CloserTrackFactory::closerTop).muted(),
+            track(CloserTrackFactory::closerRiser).muted().asFill(),
         });
     return seq;
 }
@@ -87,9 +88,9 @@ Sequence CloserSequenceFactory::closerBackKick()
         8, 4, 0, "BackKick", songTempo, true,
         {
             SequenceTrackFactory::kickFour,
+            CloserTrackFactory::closerStab,
             track(CloserTrackFactory::closerHats).muted(),
             track(CloserTrackFactory::closerLoopHat).muted(),
-            CloserTrackFactory::closerStab,
             track(CloserTrackFactory::closerFill808).withMuteEvent(0).asFill(),
             track(CloserTrackFactory::closerRiser).withMuteEvent(0).asFill(),
             track(SequenceTrackFactory::gtrLoopErase),
@@ -106,14 +107,14 @@ Sequence CloserSequenceFactory::closerClimax()
         8, 4, 4, "Climax", songTempo, true,
         {
             SequenceTrackFactory::kickFour,
-            CloserTrackFactory::closerClapTom,
+            CloserTrackFactory::closerStab,
             track(CloserTrackFactory::closerHats).muted(),
             track(CloserTrackFactory::closerLoopHat).muted(),
-            CloserTrackFactory::closerStab,
+            CloserTrackFactory::closerClapTom,
+            track(CloserTrackFactory::closerDrumix).muted(),
             track(CloserTrackFactory::closerFill808).withMuteEvent(TICK(4)).asFill(),
             track(CloserTrackFactory::closerRiser).withMuteEvent(TICK(4)).asFill(),
             CloserTrackFactory::closer303,
-            track(CloserTrackFactory::closerDrumix).muted(),
             track(SequenceTrackFactory::microfreak).withProgramChange(Microfreak::kCloserHouse),
             track(SequenceTrackFactory::midiLoop)
                 .withCC(MidiLoop::kPaste_cc, 3)

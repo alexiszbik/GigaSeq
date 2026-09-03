@@ -147,4 +147,11 @@ constexpr PatternStep kFantasyShakeEndSteps[] = {
 
 MAKE_PATTERN(kFantasyShakeEnd, kFantasyShakeEndSteps, 8);
 
+
+constexpr PatternStep kFantasyArpEndSteps[] = {
+    {{C3}, 127, 1},
+};
+
+MAKE_PATTERN(kFantasyArpEnd, kFantasyArpEndSteps, 16);
+
 } // namespace FantasyPatterns
