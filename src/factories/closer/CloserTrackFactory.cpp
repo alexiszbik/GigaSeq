@@ -202,3 +202,56 @@ SequenceTrack CloserTrackFactory::closerDrumix(tick_t lengthInTicks, tick_t star
     track.addNote(TICK(6), TickHelper::kStepLen, Closer::triChopdrum, 127);
     return track;
 }
+
+SequenceTrack CloserTrackFactory::closerLedStab(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("LedStab", MidiChannel::kLedStrips);
+
+    SequenceDesc desc;
+    desc.notes = {
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {LedStrips::kWhite_ALL}
+    };
+    desc.rate = 16;
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
+
+    return track;
+}
+
+SequenceTrack CloserTrackFactory::closerBlastLed(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("BlastLed", MidiChannel::kLedStrips);
+
+    tick_t sixBars = TickHelper::bars(6);
+    tick_t oneBar = TickHelper::bars(1);
+
+    SequenceDesc desc;
+    desc.notes = {{LedStrips::kWhite_ALL}, {}};
+    desc.rate = 8;
+    makeSequenceTrack(track, desc, sixBars, startInTicks);
+
+    desc.rate = 16;
+    makeSequenceTrack(track, desc, oneBar, startInTicks + sixBars);
+    
+    desc.rate = 32;
+    makeSequenceTrack(track, desc, oneBar, startInTicks + sixBars + oneBar);
+
+    track.addControlChange({0, LedStrips::kDecay_cc, 1});
+
+    return track;
+}

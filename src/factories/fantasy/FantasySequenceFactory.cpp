@@ -50,6 +50,7 @@ Sequence FantasySequenceFactory::fantasyStart()
             FantasyTrackFactory::fantasyDrums,
             FantasyTrackFactory::fantasyShake,
             FantasyTrackFactory::fantasyChords,
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kFantasy_signA)
         });
     return seq;
 }
@@ -62,7 +63,8 @@ Sequence FantasySequenceFactory::fantasyBreak()
             FantasyTrackFactory::fantasyHiDrum,
             track(FantasyTrackFactory::fantasyFreak).muted(),
             track(FantasyTrackFactory::fantasyVocals).muted(),
-            track(SequenceTrackFactory::polySynth).withCC(ModularA::kGlobalMute_cc, ON)
+            track(SequenceTrackFactory::polySynth).withCC(ModularA::kGlobalMute_cc, ON),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kKill)
         });
     return seq;
 }
@@ -91,7 +93,8 @@ Sequence FantasySequenceFactory::fantasyBack()
             track(SequenceTrackFactory::polySynth)
                 .withCC(ModularA::kGlobalMute_cc, OFF).withProgramChange(PolySynth::kFantasyChords),
             track(SequenceTrackFactory::gtrLoop)
-                .withCC(BossRC::kVolume_cc, 0, TICK(8)).withCC(BossRC::kVolume_cc, 65, TICK(8, 1))
+                .withCC(BossRC::kVolume_cc, 0, TICK(8)).withCC(BossRC::kVolume_cc, 65, TICK(8, 1)),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kFantasy_signB, TICK(8, 1))
         });
 }
 
@@ -113,6 +116,7 @@ Sequence FantasySequenceFactory::fantasyRave()
             SequenceTrackFactory::gtrLoopMute,
             track(SequenceTrackFactory::gtrPedal)
                 .withProgramChange(HXStomp::kFantasySolo),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kKill)
         });
     return seq;
 }
@@ -159,7 +163,8 @@ Sequence FantasySequenceFactory::fantasyClimax()
             FantasyTrackFactory::fantasyVocals,
             track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, OFF),
             track(SequenceTrackFactory::bass).withCC(Bass::kGlobalMute_cc, OFF),
-            track(FantasyTrackFactory::fantasyRiser).withMuteEvent(0).asFill()
+            track(FantasyTrackFactory::fantasyRiser).withMuteEvent(0).asFill(),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kFantasy_signC)
         });
     return seq;
 }

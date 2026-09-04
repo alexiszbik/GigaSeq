@@ -268,3 +268,15 @@ SequenceTrack FallingTrackFactory::fallingSynthEnd(tick_t lengthInTicks, tick_t 
 
     return track;
 }
+
+SequenceTrack FallingTrackFactory::fallingBlinkKick(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("BlinkKick", MidiChannel::kLedStrips);
+    track.setPattern(FallingPatterns::kFallingBlinkKick, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack FallingTrackFactory::fallingBlinkSnare(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("BlinkSnare", MidiChannel::kLedStrips);
+    track.setPattern(FallingPatterns::kFallingBlinkSnare, lengthInTicks, startInTicks);
+    return track;
+}

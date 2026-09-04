@@ -3,7 +3,9 @@
 #include "factories/SequenceBuilder.h"
 #include "factories/SequenceTrackFactory.h"
 #include "factories/together/TogetherTrackFactory.h"
+#include "factories/together/TogetherSamples.h"
 #include "MidiConst.h"
+
 
 namespace {
 constexpr uint8_t songTempo = 130;
@@ -20,7 +22,7 @@ Sequence TogetherSequenceFactory::togetherIntro()
             track(SequenceTrackFactory::microfreak).withProgramChange(Microfreak::kTogetherLead),
             track(SequenceTrackFactory::midiLoop)
                 .withNote(MidiLoop::kSelectMicrofreak)
-                .withCC(MidiLoop::kBarCount_cc, 8),
+                .withCC(MidiLoop::kBarCount_cc, 4),
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kKill)
         });
 
@@ -117,7 +119,10 @@ Sequence TogetherSequenceFactory::togetherClimax()
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kTogether_vuRainbow),
             track(SequenceTrackFactory::ledStrips)
                 .withNote(LedStrips::kRainbow_note, 127, 0, TICK(16))
-                .withCC(LedStrips::kRainbowSpeed_cc, 14)
+                .withCC(LedStrips::kRainbowSpeed_cc, 14),
+            track(SequenceTrackFactory::drumMachine)
+                .withNote(Together::tgtAh)
+                .withCC(DrumMachine::kPerformMode_cc, OFF)
         });
 }
 
@@ -148,7 +153,7 @@ Sequence TogetherSequenceFactory::togetherPartB()
         {
             TogetherTrackFactory::togetherPartBSampleCut,
             TogetherTrackFactory::togetherPartBSynth,
-            track(TogetherTrackFactory::togetherPartBAh).muted(),
+            //track(TogetherTrackFactory::togetherPartBAh).muted(),
             track(TogetherTrackFactory::togetherPartBDaDaDa).muted(),
             track(SequenceTrackFactory::gtrPedal)
                 .withCC(HXStomp::kTogetherChorus_ccDrive, 0)
@@ -168,7 +173,7 @@ Sequence TogetherSequenceFactory::togetherPartBWithHats()
         {
             TogetherTrackFactory::togetherPartBSampleCut,
             TogetherTrackFactory::togetherPartBSynth,
-            TogetherTrackFactory::togetherPartBAh,
+            //TogetherTrackFactory::togetherPartBAh,
             TogetherTrackFactory::togetherPartBDaDaDa,
             TogetherTrackFactory::togetherHatsOnly,
             track(TogetherTrackFactory::togetherBassLed).withCC(LedStrips::kDecay_cc, 80)
@@ -178,10 +183,10 @@ Sequence TogetherSequenceFactory::togetherPartBWithHats()
 Sequence TogetherSequenceFactory::togetherPartBDrums()
 {
     return buildSequence(
-        8, 4, 0, "PartBDrums", songTempo, true,
+        16, 4, 8, "PartBDrums", songTempo, true,
         {
             TogetherTrackFactory::togetherPartBSynth,
-            TogetherTrackFactory::togetherPartBAh,
+            //TogetherTrackFactory::togetherPartBAh,
             TogetherTrackFactory::togetherHiDrum,
             SequenceTrackFactory::kickFour,
             track(TogetherTrackFactory::togetherPartBJC).muted(),
@@ -196,13 +201,13 @@ Sequence TogetherSequenceFactory::togetherPartBClimax()
         8, 4, 0, "PartBClimax", songTempo, true,
         {
             TogetherTrackFactory::togetherPartBSynth,
-            TogetherTrackFactory::togetherPartBAh,
+            //TogetherTrackFactory::togetherPartBAh,
             TogetherTrackFactory::togetherHiDrum,
             SequenceTrackFactory::kickFour,
             TogetherTrackFactory::togetherPartBJC,
             TogetherTrackFactory::togetherPartBTambourin,
             TogetherTrackFactory::togetherPartBCymbal,
             track(TogetherTrackFactory::togetherEndRiser).withMuteEvent(0).asFill(),
-            track(TogetherTrackFactory::togetherLedBlinkClimax).withCC(LedStrips::kDecay_cc, 20)
+            track(TogetherTrackFactory::togetherLedBlinkClimax).withCC(LedStrips::kDecay_cc, 44)
         });
 }

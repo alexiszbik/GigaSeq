@@ -2,6 +2,7 @@
 
 #include "TrackPattern.h"
 #include "factories/MidiNotes.h"
+#include "MidiConst.h"
 
 namespace FallingPatterns
 {
@@ -295,5 +296,19 @@ MAKE_PATTERN(kFallingHandTamb, kFallingHandTambSteps, 1);
 
 #undef KICK_STEP
 #undef NOTE
+
+
+constexpr PatternStep kFallingBlinkKickSteps[] = {
+    {{LedStrips::kBlue_C}, 127, 1}, _NO_STEP
+};
+
+MAKE_PATTERN(kFallingBlinkKick, kFallingBlinkKickSteps, 8);
+
+
+constexpr PatternStep kFallingBlinkSnareSteps[] = {
+    _NO_STEP, _NO_STEP, {{LedStrips::kBlue_A, LedStrips::kBlue_B, LedStrips::kBlue_D}, 127, 1}, _NO_STEP
+};
+
+MAKE_PATTERN(kFallingBlinkSnare, kFallingBlinkSnareSteps, 8);
 
 } // namespace FallingPatterns

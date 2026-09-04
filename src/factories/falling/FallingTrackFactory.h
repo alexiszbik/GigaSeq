@@ -21,4 +21,6 @@ public:
     static SequenceTrack fallingPiano(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack fallingRimTom(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack fallingSynthEnd(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack fallingBlinkKick(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack fallingBlinkSnare(tick_t lengthInTicks, tick_t startInTicks);
 };

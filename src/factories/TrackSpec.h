@@ -41,6 +41,7 @@ public:
         uint8_t endValue);
     TrackSpec& withMuteEvent(tick_t tick, bool mute = true);
     TrackSpec& withNote(uint8_t pitch, uint8_t velocity = 127, tick_t tick = 0, tick_t duration = TickHelper::kStepLen);
+    TrackSpec& withNotes(std::vector<uint8_t> pitches, uint8_t velocity = 127, tick_t tick = 0, tick_t duration = TickHelper::kStepLen);
     TrackSpec& asFill();
     TrackSpec& withLength(tick_t length);
     TrackSpec& withStart(tick_t start);

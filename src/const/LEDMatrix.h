@@ -25,13 +25,14 @@ _MATRIX_PRESET_NOTE(Water, osc, squareB, 49);
 _MATRIX_PRESET_NOTE(Water, osc, squareC, 50);
 _MATRIX_PRESET_NOTE(Water, osc, squareD, 51);
 
-_MATRIX_PRESET_NOTE(Water, osc, squareOff, 60);
+_MATRIX_PRESET_NOTE(Water, osc, off, 60);
+_MATRIX_PRESET_NOTE(Water, osc, squareOff, 61);
 
 // === Falling ===
 //TO do ...
 _MATRIX_PRESET(Falling, turnstile, 25);
+_MATRIX_PRESET(Falling, squares, 17);
 _MATRIX_PRESET(Falling, drops, 6);
-_MATRIX_PRESET(Falling, rain, 22);
 
 // === Closer ===
 _MATRIX_PRESET(Closer, lasers, 8);
@@ -56,7 +57,7 @@ _MATRIX_PRESET(UandI, explode, 59);
 
 // === Friendship ===
 _MATRIX_PRESET(Friendship, vuIntro, 43); //?
-_MATRIX_PRESET(Friendship, circles, 44); //?
+_MATRIX_PRESET(Friendship, rain, 22); //?
 _MATRIX_PRESET(Friendship, vuRainbow, 45); //?
 _MATRIX_PRESET(Friendship, kaomjis, 18); //?
 _MATRIX_PRESET(Friendship, sign, 46);

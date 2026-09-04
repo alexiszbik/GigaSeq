@@ -23,4 +23,6 @@ public:
     static SequenceTrack closerBlastSnare(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack closer303(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack closerDrumix(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack closerLedStab(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack closerBlastLed(tick_t lengthInTicks, tick_t startInTicks);
 };

@@ -9,6 +9,7 @@
 
 namespace {
     constexpr uint8_t songTempo = 125;
+    constexpr uint8_t decayBlink = 25;
 }
 
 Sequence FallingSequenceFactory::fallingIntro()
@@ -30,6 +31,7 @@ Sequence FallingSequenceFactory::fallingIntro()
                 .withNote(MidiLoop::kSelectPoly)
                 .withCC(MidiLoop::kArpMode_cc, OFF)
                 .withCC(MidiLoop::kRecord_cc, OFF),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kWater_turnstile),
         });
     return seq;
 }
@@ -69,7 +71,12 @@ Sequence FallingSequenceFactory::fallingBassSeq()
             track(FallingTrackFactory::fallingTambourin).muted(),
             track(SequenceTrackFactory::modularA)
                 .withCC(ModularA::kMuteClock_cc, ON).withCC(ModularA::kMuteClock_cc, OFF, TICK(8)),
-            track(SequenceTrackFactory::polySynth).withProgramChange(PolySynth::kFallingEnd)
+            track(SequenceTrackFactory::polySynth).withProgramChange(PolySynth::kFallingEnd),
+            track(SequenceTrackFactory::matrix)
+                .withProgramChange(LedMatrix::kKill, 0)
+                .withProgramChange(LedMatrix::kWater_turnstile, TICK(loopPoint)),
+            track(FallingTrackFactory::fallingBlinkKick).withCC(LedStrips::kDecay_cc, decayBlink),
+            track(FallingTrackFactory::fallingBlinkSnare).withStart(TICK(loopPoint)),
         });
 
     return seq;
@@ -86,7 +93,8 @@ Sequence FallingSequenceFactory::fallingPreInterlude()
             track(FallingTrackFactory::fallingBass).withLength(length),
             FallingTrackFactory::fallingPreInterlude,
             track(SequenceTrackFactory::modularA)
-                .withCC(ModularA::kMuteClock_cc, ON, length)
+                .withCC(ModularA::kMuteClock_cc, ON, length),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kKill, length),
         });
     return seq;
 }
@@ -105,7 +113,9 @@ Sequence FallingSequenceFactory::fallingInterlude()
             FallingTrackFactory::fallingSnareFill,
             FallingTrackFactory::fallingKickFill,
             track(SequenceTrackFactory::modularA)
-                .withCC(ModularA::kMuteClock_cc, OFF, TICK(16))
+                .withCC(ModularA::kMuteClock_cc, OFF, TICK(16)),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kFalling_drops, len1),
+            track(SequenceTrackFactory::ledStrips).withNote(LedStrips::kWhite_ALL, 127, len1, TICK(16))
         });
     return seq;
 }
@@ -124,6 +134,9 @@ Sequence FallingSequenceFactory::fallingPreClimax()
             FallingTrackFactory::fallingPiano,
             FallingTrackFactory::fallingRiser,
             FallingTrackFactory::fallingSnareFill,
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kFalling_squares),
+            track(FallingTrackFactory::fallingBlinkKick).withCC(LedStrips::kDecay_cc, decayBlink),
+            FallingTrackFactory::fallingBlinkSnare
         });
     return seq;
 }
@@ -143,6 +156,8 @@ Sequence FallingSequenceFactory::fallingClimax()
             SequenceTrackFactory::rideOff,
             FallingTrackFactory::fallingRimTom,
             track(FallingTrackFactory::fallingRiser).withMuteEvent(0).asFill(),
+            FallingTrackFactory::fallingBlinkKick,
+            FallingTrackFactory::fallingBlinkSnare
         });
     return seq;
 }
@@ -155,6 +170,7 @@ Sequence FallingSequenceFactory::fallingEnd()
             FallingTrackFactory::fallingHandTamb,
             track(FallingTrackFactory::fallingSynthEnd).withLength(TickHelper::bars(16)),
             FallingTrackFactory::fallingHarp,
+            track(FallingTrackFactory::fallingRiser).muted().asFill(),
             track(SequenceTrackFactory::midiLoop)
                 .withNote(MidiLoop::kSelectBass)
                 .withCC(MidiLoop::kArpMode_cc, OFF)

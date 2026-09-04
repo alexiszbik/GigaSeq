@@ -8,6 +8,7 @@
 
 namespace {
     constexpr uint8_t songTempo = 130;
+    constexpr uint8_t stabLedDecay = 50;
 }
 
 Sequence CloserSequenceFactory::closerIntro()
@@ -31,6 +32,8 @@ Sequence CloserSequenceFactory::closerIntro()
                 .withCC(MidiLoop::kArpMode_cc, OFF)
                 .withCC(MidiLoop::kRecord_cc, ON)
                 .withCC(MidiLoop::kBarCount_cc, 4),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kCloser_lasers),
+            track(CloserTrackFactory::closerLedStab).withCC(LedStrips::kDecay_cc, stabLedDecay)
         });
     return seq;
 }
@@ -44,7 +47,9 @@ Sequence CloserSequenceFactory::closerChords()
             CloserTrackFactory::closerModular,
             track(CloserTrackFactory::closerTambourin).muted(),
             track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kCloserBassDisto),
-            track(SequenceTrackFactory::midiLoop).withCC(MidiLoop::kMuteBass_cc, ON)
+            track(SequenceTrackFactory::midiLoop).withCC(MidiLoop::kMuteBass_cc, ON),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kCloser_plasma),
+            track(SequenceTrackFactory::ledStrips).withNotes({LedStrips::kBlue_ALL, LedStrips::kGreen_ALL}, 127, 0, TICK(8))
         });
     return seq;
 }
@@ -78,6 +83,7 @@ Sequence CloserSequenceFactory::closerBlast()
             CloserTrackFactory::closerBlastCymb,
             CloserTrackFactory::closerBlastKick,
             CloserTrackFactory::closerBlastSnare,
+            CloserTrackFactory::closerBlastLed,
         });
     return seq;
 }
@@ -96,7 +102,9 @@ Sequence CloserSequenceFactory::closerBackKick()
             track(SequenceTrackFactory::gtrLoopErase),
             track(SequenceTrackFactory::midiLoop)
                 .withCC(MidiLoop::kMuteBass_cc, OFF)
-                .withCC(MidiLoop::kCopy_cc, 1)
+                .withCC(MidiLoop::kCopy_cc, 1),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kKill),
+            track(CloserTrackFactory::closerLedStab).withCC(LedStrips::kDecay_cc, stabLedDecay)
         });
     return seq;
 }
@@ -117,7 +125,9 @@ Sequence CloserSequenceFactory::closerClimax()
             CloserTrackFactory::closer303,
             track(SequenceTrackFactory::microfreak).withProgramChange(Microfreak::kCloserHouse),
             track(SequenceTrackFactory::midiLoop)
-                .withCC(MidiLoop::kPaste_cc, 3)
+                .withCC(MidiLoop::kPaste_cc, 3),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kCloser_smileys),
+            track(CloserTrackFactory::closerLedStab).withCC(LedStrips::kDecay_cc, stabLedDecay)
         });
     return seq;
 }
@@ -129,6 +139,9 @@ Sequence CloserSequenceFactory::closerEnd()
         4, 4, 0, "Climax", songTempo, true,
         {
             track(CloserTrackFactory::closerRiser).withMuteEvent(0).asFill(),
+            CloserTrackFactory::closerStab,
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kKill),
+            track(CloserTrackFactory::closerLedStab)
         });
     return seq;
 }

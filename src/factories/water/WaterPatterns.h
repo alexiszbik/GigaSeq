@@ -167,22 +167,26 @@ MAKE_PATTERN(kWaterChorusBFreak, kWaterChorusBFreakSteps, 16);
 //We could use an arp for that
 
 constexpr PatternStep kWaterMatrixSteps[] = {
-    SEQ_EMPTY, _NO_STEP, _NO_STEP,
+    {{LedMatrix::kWater_osc_squareOff_note}},
+    SEQ_EMPTY, _NO_STEP,
     {{LedMatrix::kWater_osc_squareA_note}}, {{LedMatrix::kWater_osc_squareD_note}}, 
     {{LedMatrix::kWater_osc_squareB_note}}, {{LedMatrix::kWater_osc_squareC_note}}, 
     {{LedMatrix::kWater_osc_squareA_note}}, {{LedMatrix::kWater_osc_squareB_note}}, 
 
-    SEQ_EMPTY, _NO_STEP, _NO_STEP,
+    {{LedMatrix::kWater_osc_squareOff_note}},
+    SEQ_EMPTY, _NO_STEP,
     {{LedMatrix::kWater_osc_squareB_note}}, {{LedMatrix::kWater_osc_squareA_note}}, 
     {{LedMatrix::kWater_osc_squareD_note}}, {{LedMatrix::kWater_osc_squareA_note}}, 
     {{LedMatrix::kWater_osc_squareC_note}}, {{LedMatrix::kWater_osc_squareB_note}}, 
 
-    SEQ_EMPTY, _NO_STEP, _NO_STEP,
+    {{LedMatrix::kWater_osc_squareOff_note}},
+    SEQ_EMPTY, _NO_STEP,
     {{LedMatrix::kWater_osc_squareD_note}}, {{LedMatrix::kWater_osc_squareA_note}}, 
     {{LedMatrix::kWater_osc_squareC_note}}, {{LedMatrix::kWater_osc_squareD_note}}, 
     {{LedMatrix::kWater_osc_squareB_note}}, {{LedMatrix::kWater_osc_squareA_note}}, 
 
-    SEQ_EMPTY, _NO_STEP, _NO_STEP,
+    {{LedMatrix::kWater_osc_squareOff_note}},
+    SEQ_EMPTY, _NO_STEP,
     {{LedMatrix::kWater_osc_squareB_note}}, {{LedMatrix::kWater_osc_squareC_note}}, 
     {{LedMatrix::kWater_osc_squareB_note}}, {{LedMatrix::kWater_osc_squareA_note}}, 
     {{LedMatrix::kWater_osc_squareD_note}}, {{LedMatrix::kWater_osc_squareC_note}}, 

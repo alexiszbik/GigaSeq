@@ -31,7 +31,9 @@ Sequence WaterSequenceFactory::waterIntro()
                 .withCC(MidiLoop::kArpMode_cc, OFF)
                 .withCC(MidiLoop::kRecord_cc, OFF),
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kWater_oscBlue),
-            track(WaterTrackFactory::waterCyanBlink).withCC(LedStrips::kDecay_cc, decayCyan)
+            track(WaterTrackFactory::waterCyanBlink).withCC(LedStrips::kDecay_cc, decayCyan),
+            track(SequenceTrackFactory::drumMachine).withCC(DrumMachine::kClearAll_cc, ON),
+            track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, ON)
         });
 
     return seq;
@@ -173,7 +175,7 @@ Sequence WaterSequenceFactory::waterPartC()
             WaterTrackFactory::waterClaves,
             track(WaterTrackFactory::waterBalafon).muted(),
             track(WaterTrackFactory::waterShakes).muted(),
-            track(WaterTrackFactory::waterXmas).withStart(TickHelper::bars(16)),
+            //track(WaterTrackFactory::waterXmas).withStart(TickHelper::bars(16)),
             WaterTrackFactory::waterFmbass,
             track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, OFF),
             track(SequenceTrackFactory::drumMachine)

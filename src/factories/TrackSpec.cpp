@@ -41,6 +41,16 @@ TrackSpec& TrackSpec::withNote(uint8_t pitch, uint8_t velocity, tick_t tick, tic
     return *this;
 }
 
+TrackSpec& TrackSpec::withNotes(std::vector<uint8_t> pitches, uint8_t velocity, tick_t tick, tick_t duration)
+{
+    for (auto& p : pitches) {
+        notes_.push_back({ tick, duration, { p, velocity } });
+    }
+
+    return *this;
+}
+
+
 TrackSpec& TrackSpec::asFill()
 {
     isFill_ = true;
