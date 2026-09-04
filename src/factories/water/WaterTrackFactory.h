@@ -19,7 +19,7 @@ public:
     static SequenceTrack waterShakes(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack waterFmbass(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack waterKickPreChorus(tick_t lengthInTicks, tick_t startInTicks);
-    static SequenceTrack waterChorus2(tick_t lengthInTicks, tick_t startInTicks);
+
     static SequenceTrack waterChorusFMBass(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack waterKickPartB(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack waterEventsPartB(tick_t lengthInTicks, tick_t startInTicks);
@@ -29,4 +29,8 @@ public:
     static SequenceTrack waterEventsEnd(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack waterChorusEnd(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack waterFreakWind(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack waterMatrix(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack waterCyanBlink(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack waterChorusLed(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack waterLedPattern(tick_t lengthInTicks, tick_t startInTicks);
 };

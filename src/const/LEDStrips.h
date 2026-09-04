@@ -13,10 +13,11 @@ namespace LedStrips {
 
 #define STRIP_CC(name, nbr) constexpr uint8_t k##name##_cc = nbr;
 
-STRIP_NOTES(A, 0)
-STRIP_NOTES(B, 1)
-STRIP_NOTES(C, 2)
-STRIP_NOTES(D, 3)
+STRIP_NOTES(ALL, 0)
+STRIP_NOTES(A, 1)
+STRIP_NOTES(B, 2)
+STRIP_NOTES(C, 3)
+STRIP_NOTES(D, 4)
 
 constexpr uint8_t kRainbow_note = 58;
 constexpr uint8_t kExplode_note = 59;

@@ -104,6 +104,11 @@ SequenceTrack SequenceTrackFactory::drumMachine(tick_t lengthInTicks, tick_t sta
     return track;
 }
 
+SequenceTrack SequenceTrackFactory::matrix(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Matrix", MidiChannel::kMatrix);
+    return track;
+}
+
 SequenceTrack SequenceTrackFactory::ledStrips(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("LedStrips", MidiChannel::kLedStrips);
     return track;

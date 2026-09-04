@@ -1,6 +1,7 @@
 #pragma once
 
 #include "TrackPattern.h"
+#include "MidiConst.h"
 #include "factories/MidiNotes.h"
 
 namespace TogetherPatterns
@@ -142,5 +143,12 @@ MAKE_PATTERN(kTogetherPartBCymbal, kTogetherPartBCymbalSteps, 8);
 #undef DX7_B2_STEP
 #undef DX7_B2_BAR
 #undef DX7_B2_PHRASE
+
+
+constexpr PatternStep kTogetherLedBlinkBlueSteps[] = {
+    {{LedStrips::kBlue_ALL}, 127, 1}, _NO_STEP,
+};
+
+MAKE_PATTERN(kTogetherLedBlinkBlue, kTogetherLedBlinkBlueSteps, 8); //parce qu'on peut pas encore gérer la longueur des notes
 
 } // namespace TogetherPatterns

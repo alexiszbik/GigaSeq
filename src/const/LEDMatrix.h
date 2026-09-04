@@ -4,10 +4,10 @@
 
 namespace LedMatrix {
 
-#define _MATRIX_PRESET(song, preset, nbr) constexpr uint8_t k##song##_##preset = nbr - 1
+#define _MATRIX_PRESET(song, preset, nbr) constexpr uint8_t k##song##_##preset = nbr
 #define _MATRIX_PRESET_NOTE(song, preset, command, nbr) constexpr uint8_t k##song##_##preset##_##command##_note = nbr
 
-constexpr uint8_t kKill = 16 - 1; //Maybe prepare a specific program for this ?
+constexpr uint8_t kKill = 16; //Maybe prepare a specific program for this ?
 
 // === Together ===
 //TO do ...

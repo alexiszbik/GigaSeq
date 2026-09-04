@@ -4,9 +4,37 @@ MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, MIDI);
 
 namespace GigaSeq {
 
+GigaMidiInOut* GigaMidiInOut::instance_ = nullptr;
+
+void GigaMidiInOut::onNoteOn(byte channel, byte note, byte velocity) {
+    if (instance_ != nullptr) {
+        instance_->sendNoteOn(note, velocity, channel - 1);
+    }
+}
+
+void GigaMidiInOut::onNoteOff(byte channel, byte note, byte velocity) {
+    if (instance_ != nullptr) {
+        instance_->sendNoteOff(note, velocity, channel - 1);
+    }
+}
+
+void GigaMidiInOut::onControlChange(byte channel, byte control, byte value) {
+    if (instance_ != nullptr && channel != 1 /* dont use control change from keyboard */) {
+        instance_->sendControlChange(channel - 1, control, value);
+    }
+}
+
 void GigaMidiInOut::begin(uint8_t channel) {
+    instance_ = this;
+
     Serial1.begin(31250);
+
+    MIDI.setHandleNoteOn(onNoteOn);
+    MIDI.setHandleNoteOff(onNoteOff);
+    MIDI.setHandleControlChange(onControlChange);
+
     MIDI.begin(channel);
+    MIDI.turnThruOff();
 }
 
 void GigaMidiInOut::read() {

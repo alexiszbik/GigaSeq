@@ -20,7 +20,8 @@ Sequence TogetherSequenceFactory::togetherIntro()
             track(SequenceTrackFactory::microfreak).withProgramChange(Microfreak::kTogetherLead),
             track(SequenceTrackFactory::midiLoop)
                 .withNote(MidiLoop::kSelectMicrofreak)
-                .withCC(MidiLoop::kBarCount_cc, 8)
+                .withCC(MidiLoop::kBarCount_cc, 8),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kKill)
         });
 
     addProgramChangeTrack(seq, "Poly pgm", MidiChannel::kPoly, 1);
@@ -61,6 +62,8 @@ Sequence TogetherSequenceFactory::togetherKick()
             track(TogetherTrackFactory::togetherSample).withCC(13, 127),
             TogetherTrackFactory::togetherDX7,
             SequenceTrackFactory::kickFour,
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kTogether_vuIntro),
+            track(TogetherTrackFactory::togetherLedBlinkBlue).withCC(LedStrips::kDecay_cc, 30),
         });
 }
 
@@ -93,7 +96,9 @@ Sequence TogetherSequenceFactory::togetherPause()
             TogetherTrackFactory::togetherSample,
             TogetherTrackFactory::togetherDX7,
             track(SequenceTrackFactory::gtrPedal).withCC(HXStomp::kTogetherChorus_ccVolume, 127),
-            SequenceTrackFactory::gtrLoopMute
+            SequenceTrackFactory::gtrLoopMute,
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kTogether_circles),
+            track(SequenceTrackFactory::ledStrips).withNote(LedStrips::kBlue_ALL, 127, 0, TICK(8))
         });
 }
 
@@ -108,7 +113,11 @@ Sequence TogetherSequenceFactory::togetherClimax()
             TogetherTrackFactory::togetherDX7,
             SequenceTrackFactory::kickFour,
             track(SequenceTrackFactory::gtrPedal).withCC(HXStomp::kTogetherChorus_ccDrive, 127),
-            SequenceTrackFactory::gtrLoopUnmute
+            SequenceTrackFactory::gtrLoopUnmute,
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kTogether_vuRainbow),
+            track(SequenceTrackFactory::ledStrips)
+                .withNote(LedStrips::kRainbow_note, 127, 0, TICK(16))
+                .withCC(LedStrips::kRainbowSpeed_cc, 14)
         });
 }
 
@@ -124,7 +133,11 @@ Sequence TogetherSequenceFactory::togetherRepeat()
             TogetherTrackFactory::togetherKickRepeat,
             TogetherTrackFactory::togetherExtraBass,
             TogetherTrackFactory::togetherEndRiser,
-            SequenceTrackFactory::gtrLoopErase
+            SequenceTrackFactory::gtrLoopErase,
+            track(SequenceTrackFactory::ledStrips)
+                .withNote(LedStrips::kRainbow_note, 127, 0, TICK(4))
+                .withCC(LedStrips::kRainbowSpeed_cc, 2)
+                .withCC(LedStrips::kDecay_cc, 0)
         });
 }
 
@@ -143,7 +156,8 @@ Sequence TogetherSequenceFactory::togetherPartB()
             track(SequenceTrackFactory::gtrLoop).withProgramChange(BossRC::kTogetherB, TICK(5)),
             track(SequenceTrackFactory::midiLoop)
                 .withNote(MidiLoop::kSelectBass)
-                .withCC(MidiLoop::kBarCount_cc, 4)
+                .withCC(MidiLoop::kBarCount_cc, 4),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kKill)
         });
 }
 
@@ -157,6 +171,7 @@ Sequence TogetherSequenceFactory::togetherPartBWithHats()
             TogetherTrackFactory::togetherPartBAh,
             TogetherTrackFactory::togetherPartBDaDaDa,
             TogetherTrackFactory::togetherHatsOnly,
+            track(TogetherTrackFactory::togetherBassLed).withCC(LedStrips::kDecay_cc, 80)
         });
 }
 
@@ -188,5 +203,6 @@ Sequence TogetherSequenceFactory::togetherPartBClimax()
             TogetherTrackFactory::togetherPartBTambourin,
             TogetherTrackFactory::togetherPartBCymbal,
             track(TogetherTrackFactory::togetherEndRiser).withMuteEvent(0).asFill(),
+            track(TogetherTrackFactory::togetherLedBlinkClimax).withCC(LedStrips::kDecay_cc, 20)
         });
 }

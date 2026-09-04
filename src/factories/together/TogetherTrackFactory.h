@@ -25,4 +25,7 @@ public:
     static SequenceTrack togetherPartBJC(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack togetherPartBTambourin(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack togetherPartBCymbal(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack togetherLedBlinkBlue(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack togetherBassLed(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack togetherLedBlinkClimax(tick_t lengthInTicks, tick_t startInTicks);
 };

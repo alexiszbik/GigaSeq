@@ -209,3 +209,38 @@ SequenceTrack WaterTrackFactory::waterFreakWind(tick_t lengthInTicks, tick_t sta
 
     return track;
 }
+
+SequenceTrack WaterTrackFactory::waterMatrix(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Matrix", MidiChannel::kMatrix);
+    track.setPattern(WaterPatterns::kWaterMatrix, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack WaterTrackFactory::waterCyanBlink(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("CyanBlink", MidiChannel::kLedStrips);
+    track.setPattern(WaterPatterns::kWaterCyanBlink, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack WaterTrackFactory::waterChorusLed(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("ChorusLed", MidiChannel::kLedStrips);
+
+    SequenceDesc desc;
+    desc.notes = {
+        {LedStrips::kWhite_ALL}, {}, {}, {}, {}, {}, {}, {LedStrips::kWhite_ALL},
+        {}, {}, {}, {}, {}, {}, {}, {},
+        {LedStrips::kWhite_ALL}, {}, {}, {}, {}, {}, {}, {},
+        {}, {}, {}, {}, {}, {}, {}, {},
+    };
+    desc.rate = 8;
+    desc.durations = {4,4,8};
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
+
+    return track;
+}
+
+SequenceTrack WaterTrackFactory::waterLedPattern(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("LedPattern", MidiChannel::kLedStrips);
+    track.setPattern(WaterPatterns::kWaterLedPattern, lengthInTicks, startInTicks);
+    return track;
+}

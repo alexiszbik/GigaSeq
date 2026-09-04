@@ -23,10 +23,15 @@ public:
     bool flush();
 
 private:
+    static void onNoteOn(byte channel, byte note, byte velocity);
+    static void onNoteOff(byte channel, byte note, byte velocity);
+    static void onControlChange(byte channel, byte control, byte value);
+
     void write1(uint8_t b);
     void write2(uint8_t b1, uint8_t b2);
     void write3(uint8_t b1, uint8_t b2, uint8_t b3);
 
+    static GigaMidiInOut* instance_;
     MidiQueue queue_;
 };
 

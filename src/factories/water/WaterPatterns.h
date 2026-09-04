@@ -3,6 +3,7 @@
 #include "TrackPattern.h"
 #include "factories/MidiNotes.h"
 #include "WaterSamples.h"
+#include "MidiConst.h"
 
 namespace WaterPatterns
 {
@@ -127,7 +128,7 @@ MAKE_PATTERN(kWaterClaves, kWaterClavesSteps, 4);
     _NO_STEP, _NO_STEP, {{Water::fmbasscd}, 127, 1}, {{Water::fmbasscd}, 127, 1}, \
     {{Water::fmbassad}, 127, 1}, {{Water::fmbassad}, 127, 1}, {{Water::fmbasscd}, 127, 1}, {{Water::fmbasscd}, 127, 1}
 
-#define FMBASS_24_EMPTY \
+#define SEQ_EMPTY \
     _NO_STEP, _NO_STEP, _NO_STEP, _NO_STEP, \
     _NO_STEP, _NO_STEP, _NO_STEP, _NO_STEP, \
     _NO_STEP, _NO_STEP, _NO_STEP, _NO_STEP, \
@@ -136,10 +137,10 @@ MAKE_PATTERN(kWaterClaves, kWaterClavesSteps, 4);
     _NO_STEP, _NO_STEP, _NO_STEP, _NO_STEP
 
 #define FMBASS_HALF_GD \
-    FMBASS_24_EMPTY, FMBASS_MOTIF_GD
+    SEQ_EMPTY, FMBASS_MOTIF_GD
 
 #define FMBASS_HALF_CD \
-    FMBASS_24_EMPTY, FMBASS_MOTIF_CD
+    SEQ_EMPTY, FMBASS_MOTIF_CD
 
 constexpr PatternStep kWaterFmbassSteps[] = {
     FMBASS_HALF_GD,
@@ -158,9 +159,77 @@ MAKE_PATTERN(kWaterChorusBFreak, kWaterChorusBFreakSteps, 16);
 
 #undef FMBASS_MOTIF_GD
 #undef FMBASS_MOTIF_CD
-#undef FMBASS_24_EMPTY
+
 #undef FMBASS_HALF_GD
 #undef FMBASS_HALF_CD
 
+//TODO : something more random here !
+//We could use an arp for that
+
+constexpr PatternStep kWaterMatrixSteps[] = {
+    SEQ_EMPTY, _NO_STEP, _NO_STEP,
+    {{LedMatrix::kWater_osc_squareA_note}}, {{LedMatrix::kWater_osc_squareD_note}}, 
+    {{LedMatrix::kWater_osc_squareB_note}}, {{LedMatrix::kWater_osc_squareC_note}}, 
+    {{LedMatrix::kWater_osc_squareA_note}}, {{LedMatrix::kWater_osc_squareB_note}}, 
+
+    SEQ_EMPTY, _NO_STEP, _NO_STEP,
+    {{LedMatrix::kWater_osc_squareB_note}}, {{LedMatrix::kWater_osc_squareA_note}}, 
+    {{LedMatrix::kWater_osc_squareD_note}}, {{LedMatrix::kWater_osc_squareA_note}}, 
+    {{LedMatrix::kWater_osc_squareC_note}}, {{LedMatrix::kWater_osc_squareB_note}}, 
+
+    SEQ_EMPTY, _NO_STEP, _NO_STEP,
+    {{LedMatrix::kWater_osc_squareD_note}}, {{LedMatrix::kWater_osc_squareA_note}}, 
+    {{LedMatrix::kWater_osc_squareC_note}}, {{LedMatrix::kWater_osc_squareD_note}}, 
+    {{LedMatrix::kWater_osc_squareB_note}}, {{LedMatrix::kWater_osc_squareA_note}}, 
+
+    SEQ_EMPTY, _NO_STEP, _NO_STEP,
+    {{LedMatrix::kWater_osc_squareB_note}}, {{LedMatrix::kWater_osc_squareC_note}}, 
+    {{LedMatrix::kWater_osc_squareB_note}}, {{LedMatrix::kWater_osc_squareA_note}}, 
+    {{LedMatrix::kWater_osc_squareD_note}}, {{LedMatrix::kWater_osc_squareC_note}}, 
+};
+
+MAKE_PATTERN(kWaterMatrix, kWaterMatrixSteps, 16);
+
+
+constexpr PatternStep kWaterLedPatternSteps[] = {
+    SEQ_EMPTY, _NO_STEP, _NO_STEP,
+    {{LedStrips::kWhite_A}}, {{LedStrips::kWhite_B}}, 
+    {{LedStrips::kWhite_D}}, {{LedStrips::kWhite_A}}, 
+    {{LedStrips::kWhite_D}}, {{LedStrips::kWhite_C}}, 
+
+    SEQ_EMPTY, _NO_STEP, _NO_STEP,
+    {{LedStrips::kWhite_A}}, {{LedStrips::kWhite_C}}, 
+    {{LedStrips::kWhite_B}}, {{LedStrips::kWhite_A}}, 
+    {{LedStrips::kWhite_C}}, {{LedStrips::kWhite_D}}, 
+
+    SEQ_EMPTY, _NO_STEP, _NO_STEP,
+    {{LedStrips::kWhite_C}}, {{LedStrips::kWhite_D}}, 
+    {{LedStrips::kWhite_A}}, {{LedStrips::kWhite_C}}, 
+    {{LedStrips::kWhite_B}}, {{LedStrips::kWhite_D}}, 
+
+    SEQ_EMPTY, _NO_STEP, _NO_STEP,
+    {{LedStrips::kWhite_B}}, {{LedStrips::kWhite_A}}, 
+    {{LedStrips::kWhite_D}}, {{LedStrips::kWhite_B}}, 
+    {{LedStrips::kWhite_A}}, {{LedStrips::kWhite_C}}, 
+};
+
+MAKE_PATTERN(kWaterLedPattern, kWaterLedPatternSteps, 16);
+
+
+
+constexpr PatternStep kWaterCyanBlinkSteps[] = {
+    _NO_STEP,
+    {{LedStrips::kBlue_C, LedStrips::kGreen_C}, 127, 1},
+    _NO_STEP,
+    {{LedStrips::kBlue_C, LedStrips::kGreen_C}, 127, 1},
+    _NO_STEP,
+    _NO_STEP,
+    _NO_STEP,
+    _NO_STEP,
+};
+
+MAKE_PATTERN(kWaterCyanBlink, kWaterCyanBlinkSteps, 16);
 
 } // namespace WaterPatterns
+
+#undef SEQ_EMPTY

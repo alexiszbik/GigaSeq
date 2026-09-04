@@ -165,3 +165,39 @@ SequenceTrack TogetherTrackFactory::togetherPartBCymbal(tick_t lengthInTicks, ti
     track.setPattern(TogetherPatterns::kTogetherPartBCymbal, lengthInTicks, startInTicks);
     return track;
 }
+
+SequenceTrack TogetherTrackFactory::togetherLedBlinkBlue(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("LedBlinkBlue", MidiChannel::kLedStrips);
+    track.setPattern(TogetherPatterns::kTogetherLedBlinkBlue, lengthInTicks, startInTicks);
+    return track;
+}
+SequenceTrack TogetherTrackFactory::togetherBassLed(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("BassLed", MidiChannel::kLedStrips);
+
+    SequenceDesc desc;
+    desc.notes = {
+        {}, {LedStrips::kWhite_ALL}, {}, {}, 
+        {}, {}, {}, {}
+    };
+    desc.rate = 4;
+    desc.durations = {4};
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
+
+    return track;
+}
+
+SequenceTrack TogetherTrackFactory::togetherLedBlinkClimax(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("LedBlinkClimax", MidiChannel::kLedStrips);
+
+    SequenceDesc desc;
+    desc.notes = {
+        {LedStrips::kWhite_ALL}, {},
+        {LedStrips::kWhite_A}, {}, 
+        {LedStrips::kWhite_B}, {}, 
+        {LedStrips::kWhite_C}, {}, 
+    };
+    desc.rate = 8;
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
+
+    return track;
+}
