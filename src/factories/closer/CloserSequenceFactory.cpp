@@ -103,7 +103,7 @@ Sequence CloserSequenceFactory::closerBackKick()
             track(SequenceTrackFactory::midiLoop)
                 .withCC(MidiLoop::kMuteBass_cc, OFF)
                 .withCC(MidiLoop::kCopy_cc, 1),
-            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kKill),
+            SequenceTrackFactory::matrixKill,
             track(CloserTrackFactory::closerLedStab).withCC(LedStrips::kDecay_cc, stabLedDecay)
         });
     return seq;
@@ -140,7 +140,7 @@ Sequence CloserSequenceFactory::closerEnd()
         {
             track(CloserTrackFactory::closerRiser).withMuteEvent(0).asFill(),
             CloserTrackFactory::closerStab,
-            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kKill),
+            SequenceTrackFactory::matrixKill,
             track(CloserTrackFactory::closerLedStab)
         });
     return seq;

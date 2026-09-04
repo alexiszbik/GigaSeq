@@ -180,3 +180,61 @@ SequenceTrack FantasyTrackFactory::fantasyArpEnd(tick_t lengthInTicks, tick_t st
     track.setPattern(FantasyPatterns::kFantasyArpEnd, lengthInTicks, startInTicks);
     return track;
 }
+
+SequenceTrack FantasyTrackFactory::fantasyRainbowChorus(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("RainbowChorus", MidiChannel::kLedStrips);
+
+    track.addControlChange({startInTicks, LedStrips::kRainbowSpeed_cc, 20});
+    track.addNote(startInTicks, lengthInTicks, LedStrips::kRainbow_note, 127);
+    return track;
+}
+
+SequenceTrack FantasyTrackFactory::fantasyLedChorus1(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("LedChorus1", MidiChannel::kLedStrips);
+
+    uint8_t note = LedStrips::kBlue_ALL;
+
+    SequenceDesc desc;
+    desc.notes = {
+        {note}, {}, {}, {}, {}, {}, {}, {note},
+        {}, {}, {}, {}, {}, {}, {}, {note},
+        {}, {}, {}, {}, {}, {}, {}, {note},
+        {}, {}, {}, {}, {}, {}, {}, {},
+    };
+
+    desc.durations = {4, 6, 6, 7};
+    desc.rate = 8;
+    makeSequenceTrack(track, desc, TICK(4), startInTicks);
+    
+
+    return track;
+}
+
+
+SequenceTrack FantasyTrackFactory::fantasyLedChorus2(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("LedChorus1", MidiChannel::kLedStrips);
+
+    uint8_t note = LedStrips::kRainbow_note;
+
+    SequenceDesc desc;
+    desc.notes = {
+        {note}, {}, {}, {}, {}, {}, {}, {note},
+        {}, {}, {}, {}, {}, {}, {}, {note},
+        {}, {}, {}, {}, {}, {}, {}, {note},
+        {}, {}, {}, {}, {}, {}, {}, {},
+    };
+
+    desc.durations = {4, 6, 6, 7};
+    desc.rate = 8;
+    makeSequenceTrack(track, desc, TICK(4), startInTicks);
+    
+
+    return track;
+}
+
+SequenceTrack FantasyTrackFactory::fantasyLedRave(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("LedRave", MidiChannel::kLedStrips);
+
+    makeRoll(track, LedStrips::kWhite_ALL, TICK(32), TICK(16), 0, 127, {}, 32);
+    return track;
+}

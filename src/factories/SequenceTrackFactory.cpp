@@ -109,6 +109,12 @@ SequenceTrack SequenceTrackFactory::matrix(tick_t lengthInTicks, tick_t startInT
     return track;
 }
 
+SequenceTrack SequenceTrackFactory::matrixKill(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track = matrix(lengthInTicks, startInTicks);
+    track.addProgramChange({ 0, LedMatrix::kKill });
+    return track;
+}
+
 SequenceTrack SequenceTrackFactory::ledStrips(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("LedStrips", MidiChannel::kLedStrips);
     return track;

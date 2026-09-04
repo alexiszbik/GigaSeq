@@ -23,7 +23,7 @@ Sequence TogetherSequenceFactory::togetherIntro()
             track(SequenceTrackFactory::midiLoop)
                 .withNote(MidiLoop::kSelectMicrofreak)
                 .withCC(MidiLoop::kBarCount_cc, 4),
-            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kKill)
+            SequenceTrackFactory::matrixKill
         });
 
     addProgramChangeTrack(seq, "Poly pgm", MidiChannel::kPoly, 1);
@@ -162,7 +162,7 @@ Sequence TogetherSequenceFactory::togetherPartB()
             track(SequenceTrackFactory::midiLoop)
                 .withNote(MidiLoop::kSelectBass)
                 .withCC(MidiLoop::kBarCount_cc, 4),
-            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kKill)
+            SequenceTrackFactory::matrixKill
         });
 }
 

@@ -50,7 +50,8 @@ Sequence FantasySequenceFactory::fantasyStart()
             FantasyTrackFactory::fantasyDrums,
             FantasyTrackFactory::fantasyShake,
             FantasyTrackFactory::fantasyChords,
-            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kFantasy_signA)
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kFantasy_signA),
+            track(FantasyTrackFactory::fantasyLedChorus1).withCC(LedStrips::kDecay_cc, 50)
         });
     return seq;
 }
@@ -64,7 +65,8 @@ Sequence FantasySequenceFactory::fantasyBreak()
             track(FantasyTrackFactory::fantasyFreak).muted(),
             track(FantasyTrackFactory::fantasyVocals).muted(),
             track(SequenceTrackFactory::polySynth).withCC(ModularA::kGlobalMute_cc, ON),
-            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kKill)
+            SequenceTrackFactory::matrixKill,
+            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, 0),
         });
     return seq;
 }
@@ -94,7 +96,9 @@ Sequence FantasySequenceFactory::fantasyBack()
                 .withCC(ModularA::kGlobalMute_cc, OFF).withProgramChange(PolySynth::kFantasyChords),
             track(SequenceTrackFactory::gtrLoop)
                 .withCC(BossRC::kVolume_cc, 0, TICK(8)).withCC(BossRC::kVolume_cc, 65, TICK(8, 1)),
-            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kFantasy_signB, TICK(8, 1))
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kFantasy_signB, TICK(8, 1)),
+            track(FantasyTrackFactory::fantasyLedChorus2).withCC(LedStrips::kDecay_cc, 50)
+                .withStart(TICK(8, 0)) //TODO : make better sync
         });
 }
 
@@ -110,13 +114,14 @@ Sequence FantasySequenceFactory::fantasyRave()
                 .withProgramChange(PolySynth::kRave),
             track(FantasyTrackFactory::fantasyArpBass).muted(),
             track(FantasyTrackFactory::fantasySnare909).withCC(36,10).withStart(TICK(16))
-            .withAutomation(TICK(16), TICK(len), 36, 24, 127),
+                .withAutomation(TICK(16), TICK(len), 36, 24, 127), //TODO : replace by a roll ?
             FantasyTrackFactory::fantasyRiser,
             FantasyTrackFactory::fantasyBigRiz1,
             SequenceTrackFactory::gtrLoopMute,
             track(SequenceTrackFactory::gtrPedal)
                 .withProgramChange(HXStomp::kFantasySolo),
-            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kKill)
+            SequenceTrackFactory::matrixKill,
+            FantasyTrackFactory::fantasyLedRave
         });
     return seq;
 }
@@ -164,7 +169,8 @@ Sequence FantasySequenceFactory::fantasyClimax()
             track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, OFF),
             track(SequenceTrackFactory::bass).withCC(Bass::kGlobalMute_cc, OFF),
             track(FantasyTrackFactory::fantasyRiser).withMuteEvent(0).asFill(),
-            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kFantasy_signC)
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kFantasy_signC),
+            FantasyTrackFactory::fantasyRainbowChorus
         });
     return seq;
 }

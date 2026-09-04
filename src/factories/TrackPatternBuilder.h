@@ -36,7 +36,7 @@ void makeRoll(
     SequenceTrack& track,
     uint8_t note,
     tick_t lengthInTicks,
-    tick_t startTIck,
+    tick_t startTick,
     uint8_t startVelocity,
     uint8_t endVelocity,
     std::vector<double> velocityPattern = {1},
