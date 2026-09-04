@@ -89,7 +89,7 @@ void makeRiser(
 
 void makeRoll(
     SequenceTrack& track,
-    uint8_t note,
+    std::vector<uint8_t> notes,
     tick_t lengthInTicks,
     tick_t startTick,
     uint8_t startVelocity,
@@ -98,6 +98,10 @@ void makeRoll(
     uint8_t stepRatio) 
 {
     const tick_t stepDuration = TickHelper::kOneBarTick4_4 / stepRatio;
+
+    const int noteCount = notes.size();
+
+    int noteIdx = 0;
 
     if (lengthInTicks < stepDuration) {
         return;
@@ -118,11 +122,16 @@ void makeRoll(
 
         const int velocity = startVelocity + (velocityDelta * step) / (stepCount - 1);
 
-        track.addNote(tick, stepDuration, note, static_cast<uint8_t>(velocity * velocityRatio));
+        track.addNote(tick, stepDuration, notes.at(noteIdx), static_cast<uint8_t>(velocity * velocityRatio));
 
         velocityIdx++;
         if (velocityIdx >= velocityCount) {
             velocityIdx = 0;
+        }
+
+        noteIdx++;
+        if (noteIdx >= noteCount) {
+            noteIdx = 0;
         }
     }
 

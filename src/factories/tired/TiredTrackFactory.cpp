@@ -154,7 +154,7 @@ SequenceTrack TiredTrackFactory::tiredCymbal(tick_t lengthInTicks, tick_t startI
 SequenceTrack TiredTrackFactory::tiredSnareRoll(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("SnareRoll", MidiChannel::kDrums);
 
-    makeRoll(track, Tired::shortsnr, TICK(7), 0, 10, 127, {1, 0.87, 0.75});
+    makeRoll(track, {Tired::shortsnr}, TICK(7), 0, 10, 127, {1, 0.87, 0.75});
 
     return track;
 }

@@ -206,7 +206,7 @@ SequenceTrack FriendshipTrackFactory::friendshipOpenH909(tick_t lengthInTicks, t
 SequenceTrack FriendshipTrackFactory::friendshipSnareRoll(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("SnareRoll", MidiChannel::kDrums);
 
-    makeRoll(track, Friendship::snr909, TICK(15,0), startInTicks, 1, 127);
+    makeRoll(track, {Friendship::snr909}, TICK(15,0), startInTicks, 1, 127);
     return track;
 }
 

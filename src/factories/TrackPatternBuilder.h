@@ -34,7 +34,7 @@ void makeRiser(
 
 void makeRoll(
     SequenceTrack& track,
-    uint8_t note,
+    std::vector<uint8_t> notes,
     tick_t lengthInTicks,
     tick_t startTick,
     uint8_t startVelocity,

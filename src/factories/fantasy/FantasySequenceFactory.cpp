@@ -97,7 +97,7 @@ Sequence FantasySequenceFactory::fantasyBack()
             track(SequenceTrackFactory::gtrLoop)
                 .withCC(BossRC::kVolume_cc, 0, TICK(8)).withCC(BossRC::kVolume_cc, 65, TICK(8, 1)),
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kFantasy_signB, TICK(8, 1)),
-            track(FantasyTrackFactory::fantasyLedChorus2).withCC(LedStrips::kDecay_cc, 50)
+            track(FantasyTrackFactory::fantasyLedChorus2) //TODO y'a un truc qui va pas du TOUT ici avec le decay!!!!
                 .withStart(TICK(8, 0)) //TODO : make better sync
         });
 }
@@ -121,7 +121,7 @@ Sequence FantasySequenceFactory::fantasyRave()
             track(SequenceTrackFactory::gtrPedal)
                 .withProgramChange(HXStomp::kFantasySolo),
             SequenceTrackFactory::matrixKill,
-            FantasyTrackFactory::fantasyLedRave
+            track(FantasyTrackFactory::fantasyLedRave).withCC(LedStrips::kDecay_cc, 1)
         });
     return seq;
 }

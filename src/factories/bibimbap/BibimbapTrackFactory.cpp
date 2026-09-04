@@ -191,7 +191,7 @@ SequenceTrack BibimbapTrackFactory::bibimbapRiser(tick_t lengthInTicks, tick_t s
 SequenceTrack BibimbapTrackFactory::bibimbapSnareRoll(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("SnareRoll", MidiChannel::kDrums);
 
-    makeRoll(track, Bibimbap::sd1050, lengthInTicks, startInTicks, 32, 127);
+    makeRoll(track, {Bibimbap::sd1050}, lengthInTicks, startInTicks, 32, 127);
 
     return track;
 }
@@ -200,8 +200,8 @@ SequenceTrack BibimbapTrackFactory::bibimbapSnareRoll2(tick_t lengthInTicks, tic
     SequenceTrack track("SnareRoll", MidiChannel::kDrums);
 
     tick_t len = lengthInTicks - TICK(0,3);
-    makeRoll(track, Bibimbap::sd1050, lengthInTicks - TICK(0,3), startInTicks, 110, 124);
-    makeRoll(track, Bibimbap::sd1050, TICK(0,3), startInTicks + lengthInTicks - TICK(0,3), 124, 127, {1}, 32);
+    makeRoll(track, {Bibimbap::sd1050}, lengthInTicks - TICK(0,3), startInTicks, 110, 124);
+    makeRoll(track, {Bibimbap::sd1050}, TICK(0,3), startInTicks + lengthInTicks - TICK(0,3), 124, 127, {1}, 32);
 
     return track;
 }

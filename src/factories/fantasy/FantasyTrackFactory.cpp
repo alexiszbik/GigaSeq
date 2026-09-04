@@ -185,7 +185,8 @@ SequenceTrack FantasyTrackFactory::fantasyRainbowChorus(tick_t lengthInTicks, ti
     SequenceTrack track("RainbowChorus", MidiChannel::kLedStrips);
 
     track.addControlChange({startInTicks, LedStrips::kRainbowSpeed_cc, 20});
-    track.addNote(startInTicks, lengthInTicks, LedStrips::kRainbow_note, 127);
+    track.addNote(0, TICK(4), LedStrips::kRainbow_note, 127);
+    track.addNote(TICK(4), TICK(4), LedStrips::kRainbow_note, 127);
     return track;
 }
 
@@ -226,8 +227,9 @@ SequenceTrack FantasyTrackFactory::fantasyLedChorus2(tick_t lengthInTicks, tick_
 
     desc.durations = {4, 6, 6, 7};
     desc.rate = 8;
-    makeSequenceTrack(track, desc, TICK(4), startInTicks);
-    
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
+
+    track.addControlChange({startInTicks,LedStrips::kDecay_cc, 50});
 
     return track;
 }
@@ -235,6 +237,14 @@ SequenceTrack FantasyTrackFactory::fantasyLedChorus2(tick_t lengthInTicks, tick_
 SequenceTrack FantasyTrackFactory::fantasyLedRave(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("LedRave", MidiChannel::kLedStrips);
 
-    makeRoll(track, LedStrips::kWhite_ALL, TICK(32), TICK(16), 0, 127, {}, 32);
+    makeRoll(
+        track,
+        {LedStrips::kWhite_A, LedStrips::kWhite_B, LedStrips::kWhite_C, LedStrips::kWhite_D},
+        TICK(32),
+        TICK(16),
+        0,
+        127,
+        {1},
+        16);
     return track;
 }
