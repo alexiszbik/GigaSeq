@@ -1,6 +1,6 @@
 #include "WaterInMidiRules.h"
 
-#include "InMidiRules.h"
+#include "midiinrules/InMidiRules.h"
 
 namespace {
 

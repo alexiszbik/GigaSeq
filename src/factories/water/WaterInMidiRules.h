@@ -1,6 +1,6 @@
 #pragma once
 
-#include "InMidiRules.h"
+#include "midiinrules/InMidiRules.h"
 
 #include <cstdint>
 

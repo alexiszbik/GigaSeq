@@ -30,9 +30,9 @@ add_executable(GigaSeq
     src/engine/SequenceTrack.cpp
     src/engine/ActiveNotePool.cpp
     src/engine/OutMidiRules.cpp
-    src/engine/InMidiRules.cpp
-    src/engine/ChordInMidiRules.cpp
-    src/engine/TransposeInMidiRules.cpp
+    src/engine/midiinrules/InMidiRules.cpp
+    src/engine/midiinrules/ChordInMidiRules.cpp
+    src/engine/midiinrules/TransposeInMidiRules.cpp
     src/factories/SequenceBuilder.cpp
     src/factories/SequenceTrackFactory.cpp
     src/factories/TrackPatternBuilder.cpp

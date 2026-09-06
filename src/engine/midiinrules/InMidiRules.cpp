@@ -1,4 +1,4 @@
-#include "InMidiRules.h"
+#include "midiinrules/InMidiRules.h"
 
 uint8_t transposeMidiNote(uint8_t note, int8_t semitones) noexcept
 {

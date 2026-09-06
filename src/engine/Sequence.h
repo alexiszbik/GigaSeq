@@ -1,6 +1,6 @@
 #pragma once
 
-#include "InMidiRules.h"
+#include "midiinrules/InMidiRules.h"
 #include "MidiInOut.h"
 #include "OutMidiRules.h"
 #include "SequenceTrack.h"

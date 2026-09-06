@@ -4,6 +4,7 @@
 #include "factories/SequenceTrackFactory.h"
 #include "factories/closer/CloserTrackFactory.h"
 #include "factories/falling/FallingTrackFactory.h"
+#include "midiinrules/TransposeInMidiRules.h"
 #include "MidiConst.h"
 
 namespace {
@@ -35,6 +36,7 @@ Sequence CloserSequenceFactory::closerIntro()
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kCloser_lasers),
             track(CloserTrackFactory::closerLedStab).withCC(LedStrips::kDecay_cc, stabLedDecay)
         });
+    addInMidiRules(seq, &kTransposeInMidiRules, -12);
     return seq;
 }
 
@@ -51,6 +53,7 @@ Sequence CloserSequenceFactory::closerChords()
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kCloser_plasma),
             track(SequenceTrackFactory::ledStrips).withNotes({LedStrips::kBlue_ALL, LedStrips::kGreen_ALL}, 127, 0, TICK(8))
         });
+    addInMidiRules(seq, &kTransposeInMidiRules, -12);
     return seq;
 }
 
@@ -68,6 +71,7 @@ Sequence CloserSequenceFactory::closerBass()
             track(CloserTrackFactory::closerTop).muted(),
             track(CloserTrackFactory::closerRiser).muted().asFill(),
         });
+    addInMidiRules(seq, &kTransposeInMidiRules, -12);
     return seq;
 }
 
@@ -85,6 +89,7 @@ Sequence CloserSequenceFactory::closerBlast()
             CloserTrackFactory::closerBlastSnare,
             CloserTrackFactory::closerBlastLed,
         });
+    addInMidiRules(seq, &kTransposeInMidiRules, -12);
     return seq;
 }
 
@@ -106,6 +111,7 @@ Sequence CloserSequenceFactory::closerBackKick()
             SequenceTrackFactory::matrixKill,
             track(CloserTrackFactory::closerLedStab).withCC(LedStrips::kDecay_cc, stabLedDecay)
         });
+    addInMidiRules(seq, &kTransposeInMidiRules, -12);
     return seq;
 }
 
@@ -129,6 +135,7 @@ Sequence CloserSequenceFactory::closerClimax()
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kCloser_smileys),
             track(CloserTrackFactory::closerLedStab).withCC(LedStrips::kDecay_cc, stabLedDecay)
         });
+    addInMidiRules(seq, &kTransposeInMidiRules, -12);
     return seq;
 }
 
@@ -143,6 +150,7 @@ Sequence CloserSequenceFactory::closerEnd()
             SequenceTrackFactory::matrixKill,
             track(CloserTrackFactory::closerLedStab)
         });
+    addInMidiRules(seq, &kTransposeInMidiRules, -12);
     return seq;
 }
 

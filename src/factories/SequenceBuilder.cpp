@@ -1,6 +1,6 @@
 #include "SequenceBuilder.h"
 
-#include "InMidiRules.h"
+#include "midiinrules/InMidiRules.h"
 #include "OutMidiRules.h"
 
 Sequence buildSequence(

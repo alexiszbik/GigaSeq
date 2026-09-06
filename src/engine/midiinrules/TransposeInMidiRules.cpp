@@ -1,4 +1,4 @@
-#include "TransposeInMidiRules.h"
+#include "midiinrules/TransposeInMidiRules.h"
 
 TransposeInMidiRules kTransposeInMidiRules;
 

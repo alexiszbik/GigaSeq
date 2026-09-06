@@ -4,6 +4,7 @@
 #include "factories/SequenceTrackFactory.h"
 #include "factories/falling/FallingTrackFactory.h"
 #include "factories/water/WaterTrackFactory.h"
+#include "midiinrules/TransposeInMidiRules.h"
 #include "MidiConst.h"
 #include "TickHelper.h"
 
@@ -177,5 +178,6 @@ Sequence FallingSequenceFactory::fallingEnd()
                 .withCC(MidiLoop::kRecord_cc, ON)
                 .withCC(MidiLoop::kBarCount_cc, 4),
         });
+    addInMidiRules(seq, &kTransposeInMidiRules, -12);
     return seq;
 }

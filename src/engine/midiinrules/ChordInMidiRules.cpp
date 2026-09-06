@@ -1,4 +1,4 @@
-#include "ChordInMidiRules.h"
+#include "midiinrules/ChordInMidiRules.h"
 
 ChordInMidiRules::ChordInMidiRules(const int8_t* intervals, uint8_t intervalCount)
 {

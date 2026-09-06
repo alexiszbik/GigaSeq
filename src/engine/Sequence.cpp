@@ -1,6 +1,6 @@
 #include "Sequence.h"
 
-#include "InMidiRules.h"
+#include "midiinrules/InMidiRules.h"
 #include "OutMidiRules.h"
 
 #include <stdexcept>
