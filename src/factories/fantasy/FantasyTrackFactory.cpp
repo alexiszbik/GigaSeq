@@ -215,21 +215,29 @@ SequenceTrack FantasyTrackFactory::fantasyLedChorus1(tick_t lengthInTicks, tick_
 SequenceTrack FantasyTrackFactory::fantasyLedChorus2(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("LedChorus1", MidiChannel::kLedStrips);
 
-    uint8_t note = LedStrips::kRainbow_note;
+    uint8_t note = LedStrips::kBlue_ALL;
 
     SequenceDesc desc;
     desc.notes = {
+        {}, {note}, {}, {}, {}, {}, {}, {note},
+        {}, {}, {}, {}, {}, {}, {}, {note},
+        {}, {}, {}, {}, {}, {}, {}, {note},
+        {}, {}, {}, {}, {}, {}, {}, {},
+
+        {note}, {}, {}, {}, {}, {}, {}, {note},
+        {}, {}, {}, {}, {}, {}, {}, {note},
+        {}, {}, {}, {}, {}, {}, {}, {note},
+        {}, {}, {}, {}, {}, {}, {}, {},
+
         {note}, {}, {}, {}, {}, {}, {}, {note},
         {}, {}, {}, {}, {}, {}, {}, {note},
         {}, {}, {}, {}, {}, {}, {}, {note},
         {}, {}, {}, {}, {}, {}, {}, {},
     };
 
-    desc.durations = {4, 6, 6, 7};
+    desc.durations = {3, 6, 6, 7, 4, 6, 6, 7, 4, 6, 6, 7};
     desc.rate = 8;
     makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
-
-    track.addControlChange({startInTicks,LedStrips::kDecay_cc, 50});
 
     return track;
 }

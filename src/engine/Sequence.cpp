@@ -1,5 +1,7 @@
 #include "Sequence.h"
 
+#include "OutMidiRules.h"
+
 #include <stdexcept>
 #include <utility>
 
@@ -47,8 +49,17 @@ void Sequence::addTrack(SequenceTrack track)
         track.attachMidi(*midi_);
     }
 
+    track.setOutMidiRules(outMidiRules_);
     tracks_.push_back(std::move(track));
     applyTrackMuteCallbacks();
+}
+
+void Sequence::setOutMidiRules(OutMidiRules* rules)
+{
+    outMidiRules_ = rules;
+    for (SequenceTrack& track : tracks_) {
+        track.setOutMidiRules(outMidiRules_);
+    }
 }
 
 void Sequence::setOnTrackMuteChanged(MuteChangedCallback callback)
@@ -155,8 +166,19 @@ void Sequence::processTick(bool wrapAtEnd)
         }
     });
 
+    if (loopWrap && outMidiRules_ != nullptr) {
+        if (midi_ != nullptr) {
+            outMidiRules_->releaseActiveNotes(*midi_);
+        }
+        outMidiRules_->reset();
+    }
+
     for (SequenceTrack& track : tracks_) {
         track.processTick(position_, loopWrap);
+    }
+
+    if (midi_ != nullptr && outMidiRules_ != nullptr) {
+        outMidiRules_->processTick(*midi_);
     }
 
     ++position_;
@@ -172,5 +194,9 @@ void Sequence::allNotesOff()
 {
     for (SequenceTrack& track : tracks_) {
         track.releaseActiveNotes();
+    }
+
+    if (midi_ != nullptr && outMidiRules_ != nullptr) {
+        outMidiRules_->releaseActiveNotes(*midi_);
     }
 }

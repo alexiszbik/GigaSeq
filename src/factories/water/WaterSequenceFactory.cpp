@@ -3,6 +3,7 @@
 #include "factories/SequenceBuilder.h"
 #include "factories/SequenceTrackFactory.h"
 #include "factories/water/WaterTrackFactory.h"
+#include "factories/water/WaterFmbassLedRules.h"
 #include "MidiConst.h"
 #include "TickHelper.h"
 #include "WaterSamples.h"
@@ -54,7 +55,6 @@ Sequence WaterSequenceFactory::waterIntroBass()
             track(WaterTrackFactory::waterCongas).muted(),
             track(WaterTrackFactory::waterFmbass).muted(),
             track(WaterTrackFactory::waterMatrix).muted(),
-            track(WaterTrackFactory::waterLedPattern).muted(),
             track(WaterTrackFactory::waterCyanBlink).withCC(LedStrips::kDecay_cc, decayCyan)
         });
 
@@ -76,9 +76,9 @@ Sequence WaterSequenceFactory::waterPrechorus()
             WaterTrackFactory::waterCongas,
             track(WaterTrackFactory::waterFmbass).withLength(TickHelper::bars(7)),
             track(WaterTrackFactory::waterMatrix).withLength(TickHelper::bars(7)),
-            track(WaterTrackFactory::waterLedPattern).withLength(TickHelper::bars(7)),
             track(WaterTrackFactory::waterCyanBlink).withCC(LedStrips::kDecay_cc, decayCyan)
-        });
+        },
+        &kWaterFmbassLedRules);
 }
 
 Sequence WaterSequenceFactory::waterChorus()
@@ -131,9 +131,9 @@ Sequence WaterSequenceFactory::waterPartB()
             track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, OFF).withCC(ModularA::kGlobalMute_cc, ON, len1),
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kWater_oscBlue),
             track(WaterTrackFactory::waterMatrix).withLength(TickHelper::bars(31)),
-            track(WaterTrackFactory::waterLedPattern).withLength(TickHelper::bars(31)),
             track(WaterTrackFactory::waterCyanBlink).withCC(LedStrips::kDecay_cc, decayCyan).withLength(TickHelper::bars(31)),
-        });
+        },
+        &kWaterFmbassLedRules);
 }
 
 
@@ -183,10 +183,11 @@ Sequence WaterSequenceFactory::waterPartC()
                 .withNote(Water::wtrCym808),
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kWater_oscBlueWhite),
             WaterTrackFactory::waterMatrix,
-            WaterTrackFactory::waterLedPattern,
             track(WaterTrackFactory::waterCyanBlink).withCC(LedStrips::kDecay_cc, decayCyan)
                 
-        });
+        },
+        &kWaterFmbassLedRules);
+
     return seq;
 }
 
@@ -215,9 +216,9 @@ Sequence WaterSequenceFactory::waterPartCEnd()
             track(SequenceTrackFactory::drumMachine)
                 .withCC(DrumMachine::kClearAll_cc, ON, len),
             track(WaterTrackFactory::waterMatrix).withLength(len),
-            track(WaterTrackFactory::waterLedPattern).withLength(len),
             track(WaterTrackFactory::waterCyanBlink).withCC(LedStrips::kDecay_cc, decayCyan).withLength(len)
-        });
+        },
+        &kWaterFmbassLedRules);
 }
 
 

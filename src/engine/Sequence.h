@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MidiInOut.h"
+#include "OutMidiRules.h"
 #include "SequenceTrack.h"
 #include "TempoEvent.h"
 #include "Tick.h"
@@ -58,6 +59,8 @@ public:
 
     void addTempoEvent(tick_t tick, uint8_t bpm);
 
+    void setOutMidiRules(OutMidiRules* rules);
+
     void reset();
     void processTick(bool wrapAtEnd = true);
     void allNotesOff();
@@ -82,4 +85,5 @@ private:
     bool loopStartAfterWrap_ = false;
     TimedEventList<TempoEvent> tempoEvents_;
     std::vector<SequenceTrack> tracks_;
+    OutMidiRules* outMidiRules_ = nullptr;
 };

@@ -7,7 +7,8 @@ Sequence buildSequence(
     const char* name,
     uint8_t tempo,
     bool isLooping,
-    std::vector<TrackSpec> tracks)
+    std::vector<TrackSpec> tracks,
+    OutMidiRules* outMidiRules)
 {
     Sequence sequence(name, tempo, barCount, beatsPerBar, barLoop, isLooping);
     const tick_t length = sequence.lengthInTicks();
@@ -57,6 +58,8 @@ Sequence buildSequence(
             t.setPitchOffset(spec.pitchOffset());
         }
     }
+
+    sequence.setOutMidiRules(outMidiRules);
 
     return sequence;
 }

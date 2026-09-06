@@ -27,6 +27,8 @@ add_executable(GigaSeq
     src/engine/Song.cpp
     src/engine/SequencePool.cpp
     src/engine/SequenceTrack.cpp
+    src/engine/ActiveNotePool.cpp
+    src/engine/OutMidiRules.cpp
     src/factories/SequenceBuilder.cpp
     src/factories/SequenceTrackFactory.cpp
     src/factories/TrackPatternBuilder.cpp
@@ -40,6 +42,7 @@ add_executable(GigaSeq
     src/factories/water/WaterSequenceFactory.cpp
     src/factories/water/WaterSong.cpp
     src/factories/water/WaterTrackFactory.cpp
+    src/factories/water/WaterFmbassLedRules.cpp
 
     src/factories/falling/FallingSequenceFactory.cpp
     src/factories/falling/FallingSong.cpp

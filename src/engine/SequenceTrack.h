@@ -1,10 +1,12 @@
 #pragma once
 
+#include "ActiveNotePool.h"
 #include "ControlAutomation.h"
 #include "ControlChange.h"
 #include "MidiInOut.h"
-#include "Note.h"
 #include "MuteEvent.h"
+#include "Note.h"
+#include "OutMidiRules.h"
 #include "ProgramChange.h"
 #include "TimedEventList.h"
 #include "Tick.h"
@@ -60,6 +62,8 @@ public:
     void setPitchOffset(int offset) noexcept { pitchOffset_ = offset; }
     int pitchOffset() const noexcept { return pitchOffset_; }
 
+    void setOutMidiRules(OutMidiRules* rules) noexcept { outMidiRules_ = rules; }
+
     void removeNotes(
         tick_t tick,
         tick_t durationTicks,
@@ -70,17 +74,12 @@ public:
     void releaseActiveNotes();
 
 private:
-    struct ActiveNote
-    {
-        uint8_t note = 0;
-        tick_t remainingTicks = 0;
-    };
-
     void startNote(const ScheduledNote& scheduledNote);
     void processPatternTick(tick_t position);
     void processControlAutomations(tick_t position, bool loopWrap);
-    void tickActiveNotes();
     void notifyMuteChanged();
+
+    ActiveNotePool activeNotes_;
 
     const char* name_ = "";
     uint8_t channel_ = 0;
@@ -91,13 +90,8 @@ private:
     bool isFill_ = false;
 
     MidiInOut* midi_ = nullptr;
+    OutMidiRules* outMidiRules_ = nullptr;
     MuteChangedCallback onMuteChanged_ = nullptr;
-
-    // Fixed-capacity active note pool: no heap allocation, so it is safe to
-    // mutate from the clock ISR (startNote/tickActiveNotes run in ISR).
-    static constexpr uint8_t kMaxActiveNotes = 32;
-    ActiveNote activeNotes_[kMaxActiveNotes];
-    uint8_t activeNoteCount_ = 0;
 
     const TrackPattern* pattern_ = nullptr;
     tick_t patternStart_ = 0;

@@ -102,7 +102,7 @@ void SequenceTrack::reset()
     programChanges_.reset();
     muteEvents_.reset();
     std::fill(automationLastSent_.begin(), automationLastSent_.end(), kAutomationNotSent);
-    activeNoteCount_ = 0;
+    activeNotes_.reset();
 
     const bool wasMuted = muted_;
     muted_ = startMuted_;
@@ -155,38 +155,36 @@ void SequenceTrack::setMuted(bool muted)
 
 void SequenceTrack::startNote(const ScheduledNote& scheduledNote)
 {
+    if (midi_ == nullptr) {
+        return;
+    }
+
     const uint8_t pitch = static_cast<uint8_t>(
         pitchOffset_ + static_cast<int>(scheduledNote.note.note));
-    midi_->sendNoteOn(channel_, pitch, scheduledNote.note.velocity);
-    if (activeNoteCount_ < kMaxActiveNotes) {
-        activeNotes_[activeNoteCount_++] = { pitch, scheduledNote.durationTicks };
-    }
-    // Pool full: drop the note-on silently rather than allocating in ISR.
-}
 
-void SequenceTrack::tickActiveNotes()
-{
-    uint8_t write = 0;
-    for (uint8_t read = 0; read < activeNoteCount_; ++read)
-    {
-        --activeNotes_[read].remainingTicks;
+    activeNotes_.startNote(
+        channel_,
+        pitch,
+        scheduledNote.note.velocity,
+        scheduledNote.durationTicks,
+        *midi_);
 
-        if (activeNotes_[read].remainingTicks == 0) {
-            midi_->sendNoteOff(channel_, activeNotes_[read].note, 0);
-        } else {
-            activeNotes_[write++] = activeNotes_[read];
-        }
+    if (outMidiRules_ != nullptr) {
+        outMidiRules_->processNoteOn(
+            { pitch, scheduledNote.note.velocity },
+            channel_,
+            scheduledNote.durationTicks,
+            *midi_);
     }
-    activeNoteCount_ = write;
 }
 
 void SequenceTrack::releaseActiveNotes()
 {
-    for (uint8_t i = 0; i < activeNoteCount_; ++i) {
-        midi_->sendNoteOff(channel_, activeNotes_[i].note, 0);
+    if (midi_ != nullptr) {
+        activeNotes_.releaseAll(*midi_);
+    } else {
+        activeNotes_.reset();
     }
-
-    activeNoteCount_ = 0;
 }
 
 void SequenceTrack::processPatternTick(tick_t position)
@@ -309,5 +307,7 @@ void SequenceTrack::processTick(tick_t position, bool loopWrap)
 
     processPatternTick(position);
 
-    tickActiveNotes();
+    if (midi_ != nullptr) {
+        activeNotes_.processTick(*midi_);
+    }
 }
