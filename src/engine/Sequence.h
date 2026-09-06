@@ -1,5 +1,6 @@
 #pragma once
 
+#include "InMidiRules.h"
 #include "MidiInOut.h"
 #include "OutMidiRules.h"
 #include "SequenceTrack.h"
@@ -60,6 +61,13 @@ public:
     void addTempoEvent(tick_t tick, uint8_t bpm);
 
     void setOutMidiRules(OutMidiRules* rules);
+    void setInMidiRules(InMidiRules* rules, int8_t transposeSemitones = 0);
+
+    InMidiRules* inMidiRules() noexcept { return inMidiRules_; }
+    const InMidiRules* inMidiRules() const noexcept { return inMidiRules_; }
+    const InMidiRulesConfig& inMidiRulesConfig() const noexcept { return inMidiRulesConfig_; }
+
+    void releaseInMidiHeldNotes();
 
     void reset();
     void processTick(bool wrapAtEnd = true);
@@ -86,4 +94,6 @@ private:
     TimedEventList<TempoEvent> tempoEvents_;
     std::vector<SequenceTrack> tracks_;
     OutMidiRules* outMidiRules_ = nullptr;
+    InMidiRules* inMidiRules_ = nullptr;
+    InMidiRulesConfig inMidiRulesConfig_ = {};
 };

@@ -1,5 +1,6 @@
 #include "Sequence.h"
 
+#include "InMidiRules.h"
 #include "OutMidiRules.h"
 
 #include <stdexcept>
@@ -59,6 +60,20 @@ void Sequence::setOutMidiRules(OutMidiRules* rules)
     outMidiRules_ = rules;
     for (SequenceTrack& track : tracks_) {
         track.setOutMidiRules(outMidiRules_);
+    }
+}
+
+void Sequence::setInMidiRules(InMidiRules* rules, int8_t transposeSemitones)
+{
+    inMidiRules_ = rules;
+    inMidiRulesConfig_.transposeSemitones = transposeSemitones;
+}
+
+void Sequence::releaseInMidiHeldNotes()
+{
+    if (midi_ != nullptr && inMidiRules_ != nullptr) {
+        inMidiRules_->releaseHeldNotes(*midi_);
+        inMidiRules_->reset();
     }
 }
 
@@ -199,4 +214,6 @@ void Sequence::allNotesOff()
     if (midi_ != nullptr && outMidiRules_ != nullptr) {
         outMidiRules_->releaseActiveNotes(*midi_);
     }
+
+    releaseInMidiHeldNotes();
 }

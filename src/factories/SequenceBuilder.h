@@ -17,6 +17,8 @@ Sequence buildSequence(
 
 void addOutMidiRules(Sequence& sequence, OutMidiRules* rules);
 
+void addInMidiRules(Sequence& sequence, InMidiRules* rules, int8_t transposeSemitones = 0);
+
 void addProgramChangeTrack(
     Sequence& sequence,
     const char* name,

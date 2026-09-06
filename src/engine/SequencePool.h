@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Logger.h"
+#include "MidiInputHandler.h"
 #include "MidiInOut.h"
 #include "Sequence.h"
 #include "Song.h"
@@ -21,10 +22,13 @@ using SequenceChangedCallback = void (*)();
 using PendingChangedCallback = void (*)(PendingSwitch);
 using PlaybackStopCallback = void (*)();
 
-class SequencePool
+class SequencePool : public MidiInputHandler
 {
 public:
     SequencePool(MidiInOut& midi, Logger& logger);
+
+    void handleNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) override;
+    void handleNoteOff(uint8_t channel, uint8_t note, uint8_t velocity) override;
 
     void add(Song song);
 
@@ -72,6 +76,7 @@ private:
     void wireTrackMuteCallbacks();
     void wireTempoCallbacks();
     void setPending(PendingSwitch sw);
+    void releaseCurrentInMidiHeldNotes();
 
     MidiInOut& midi_;
     Logger& logger_;

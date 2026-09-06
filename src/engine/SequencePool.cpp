@@ -228,6 +228,45 @@ void SequencePool::processTick()
     }
 }
 
+void SequencePool::releaseCurrentInMidiHeldNotes()
+{
+    if (!songs_.empty()) {
+        current().releaseInMidiHeldNotes();
+    }
+}
+
+void SequencePool::handleNoteOn(uint8_t channel, uint8_t note, uint8_t velocity)
+{
+    if (songs_.empty()) {
+        midi_.sendNoteOn(channel, note, velocity);
+        return;
+    }
+
+    Sequence& sequence = current();
+    InMidiRules* rules = sequence.inMidiRules();
+    if (rules != nullptr) {
+        rules->processNoteOn(channel, note, velocity, sequence.inMidiRulesConfig(), midi_);
+    } else {
+        midi_.sendNoteOn(channel, note, velocity);
+    }
+}
+
+void SequencePool::handleNoteOff(uint8_t channel, uint8_t note, uint8_t velocity)
+{
+    if (songs_.empty()) {
+        midi_.sendNoteOff(channel, note, velocity);
+        return;
+    }
+
+    Sequence& sequence = current();
+    InMidiRules* rules = sequence.inMidiRules();
+    if (rules != nullptr) {
+        rules->processNoteOff(channel, note, velocity, sequence.inMidiRulesConfig(), midi_);
+    } else {
+        midi_.sendNoteOff(channel, note, velocity);
+    }
+}
+
 void SequencePool::allNotesOff()
 {
     for (Song& song : songs_) {
@@ -330,6 +369,7 @@ void SequencePool::advanceToNext()
         return;
     }
 
+    releaseCurrentInMidiHeldNotes();
     current().allNotesOff();
 
     setPending(PendingSwitch::None);
@@ -358,6 +398,7 @@ void SequencePool::advanceToPrevious()
         return;
     }
 
+    releaseCurrentInMidiHeldNotes();
     current().allNotesOff();
 
     setPending(PendingSwitch::None);
@@ -382,6 +423,7 @@ void SequencePool::advanceToSong(std::size_t songIndex)
         return;
     }
 
+    releaseCurrentInMidiHeldNotes();
     current().allNotesOff();
 
     setPending(PendingSwitch::None);

@@ -5,17 +5,32 @@ MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, MIDI);
 namespace GigaSeq {
 
 GigaMidiInOut* GigaMidiInOut::instance_ = nullptr;
+MidiInputHandler* GigaMidiInOut::inputHandler_ = nullptr;
 
 void GigaMidiInOut::onNoteOn(byte channel, byte note, byte velocity) {
-    if (instance_ != nullptr) {
-        instance_->sendNoteOn(note, velocity, channel - 1);
+    if (instance_ == nullptr) {
+        return;
     }
+
+    if (inputHandler_ != nullptr) {
+        inputHandler_->handleNoteOn(channel - 1, note, velocity);
+        return;
+    }
+
+    instance_->sendNoteOn(note, velocity, channel - 1);
 }
 
 void GigaMidiInOut::onNoteOff(byte channel, byte note, byte velocity) {
-    if (instance_ != nullptr) {
-        instance_->sendNoteOff(note, velocity, channel - 1);
+    if (instance_ == nullptr) {
+        return;
     }
+
+    if (inputHandler_ != nullptr) {
+        inputHandler_->handleNoteOff(channel - 1, note, velocity);
+        return;
+    }
+
+    instance_->sendNoteOff(note, velocity, channel - 1);
 }
 
 void GigaMidiInOut::onControlChange(byte channel, byte control, byte value) {

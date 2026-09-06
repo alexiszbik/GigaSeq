@@ -1,5 +1,6 @@
 #include "SequenceBuilder.h"
 
+#include "InMidiRules.h"
 #include "OutMidiRules.h"
 
 Sequence buildSequence(
@@ -66,6 +67,11 @@ Sequence buildSequence(
 void addOutMidiRules(Sequence& sequence, OutMidiRules* rules)
 {
     sequence.setOutMidiRules(rules);
+}
+
+void addInMidiRules(Sequence& sequence, InMidiRules* rules, int8_t transposeSemitones)
+{
+    sequence.setInMidiRules(rules, transposeSemitones);
 }
 
 void addProgramChangeTrack(

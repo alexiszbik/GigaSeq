@@ -2,6 +2,7 @@
 
 #include "MidiChannel.h"
 #include "MidiConst.h"
+#include "RandomHelper.h"
 #include "WaterSamples.h"
 
 namespace {
@@ -22,14 +23,6 @@ bool isFmbassNote(uint8_t note)
         || note == Water::fmbassad;
 }
 
-uint8_t nextRandomIndex(uint8_t& state)
-{
-    state ^= static_cast<uint8_t>(state << 7);
-    state ^= static_cast<uint8_t>(state >> 5);
-    state ^= static_cast<uint8_t>(state << 3);
-    return state % kWhiteLedCount;
-}
-
 } // namespace
 
 WaterFmbassLedRules kWaterFmbassLedRules;
@@ -41,7 +34,7 @@ void WaterFmbassLedRules::processNoteOn(
     MidiInOut& midi)
 {
     if (channel == MidiChannel::kSampler && isFmbassNote(note.note)) {
-        const uint8_t ledNote = kWhiteLeds[nextRandomIndex(rngState_)];
+        const uint8_t ledNote = kWhiteLeds[RandomHelper::nextRandomIndex(rngState_, kWhiteLedCount)];
         addNote(MidiChannel::kLedStrips, ledNote, note.velocity, durationTicks, midi);
     } else if (channel == MidiChannel::kMicrofreak) {
         addNote(MidiChannel::kLedStrips, LedStrips::kBlue_D, note.velocity, durationTicks, midi);

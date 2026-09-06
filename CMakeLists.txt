@@ -23,12 +23,16 @@ add_executable(GigaSeq
     src/desktop/TransportPosition.cpp
     src/desktop/VirtualMidiSender.cpp
     src/engine/StringHelper.cpp
+    src/engine/RandomHelper.cpp
     src/engine/Sequence.cpp
     src/engine/Song.cpp
     src/engine/SequencePool.cpp
     src/engine/SequenceTrack.cpp
     src/engine/ActiveNotePool.cpp
     src/engine/OutMidiRules.cpp
+    src/engine/InMidiRules.cpp
+    src/engine/ChordInMidiRules.cpp
+    src/engine/TransposeInMidiRules.cpp
     src/factories/SequenceBuilder.cpp
     src/factories/SequenceTrackFactory.cpp
     src/factories/TrackPatternBuilder.cpp
@@ -43,6 +47,7 @@ add_executable(GigaSeq
     src/factories/water/WaterSong.cpp
     src/factories/water/WaterTrackFactory.cpp
     src/factories/water/WaterFmbassLedRules.cpp
+    src/factories/water/WaterInMidiRules.cpp
 
     src/factories/falling/FallingSequenceFactory.cpp
     src/factories/falling/FallingSong.cpp

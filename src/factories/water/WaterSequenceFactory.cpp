@@ -4,6 +4,7 @@
 #include "factories/SequenceTrackFactory.h"
 #include "factories/water/WaterTrackFactory.h"
 #include "factories/water/WaterFmbassLedRules.h"
+#include "factories/water/WaterInMidiRules.h"
 #include "MidiConst.h"
 #include "TickHelper.h"
 #include "WaterSamples.h"
@@ -37,6 +38,8 @@ Sequence WaterSequenceFactory::waterIntro()
             track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, ON)
         });
 
+    addOutMidiRules(seq, &kWaterFmbassLedRules);
+    addInMidiRules(seq, &kWaterChordInRules);
     return seq;
 }
 
@@ -57,7 +60,9 @@ Sequence WaterSequenceFactory::waterIntroBass()
             track(WaterTrackFactory::waterMatrix).muted(),
             track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, decayCyan)
         });
+
     addOutMidiRules(seq, &kWaterFmbassLedRules);
+    addInMidiRules(seq, &kWaterChordInRules);
 
     return seq;
 }
@@ -80,6 +85,9 @@ Sequence WaterSequenceFactory::waterPrechorus()
             track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, decayCyan)
         });
     
+    addOutMidiRules(seq, &kWaterFmbassLedRules);
+    addInMidiRules(seq, &kWaterChordInRules);
+
     return seq;
 }
 
@@ -135,7 +143,9 @@ Sequence WaterSequenceFactory::waterPartB()
             track(WaterTrackFactory::waterMatrix).withLength(TickHelper::bars(31)),
             track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, decayCyan)
         });
+    
     addOutMidiRules(seq, &kWaterFmbassLedRules);
+
     return seq;
 }
 
@@ -191,9 +201,9 @@ Sequence WaterSequenceFactory::waterPartC()
         });
 
     addOutMidiRules(seq, &kWaterFmbassLedRules);
+
     return seq;
 }
-
 
 Sequence WaterSequenceFactory::waterPartCEnd()
 {
@@ -222,9 +232,9 @@ Sequence WaterSequenceFactory::waterPartCEnd()
             track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, decayCyan).withLength(len)
         });
     addOutMidiRules(seq, &kWaterFmbassLedRules);
+
     return seq;
 }
-
 
 Sequence WaterSequenceFactory::waterChorusEnd()
 {

@@ -205,6 +205,7 @@ void setup() {
     }
 
     gigaMidi.begin();
+    gigaMidi.setInputHandler(&sequencePool);
     transportClock.begin(sequencePool.current().getTempo());
     transportClock.setOnTick(onClockTick);
     sequencePool.setOnSequenceChanged(onSequenceChanged);
