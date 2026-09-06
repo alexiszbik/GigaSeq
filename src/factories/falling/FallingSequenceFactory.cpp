@@ -4,6 +4,7 @@
 #include "factories/SequenceTrackFactory.h"
 #include "factories/falling/FallingTrackFactory.h"
 #include "factories/falling/FallingDrumLedRules.h"
+#include "factories/falling/FallingSamples.h"
 #include "factories/water/WaterTrackFactory.h"
 #include "midiinrules/TransposeInMidiRules.h"
 #include "MidiConst.h"

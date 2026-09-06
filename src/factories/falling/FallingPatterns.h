@@ -2,43 +2,31 @@
 
 #include "TrackPattern.h"
 #include "factories/MidiNotes.h"
+#include "factories/falling/FallingSamples.h"
 #include "MidiConst.h"
 
 namespace FallingPatterns
 {
-constexpr uint8_t hatC = 40;
-constexpr uint8_t hatO = 42;
-
-constexpr uint8_t pads = 66;
-constexpr uint8_t kick = 36;
-
-constexpr uint8_t handTamb = 54;
-
-//constexpr uint8_t riz = 52;
-//constexpr uint8_t bigClap = 39;
-
-constexpr uint8_t tamb = 43;
-constexpr uint8_t ride = 51;
 
 constexpr PatternStep kFallingHatsSteps[] = {
     _NO_STEP,
-    {{hatC}, 127, 1},
-    {{hatC, hatO}, 127, 1},
-    {{hatC}, 127, 1},
+    {{Falling::faHhc}, 127, 1},
+    {{Falling::faHhc, Falling::faHho}, 127, 1},
+    {{Falling::faHhc}, 127, 1},
 
-    {{hatC}, 90, 1},
+    {{Falling::faHhc}, 90, 1},
     _NO_STEP,
-    {{hatO}, 127, 1},
+    {{Falling::faHho}, 127, 1},
     _NO_STEP,
-
-    _NO_STEP,
-    {{hatC}, 127, 1},
-    {{hatC, hatO}, 127, 1},
-    {{hatC}, 127, 1},
 
     _NO_STEP,
+    {{Falling::faHhc}, 127, 1},
+    {{Falling::faHhc, Falling::faHho}, 127, 1},
+    {{Falling::faHhc}, 127, 1},
+
     _NO_STEP,
-    {{hatO}, 127, 1},
+    _NO_STEP,
+    {{Falling::faHho}, 127, 1},
     _NO_STEP,
 };
 
@@ -46,7 +34,7 @@ MAKE_PATTERN(kFallingHats, kFallingHatsSteps, 16);
 
 
 constexpr PatternStep kFallingPadsSteps[] = {
-    {{pads}, 127, 1},
+    {{Falling::faPads}, 127, 1},
     _NO_STEP,
     _NO_STEP,
     _NO_STEP,
@@ -60,7 +48,7 @@ constexpr PatternStep kFallingPadsSteps[] = {
 MAKE_PATTERN(kFallingPads, kFallingPadsSteps, 1);
 
 
-#define KICK_STEP {{kick}, 127, 1}
+#define KICK_STEP {{Falling::faKick}, 127, 1}
 
 constexpr PatternStep kFallingKickSteps[] = {
     KICK_STEP, _NO_STEP, _NO_STEP, _NO_STEP,
@@ -261,7 +249,7 @@ constexpr PatternStep kFallingHarpSteps[] = {
 
 MAKE_PATTERN(kFallingHarp, kFallingHarpSteps, 16);
 
-#define TAMB_STEP {{tamb}, 127, 1}
+#define TAMB_STEP {{Falling::faMtamb}, 127, 1}
 
 constexpr PatternStep kFallingTambourinSteps[] = {
     _NO_STEP,
@@ -289,7 +277,7 @@ MAKE_PATTERN(kFallingTambourin, kFallingTambourinSteps, 16);
 
 
 constexpr PatternStep kFallingHandTambSteps[] = {
-    {{handTamb}, 127, 1},
+    {{Falling::faTamb}, 127, 1},
 };
 
 MAKE_PATTERN(kFallingHandTamb, kFallingHandTambSteps, 1);

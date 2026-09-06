@@ -1,31 +1,14 @@
 #include "FallingTrackFactory.h"
 
 #include "factories/falling/FallingPatterns.h"
+#include "factories/falling/FallingSamples.h"
 
-#include "factories/DrumPatterns.h"
+#include "factories/falling/FallingSamples.h"
+
 #include "factories/TrackPatternBuilder.h"
 #include "MidiConst.h"
 #include "TickHelper.h"
 #include "factories/MidiNotes.h"
-
-
-namespace
-{
-constexpr uint8_t riz = 52;
-constexpr uint8_t bigClap = 39;
-
-constexpr uint8_t rim = 45;
-constexpr uint8_t tom = 44;
-
-constexpr uint8_t riz2 = 53;
-constexpr uint8_t tomFill = 55;
-
-constexpr uint8_t interlude = 65;
-
-constexpr uint8_t pianoLow = 68;
-constexpr uint8_t pianoHi = 67;
-
-}
 
 SequenceTrack FallingTrackFactory::fallingHats(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Hats", MidiChannel::kDrums);
@@ -48,7 +31,7 @@ SequenceTrack FallingTrackFactory::fallingKick(tick_t lengthInTicks, tick_t star
 SequenceTrack FallingTrackFactory::fallingRiser(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Riser", MidiChannel::kSampler);
 
-    track.addNote(lengthInTicks - 2 * TickHelper::kOneBarTick4_4, TickHelper::kStepLen, riz, 127);
+    track.addNote(lengthInTicks - 2 * TickHelper::kOneBarTick4_4, TickHelper::kStepLen, Falling::faRiz, 127);
 
     return track;
 }
@@ -72,7 +55,7 @@ SequenceTrack FallingTrackFactory::fallingBigClap(tick_t lengthInTicks, tick_t s
         {}, {}, {}, {}, {}, {}, {}, {},
         {}, {}, {}, {}, {}, {}, {}, {},
         {}, {}, {}, {}, {}, {}, {}, {},
-        {}, {}, {}, {}, {}, {}, {bigClap}, {bigClap}
+        {}, {}, {}, {}, {}, {}, {Falling::faClnclp}, {Falling::faClnclp}
     };
     desc.rate = 8;
     makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
@@ -97,30 +80,28 @@ SequenceTrack FallingTrackFactory::fallingTambourin(tick_t lengthInTicks, tick_t
 SequenceTrack FallingTrackFactory::fallingPreInterlude(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("PreInterlude", MidiChannel::kSampler);
 
-    track.addNote(0, TickHelper::kStepLen, pianoLow, 127);
-    track.addNote(TickHelper::bars(3), TickHelper::kStepLen, riz2, 127);
-    track.addNote(TICK(3, 2, 3), TickHelper::kStepLen, tomFill, 127);
+    track.addNote(0, TickHelper::kStepLen, Falling::faPianolow, 127);
+    track.addNote(TickHelper::bars(3), TickHelper::kStepLen, Falling::faRiz2, 127);
+    track.addNote(TICK(3, 2, 3), TickHelper::kStepLen, Falling::faToms, 127);
     return track;
 }
 
 SequenceTrack FallingTrackFactory::fallingInterlude(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Interlude", MidiChannel::kSampler);
-    track.addNote(0, TickHelper::kStepLen, interlude, 127);
+    track.addNote(0, TickHelper::kStepLen, Falling::faIntld, 127);
     return track;
 }
 
 SequenceTrack FallingTrackFactory::fallingSnareFill(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("SnareFill", MidiChannel::kDrums);
 
-    uint8_t snr = 37;
-
     SequenceDesc desc;
     desc.notes = {
-        {snr}, {snr},
-        {snr}, {}, {}, {snr},
-        {}, {}, {snr}, {snr}, 
-        {}, {}, {snr}, {},
-        {snr}, {snr}, {}, {}};
+        {Falling::faSnr}, {Falling::faSnr},
+        {Falling::faSnr}, {}, {}, {Falling::faSnr},
+        {}, {}, {Falling::faSnr}, {Falling::faSnr}, 
+        {}, {}, {Falling::faSnr}, {},
+        {Falling::faSnr}, {Falling::faSnr}, {}, {}};
     desc.rate = 16;
 
     desc.velocities = {
@@ -145,10 +126,8 @@ SequenceTrack FallingTrackFactory::fallingHandTamb(tick_t lengthInTicks, tick_t 
 SequenceTrack FallingTrackFactory::fallingKickFill(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("KickFill", MidiChannel::kDrums);
 
-    uint8_t kick = 36;
-
     SequenceDesc desc;
-    desc.notes = {{kick}, {}};
+    desc.notes = {{Falling::faKick}, {}};
     desc.rate = 16;
 
     tick_t fillLen = desc.notes.size() * TickHelper::kStepLen;
@@ -162,16 +141,16 @@ SequenceTrack FallingTrackFactory::fallingPiano(tick_t lengthInTicks, tick_t sta
 
     SequenceDesc desc;
     desc.notes = {
-        {pianoLow}, {}, 
+        {Falling::faPianolow}, {}, 
         {}, {},
         {}, {},
-        {}, {pianoHi},
+        {}, {Falling::faPianohi},
     
         {}, {}, {}, {}, {}, {}, {}, {},
         {}, {}, {}, {}, {}, {}, {}, {},
         {}, {}, {}, {}, {}, {}, {}, {},
     
-        {pianoLow}, {}, 
+        {Falling::faPianolow}, {}, 
         {}, {},
         {}, {},
         {}, {},
@@ -193,23 +172,23 @@ SequenceTrack FallingTrackFactory::fallingRimTom(tick_t lengthInTicks, tick_t st
     desc.notes = {
         {}, {}, {}, {},
         {}, {}, {}, {},
-        {}, {}, {}, {rim},
-        {}, {}, {rim}, {},
+        {}, {}, {}, {Falling::faRimverb},
+        {}, {}, {Falling::faRimverb}, {},
 
         {}, {}, {}, {},
         {}, {}, {}, {},
-        {}, {}, {}, {rim},
-        {}, {}, {rim}, {},
+        {}, {}, {}, {Falling::faRimverb},
+        {}, {}, {Falling::faRimverb}, {},
 
         {}, {}, {}, {},
         {}, {}, {}, {},
-        {}, {}, {}, {rim},
-        {}, {}, {rim}, {},
+        {}, {}, {}, {Falling::faRimverb},
+        {}, {}, {Falling::faRimverb}, {},
 
         {}, {}, {}, {},
-        {}, {}, {rim}, {rim},
-        {}, {rim}, {rim}, {rim, tom},
-        {}, {}, {rim, tom}, {}
+        {}, {}, {Falling::faRimverb}, {Falling::faRimverb},
+        {}, {Falling::faRimverb}, {Falling::faRimverb}, {Falling::faRimverb, Falling::tom2},
+        {}, {}, {Falling::faRimverb, Falling::tom2}, {}
     };
     desc.rate = 16;
     makeSequenceTrack(track, desc, lengthInTicks, startInTicks);

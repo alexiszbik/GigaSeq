@@ -1,6 +1,6 @@
 #include "FallingDrumLedRules.h"
 
-#include "factories/DrumPatterns.h"
+#include "factories/falling/FallingSamples.h"
 #include "MidiChannel.h"
 #include "MidiConst.h"
 
@@ -14,14 +14,14 @@ constexpr uint8_t kSnareLeds[] = {
 
 bool isKickNote(uint8_t channel, uint8_t note)
 {
-    return note == DrumPatterns::kick
-        && channel == MidiChannel::kDrums;
+    return note == Falling::faKick
+        && (channel == MidiChannel::kDrums || channel == MidiChannel::kSampler);
 }
 
 bool isSnareNote(uint8_t channel, uint8_t note)
 {
     return channel == MidiChannel::kDrums
-        && (note == DrumPatterns::snare);
+        && (note == Falling::faSnr || note == Falling::faClap);
 }
 
 } // namespace
