@@ -3,6 +3,7 @@
 #include "factories/SequenceBuilder.h"
 #include "factories/SequenceTrackFactory.h"
 #include "factories/falling/FallingTrackFactory.h"
+#include "factories/falling/FallingDrumLedRules.h"
 #include "factories/water/WaterTrackFactory.h"
 #include "midiinrules/TransposeInMidiRules.h"
 #include "MidiConst.h"
@@ -76,10 +77,10 @@ Sequence FallingSequenceFactory::fallingBassSeq()
             track(SequenceTrackFactory::matrix)
                 .withProgramChange(LedMatrix::kKill, 0)
                 .withProgramChange(LedMatrix::kWater_turnstile, TICK(loopPoint)),
-            track(FallingTrackFactory::fallingBlinkKick).withCC(LedStrips::kDecay_cc, decayBlink),
-            track(FallingTrackFactory::fallingBlinkSnare).withStart(TICK(loopPoint)),
+            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, decayBlink),
         });
 
+    addOutMidiRules(seq, &kFallingDrumLedRules);
     return seq;
 }
 
@@ -136,9 +137,10 @@ Sequence FallingSequenceFactory::fallingPreClimax()
             FallingTrackFactory::fallingRiser,
             FallingTrackFactory::fallingSnareFill,
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kFalling_squares),
-            track(FallingTrackFactory::fallingBlinkKick).withCC(LedStrips::kDecay_cc, decayBlink),
-            FallingTrackFactory::fallingBlinkSnare
+            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, decayBlink),
         });
+
+    addOutMidiRules(seq, &kFallingDrumLedRules);
     return seq;
 }
 
@@ -157,9 +159,9 @@ Sequence FallingSequenceFactory::fallingClimax()
             SequenceTrackFactory::rideOff,
             FallingTrackFactory::fallingRimTom,
             track(FallingTrackFactory::fallingRiser).withMuteEvent(0).asFill(),
-            FallingTrackFactory::fallingBlinkKick,
-            FallingTrackFactory::fallingBlinkSnare
         });
+
+    addOutMidiRules(seq, &kFallingDrumLedRules);
     return seq;
 }
 

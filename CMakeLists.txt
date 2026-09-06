@@ -52,6 +52,7 @@ add_executable(GigaSeq
     src/factories/falling/FallingSequenceFactory.cpp
     src/factories/falling/FallingSong.cpp
     src/factories/falling/FallingTrackFactory.cpp
+    src/factories/falling/FallingDrumLedRules.cpp
 
     src/factories/closer/CloserSequenceFactory.cpp
     src/factories/closer/CloserSong.cpp

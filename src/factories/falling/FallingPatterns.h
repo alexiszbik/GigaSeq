@@ -298,6 +298,7 @@ MAKE_PATTERN(kFallingHandTamb, kFallingHandTambSteps, 1);
 #undef NOTE
 
 
+/*
 constexpr PatternStep kFallingBlinkKickSteps[] = {
     {{LedStrips::kBlue_C}, 127, 1}, _NO_STEP
 };
@@ -310,5 +311,6 @@ constexpr PatternStep kFallingBlinkSnareSteps[] = {
 };
 
 MAKE_PATTERN(kFallingBlinkSnare, kFallingBlinkSnareSteps, 8);
+*/
 
 } // namespace FallingPatterns
