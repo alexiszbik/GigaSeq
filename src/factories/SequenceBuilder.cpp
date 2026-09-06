@@ -1,5 +1,7 @@
 #include "SequenceBuilder.h"
 
+#include "OutMidiRules.h"
+
 Sequence buildSequence(
     int barCount,
     int beatsPerBar,
@@ -7,8 +9,7 @@ Sequence buildSequence(
     const char* name,
     uint8_t tempo,
     bool isLooping,
-    std::vector<TrackSpec> tracks,
-    OutMidiRules* outMidiRules)
+    std::vector<TrackSpec> tracks)
 {
     Sequence sequence(name, tempo, barCount, beatsPerBar, barLoop, isLooping);
     const tick_t length = sequence.lengthInTicks();
@@ -59,9 +60,12 @@ Sequence buildSequence(
         }
     }
 
-    sequence.setOutMidiRules(outMidiRules);
-
     return sequence;
+}
+
+void addOutMidiRules(Sequence& sequence, OutMidiRules* rules)
+{
+    sequence.setOutMidiRules(rules);
 }
 
 void addProgramChangeTrack(

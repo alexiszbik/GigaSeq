@@ -40,12 +40,13 @@ void WaterFmbassLedRules::processNoteOn(
     tick_t durationTicks,
     MidiInOut& midi)
 {
-    if (channel != MidiChannel::kSampler || !isFmbassNote(note.note)) {
-        return;
+    if (channel == MidiChannel::kSampler && isFmbassNote(note.note)) {
+        const uint8_t ledNote = kWhiteLeds[nextRandomIndex(rngState_)];
+        addNote(MidiChannel::kLedStrips, ledNote, note.velocity, durationTicks, midi);
+    } else if (channel == MidiChannel::kMicrofreak) {
+        addNote(MidiChannel::kLedStrips, LedStrips::kBlue_D, note.velocity, durationTicks, midi);
+        addNote(MidiChannel::kLedStrips, LedStrips::kGreen_D, note.velocity, durationTicks, midi);
     }
-
-    const uint8_t ledNote = kWhiteLeds[nextRandomIndex(rngState_)];
-    addNote(MidiChannel::kLedStrips, ledNote, note.velocity, durationTicks, midi);
 }
 
 void WaterFmbassLedRules::reset()

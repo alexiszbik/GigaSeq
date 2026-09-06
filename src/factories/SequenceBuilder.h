@@ -4,8 +4,6 @@
 #include "SequenceTrack.h"
 #include "TrackSpec.h"
 
-#include "OutMidiRules.h"
-
 #include <vector>
 
 Sequence buildSequence(
@@ -15,8 +13,9 @@ Sequence buildSequence(
     const char* name,
     uint8_t tempo,
     bool isLooping,
-    std::vector<TrackSpec> tracks,
-    OutMidiRules* outMidiRules = nullptr);
+    std::vector<TrackSpec> tracks);
+
+void addOutMidiRules(Sequence& sequence, OutMidiRules* rules);
 
 void addProgramChangeTrack(
     Sequence& sequence,

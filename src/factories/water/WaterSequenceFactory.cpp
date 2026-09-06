@@ -32,7 +32,7 @@ Sequence WaterSequenceFactory::waterIntro()
                 .withCC(MidiLoop::kArpMode_cc, OFF)
                 .withCC(MidiLoop::kRecord_cc, OFF),
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kWater_oscBlue),
-            track(WaterTrackFactory::waterCyanBlink).withCC(LedStrips::kDecay_cc, decayCyan),
+            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, decayCyan),
             track(SequenceTrackFactory::drumMachine).withCC(DrumMachine::kClearAll_cc, ON),
             track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, ON)
         });
@@ -55,15 +55,16 @@ Sequence WaterSequenceFactory::waterIntroBass()
             track(WaterTrackFactory::waterCongas).muted(),
             track(WaterTrackFactory::waterFmbass).muted(),
             track(WaterTrackFactory::waterMatrix).muted(),
-            track(WaterTrackFactory::waterCyanBlink).withCC(LedStrips::kDecay_cc, decayCyan)
+            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, decayCyan)
         });
+    addOutMidiRules(seq, &kWaterFmbassLedRules);
 
     return seq;
 }
 
 Sequence WaterSequenceFactory::waterPrechorus()
 {
-    return buildSequence(
+    Sequence seq = buildSequence(
         8, 4, 0, "PreChorus", songTempo, false,
         {
             WaterTrackFactory::waterKickPreChorus,
@@ -76,9 +77,10 @@ Sequence WaterSequenceFactory::waterPrechorus()
             WaterTrackFactory::waterCongas,
             track(WaterTrackFactory::waterFmbass).withLength(TickHelper::bars(7)),
             track(WaterTrackFactory::waterMatrix).withLength(TickHelper::bars(7)),
-            track(WaterTrackFactory::waterCyanBlink).withCC(LedStrips::kDecay_cc, decayCyan)
-        },
-        &kWaterFmbassLedRules);
+            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, decayCyan)
+        });
+    
+    return seq;
 }
 
 Sequence WaterSequenceFactory::waterChorus()
@@ -112,7 +114,7 @@ Sequence WaterSequenceFactory::waterPartB()
     tick_t len3 = TICK(15, 3);
     tick_t len4 = TICK(7, 3);
 
-    return buildSequence(
+    Sequence seq = buildSequence(
         32, 4, 0, "PartB", songTempo, false,
         {
             WaterTrackFactory::waterKickPartB,
@@ -131,9 +133,10 @@ Sequence WaterSequenceFactory::waterPartB()
             track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, OFF).withCC(ModularA::kGlobalMute_cc, ON, len1),
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kWater_oscBlue),
             track(WaterTrackFactory::waterMatrix).withLength(TickHelper::bars(31)),
-            track(WaterTrackFactory::waterCyanBlink).withCC(LedStrips::kDecay_cc, decayCyan).withLength(TickHelper::bars(31)),
-        },
-        &kWaterFmbassLedRules);
+            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, decayCyan)
+        });
+    addOutMidiRules(seq, &kWaterFmbassLedRules);
+    return seq;
 }
 
 
@@ -183,11 +186,11 @@ Sequence WaterSequenceFactory::waterPartC()
                 .withNote(Water::wtrCym808),
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kWater_oscBlueWhite),
             WaterTrackFactory::waterMatrix,
-            track(WaterTrackFactory::waterCyanBlink).withCC(LedStrips::kDecay_cc, decayCyan)
+            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, decayCyan)
                 
-        },
-        &kWaterFmbassLedRules);
+        });
 
+    addOutMidiRules(seq, &kWaterFmbassLedRules);
     return seq;
 }
 
@@ -196,7 +199,7 @@ Sequence WaterSequenceFactory::waterPartCEnd()
 {
     tick_t len = TICK(7, 2, 2);
 
-    return buildSequence(
+    Sequence seq = buildSequence(
         8, 4, 0, "PartCEnd", songTempo, false,
         {
             WaterTrackFactory::waterKickPartC,
@@ -216,9 +219,10 @@ Sequence WaterSequenceFactory::waterPartCEnd()
             track(SequenceTrackFactory::drumMachine)
                 .withCC(DrumMachine::kClearAll_cc, ON, len),
             track(WaterTrackFactory::waterMatrix).withLength(len),
-            track(WaterTrackFactory::waterCyanBlink).withCC(LedStrips::kDecay_cc, decayCyan).withLength(len)
-        },
-        &kWaterFmbassLedRules);
+            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, decayCyan).withLength(len)
+        });
+    addOutMidiRules(seq, &kWaterFmbassLedRules);
+    return seq;
 }
 
 

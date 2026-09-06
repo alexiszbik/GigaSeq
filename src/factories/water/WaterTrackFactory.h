@@ -30,7 +30,5 @@ public:
     static SequenceTrack waterChorusEnd(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack waterFreakWind(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack waterMatrix(tick_t lengthInTicks, tick_t startInTicks);
-    static SequenceTrack waterCyanBlink(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack waterChorusLed(tick_t lengthInTicks, tick_t startInTicks);
-    static SequenceTrack waterLedPattern(tick_t lengthInTicks, tick_t startInTicks);
 };

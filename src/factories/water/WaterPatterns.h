@@ -194,46 +194,6 @@ constexpr PatternStep kWaterMatrixSteps[] = {
 
 MAKE_PATTERN(kWaterMatrix, kWaterMatrixSteps, 16);
 
-
-constexpr PatternStep kWaterLedPatternSteps[] = {
-    SEQ_EMPTY, _NO_STEP, _NO_STEP,
-    {{LedStrips::kWhite_A}}, {{LedStrips::kWhite_B}}, 
-    {{LedStrips::kWhite_D}}, {{LedStrips::kWhite_A}}, 
-    {{LedStrips::kWhite_D}}, {{LedStrips::kWhite_C}}, 
-
-    SEQ_EMPTY, _NO_STEP, _NO_STEP,
-    {{LedStrips::kWhite_A}}, {{LedStrips::kWhite_C}}, 
-    {{LedStrips::kWhite_B}}, {{LedStrips::kWhite_A}}, 
-    {{LedStrips::kWhite_C}}, {{LedStrips::kWhite_D}}, 
-
-    SEQ_EMPTY, _NO_STEP, _NO_STEP,
-    {{LedStrips::kWhite_C}}, {{LedStrips::kWhite_D}}, 
-    {{LedStrips::kWhite_A}}, {{LedStrips::kWhite_C}}, 
-    {{LedStrips::kWhite_B}}, {{LedStrips::kWhite_D}}, 
-
-    SEQ_EMPTY, _NO_STEP, _NO_STEP,
-    {{LedStrips::kWhite_B}}, {{LedStrips::kWhite_A}}, 
-    {{LedStrips::kWhite_D}}, {{LedStrips::kWhite_B}}, 
-    {{LedStrips::kWhite_A}}, {{LedStrips::kWhite_C}}, 
-};
-
-MAKE_PATTERN(kWaterLedPattern, kWaterLedPatternSteps, 16);
-
-
-
-constexpr PatternStep kWaterCyanBlinkSteps[] = {
-    _NO_STEP,
-    {{LedStrips::kBlue_C, LedStrips::kGreen_C}, 127, 1},
-    _NO_STEP,
-    {{LedStrips::kBlue_C, LedStrips::kGreen_C}, 127, 1},
-    _NO_STEP,
-    _NO_STEP,
-    _NO_STEP,
-    _NO_STEP,
-};
-
-MAKE_PATTERN(kWaterCyanBlink, kWaterCyanBlinkSteps, 16);
-
 } // namespace WaterPatterns
 
 #undef SEQ_EMPTY

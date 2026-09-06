@@ -216,12 +216,6 @@ SequenceTrack WaterTrackFactory::waterMatrix(tick_t lengthInTicks, tick_t startI
     return track;
 }
 
-SequenceTrack WaterTrackFactory::waterCyanBlink(tick_t lengthInTicks, tick_t startInTicks) {
-    SequenceTrack track("CyanBlink", MidiChannel::kLedStrips);
-    track.setPattern(WaterPatterns::kWaterCyanBlink, lengthInTicks, startInTicks);
-    return track;
-}
-
 SequenceTrack WaterTrackFactory::waterChorusLed(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("ChorusLed", MidiChannel::kLedStrips);
 
@@ -238,9 +232,10 @@ SequenceTrack WaterTrackFactory::waterChorusLed(tick_t lengthInTicks, tick_t sta
 
     return track;
 }
-
+/*
 SequenceTrack WaterTrackFactory::waterLedPattern(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("LedPattern", MidiChannel::kLedStrips);
     track.setPattern(WaterPatterns::kWaterLedPattern, lengthInTicks, startInTicks);
     return track;
 }
+*/
