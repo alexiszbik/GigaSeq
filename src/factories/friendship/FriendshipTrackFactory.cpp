@@ -119,6 +119,22 @@ SequenceTrack FriendshipTrackFactory::friendshipChords(tick_t lengthInTicks, tic
     return track;
 }
 
+SequenceTrack FriendshipTrackFactory::friendshipPolyBass(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("PolyBass", MidiChannel::kPoly);
+
+    SequenceDesc desc;
+    desc.notes = {
+        {Cd1}, {}, {Gd1}, {Fd1}
+
+    };
+    desc.rate = 0.5;
+    desc.durations = {2,1,1};
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
+
+    return track;
+}
+
+
 SequenceTrack FriendshipTrackFactory::friendshipBalafon(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Balafon", MidiChannel::kSampler);
     track.setPattern(FriendshipPatterns::kFriendshipBalafon, lengthInTicks, startInTicks);
@@ -250,3 +266,4 @@ SequenceTrack FriendshipTrackFactory::friendshipMatrixBraveryClimax(tick_t lengt
 
     return track;
 }
+

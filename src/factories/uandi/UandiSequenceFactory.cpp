@@ -151,7 +151,6 @@ Sequence UandiSequenceFactory::uandiEnd()
         {
             track(SequenceTrackFactory::sampler).withNote(69),
             track(UandiTrackFactory::uandiExplode).withStart(TICK(2)),
-            track(SequenceTrackFactory::microfreak).withProgramChange(Microfreak::kUandIDust),
             track(UandiTrackFactory::uandiDust).withStart(TICK(2)).withProgramChange(Microfreak::kUandIDust),
             track(SequenceTrackFactory::matrix)
                 .withProgramChange(LedMatrix::kKill, 0)

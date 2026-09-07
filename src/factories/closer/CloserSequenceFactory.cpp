@@ -43,7 +43,7 @@ Sequence CloserSequenceFactory::closerIntro()
 Sequence CloserSequenceFactory::closerChords()
 {
     Sequence seq = buildSequence(
-        8, 4, 0, "Chords", songTempo, true,
+        16, 4, 8, "Chords", songTempo, true,
         {
             track(CloserTrackFactory::closerChords).withProgramChange(Microfreak::kCloserChords),
             CloserTrackFactory::closerModular,
@@ -51,7 +51,9 @@ Sequence CloserSequenceFactory::closerChords()
             track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kCloserBassDisto),
             track(SequenceTrackFactory::midiLoop).withCC(MidiLoop::kMuteBass_cc, ON),
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kCloser_plasma),
-            track(SequenceTrackFactory::ledStrips).withNotes({LedStrips::kBlue_ALL, LedStrips::kGreen_ALL}, 127, 0, TICK(8))
+            track(SequenceTrackFactory::ledStrips)
+                .withNotes({LedStrips::kBlue_ALL, LedStrips::kGreen_ALL}, 127, 0, TICK(8))
+                .withNotes({LedStrips::kBlue_ALL, LedStrips::kGreen_ALL}, 127, TICK(8), TICK(8))
         });
     addInMidiRules(seq, &kTransposeInMidiRules, -12);
     return seq;

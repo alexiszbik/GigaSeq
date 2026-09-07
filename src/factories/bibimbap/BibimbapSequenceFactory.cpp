@@ -49,6 +49,7 @@ Sequence BibimbapSequenceFactory::bibimbapMain()
             track(BibimbapTrackFactory::bibimbapDizee).withStart(TICK(0,7*4)),
             track(BibimbapTrackFactory::bibimbapVocals).withStart(TICK(0,7*4)),
             track(BibimbapTrackFactory::bibimbapMarimbaVerb).withStart(TICK(0,7*4)).muted(),
+            track(BibimbapTrackFactory::bibimbapRiser).muted().asFill(),
         });
     
     addOutMidiRules(seq, &kBibimbapLedRules);

@@ -53,6 +53,7 @@ Sequence FriendshipSequenceFactory::friendshipChill()
         16, 4, 8, "Chill", songTempo, true,
         {
             track(FriendshipTrackFactory::friendshipChords).withProgramChange(Microfreak::kFriendshipChords),
+            track(FriendshipTrackFactory::friendshipPolyBass).withProgramChange(PolySynth::kFriendshipBass),
             FriendshipTrackFactory::friendshipXylo,
             track(FriendshipTrackFactory::friendshipSeqVoice).withStart(TICK(8)),
             track(FriendshipTrackFactory::friendshipBalafon).muted(),
@@ -75,6 +76,7 @@ Sequence FriendshipSequenceFactory::friendshipBack()
         8, 4, 0, "Back", songTempo, false,
         {
             FriendshipTrackFactory::friendshipChords,
+            FriendshipTrackFactory::friendshipPolyBass,
             FriendshipTrackFactory::friendshipXylo,
             FriendshipTrackFactory::friendshipSeqVoice,
             FriendshipTrackFactory::friendshipBalafon,

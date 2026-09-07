@@ -14,7 +14,9 @@ _POLY_PRESET(BigLead, 6);
 _POLY_PRESET(Rave, 7);
 _POLY_PRESET(TiredEnd, 8);
 _POLY_PRESET(FallingEnd, 9);
+
 _POLY_PRESET(Closer, 12);
+_POLY_PRESET(FriendshipBass, 13);
 _POLY_PRESET(FantasyChords, 16);
 
 

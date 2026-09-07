@@ -156,7 +156,7 @@ SequenceTrack UandiTrackFactory::uandiSweep(tick_t lengthInTicks, tick_t startIn
 }
 
 SequenceTrack UandiTrackFactory::uandiDust(tick_t lengthInTicks, tick_t startInTicks) {
-    SequenceTrack track("Dust", MidiChannel::kSampler);
+    SequenceTrack track("Dust", MidiChannel::kMicrofreak);
 
     SequenceDesc desc;
     desc.notes = {{C4}};

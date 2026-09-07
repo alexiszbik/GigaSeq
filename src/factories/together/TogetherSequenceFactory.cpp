@@ -4,6 +4,7 @@
 #include "factories/SequenceTrackFactory.h"
 #include "factories/together/TogetherTrackFactory.h"
 #include "factories/together/TogetherSamples.h"
+#include "midiinrules/TransposeInMidiRules.h"
 #include "MidiConst.h"
 
 
@@ -27,12 +28,13 @@ Sequence TogetherSequenceFactory::togetherIntro()
         });
 
     addProgramChangeTrack(seq, "Poly pgm", MidiChannel::kPoly, 1);
+    addInMidiRules(seq, &kTransposeInMidiRules, 12);
     return seq;
 }
 
 Sequence TogetherSequenceFactory::togetherSample()
 {
-    return buildSequence(
+    Sequence seq = buildSequence(
         8, 4, 0, "Sample", songTempo, true,
         {
             TogetherTrackFactory::togetherArp,
@@ -52,6 +54,8 @@ Sequence TogetherSequenceFactory::togetherSample()
                 .withCC(Vocoder::kOscBPwm_cc, 64),
 
         });
+    addInMidiRules(seq, &kTransposeInMidiRules, 12);
+    return seq;
 }
 
 Sequence TogetherSequenceFactory::togetherKick()

@@ -15,6 +15,7 @@ public:
     static SequenceTrack friendshipAndBravery(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack friendshipXylo(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack friendshipChords(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack friendshipPolyBass(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack friendshipBalafon(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack friendshipDrop(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack friendshipSeqVoice(tick_t lengthInTicks, tick_t startInTicks);
@@ -30,4 +31,5 @@ public:
     static SequenceTrack friendshipLedTrance(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack friendshipMatrixBravery(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack friendshipMatrixBraveryClimax(tick_t lengthInTicks, tick_t startInTicks);
+
 };
