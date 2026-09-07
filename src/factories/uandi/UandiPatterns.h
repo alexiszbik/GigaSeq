@@ -2,6 +2,7 @@
 
 #include "TrackPattern.h"
 #include "factories/MidiNotes.h"
+#include "MidiConst.h"
 
 namespace UandiPatterns
 {

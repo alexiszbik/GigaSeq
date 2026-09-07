@@ -46,13 +46,13 @@ add_executable(GigaSeq
     src/factories/water/WaterSequenceFactory.cpp
     src/factories/water/WaterSong.cpp
     src/factories/water/WaterTrackFactory.cpp
-    src/factories/water/WaterFmbassLedRules.cpp
+    src/factories/water/WaterLedRules.cpp
     src/factories/water/WaterInMidiRules.cpp
 
     src/factories/falling/FallingSequenceFactory.cpp
     src/factories/falling/FallingSong.cpp
     src/factories/falling/FallingTrackFactory.cpp
-    src/factories/falling/FallingDrumLedRules.cpp
+    src/factories/falling/FallingLedRules.cpp
 
     src/factories/closer/CloserSequenceFactory.cpp
     src/factories/closer/CloserSong.cpp
@@ -66,6 +66,7 @@ add_executable(GigaSeq
     src/factories/uandi/UandiSequenceFactory.cpp
     src/factories/uandi/UandiSong.cpp
     src/factories/uandi/UandiTrackFactory.cpp
+    src/factories/uandi/UandiLedRules.cpp
 
 
     src/factories/tired/TiredSequenceFactory.cpp
@@ -81,6 +82,8 @@ add_executable(GigaSeq
     src/factories/bibimbap/BibimbapSequenceFactory.cpp
     src/factories/bibimbap/BibimbapSong.cpp
     src/factories/bibimbap/BibimbapTrackFactory.cpp
+    src/factories/bibimbap/BibimbapDropLedRules.cpp
+    src/factories/bibimbap/BibimbapLedRules.cpp
 
 )
 

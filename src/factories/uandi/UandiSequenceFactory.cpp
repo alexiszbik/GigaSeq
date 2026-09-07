@@ -3,6 +3,7 @@
 #include "factories/SequenceBuilder.h"
 #include "factories/SequenceTrackFactory.h"
 #include "factories/uandi/UandiTrackFactory.h"
+#include "factories/uandi/UandiLedRules.h"
 #include "MidiConst.h"
 
 namespace {
@@ -26,8 +27,12 @@ Sequence UandiSequenceFactory::uandiIntro()
             track(SequenceTrackFactory::drumMachine)
                 .withCC(DrumMachine::kClearAll_cc, ON)
                 .withCC(DrumMachine::kPerformMode_cc, ON)
-                .withCC(DrumMachine::kRepeatMode_cc, ON)
+                .withCC(DrumMachine::kRepeatMode_cc, ON),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kUandI_noise),
+            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, 76)
         });
+
+    addOutMidiRules(seq, &kUandiLedRules);
     return seq;
 }
 
@@ -40,8 +45,11 @@ Sequence UandiSequenceFactory::uandiIntroB()
             UandiTrackFactory::uandiBassB,
             UandiTrackFactory::uandiFreak,
             UandiTrackFactory::uandiDiscoB,
-            track(UandiTrackFactory::uandiRiser).muted().withMuteEvent(0).asFill(),
+            UandiTrackFactory::uandiRiser,
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kUandI_wash)
         });
+
+    addOutMidiRules(seq, &kUandiLedRules);
     return seq;
 }
 
@@ -59,7 +67,9 @@ Sequence UandiSequenceFactory::uandiMain()
             UandiTrackFactory::uandiDiscoAB,
             UandiTrackFactory::uandiOpenHat,
             UandiTrackFactory::uandiRiser,
+            UandiTrackFactory::uandiMatrixMain
         });
+    addOutMidiRules(seq, &kUandiLedRules);
     return seq;
 }
 
@@ -79,7 +89,9 @@ Sequence UandiSequenceFactory::uandiBreak()
             UandiTrackFactory::uandiShaker,
             UandiTrackFactory::uandiTomEvent,
             track(UandiTrackFactory::uandiPiano).muted().withMuteEvent(loopPoint),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kUandI_noise)
        });
+    addOutMidiRules(seq, &kUandiLedRules);
     return seq;
 }
 
@@ -96,7 +108,9 @@ Sequence UandiSequenceFactory::uandiBack()
             track(SequenceTrackFactory::gtrPedal)
                 .withCC(HXStomp::kUandI_ccShifter, OFF, TICK(3,2)) 
                 .withCC(HXStomp::kUandI_ccDrive, ON),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kUandI_wash)
         });
+    addOutMidiRules(seq, &kUandiLedRules);
     return seq;
 }
 
@@ -123,8 +137,10 @@ Sequence UandiSequenceFactory::uandiClimax()
                 .withCC(Bass::kHpfResonance_cc, 0)
                 .withCC(Bass::kReverbSend_cc, 0)
                 .withCC(Bass::kGlobalMute_cc, OFF),
+            UandiTrackFactory::uandiMatrixMain
             
         });
+    addOutMidiRules(seq, &kUandiLedRules);
     return seq;
 }
 
@@ -137,6 +153,9 @@ Sequence UandiSequenceFactory::uandiEnd()
             track(UandiTrackFactory::uandiExplode).withStart(TICK(2)),
             track(SequenceTrackFactory::microfreak).withProgramChange(Microfreak::kUandIDust),
             track(UandiTrackFactory::uandiDust).withStart(TICK(2)).withProgramChange(Microfreak::kUandIDust),
+            track(SequenceTrackFactory::matrix)
+                .withProgramChange(LedMatrix::kKill, 0)
+                .withProgramChange(LedMatrix::kUandI_explode, TICK(2))
         });
     return seq;
 }

@@ -3,7 +3,7 @@
 #include "factories/SequenceBuilder.h"
 #include "factories/SequenceTrackFactory.h"
 #include "factories/falling/FallingTrackFactory.h"
-#include "factories/falling/FallingDrumLedRules.h"
+#include "factories/falling/FallingLedRules.h"
 #include "factories/falling/FallingSamples.h"
 #include "factories/water/WaterTrackFactory.h"
 #include "midiinrules/TransposeInMidiRules.h"
@@ -81,7 +81,7 @@ Sequence FallingSequenceFactory::fallingBassSeq()
             track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, decayBlink),
         });
 
-    addOutMidiRules(seq, &kFallingDrumLedRules);
+    addOutMidiRules(seq, &kFallingLedRules);
     return seq;
 }
 
@@ -141,7 +141,7 @@ Sequence FallingSequenceFactory::fallingPreClimax()
             track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, decayBlink),
         });
 
-    addOutMidiRules(seq, &kFallingDrumLedRules);
+    addOutMidiRules(seq, &kFallingLedRules);
     return seq;
 }
 
@@ -162,7 +162,7 @@ Sequence FallingSequenceFactory::fallingClimax()
             track(FallingTrackFactory::fallingRiser).withMuteEvent(0).asFill(),
         });
 
-    addOutMidiRules(seq, &kFallingDrumLedRules);
+    addOutMidiRules(seq, &kFallingLedRules);
     return seq;
 }
 

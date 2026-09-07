@@ -1,6 +1,7 @@
 #include "BibimbapSequenceFactory.h"
 
 #include "factories/SequenceBuilder.h"
+#include "factories/bibimbap/BibimbapLedRules.h"
 #include "factories/SequenceTrackFactory.h"
 #include "factories/bibimbap/BibimbapTrackFactory.h"
 #include "MidiConst.h"
@@ -27,8 +28,11 @@ Sequence BibimbapSequenceFactory::bibimbapIntro()
                 .withNote(MidiLoop::kSelectPoly)
                 .withCC(MidiLoop::kArpMode_cc, OFF)
                 .withCC(MidiLoop::kRecord_cc, OFF),
-            SequenceTrackFactory::ledStripsTest
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kBibimbap_vu),
+            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, 12)
         });
+
+    addOutMidiRules(seq, &kBibimbapLedRules);
     return seq;
 }
 
@@ -46,6 +50,8 @@ Sequence BibimbapSequenceFactory::bibimbapMain()
             track(BibimbapTrackFactory::bibimbapVocals).withStart(TICK(0,7*4)),
             track(BibimbapTrackFactory::bibimbapMarimbaVerb).withStart(TICK(0,7*4)).muted(),
         });
+    
+    addOutMidiRules(seq, &kBibimbapLedRules);
     return seq;
 }
 
@@ -61,8 +67,11 @@ Sequence BibimbapSequenceFactory::bibimbapBass()
             BibimbapTrackFactory::bibimbapMarimbaVerb,
             BibimbapTrackFactory::bibimbapXyloLoop,
             BibimbapTrackFactory::bibimbapBass,
-            BibimbapTrackFactory::bibimbapRiser
+            BibimbapTrackFactory::bibimbapRiser,
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kBibimbap_vortex)
         });
+
+    addOutMidiRules(seq, &kBibimbapLedRules);
     return seq;
 }
 
@@ -86,6 +95,8 @@ Sequence BibimbapSequenceFactory::bibimbapBassFull()
             track(BibimbapTrackFactory::bibimbapHats).muted(),
             track(BibimbapTrackFactory::bibimbapRiser).muted().asFill(),
         });
+
+    addOutMidiRules(seq, &kBibimbapLedRules);
     return seq;
 }
 
@@ -97,6 +108,7 @@ Sequence BibimbapSequenceFactory::bibimbapPause()
             BibimbapTrackFactory::bibimbapShaker,
             track(SequenceTrackFactory::gtrPedal)
                 .withProgramChange(HXStomp::kBiBimBapSolo),
+            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, 1)
         });
     return seq;
 }
@@ -117,6 +129,8 @@ Sequence BibimbapSequenceFactory::bibimbapDrop()
             track(SequenceTrackFactory::polySynth).withCC(PolySynth::kGlobalMute_cc, ON, dropPoint),
             track(SequenceTrackFactory::modularA).withCC(ModularA::kMuteClock_cc, ON, dropPoint),
         });
+
+    addOutMidiRules(seq, &kBibimbapLedRules);
     return seq;
 }
 
@@ -151,6 +165,8 @@ Sequence BibimbapSequenceFactory::bibimbapClimax()
                 .withCC(HXStomp::kBiBimBapSolo_ccDrive, ON),
             track(SequenceTrackFactory::polySynth).withCC(PolySynth::kGlobalMute_cc, OFF),
             track(SequenceTrackFactory::modularA).withCC(ModularA::kMuteClock_cc, OFF),
+            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, 12)
         });
+    addOutMidiRules(seq, &kBibimbapLedRules);
     return seq;
 }

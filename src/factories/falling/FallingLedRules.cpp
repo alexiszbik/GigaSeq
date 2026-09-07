@@ -1,4 +1,4 @@
-#include "FallingDrumLedRules.h"
+#include "FallingLedRules.h"
 
 #include "factories/falling/FallingSamples.h"
 #include "MidiChannel.h"
@@ -26,9 +26,9 @@ bool isSnareNote(uint8_t channel, uint8_t note)
 
 } // namespace
 
-FallingDrumLedRules kFallingDrumLedRules;
+FallingLedRules kFallingLedRules;
 
-void FallingDrumLedRules::processNoteOn(
+void FallingLedRules::processNoteOn(
     const Note& note,
     uint8_t channel,
     tick_t durationTicks,

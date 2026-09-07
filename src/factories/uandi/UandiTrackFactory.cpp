@@ -165,3 +165,22 @@ SequenceTrack UandiTrackFactory::uandiDust(tick_t lengthInTicks, tick_t startInT
 
     return track;
 }
+
+SequenceTrack UandiTrackFactory::uandiMatrixMain(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("MatrixMain", MidiChannel::kMatrix);
+    
+    track.addProgramChange({0, LedMatrix::kUandI_noise});
+    track.addProgramChange({TICK(8), LedMatrix::kUandI_wash});
+
+    if (lengthInTicks >= TICK(12)) {
+        track.addProgramChange({TICK(12), LedMatrix::kUandI_noise});
+        track.addProgramChange({TICK(20), LedMatrix::kUandI_wash});
+    }
+
+    if (lengthInTicks >= TICK(24)) {
+        track.addProgramChange({TICK(24), LedMatrix::kUandI_noise});
+        track.addProgramChange({TICK(32), LedMatrix::kUandI_wash});
+    }
+
+    return track;
+}

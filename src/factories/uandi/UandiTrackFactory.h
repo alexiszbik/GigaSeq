@@ -26,4 +26,5 @@ public:
     static SequenceTrack uandiExplode(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack uandiSweep(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack uandiDust(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack uandiMatrixMain(tick_t lengthInTicks, tick_t startInTicks);
 };

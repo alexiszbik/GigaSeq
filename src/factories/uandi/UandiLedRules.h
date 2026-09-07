@@ -2,14 +2,10 @@
 
 #include "OutMidiRules.h"
 
-class WaterFmbassLedRules : public OutMidiRules
+class UandiLedRules : public OutMidiRules
 {
 public:
     void processNoteOn(const Note& note, uint8_t channel, tick_t durationTicks, MidiInOut& midi) override;
-    void reset() override;
-
-private:
-    uint8_t rngState_ = 1;
 };
 
-extern WaterFmbassLedRules kWaterFmbassLedRules;
+extern UandiLedRules kUandiLedRules;

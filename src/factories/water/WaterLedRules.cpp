@@ -1,4 +1,4 @@
-#include "WaterFmbassLedRules.h"
+#include "WaterLedRules.h"
 
 #include "MidiChannel.h"
 #include "MidiConst.h"
@@ -25,9 +25,9 @@ bool isFmbassNote(uint8_t note)
 
 } // namespace
 
-WaterFmbassLedRules kWaterFmbassLedRules;
+WaterLedRules kWaterFmbassLedRules;
 
-void WaterFmbassLedRules::processNoteOn(
+void WaterLedRules::processNoteOn(
     const Note& note,
     uint8_t channel,
     tick_t durationTicks,
@@ -42,7 +42,7 @@ void WaterFmbassLedRules::processNoteOn(
     }
 }
 
-void WaterFmbassLedRules::reset()
+void WaterLedRules::reset()
 {
     OutMidiRules::reset();
     rngState_ = 1;
