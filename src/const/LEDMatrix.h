@@ -56,12 +56,14 @@ _MATRIX_PRESET(UandI, wash, 20);
 _MATRIX_PRESET(UandI, explode, 59);
 
 // === Friendship ===
-_MATRIX_PRESET(Friendship, vuIntro, 43); //?
 _MATRIX_PRESET(Friendship, rain, 22); //?
-_MATRIX_PRESET(Friendship, vuRainbow, 45); //?
 _MATRIX_PRESET(Friendship, kaomjis, 18); //?
 _MATRIX_PRESET(Friendship, sign, 46);
 _MATRIX_PRESET(Friendship, rainbowSign, 47);
+
+_MATRIX_PRESET_NOTE(Friendship, sign, noteA, 36);
+_MATRIX_PRESET_NOTE(Friendship, sign, noteB, 37);
+_MATRIX_PRESET_NOTE(Friendship, sign, noteC, 38);
 
 // === Tir3d ===
 _MATRIX_PRESET(Tired, sticks, 15); //?

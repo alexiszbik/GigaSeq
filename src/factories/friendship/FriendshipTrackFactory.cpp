@@ -222,3 +222,31 @@ SequenceTrack FriendshipTrackFactory::friendshipCrash(tick_t lengthInTicks, tick
     addSingleNote(track, Friendship::cym74);
     return track;
 }
+
+SequenceTrack FriendshipTrackFactory::friendshipLedTrance(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("LedTrance", MidiChannel::kLedStrips);
+    track.setPattern(FriendshipPatterns::kFriendshipLedTrance, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack FriendshipTrackFactory::friendshipMatrixBravery(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("MatrixBravery", MidiChannel::kMatrix);
+
+    SequenceDesc desc;
+    desc.notes = {{LedMatrix::kFriendship_sign_noteB_note}, {}, {}, {LedMatrix::kFriendship_sign_noteC_note}};
+    desc.rate = 4;
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
+
+    return track;
+}
+
+SequenceTrack FriendshipTrackFactory::friendshipMatrixBraveryClimax(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("MatrixBraveryClimax", MidiChannel::kMatrix);
+
+    SequenceDesc desc;
+    desc.notes = {{LedMatrix::kFriendship_sign_noteA_note}, {}, {LedMatrix::kFriendship_sign_noteB_note}, {LedMatrix::kFriendship_sign_noteC_note}};
+    desc.rate = 4;
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
+
+    return track;
+}

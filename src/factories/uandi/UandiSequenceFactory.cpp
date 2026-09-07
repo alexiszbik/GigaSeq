@@ -155,7 +155,10 @@ Sequence UandiSequenceFactory::uandiEnd()
             track(UandiTrackFactory::uandiDust).withStart(TICK(2)).withProgramChange(Microfreak::kUandIDust),
             track(SequenceTrackFactory::matrix)
                 .withProgramChange(LedMatrix::kKill, 0)
-                .withProgramChange(LedMatrix::kUandI_explode, TICK(2))
+                .withProgramChange(LedMatrix::kUandI_explode, TICK(2)),
+            track(SequenceTrackFactory::ledStrips)
+                .withNote(LedStrips::kExplode_note, 127, TICK(2), TICK(1))
+                .withNote(LedStrips::kExplode_note, 127, TICK(3), TICK(1))
         });
     return seq;
 }

@@ -4,6 +4,8 @@
 #include "factories/SequenceTrackFactory.h"
 #include "factories/friendship/FriendshipTrackFactory.h"
 #include "factories/friendship/FriendshipSamples.h"
+#include "factories/friendship/FriendshipLedRules.h"
+#include "midiinrules/TransposeInMidiRules.h"
 #include "MidiConst.h"
 
 namespace {
@@ -25,6 +27,7 @@ Sequence FriendshipSequenceFactory::friendshipIntro()
             track(FriendshipTrackFactory::friendshipRiser).muted().withMuteEvent(TICK(8)).asFill(),
             track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kFriendship),
             track(SequenceTrackFactory::gtrLoop).withProgramChange(BossRC::kFriendship),
+            track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, ON),
             track(SequenceTrackFactory::midiLoop)
                 .withNote(MidiLoop::kEraseAll)
                 .withNote(MidiLoop::kSelectBass)
@@ -34,9 +37,13 @@ Sequence FriendshipSequenceFactory::friendshipIntro()
             track(SequenceTrackFactory::drumMachine)
                 .withCC(DrumMachine::kPerformMode_cc, OFF)
                 .withCC(DrumMachine::kClearAll_cc, ON)
-                .withNote(Friendship::openhat)
+                .withNote(Friendship::openhat),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kFriendship_kaomjis),
+            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, 20)
             
         });
+    addInMidiRules(seq, &kTransposeInMidiRules, -12);
+    addOutMidiRules(seq, &kFriendshipLedRules);
     return seq;
 }
 
@@ -50,8 +57,14 @@ Sequence FriendshipSequenceFactory::friendshipChill()
             track(FriendshipTrackFactory::friendshipSeqVoice).withStart(TICK(8)),
             track(FriendshipTrackFactory::friendshipBalafon).muted(),
             track(FriendshipTrackFactory::friendshipHats).muted(),
-            track(SequenceTrackFactory::midiLoop).withCC(MidiLoop::kMuteBass_cc, ON)
+            track(SequenceTrackFactory::midiLoop).withCC(MidiLoop::kMuteBass_cc, ON),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kFriendship_rain),
+            track(SequenceTrackFactory::ledStrips)
+                .withNote(LedStrips::kBlue_ALL, 127, 0, TICK(8))
+                .withNote(LedStrips::kBlue_ALL, 127, TICK(8), TICK(8))
+
         });
+    addInMidiRules(seq, &kTransposeInMidiRules, -12);
     return seq;
 }
 
@@ -68,8 +81,14 @@ Sequence FriendshipSequenceFactory::friendshipBack()
             FriendshipTrackFactory::friendshipHats,
             FriendshipTrackFactory::friendshipDrop,
             FriendshipTrackFactory::friendshipRiser,
-            FriendshipTrackFactory::friendshipVocalHits
+            FriendshipTrackFactory::friendshipVocalHits,
+            track(SequenceTrackFactory::ledStrips)
+                .withNote(LedStrips::kBlue_ALL, 127, 0, TICK(4))
         });
+
+    addInMidiRules(seq, &kTransposeInMidiRules, -12);
+    addOutMidiRules(seq, &kFriendshipLedRules);
+
     return seq;
 }
 
@@ -89,8 +108,11 @@ Sequence FriendshipSequenceFactory::friendshipMain()
             track(SequenceTrackFactory::microfreak).withProgramChange(Microfreak::kFriendshipArp),
             track(SequenceTrackFactory::midiLoop)
                 .withCC(MidiLoop::kMuteBass_cc, OFF)
-                .withNote(MidiLoop::kSelectMicrofreak)
+                .withNote(MidiLoop::kSelectMicrofreak),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kFriendship_kaomjis)
         });
+
+    addOutMidiRules(seq, &kFriendshipLedRules);
     return seq;
 }
 
@@ -112,15 +134,18 @@ Sequence FriendshipSequenceFactory::friendshipBreak()
                 .withNote(MidiLoop::kEraseAll)
                 .withNote(MidiLoop::kSelectPoly)
                 .withCC(MidiLoop::kArpMode_cc, OFF)
-                .withCC(MidiLoop::kRecord_cc, OFF)
-
+                .withCC(MidiLoop::kRecord_cc, OFF),
+            track(FriendshipTrackFactory::friendshipMatrixBravery).withProgramChange(LedMatrix::kFriendship_sign),
+            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, 1)
         });
+
+    addOutMidiRules(seq, &kFriendshipLedRules);
     return seq;
 }
 
 Sequence FriendshipSequenceFactory::friendshipRising()
 {
-    return buildSequence(
+    Sequence seq = buildSequence(
         16, 4, 0, "Rising", songTempo, false,
         {
             track(FriendshipTrackFactory::friendshipTrance).withLength(TICK(15)),
@@ -138,7 +163,11 @@ Sequence FriendshipSequenceFactory::friendshipRising()
                 .withProgramChange(PolySynth::kBigLead),
             track(SequenceTrackFactory::modularA)
                 .withCC(ModularA::kMuteClock_cc, ON, TICK(15)),
+            track(FriendshipTrackFactory::friendshipMatrixBravery)
         });
+
+    addOutMidiRules(seq, &kFriendshipLedRules);
+    return seq;
 }
 
 Sequence FriendshipSequenceFactory::friendshipClimax()
@@ -157,9 +186,11 @@ Sequence FriendshipSequenceFactory::friendshipClimax()
             track(FriendshipTrackFactory::friendshipOpenH909).muted(),
             track(FriendshipTrackFactory::friendshipRiser).muted().withMuteEvent(0).asFill(),
             SequenceTrackFactory::gtrLoopUnmute,
+            FriendshipTrackFactory::friendshipLedTrance,
             track(SequenceTrackFactory::modularA)
                 .withCC(ModularA::kMuteClock_cc, OFF)
-                .withCC(ModularA::kGlobalMute_cc, OFF)
+                .withCC(ModularA::kGlobalMute_cc, OFF),
+            track(FriendshipTrackFactory::friendshipMatrixBraveryClimax).withProgramChange(LedMatrix::kFriendship_rainbowSign),
         });
     return seq;
 }
@@ -176,6 +207,7 @@ Sequence FriendshipSequenceFactory::friendshipEnd()
             FriendshipTrackFactory::friendshipStabz,
             track(FriendshipTrackFactory::friendshipCrash).withMuteEvent(TICK(1)),
             SequenceTrackFactory::gtrLoopErase,
+            track(FriendshipTrackFactory::friendshipMatrixBraveryClimax)
         });
     return seq;
 }

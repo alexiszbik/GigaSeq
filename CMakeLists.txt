@@ -24,6 +24,8 @@ add_executable(GigaSeq
     src/desktop/VirtualMidiSender.cpp
     src/engine/StringHelper.cpp
     src/engine/RandomHelper.cpp
+    src/engine/LedStripRandom.cpp
+    src/const/LedStripGroups.cpp
     src/engine/Sequence.cpp
     src/engine/Song.cpp
     src/engine/SequencePool.cpp
@@ -77,12 +79,12 @@ add_executable(GigaSeq
     src/factories/friendship/FriendshipSequenceFactory.cpp
     src/factories/friendship/FriendshipSong.cpp
     src/factories/friendship/FriendshipTrackFactory.cpp
+    src/factories/friendship/FriendshipLedRules.cpp
 
 
     src/factories/bibimbap/BibimbapSequenceFactory.cpp
     src/factories/bibimbap/BibimbapSong.cpp
     src/factories/bibimbap/BibimbapTrackFactory.cpp
-    src/factories/bibimbap/BibimbapDropLedRules.cpp
     src/factories/bibimbap/BibimbapLedRules.cpp
 
 )

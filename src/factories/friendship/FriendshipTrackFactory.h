@@ -27,4 +27,7 @@ public:
     static SequenceTrack friendshipSnareRoll(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack friendshipTranceB(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack friendshipCrash(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack friendshipLedTrance(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack friendshipMatrixBravery(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack friendshipMatrixBraveryClimax(tick_t lengthInTicks, tick_t startInTicks);
 };

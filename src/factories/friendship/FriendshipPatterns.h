@@ -3,6 +3,7 @@
 #include "TrackPattern.h"
 #include "factories/MidiNotes.h"
 #include "FriendshipSamples.h"
+#include "MidiConst.h"
 
 namespace FriendshipPatterns
 {
@@ -151,5 +152,14 @@ constexpr PatternStep kFriendshipOpenH909Steps[] = {
 
 MAKE_PATTERN(kFriendshipOpenH909, kFriendshipOpenH909Steps, 8);
 
+constexpr PatternStep kFriendshipLedTranceSteps[] = {
+    {{LedStrips::kRainbow_note}, 127, 1}, _NO_STEP, {{LedStrips::kRainbow_note}, 127, 1}, _NO_STEP,
+    {{LedStrips::kRainbow_note}, 127, 2}, _NO_STEP, _NO_STEP, _NO_STEP,
+
+    _NO_STEP, _NO_STEP, {{LedStrips::kRainbow_note}, 127, 1}, _NO_STEP,
+    {{LedStrips::kRainbow_note}, 127, 2}, _NO_STEP, _NO_STEP, _NO_STEP,
+};
+
+MAKE_PATTERN(kFriendshipLedTrance, kFriendshipLedTranceSteps, 32);
 
 } // namespace FriendshipPatterns

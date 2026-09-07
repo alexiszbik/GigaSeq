@@ -3,27 +3,8 @@
 
 #include "MidiChannel.h"
 #include "MidiConst.h"
-#include "RandomHelper.h"
 
 BibimbapLedRules kBibimbapLedRules;
-
-constexpr uint8_t kGreenLeds[] = {
-    LedStrips::kGreen_A,
-    LedStrips::kGreen_B,
-    LedStrips::kGreen_C,
-    LedStrips::kGreen_D,
-};
-
-constexpr uint8_t kGreenLedCount = sizeof(kGreenLeds) / sizeof(kGreenLeds[0]);
-
-constexpr uint8_t kWhiteLeds[] = {
-    LedStrips::kWhite_A,
-    LedStrips::kWhite_B,
-    LedStrips::kWhite_C,
-    LedStrips::kWhite_D,
-};
-
-constexpr uint8_t kWhiteLedCount = sizeof(kWhiteLeds) / sizeof(kWhiteLeds[0]);
 
 bool isKickNote(uint8_t channel, uint8_t note)
 {
@@ -86,12 +67,13 @@ void BibimbapLedRules::processNoteOn(
     }
 
     if (isSnare(channel, note.note)) {
-        addNote(MidiChannel::kLedStrips, LedStrips::kGreen_ALL, 127, durationTicks, midi);
-        addNote(MidiChannel::kLedStrips, LedStrips::kRed_ALL, 127, durationTicks, midi);
+        addNote(MidiChannel::kLedStrips, LedStrips::kGreen_A, 127, durationTicks, midi);
+        addNote(MidiChannel::kLedStrips, LedStrips::kGreen_B, 127, durationTicks, midi);
+        addNote(MidiChannel::kLedStrips, LedStrips::kGreen_C, 127, durationTicks, midi);
     }
 
     if (isDizzee(channel, note.note)) {
-        const uint8_t ledNote = kGreenLeds[RandomHelper::nextRandomIndex(rngState_, kGreenLedCount)];
+        const uint8_t ledNote = LedStrips::kGreenLedsRandom.nextRandom();
         addNote(MidiChannel::kLedStrips, ledNote, note.velocity, durationTicks, midi);
     }
 
@@ -100,9 +82,7 @@ void BibimbapLedRules::processNoteOn(
     }
 
     if (isDropSnare(channel, note.note)) {
-        const uint8_t ledNote = kWhiteLeds[RandomHelper::nextRandomIndex(rngState_B, kWhiteLedCount)];
+        const uint8_t ledNote = LedStrips::kWhiteLedsRandom.nextRandom();
         addNote(MidiChannel::kLedStrips, ledNote, note.velocity, durationTicks, midi);
     }
-
-    
 }

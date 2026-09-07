@@ -2,10 +2,12 @@
 
 #include "OutMidiRules.h"
 
-class WaterLedRules : public OutMidiRules
+class FriendshipLedRules : public OutMidiRules
 {
 public:
     void processNoteOn(const Note& note, uint8_t channel, tick_t durationTicks, MidiInOut& midi) override;
+private:
+    uint8_t whiteLedIndex = 0;
 };
 
-extern WaterLedRules kWaterFmbassLedRules;
+extern FriendshipLedRules kFriendshipLedRules;

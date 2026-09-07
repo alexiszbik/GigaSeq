@@ -20,7 +20,6 @@ void UandiLedRules::processNoteOn(
     tick_t durationTicks,
     MidiInOut& midi)
 {
-
     if (isVoice(channel, note.note)) {
         addNote(MidiChannel::kLedStrips, LedStrips::kBlue_ALL, 127, 24, midi);
         addNote(MidiChannel::kLedStrips, LedStrips::kRed_ALL, 127, 24, midi);
