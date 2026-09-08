@@ -35,13 +35,13 @@ void FallingLedRules::processNoteOn(
     MidiInOut& midi)
 {
     if (isKickNote(channel, note.note)) {
-        addNote(MidiChannel::kLedStrips, LedStrips::kBlue_C, note.velocity, durationTicks, midi);
+        addNote(MidiChannel::kLedStrips, LedStrips::kBlue_C, note.velocity, 24, midi);
         return;
     }
 
     if (isSnareNote(channel, note.note)) {
         for (uint8_t ledNote : kSnareLeds) {
-            addNote(MidiChannel::kLedStrips, ledNote, note.velocity, durationTicks, midi);
+            addNote(MidiChannel::kLedStrips, ledNote, note.velocity, 24, midi);
         }
     }
 }

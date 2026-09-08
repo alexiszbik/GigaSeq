@@ -65,7 +65,6 @@ Sequence FriendshipSequenceFactory::friendshipChill()
                 .withNote(LedStrips::kBlue_ALL, 127, TICK(8), TICK(8))
 
         });
-    addInMidiRules(seq, &kTransposeInMidiRules, -12);
     return seq;
 }
 
@@ -88,7 +87,6 @@ Sequence FriendshipSequenceFactory::friendshipBack()
                 .withNote(LedStrips::kBlue_ALL, 127, 0, TICK(4))
         });
 
-    addInMidiRules(seq, &kTransposeInMidiRules, -12);
     addOutMidiRules(seq, &kFriendshipLedRules);
 
     return seq;
@@ -114,6 +112,7 @@ Sequence FriendshipSequenceFactory::friendshipMain()
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kFriendship_kaomjis)
         });
 
+    addInMidiRules(seq, &kTransposeInMidiRules, 12);
     addOutMidiRules(seq, &kFriendshipLedRules);
     return seq;
 }

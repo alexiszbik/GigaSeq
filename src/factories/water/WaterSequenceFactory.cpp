@@ -24,8 +24,7 @@ Sequence WaterSequenceFactory::waterIntro()
             track(WaterTrackFactory::waterHats).muted(),
             track(WaterTrackFactory::waterMarimba).muted(),
             track(WaterTrackFactory::waterFreak).withProgramChange(Microfreak::kWaterBass),
-            track(SequenceTrackFactory::gtrLoopErase).withProgramChange(BossRC::kWater, TICK(4)),
-            track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kWater),
+            track(SequenceTrackFactory::gtrLoop).withProgramChange(BossRC::kWater, TICK(4)),
             track(SequenceTrackFactory::polySynth).withProgramChange(PolySynth::kWaterSqr),
             track(SequenceTrackFactory::midiLoop)
                 .withNote(MidiLoop::kEraseAll)
@@ -34,7 +33,7 @@ Sequence WaterSequenceFactory::waterIntro()
                 .withCC(MidiLoop::kRecord_cc, OFF),
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kWater_oscBlue),
             track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, decayCyan),
-            track(SequenceTrackFactory::drumMachine).withCC(DrumMachine::kClearAll_cc, ON)
+            track(SequenceTrackFactory::drumMachine).withCC(DrumMachine::kClearAll_cc, ON),
         });
 
     addOutMidiRules(seq, &kWaterFmbassLedRules);

@@ -11,6 +11,7 @@
 namespace {
     constexpr uint8_t songTempo = 130;
     constexpr uint8_t stabLedDecay = 50;
+    constexpr uint8_t chordsLedDecay = 40;
 }
 
 Sequence CloserSequenceFactory::closerIntro()
@@ -30,7 +31,8 @@ Sequence CloserSequenceFactory::closerIntro()
                 .withCC(MidiLoop::kRecord_cc, ON)
                 .withCC(MidiLoop::kBarCount_cc, 4),
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kKill),
-            track(CloserTrackFactory::closerLedStab).withCC(LedStrips::kDecay_cc, stabLedDecay)
+            track(CloserTrackFactory::closerLedStab).withCC(LedStrips::kDecay_cc, stabLedDecay),
+            track(SequenceTrackFactory::gtrLoopErase).withProgramChange(BossRC::kCloser, TICK(4)),
         });
     addInMidiRules(seq, &kTransposeInMidiRules, -12);
     
@@ -52,10 +54,10 @@ Sequence CloserSequenceFactory::closerIntroB()
             track(CloserTrackFactory::closerFill808).withMuteEvent(TICK(0)).asFill(),
             track(CloserTrackFactory::closerRiser).withMuteEvent(TICK(0)).asFill(),
             track(FallingTrackFactory::fallingHarp).withProgramChange(Microfreak::kFallingHarp),
-            track(SequenceTrackFactory::gtrLoopErase).withProgramChange(BossRC::kCloser, TICK(4)),
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kCloser_lasers),
             CloserTrackFactory::closerLedStab
         });
+        
     addInMidiRules(seq, &kTransposeInMidiRules, -12);
     return seq;
 }
@@ -73,6 +75,7 @@ Sequence CloserSequenceFactory::closerChords()
             track(SequenceTrackFactory::midiLoop).withCC(MidiLoop::kMuteBass_cc, ON),
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kCloser_plasma),
             track(SequenceTrackFactory::ledStrips)
+                .withCC(LedStrips::kDecay_cc, chordsLedDecay)
                 .withNotes({LedStrips::kBlue_ALL, LedStrips::kGreen_ALL}, 127, 0, TICK(8))
                 .withNotes({LedStrips::kBlue_ALL, LedStrips::kGreen_ALL}, 127, TICK(8), TICK(8))
         });

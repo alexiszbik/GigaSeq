@@ -8,7 +8,7 @@ namespace TogetherPatterns
 {
 
 #define ARP_GD_STEP \
-    {{Gd4}, 127, 1}, {{Gd3}, 127, 1}, {{Gd2}, 127, 1}, {{Gd3}, 127, 1}
+    {{Gd3}, 127, 1}, {{Gd2}, 127, 1}, {{Gd1}, 127, 1}, {{Gd2}, 127, 1}
 
 #define ARP_GD_BAR \
     ARP_GD_STEP, ARP_GD_STEP, ARP_GD_STEP, ARP_GD_STEP
@@ -17,7 +17,7 @@ namespace TogetherPatterns
     ARP_GD_BAR, ARP_GD_BAR, ARP_GD_BAR, ARP_GD_BAR
 
 #define ARP_C_STEP \
-    {{C4}, 127, 1}, {{C3}, 127, 1}, {{C2}, 127, 1}, {{C3}, 127, 1}
+    {{C3}, 127, 1}, {{C2}, 127, 1}, {{C1}, 127, 1}, {{C2}, 127, 1}
 
 #define ARP_C_BAR \
     ARP_C_STEP, ARP_C_STEP, ARP_C_STEP, ARP_C_STEP

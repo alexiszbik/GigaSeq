@@ -134,20 +134,43 @@ SequenceTrack TiredTrackFactory::tiredShake(tick_t lengthInTicks, tick_t startIn
 
 SequenceTrack TiredTrackFactory::tiredClapEcho(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("ClapEcho", MidiChannel::kSampler);
+
+    SequenceDesc desc;
+    desc.notes = {
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {},
+        {}, {}, {}, {Tired::tClapecho}
+    };
+    desc.rate = 4;
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
     addSingleNote(track, Tired::tClapecho, lengthInTicks - TICK(0,1));
     return track;
 }
 
 SequenceTrack TiredTrackFactory::tiredWhiteNoise(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("WhiteNoise", MidiChannel::kSampler);
-    addSingleNote(track, Tired::wnDown);
+
+    SequenceDesc desc;
+    desc.notes = {{Tired::wnDown}, {}, {}, {}, {}, {}, {}, {}};
+    desc.rate = 1;
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
+    
     return track;
 }
 
 SequenceTrack TiredTrackFactory::tiredCymbal(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Cymbal", MidiChannel::kDrums);
-    addSingleNote(track, Tired::cymb);
 
+    SequenceDesc desc;
+    desc.notes = {{Tired::cymb}, {}, {}, {}, {}, {}, {}, {}};
+    desc.rate = 1;
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
     return track;
 }
 

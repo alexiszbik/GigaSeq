@@ -163,7 +163,8 @@ Sequence BibimbapSequenceFactory::bibimbapClimax()
             track(SequenceTrackFactory::gtrLoopErase).withStart(len),
             track(SequenceTrackFactory::gtrPedal)
                 .withCC(HXStomp::kBiBimBapSolo_ccGain, ON)
-                .withCC(HXStomp::kBiBimBapSolo_ccDrive, ON),
+                .withCC(HXStomp::kBiBimBapSolo_ccDrive, ON)
+                .withCC(HXStomp::kBiBimBapSolo_ccDrive, OFF, len),
             track(SequenceTrackFactory::polySynth).withCC(PolySynth::kGlobalMute_cc, OFF),
             track(SequenceTrackFactory::modularA).withCC(ModularA::kMuteClock_cc, OFF),
             track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, 12)

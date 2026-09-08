@@ -221,7 +221,11 @@ Sequence TogetherSequenceFactory::togetherEnd()
     Sequence seq = buildSequence(
         4, 4, 3, "End", songTempo, true,
         {
-            track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, ON)
+            //track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, ON),
+            track(SequenceTrackFactory::gtrLoopErase),
+            track(SequenceTrackFactory::midiLoop)
+                .withNote(MidiLoop::kEraseAll)
+
         });
     return seq;
 }

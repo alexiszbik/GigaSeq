@@ -15,7 +15,7 @@ Sequence UandiSequenceFactory::uandiIntro()
     Sequence seq = buildSequence(
         8, 4, 0, "Intro", songTempo, true,
         {
-            SequenceTrackFactory::kickFour,
+            track(SequenceTrackFactory::kickFour).muted(),
             UandiTrackFactory::uandiWavetableA,
             track(UandiTrackFactory::uandiHatLoop).muted(),
             track(UandiTrackFactory::uandiWant).muted().withMuteEvent(0),
@@ -103,13 +103,13 @@ Sequence UandiSequenceFactory::uandiBack()
             UandiTrackFactory::uandiDiscoB,
             UandiTrackFactory::uandiHatLoop,
             UandiTrackFactory::uandiRiser,
-            track(SequenceTrackFactory::modularA).withCC(ModularA::kMuteClock_cc, ON),
             track(SequenceTrackFactory::bass).withCC(Bass::kGlobalMute_cc, ON),
             track(SequenceTrackFactory::gtrPedal)
                 .withCC(HXStomp::kUandI_ccShifter, OFF, TICK(3,2)) 
                 .withCC(HXStomp::kUandI_ccDrive, ON),
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kUandI_wash)
         });
+
     addOutMidiRules(seq, &kUandiLedRules);
     return seq;
 }
