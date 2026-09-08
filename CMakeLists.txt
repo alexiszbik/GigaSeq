@@ -59,6 +59,7 @@ add_executable(GigaSeq
     src/factories/closer/CloserSequenceFactory.cpp
     src/factories/closer/CloserSong.cpp
     src/factories/closer/CloserTrackFactory.cpp
+    src/factories/closer/CloserLedRules.cpp
 
     src/factories/fantasy/FantasySequenceFactory.cpp
     src/factories/fantasy/FantasySong.cpp

@@ -6,6 +6,7 @@ class CloserSequenceFactory
 {
 public:
     static Sequence closerIntro();
+    static Sequence closerIntroB();
 
     static Sequence closerChords();
     static Sequence closerBass();
@@ -14,4 +15,5 @@ public:
     static Sequence closerClimax();
 
     static Sequence closerEnd();
+
 };

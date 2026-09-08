@@ -34,8 +34,7 @@ Sequence WaterSequenceFactory::waterIntro()
                 .withCC(MidiLoop::kRecord_cc, OFF),
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kWater_oscBlue),
             track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, decayCyan),
-            track(SequenceTrackFactory::drumMachine).withCC(DrumMachine::kClearAll_cc, ON),
-            track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, ON)
+            track(SequenceTrackFactory::drumMachine).withCC(DrumMachine::kClearAll_cc, ON)
         });
 
     addOutMidiRules(seq, &kWaterFmbassLedRules);

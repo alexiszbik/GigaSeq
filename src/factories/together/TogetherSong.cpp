@@ -22,6 +22,7 @@ void addTogetherSong(SequencePool& pool)
         TogetherSequenceFactory::togetherPartBWithHats,
         TogetherSequenceFactory::togetherPartBDrums,
         TogetherSequenceFactory::togetherPartBClimax,
+        TogetherSequenceFactory::togetherEnd,
     };
 
     for (Builder builder : sequences) {

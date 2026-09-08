@@ -215,3 +215,13 @@ Sequence TogetherSequenceFactory::togetherPartBClimax()
             track(TogetherTrackFactory::togetherLedBlinkClimax).withCC(LedStrips::kDecay_cc, 44)
         });
 }
+
+Sequence TogetherSequenceFactory::togetherEnd()
+{
+    Sequence seq = buildSequence(
+        4, 4, 3, "End", songTempo, true,
+        {
+            track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, ON)
+        });
+    return seq;
+}

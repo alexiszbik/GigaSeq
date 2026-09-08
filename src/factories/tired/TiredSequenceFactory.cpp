@@ -3,6 +3,7 @@
 #include "factories/SequenceBuilder.h"
 #include "factories/SequenceTrackFactory.h"
 #include "factories/tired/TiredTrackFactory.h"
+#include "factories/tired/TiredSamples.h"
 #include "MidiConst.h"
 
 namespace {
@@ -24,13 +25,16 @@ Sequence TiredSequenceFactory::tiredIntro()
             track(TiredTrackFactory::tiredShake).muted(),
             track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kTiredSlicer),
             track(SequenceTrackFactory::gtrLoop).withProgramChange(BossRC::kTired),
-             track(SequenceTrackFactory::polySynth).withProgramChange(PolySynth::kFilterStr),
+            track(SequenceTrackFactory::polySynth).withProgramChange(PolySynth::kFilterStr),
             track(SequenceTrackFactory::midiLoop)
                 .withNote(MidiLoop::kEraseAll)
                 .withNote(MidiLoop::kSelectPoly)
                 .withCC(MidiLoop::kArpMode_cc, OFF)
                 .withCC(MidiLoop::kRecord_cc, OFF)
                 .withCC(MidiLoop::kBarCount_cc, 8),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kTired_sticks),
+            track(SequenceTrackFactory::drumMachine)
+                .withCC(DrumMachine::kClearAll_cc, ON)
         });
     return seq;
 }
@@ -52,7 +56,7 @@ Sequence TiredSequenceFactory::tiredDropA()
 Sequence TiredSequenceFactory::tiredMain()
 {
     Sequence seq = buildSequence(
-        8, 4, 0, "Main", songTempo, true,
+        16, 4, 8, "Main", songTempo, true,
         {
             SequenceTrackFactory::kickFour,
             TiredTrackFactory::tiredFreak,
@@ -60,9 +64,13 @@ Sequence TiredSequenceFactory::tiredMain()
             TiredTrackFactory::tiredPhazeHat,
             TiredTrackFactory::tiredShake,
             TiredTrackFactory::tiredClapEcho,
-            track(TiredTrackFactory::tiredWhiteNoise).withMuteEvent(TICK(1)),
+            track(TiredTrackFactory::tiredWhiteNoise)
+                .withMuteEvent(TICK(1)).withMuteEvent(TICK(9)),
             track(TiredTrackFactory::tiredRiserA).muted().asFill(),
             TiredTrackFactory::tiredCymbal,
+            track(SequenceTrackFactory::drumMachine)
+                .withNote(Tired::fbTom)
+                .withCC(DrumMachine::kPerformMode_cc, OFF)
         });
     return seq;
 }
@@ -79,6 +87,8 @@ Sequence TiredSequenceFactory::tiredPause()
             TiredTrackFactory::tiredClapEcho,
             TiredTrackFactory::tiredCymbal,
             track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kTiredDelay),
+            track(SequenceTrackFactory::drumMachine)
+                .withCC(DrumMachine::kClearAll_cc, ON)
         });
     return seq;
 }
@@ -155,7 +165,8 @@ Sequence TiredSequenceFactory::tiredPartBStart()
             track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kTiredEndA),
             track(SequenceTrackFactory::microfreak).withProgramChange(Microfreak::kTiredArp),
             track(SequenceTrackFactory::midiLoop)
-                .withNote(MidiLoop::kEraseAll)
+                .withNote(MidiLoop::kEraseAll),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kTired_starTour)
         });
     return seq;
 }

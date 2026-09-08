@@ -4,6 +4,7 @@
 #include "factories/SequenceTrackFactory.h"
 #include "factories/closer/CloserTrackFactory.h"
 #include "factories/falling/FallingTrackFactory.h"
+#include "factories/falling/CloserLedRules.h"
 #include "midiinrules/TransposeInMidiRules.h"
 #include "MidiConst.h"
 
@@ -14,7 +15,6 @@ namespace {
 
 Sequence CloserSequenceFactory::closerIntro()
 {
-
     Sequence seq = buildSequence(
         8, 4, 4, "Intro", songTempo, true,
         {
@@ -22,23 +22,44 @@ Sequence CloserSequenceFactory::closerIntro()
             track(CloserTrackFactory::closerStab).withProgramChange(PolySynth::kCloser),
             track(CloserTrackFactory::closerHats).muted(),
             track(CloserTrackFactory::closerLoopHat).muted(),
-            track(CloserTrackFactory::closerClapTom).muted(),
-            track(CloserTrackFactory::closerModular).muted(),
             track(CloserTrackFactory::closerFill808).withMuteEvent(TICK(4)).asFill(),
             track(CloserTrackFactory::closerRiser).withMuteEvent(TICK(4)).asFill(),
-            track(FallingTrackFactory::fallingHarp).withProgramChange(Microfreak::kFallingHarp),
-            track(SequenceTrackFactory::gtrLoopErase).withProgramChange(BossRC::kCloser, TICK(4)),
             track(SequenceTrackFactory::midiLoop)
                 .withNote(MidiLoop::kSelectBass)
                 .withCC(MidiLoop::kArpMode_cc, OFF)
                 .withCC(MidiLoop::kRecord_cc, ON)
                 .withCC(MidiLoop::kBarCount_cc, 4),
-            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kCloser_lasers),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kKill),
             track(CloserTrackFactory::closerLedStab).withCC(LedStrips::kDecay_cc, stabLedDecay)
+        });
+    addInMidiRules(seq, &kTransposeInMidiRules, -12);
+    
+    return seq;
+}
+
+
+Sequence CloserSequenceFactory::closerIntroB()
+{
+    Sequence seq = buildSequence(
+        4, 4, 0, "Intro", songTempo, true,
+        {
+            SequenceTrackFactory::kickFour,
+            CloserTrackFactory::closerStab,
+            track(CloserTrackFactory::closerHats).muted(),
+            track(CloserTrackFactory::closerLoopHat).muted(),
+            CloserTrackFactory::closerClapTom,
+            CloserTrackFactory::closerModular,
+            track(CloserTrackFactory::closerFill808).withMuteEvent(TICK(0)).asFill(),
+            track(CloserTrackFactory::closerRiser).withMuteEvent(TICK(0)).asFill(),
+            track(FallingTrackFactory::fallingHarp).withProgramChange(Microfreak::kFallingHarp),
+            track(SequenceTrackFactory::gtrLoopErase).withProgramChange(BossRC::kCloser, TICK(4)),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kCloser_lasers),
+            CloserTrackFactory::closerLedStab
         });
     addInMidiRules(seq, &kTransposeInMidiRules, -12);
     return seq;
 }
+
 
 Sequence CloserSequenceFactory::closerChords()
 {
@@ -74,6 +95,7 @@ Sequence CloserSequenceFactory::closerBass()
             track(CloserTrackFactory::closerRiser).muted().asFill(),
         });
     addInMidiRules(seq, &kTransposeInMidiRules, -12);
+    addOutMidiRules(seq, &kCloserLedRules);
     return seq;
 }
 
@@ -92,6 +114,7 @@ Sequence CloserSequenceFactory::closerBlast()
             CloserTrackFactory::closerBlastLed,
         });
     addInMidiRules(seq, &kTransposeInMidiRules, -12);
+    addOutMidiRules(seq, &kCloserLedRules);
     return seq;
 }
 
@@ -113,6 +136,7 @@ Sequence CloserSequenceFactory::closerBackKick()
             SequenceTrackFactory::matrixKill,
             track(CloserTrackFactory::closerLedStab).withCC(LedStrips::kDecay_cc, stabLedDecay)
         });
+
     addInMidiRules(seq, &kTransposeInMidiRules, -12);
     return seq;
 }
@@ -137,6 +161,7 @@ Sequence CloserSequenceFactory::closerClimax()
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kCloser_smileys),
             track(CloserTrackFactory::closerLedStab).withCC(LedStrips::kDecay_cc, stabLedDecay)
         });
+        
     addInMidiRules(seq, &kTransposeInMidiRules, -12);
     return seq;
 }
