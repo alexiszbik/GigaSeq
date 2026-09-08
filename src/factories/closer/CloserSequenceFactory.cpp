@@ -3,8 +3,8 @@
 #include "factories/SequenceBuilder.h"
 #include "factories/SequenceTrackFactory.h"
 #include "factories/closer/CloserTrackFactory.h"
+#include "factories/closer/CloserLedRules.h"
 #include "factories/falling/FallingTrackFactory.h"
-#include "factories/falling/CloserLedRules.h"
 #include "midiinrules/TransposeInMidiRules.h"
 #include "MidiConst.h"
 
@@ -161,7 +161,7 @@ Sequence CloserSequenceFactory::closerClimax()
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kCloser_smileys),
             track(CloserTrackFactory::closerLedStab).withCC(LedStrips::kDecay_cc, stabLedDecay)
         });
-        
+
     addInMidiRules(seq, &kTransposeInMidiRules, -12);
     return seq;
 }

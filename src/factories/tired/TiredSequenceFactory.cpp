@@ -2,6 +2,7 @@
 
 #include "factories/SequenceBuilder.h"
 #include "factories/SequenceTrackFactory.h"
+#include "factories/tired/TiredInMidiRules.h"
 #include "factories/tired/TiredTrackFactory.h"
 #include "factories/tired/TiredSamples.h"
 #include "MidiConst.h"
@@ -36,6 +37,8 @@ Sequence TiredSequenceFactory::tiredIntro()
             track(SequenceTrackFactory::drumMachine)
                 .withCC(DrumMachine::kClearAll_cc, ON)
         });
+
+    addInMidiRules(seq, &kTiredChordInRules);
     return seq;
 }
 
