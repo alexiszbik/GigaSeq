@@ -75,6 +75,7 @@ add_executable(GigaSeq
     src/factories/tired/TiredSequenceFactory.cpp
     src/factories/tired/TiredSong.cpp
     src/factories/tired/TiredTrackFactory.cpp
+    src/factories/tired/TiredLedRules.cpp
     src/factories/tired/TiredInMidiRules.cpp
 
 

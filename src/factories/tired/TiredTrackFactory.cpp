@@ -229,3 +229,9 @@ SequenceTrack TiredTrackFactory::tiredRollHat(tick_t lengthInTicks, tick_t start
 
     return track;
 }
+
+SequenceTrack TiredTrackFactory::tiredLedPattern(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("LedPattern", MidiChannel::kLedStrips);
+    track.setPattern(TiredPatterns::kTiredLedPattern, lengthInTicks, startInTicks);
+    return track;
+}

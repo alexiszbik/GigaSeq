@@ -2,6 +2,7 @@
 
 #include "TrackPattern.h"
 #include "TiredSamples.h"
+#include "MidiConst.h"
 #include "factories/MidiNotes.h"
 
 namespace TiredPatterns
@@ -316,5 +317,16 @@ constexpr PatternStep kTiredRideSteps[] = {
 };
 
 MAKE_PATTERN(kTiredRide, kTiredRideSteps, 8);
+
+
+constexpr PatternStep kTiredLedPatternSteps[] = {
+    {{LedStrips::kRed_A}, 127, 1},
+    {{LedStrips::kRed_B}, 127, 1},
+    {{LedStrips::kRed_C}, 127, 1},
+    {{LedStrips::kRed_D}, 127, 1},
+    {{LedStrips::kRed_ALL}, 127, 1},
+};
+
+MAKE_PATTERN(kTiredLedPattern, kTiredLedPatternSteps, 16);
 
 } // namespace TiredPatterns

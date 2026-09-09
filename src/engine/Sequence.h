@@ -93,6 +93,7 @@ private:
     bool loopStartAfterWrap_ = false;
     TimedEventList<TempoEvent> tempoEvents_;
     std::vector<SequenceTrack> tracks_;
+    
     OutMidiRules* outMidiRules_ = nullptr;
     InMidiRules* inMidiRules_ = nullptr;
     InMidiRulesConfig inMidiRulesConfig_ = {};

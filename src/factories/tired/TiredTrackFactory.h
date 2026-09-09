@@ -35,4 +35,5 @@ public:
     static SequenceTrack tiredRide(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack tiredMainBBassEvents(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack tiredRollHat(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack tiredLedPattern(tick_t lengthInTicks, tick_t startInTicks);
 };
