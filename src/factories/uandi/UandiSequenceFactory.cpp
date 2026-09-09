@@ -29,7 +29,7 @@ Sequence UandiSequenceFactory::uandiIntro()
                 .withCC(DrumMachine::kPerformMode_cc, ON)
                 .withCC(DrumMachine::kRepeatMode_cc, ON),
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kUandI_noise),
-            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, 76)
+            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, 56)
         });
 
     addOutMidiRules(seq, &kUandiLedRules);

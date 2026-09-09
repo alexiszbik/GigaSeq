@@ -17,8 +17,8 @@ Sequence FriendshipSequenceFactory::friendshipIntro()
     Sequence seq = buildSequence(
         16, 4, 8, "Intro", songTempo, true,
         {
-            track(SequenceTrackFactory::kickFour).muted(),
-            track(SequenceTrackFactory::snareFour).muted(),
+            //track(SequenceTrackFactory::kickFour).muted(),
+            //track(SequenceTrackFactory::snareFour).muted(),
             track(FriendshipTrackFactory::friendshipHats).muted(),
             track(FriendshipTrackFactory::friendshipCowClap).muted(),
             FriendshipTrackFactory::friendshipStabs,
@@ -51,15 +51,16 @@ Sequence FriendshipSequenceFactory::friendshipIntro()
 Sequence FriendshipSequenceFactory::friendshipIntroB()
 {
     Sequence seq = buildSequence(
-        8, 4, 0, "IntroB", songTempo, true,
+        24, 4, 16, "IntroB", songTempo, true,
         {
-            track(SequenceTrackFactory::kickFour).muted(),
-            track(SequenceTrackFactory::snareFour).muted(),
-            track(FriendshipTrackFactory::friendshipHats).muted(),
+            //track(SequenceTrackFactory::kickFour).muted(),
+            //track(SequenceTrackFactory::snareFour).muted(),
+            track(FriendshipTrackFactory::friendshipHats).withStart(TICK(16)),
             FriendshipTrackFactory::friendshipCowClap,
-            FriendshipTrackFactory::friendshipStabs,
+            track(FriendshipTrackFactory::friendshipStabs).withStart(TICK(16)),
             FriendshipTrackFactory::friendshipVoiceSynth,
             track(FriendshipTrackFactory::friendshipBravery).muted(),
+            track(SequenceTrackFactory::sampler).withNote(Friendship::n130riz, 127, TICK(14), TICK(2)),
             track(FriendshipTrackFactory::friendshipRiser).muted().withMuteEvent(TICK(8)).asFill(),
         });
     
@@ -162,7 +163,11 @@ Sequence FriendshipSequenceFactory::friendshipBreak()
                 .withCC(MidiLoop::kArpMode_cc, OFF)
                 .withCC(MidiLoop::kRecord_cc, OFF),
             track(FriendshipTrackFactory::friendshipMatrixBravery).withProgramChange(LedMatrix::kFriendship_sign),
-            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, 1)
+            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, 1),
+            track(SequenceTrackFactory::drumMachine)
+                .withCC(DrumMachine::kPerformMode_cc, OFF)
+                .withCC(DrumMachine::kClearAll_cc, ON)
+                .withNote(Friendship::openhat),
         });
 
     addOutMidiRules(seq, &kFriendshipLedRules);
@@ -182,7 +187,7 @@ Sequence FriendshipSequenceFactory::friendshipRising()
             track(FriendshipTrackFactory::friendshipJungle),
                 //.withNote(69, 127, TICK(15), TickHelper::kHalfStepLen),
             track(FriendshipTrackFactory::friendshipStabz).withNote(69, 137, TICK(15), TickHelper::kHalfStepLen),
-            track(FriendshipTrackFactory::friendshipOpenH909).withLength(TICK(15)),
+            track(FriendshipTrackFactory::friendshipOpenH909).muted().withLength(TICK(15)),
             track(FriendshipTrackFactory::friendshipSnareRoll),
             track(FriendshipTrackFactory::friendshipRiser).withLength(TICK(15)),
             track(SequenceTrackFactory::polySynth)
@@ -218,6 +223,8 @@ Sequence FriendshipSequenceFactory::friendshipClimax()
                 .withCC(ModularA::kGlobalMute_cc, OFF),
             track(FriendshipTrackFactory::friendshipMatrixBraveryClimax).withProgramChange(LedMatrix::kFriendship_rainbowSign),
         });
+
+    addInMidiRules(seq, &kTransposeInMidiRules, 12);
     return seq;
 }
 
