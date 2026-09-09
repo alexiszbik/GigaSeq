@@ -166,8 +166,6 @@ SequenceTrack FantasyTrackFactory::fantasyShakeEnd(tick_t lengthInTicks, tick_t 
     return track;
 }
 
-
-
 SequenceTrack FantasyTrackFactory::fantasyBreakFX(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("BreakFX", MidiChannel::kSampler);
 

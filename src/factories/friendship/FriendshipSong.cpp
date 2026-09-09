@@ -13,6 +13,7 @@ void addFriendshipSong(SequencePool& pool)
     Song song("Friendship", 8);
     const Builder sequences[] = {
         FriendshipSequenceFactory::friendshipIntro,
+        FriendshipSequenceFactory::friendshipIntroB,
         FriendshipSequenceFactory::friendshipChill,
         FriendshipSequenceFactory::friendshipBack,
         FriendshipSequenceFactory::friendshipMain,

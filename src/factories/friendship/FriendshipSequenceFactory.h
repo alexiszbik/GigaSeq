@@ -6,13 +6,12 @@ class FriendshipSequenceFactory
 {
 public:
     static Sequence friendshipIntro();
+    static Sequence friendshipIntroB();
     static Sequence friendshipChill();
     static Sequence friendshipBack();
     static Sequence friendshipMain();
     static Sequence friendshipBreak();
     static Sequence friendshipRising();
     static Sequence friendshipClimax();
-
-
     static Sequence friendshipEnd();
 };
