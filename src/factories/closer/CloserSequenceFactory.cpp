@@ -147,16 +147,16 @@ Sequence CloserSequenceFactory::closerBackKick()
 Sequence CloserSequenceFactory::closerClimax()
 {
     Sequence seq = buildSequence(
-        8, 4, 4, "Climax", songTempo, true,
+        12, 4, 8, "Climax", songTempo, true,
         {
             SequenceTrackFactory::kickFour,
             CloserTrackFactory::closerStab,
-            track(CloserTrackFactory::closerHats).muted(),
-            track(CloserTrackFactory::closerLoopHat).muted(),
+            track(CloserTrackFactory::closerHats).withStart(TICK(8)),
+            track(CloserTrackFactory::closerLoopHat).withStart(TICK(8)),
             CloserTrackFactory::closerClapTom,
-            track(CloserTrackFactory::closerDrumix).muted(),
-            track(CloserTrackFactory::closerFill808).withMuteEvent(TICK(4)).asFill(),
-            track(CloserTrackFactory::closerRiser).withMuteEvent(TICK(4)).asFill(),
+            CloserTrackFactory::closerDrumix,
+            track(CloserTrackFactory::closerFill808).withMuteEvent(TICK(8)).asFill(),
+            track(CloserTrackFactory::closerRiser).withMuteEvent(TICK(8)).asFill(),
             CloserTrackFactory::closer303,
             track(SequenceTrackFactory::microfreak).withProgramChange(Microfreak::kCloserHouse),
             track(SequenceTrackFactory::midiLoop)

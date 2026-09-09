@@ -193,13 +193,15 @@ SequenceTrack CloserTrackFactory::closer303(tick_t lengthInTicks, tick_t startIn
     SequenceTrack track("303", MidiChannel::kSampler);
     track.addNote(TICK(4), TickHelper::kStepLen, Closer::tri303, 127);
     track.addNote(TICK(6), TickHelper::kStepLen, Closer::tri303, 127);
+    track.addNote(TICK(8), TickHelper::kStepLen, Closer::tri303, 127);
+    track.addNote(TICK(10), TickHelper::kStepLen, Closer::tri303, 127);
     return track;
 }
 
 SequenceTrack CloserTrackFactory::closerDrumix(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Drumix", MidiChannel::kSampler);
-    track.addNote(TICK(4), TickHelper::kStepLen, Closer::triChopdrum, 127);
-    track.addNote(TICK(6), TickHelper::kStepLen, Closer::triChopdrum, 127);
+    track.addNote(TICK(8), TickHelper::kStepLen, Closer::triChopdrum, 127);
+    track.addNote(TICK(10), TickHelper::kStepLen, Closer::triChopdrum, 127);
     return track;
 }
 
