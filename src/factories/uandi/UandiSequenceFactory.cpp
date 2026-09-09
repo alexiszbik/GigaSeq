@@ -4,6 +4,7 @@
 #include "factories/SequenceTrackFactory.h"
 #include "factories/uandi/UandiTrackFactory.h"
 #include "factories/uandi/UandiLedRules.h"
+#include "factories/uandi/UandiSamples.h"
 #include "MidiConst.h"
 
 namespace {
@@ -19,7 +20,6 @@ Sequence UandiSequenceFactory::uandiIntro()
             UandiTrackFactory::uandiWavetableA,
             track(UandiTrackFactory::uandiHatLoop).muted(),
             track(UandiTrackFactory::uandiWant).muted().withMuteEvent(0),
-            track(UandiTrackFactory::uandiBassA).muted(),
             track(UandiTrackFactory::uandiFreak).muted().withProgramChange(Microfreak::kUandI),
             track(UandiTrackFactory::uandiRiser).muted().withMuteEvent(0).asFill(),
             track(SequenceTrackFactory::polySynth).withProgramChange(PolySynth::kSlowStr),
@@ -35,6 +35,28 @@ Sequence UandiSequenceFactory::uandiIntro()
     addOutMidiRules(seq, &kUandiLedRules);
     return seq;
 }
+
+
+Sequence UandiSequenceFactory::uandiIntroBass()
+{
+    Sequence seq = buildSequence(
+        16, 4, 8, "IntroBass", songTempo, true,
+        {
+            track(SequenceTrackFactory::kickFour).withStart(TICK(8)),
+            UandiTrackFactory::uandiWavetableA,
+            track(UandiTrackFactory::uandiHatLoop).withStart(TICK(8)),
+            UandiTrackFactory::uandiBassA,
+            UandiTrackFactory::uandiFreak,
+            track(SequenceTrackFactory::sampler)
+                .withNote(Uandi::uaiRiz, 127, TICK(7,2), TICK(0,2)),
+            track(UandiTrackFactory::uandiRiser)
+                .withMuteEvent(TICK(8)).asFill(),
+        });
+
+    addOutMidiRules(seq, &kUandiLedRules);
+    return seq;
+}
+
 
 Sequence UandiSequenceFactory::uandiIntroB()
 {

@@ -6,11 +6,12 @@ class UandiSequenceFactory
 {
 public:
     static Sequence uandiIntro();
-
+    static Sequence uandiIntroBass();
     static Sequence uandiIntroB();
     static Sequence uandiMain();
     static Sequence uandiBreak();
     static Sequence uandiBack();
     static Sequence uandiClimax();
     static Sequence uandiEnd();
+
 };

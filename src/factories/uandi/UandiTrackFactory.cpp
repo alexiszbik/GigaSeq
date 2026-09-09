@@ -7,7 +7,10 @@
 
 SequenceTrack UandiTrackFactory::uandiWavetableA(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("WavetableA", MidiChannel::kSampler);
-    addSingleNote(track, Uandi::uaiWt1, TickHelper::kTicksPerEighthNote);
+    SequenceDesc desc;
+    desc.notes = {{Uandi::uaiWt1}};
+    desc.rate = 0.125;
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks + TickHelper::kTicksPerEighthNote);
     return track;
 }
 
@@ -24,18 +27,15 @@ SequenceTrack UandiTrackFactory::uandiWavetableAB(tick_t lengthInTicks, tick_t s
     desc.notes = {{Uandi::uaiWt1}, {}, {}, {}, {}, {}, {}, {}, {Uandi::uaiWt2}, {}, {}, {}};
     desc.rate = 1;
     makeSequenceTrack(track, desc, lengthInTicks, startInTicks + TickHelper::kTicksPerEighthNote);
-
     return track;
 }
 
-
 SequenceTrack UandiTrackFactory::uandiHatLoop(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("HatLoop", MidiChannel::kSampler);
-    addSingleNote(track, Uandi::uaiHat);
-    addSingleNote(track, Uandi::uaiHat, TICK(4));
-    if (lengthInTicks > TICK(8)) {
-        addSingleNote(track, Uandi::uaiHat, TICK(8));
-    }
+    SequenceDesc desc;
+    desc.notes = {{Uandi::uaiHat}};
+    desc.rate = 0.25;
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
     return track;
 }
 

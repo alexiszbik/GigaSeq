@@ -12,13 +12,14 @@ void addUandiSong(SequencePool& pool)
     Song song("Uandi", 6);
     const Builder sequences[] = {
         UandiSequenceFactory::uandiIntro,
-  
+        UandiSequenceFactory::uandiIntroBass,
         UandiSequenceFactory::uandiIntroB,
         UandiSequenceFactory::uandiMain,
         UandiSequenceFactory::uandiBreak,
         UandiSequenceFactory::uandiBack,
         UandiSequenceFactory::uandiClimax,
         UandiSequenceFactory::uandiEnd,
+        
     };
 
     for (Builder builder : sequences) {
