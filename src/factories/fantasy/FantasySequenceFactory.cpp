@@ -162,6 +162,7 @@ Sequence FantasySequenceFactory::fantasyClimax()
         {
             FantasyTrackFactory::fantasySampleSidekick,
             FantasyTrackFactory::fantasyDrums,
+            FantasyTrackFactory::fantasySnareEnd,
             FantasyTrackFactory::fantasyShake,
             FantasyTrackFactory::fantasyChords,
             FantasyTrackFactory::fantasyShakeEnd,

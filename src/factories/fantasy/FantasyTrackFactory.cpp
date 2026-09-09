@@ -256,3 +256,9 @@ SequenceTrack FantasyTrackFactory::fantasyLedRave(tick_t lengthInTicks, tick_t s
         16);
     return track;
 }
+
+SequenceTrack FantasyTrackFactory::fantasySnareEnd(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("SnareEnd", MidiChannel::kDrums);
+    track.setPattern(FantasyPatterns::kFantasySnareEnd, lengthInTicks, startInTicks);
+    return track;
+}

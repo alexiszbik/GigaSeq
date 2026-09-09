@@ -37,7 +37,7 @@ Sequence FriendshipSequenceFactory::friendshipIntro()
             track(SequenceTrackFactory::drumMachine)
                 .withCC(DrumMachine::kPerformMode_cc, OFF)
                 .withCC(DrumMachine::kClearAll_cc, ON)
-                .withNote(Friendship::openhat),
+                .withNote(Friendship::fbrKick),
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kFriendship_kaomjis),
             track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, 20)
             
@@ -62,7 +62,11 @@ Sequence FriendshipSequenceFactory::friendshipChill()
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kFriendship_rain),
             track(SequenceTrackFactory::ledStrips)
                 .withNote(LedStrips::kBlue_ALL, 127, 0, TICK(8))
-                .withNote(LedStrips::kBlue_ALL, 127, TICK(8), TICK(8))
+                .withNote(LedStrips::kBlue_ALL, 127, TICK(8), TICK(8)),
+            track(SequenceTrackFactory::drumMachine)
+                .withCC(DrumMachine::kPerformMode_cc, OFF)
+                .withCC(DrumMachine::kClearAll_cc, ON)
+                .withNote(Friendship::openhat),
 
         });
     return seq;

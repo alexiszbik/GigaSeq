@@ -34,4 +34,5 @@ public:
     static SequenceTrack fantasyLedChorus1(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack fantasyLedChorus2(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack fantasyLedRave(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack fantasySnareEnd(tick_t lengthInTicks, tick_t startInTicks);
 };
