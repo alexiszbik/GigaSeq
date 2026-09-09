@@ -213,6 +213,7 @@ Sequence TiredSequenceFactory::tiredPartBSolo()
             track(TiredTrackFactory::tiredFreakArp).muted(),
             TiredTrackFactory::tiredRollHat,
             track(TiredTrackFactory::tiredRiserA).withLength(TICK(4)),
+            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, 22),
         });
     addOutMidiRules(seq, &kTiredLedRules);
     return seq;
