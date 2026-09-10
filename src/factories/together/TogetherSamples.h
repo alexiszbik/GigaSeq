@@ -48,4 +48,8 @@ constexpr uint8_t dx7bass2 = 59;
 
 constexpr uint8_t n130riz = 60;
 
+constexpr uint8_t tgtFill1 = 61;
+
+constexpr uint8_t tgtFill2 = 62;
+
 }

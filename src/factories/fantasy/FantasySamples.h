@@ -50,4 +50,10 @@ constexpr uint8_t bigriz2 = 64;
 
 constexpr uint8_t fantasyBreakfx = 65;
 
+constexpr uint8_t fantGtr1 = 66;
+
+constexpr uint8_t fantGtr2 = 67;
+
+constexpr uint8_t fantGtr3 = 68;
+
 }

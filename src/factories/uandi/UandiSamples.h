@@ -14,6 +14,10 @@ constexpr uint8_t uaiOh = 42;
 
 constexpr uint8_t uaiShk = 43;
 
+constexpr uint8_t uandiTomia = 44;
+
+constexpr uint8_t uandiTomib = 45;
+
 constexpr uint8_t uiTomverb = 46;
 
 constexpr uint8_t uiWant = 47;
@@ -39,5 +43,7 @@ constexpr uint8_t uaiWt1 = 66;
 constexpr uint8_t uaiWt2 = 67;
 
 constexpr uint8_t explode = 68;
+
+constexpr uint8_t uandiChineseecho = 70;
 
 }
