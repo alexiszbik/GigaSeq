@@ -1,5 +1,6 @@
 #include "FantasySequenceFactory.h"
 
+#include "factories/fantasy/FantasyLedRules.h"
 #include "factories/SequenceBuilder.h"
 #include "factories/SequenceTrackFactory.h"
 #include "factories/fantasy/FantasyTrackFactory.h"
@@ -7,6 +8,7 @@
 
 namespace {
 constexpr uint8_t songTempo = 130;
+constexpr uint8_t chorusLedDecay = 44;
 }
 
 Sequence FantasySequenceFactory::fantasyIntro()
@@ -51,8 +53,10 @@ Sequence FantasySequenceFactory::fantasyStart()
             FantasyTrackFactory::fantasyShake,
             FantasyTrackFactory::fantasyChords,
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kFantasy_signA),
-            track(FantasyTrackFactory::fantasyLedChorus1).withCC(LedStrips::kDecay_cc, 50)
+            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, chorusLedDecay)
         });
+
+    addOutMidiRules(seq, &kFantasyLedRules);
     return seq;
 }
 
@@ -73,7 +77,7 @@ Sequence FantasySequenceFactory::fantasyBreak()
 
 Sequence FantasySequenceFactory::fantasyBack()
 {
-    return buildSequence(
+    Sequence seq = buildSequence(
         16, 4, 12, "FadeCut", songTempo, true,
         {
             track(FantasyTrackFactory::fantasySampleSidekick).withStart(TICK(8)),
@@ -97,9 +101,11 @@ Sequence FantasySequenceFactory::fantasyBack()
             track(SequenceTrackFactory::gtrLoop)
                 .withCC(BossRC::kVolume_cc, 0, TICK(8)).withCC(BossRC::kVolume_cc, 65, TICK(8, 1)),
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kFantasy_signB, TICK(8, 1)),
-            track(FantasyTrackFactory::fantasyLedChorus2) //TODO y'a un truc qui va pas du TOUT ici avec le decay!!!!
-                .withStart(TICK(8, 0)) //TODO : make better sync
+            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, chorusLedDecay)
         });
+
+    addOutMidiRules(seq, &kFantasyLedRules);
+    return seq;
 }
 
 Sequence FantasySequenceFactory::fantasyRave()
@@ -121,7 +127,7 @@ Sequence FantasySequenceFactory::fantasyRave()
             track(SequenceTrackFactory::gtrPedal)
                 .withProgramChange(HXStomp::kFantasySolo),
             SequenceTrackFactory::matrixKill,
-            track(FantasyTrackFactory::fantasyLedRave).withCC(LedStrips::kDecay_cc, 1)
+            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, 1)
         });
     return seq;
 }

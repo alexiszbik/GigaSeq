@@ -49,13 +49,13 @@ Sequence WaterSequenceFactory::waterIntroBass()
             SequenceTrackFactory::kickFour,
             SequenceTrackFactory::clapFour,
             WaterTrackFactory::waterHats,
-            track(WaterTrackFactory::waterMarimba).muted(),
+            track(WaterTrackFactory::waterMarimba).muted().withMuteEvent(TICK(8), false),
             WaterTrackFactory::waterFreak,
             WaterTrackFactory::waterBass,
             track(WaterTrackFactory::waterClaves).withStart(TICK(8)),
             track(WaterTrackFactory::waterCongas).muted(),
-            track(WaterTrackFactory::waterFmbass).muted(),
-            track(WaterTrackFactory::waterMatrix).muted(),
+            track(WaterTrackFactory::waterFmbass).muted().withMuteEvent(TICK(3,2), false),
+            track(WaterTrackFactory::waterMatrix).muted().withMuteEvent(TICK(3,2), false),
             track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, decayCyan)
         });
 

@@ -64,6 +64,7 @@ add_executable(GigaSeq
     src/factories/fantasy/FantasySequenceFactory.cpp
     src/factories/fantasy/FantasySong.cpp
     src/factories/fantasy/FantasyTrackFactory.cpp
+    src/factories/fantasy/FantasyLedRules.cpp
 
 
     src/factories/uandi/UandiSequenceFactory.cpp
