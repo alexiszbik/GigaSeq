@@ -209,7 +209,7 @@ SequenceTrack FriendshipTrackFactory::friendshipVocalHits(tick_t lengthInTicks, 
 
     desc.notes = {{c}};
     makeSequenceTrack(track, desc, TICK(1), TICK(7));
-
+    //TODO : make roll !!!!
     return track;
 }
 

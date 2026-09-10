@@ -48,7 +48,7 @@ Sequence FallingSequenceFactory::fallingIntro2()
             FallingTrackFactory::fallingPads,
             track(FallingTrackFactory::fallingKick).withLength(TickHelper::bars(7)),
             FallingTrackFactory::fallingRiser,
-            track(WaterTrackFactory::waterFreakWind)
+            track(WaterTrackFactory::waterFreakWind).withAutomation(TICK(4), TICK(8), Microfreak::kLfoFreeRate_cc, 10, 100)
         });
     return seq;
 }
@@ -173,7 +173,7 @@ Sequence FallingSequenceFactory::fallingEnd()
         {
             FallingTrackFactory::fallingHandTamb,
             track(FallingTrackFactory::fallingSynthEnd).withLength(TickHelper::bars(16)),
-            FallingTrackFactory::fallingHarp,
+            track(FallingTrackFactory::fallingHarp).withProgramChange(Microfreak::kFallingHarp),
             track(FallingTrackFactory::fallingRiser).muted().asFill(),
             track(SequenceTrackFactory::midiLoop)
                 .withNote(MidiLoop::kSelectBass)

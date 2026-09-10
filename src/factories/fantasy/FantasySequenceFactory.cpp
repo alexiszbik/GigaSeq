@@ -1,6 +1,7 @@
 #include "FantasySequenceFactory.h"
 
 #include "factories/fantasy/FantasyLedRules.h"
+#include "factories/fantasy/FantasyLedRaveRules.h"
 #include "factories/SequenceBuilder.h"
 #include "factories/SequenceTrackFactory.h"
 #include "factories/fantasy/FantasyTrackFactory.h"
@@ -66,6 +67,7 @@ Sequence FantasySequenceFactory::fantasyBreak()
         4, 4, 0, "Break", songTempo, true,
         {
             FantasyTrackFactory::fantasyHiDrum,
+            FantasyTrackFactory::fantasyGuitar,
             track(FantasyTrackFactory::fantasyFreak).muted(),
             track(FantasyTrackFactory::fantasyVocals).muted(),
             track(SequenceTrackFactory::polySynth).withCC(ModularA::kGlobalMute_cc, ON),
@@ -88,6 +90,7 @@ Sequence FantasySequenceFactory::fantasyBack()
             track(FantasyTrackFactory::fantasyChordOffset).withStart(TICK(8)),
             track(FantasyTrackFactory::fantasyHiDrum).withLength(TICK(8)),
             track(FantasyTrackFactory::fantasyFreak),
+            FantasyTrackFactory::fantasyGuitar,
 //                .withMuteEvent(TICK(8)).withMuteEvent(TICK(8, 1), false),
             track(FantasyTrackFactory::fantasyVocals)
                 .withCC(37, 0)
@@ -120,15 +123,16 @@ Sequence FantasySequenceFactory::fantasyRave()
                 .withProgramChange(PolySynth::kRave),
             track(FantasyTrackFactory::fantasyArpBass).muted(),
             track(FantasyTrackFactory::fantasySnare909).withCC(36,10).withStart(TICK(16))
-                .withAutomation(TICK(16), TICK(len), 36, 24, 127), //TODO : replace by a roll ?
+                .withAutomation(TICK(15), TICK(len), 36, 24, 127), //TODO : replace by a roll ?
             FantasyTrackFactory::fantasyRiser,
             FantasyTrackFactory::fantasyBigRiz1,
             SequenceTrackFactory::gtrLoopMute,
             track(SequenceTrackFactory::gtrPedal)
                 .withProgramChange(HXStomp::kFantasySolo),
             SequenceTrackFactory::matrixKill,
-            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, 1)
+            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, 0)
         });
+    addOutMidiRules(seq, &kFantasyLedRaveRules);
     return seq;
 }
 

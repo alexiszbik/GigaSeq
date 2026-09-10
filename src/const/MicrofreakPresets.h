@@ -4,6 +4,7 @@
 
 namespace Microfreak {
 #define _MF_PRESET(preset, nbr) constexpr uint8_t k##preset = nbr - 1
+#define _MF_CC(name, nbr) constexpr uint8_t k##name##_cc = nbr
 
 
 _MF_PRESET(FriendshipArp, 1);
@@ -33,6 +34,14 @@ _MF_PRESET(Rizup, 72);
 
 _MF_PRESET(CloserHouse, 95);
 _MF_PRESET(CloserChords, 104);
+
+
+
+///CCs
+
+_MF_CC(Cutoff, 23);
+
+_MF_CC(LfoFreeRate, 93);
 
 }
 

@@ -25,4 +25,5 @@ public:
     static SequenceTrack closerDrumix(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack closerLedStab(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack closerBlastLed(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack closerMiddleHat(tick_t lengthInTicks, tick_t startInTicks);
 };

@@ -170,7 +170,7 @@ SequenceTrack FallingTrackFactory::fallingRimTom(tick_t lengthInTicks, tick_t st
 
     SequenceDesc desc;
     desc.notes = {
-        {}, {}, {}, {},
+        {Falling::faCymb}, {}, {}, {}, //we add the cymbal yeah
         {}, {}, {}, {},
         {}, {}, {}, {Falling::faRimverb},
         {}, {}, {Falling::faRimverb}, {},

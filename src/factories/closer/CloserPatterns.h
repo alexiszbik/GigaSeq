@@ -217,4 +217,14 @@ constexpr PatternStep kCloserBlastCymbSteps[] = {
 MAKE_PATTERN(kCloserBlastCymb, kCloserBlastCymbSteps, 8);
 
 
+
+constexpr PatternStep kCloserMiddleHatSteps[] = {
+    {{hat}, 92, 1},
+    {{hat}, 50, 1},
+    {{openhat}, 127, 1},
+    {{hat}, 50, 1},
+};
+
+MAKE_PATTERN_GROOVE(kCloserMiddleHat, kCloserMiddleHatSteps, songGroove);
+
 } // namespace CloserPatterns

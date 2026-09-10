@@ -122,6 +122,7 @@ MAKE_PATTERN(kTogetherHatsOnly, kTogetherHatsOnlySteps, 8);
 
 constexpr PatternStep kTogetherPartBTambourinSteps[] = {
     {{48, 50}, 127, 1},
+    {{48}, 127, 1},
 };
 MAKE_PATTERN(kTogetherPartBTambourin, kTogetherPartBTambourinSteps, 4);
 

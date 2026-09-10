@@ -33,6 +33,7 @@ Sequence CloserSequenceFactory::closerIntro()
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kKill),
             track(CloserTrackFactory::closerLedStab).withCC(LedStrips::kDecay_cc, stabLedDecay),
             track(SequenceTrackFactory::gtrLoopErase).withProgramChange(BossRC::kCloser, TICK(4)),
+            track(FallingTrackFactory::fallingHarp).withProgramChange(Microfreak::kFallingHarp),
         });
     addInMidiRules(seq, &kTransposeInMidiRules, -12);
     
@@ -53,7 +54,7 @@ Sequence CloserSequenceFactory::closerIntroB()
             CloserTrackFactory::closerModular,
             track(CloserTrackFactory::closerFill808).withMuteEvent(TICK(0)).asFill(),
             track(CloserTrackFactory::closerRiser).withMuteEvent(TICK(0)).asFill(),
-            track(FallingTrackFactory::fallingHarp).withProgramChange(Microfreak::kFallingHarp),
+            FallingTrackFactory::fallingHarp,
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kCloser_lasers),
             CloserTrackFactory::closerLedStab
         });
@@ -86,11 +87,12 @@ Sequence CloserSequenceFactory::closerChords()
 Sequence CloserSequenceFactory::closerBass()
 {
     Sequence seq = buildSequence(
-        8, 4, 0, "Bass", songTempo, true,
+        16, 4, 8, "Bass", songTempo, true,
         {
             track(SequenceTrackFactory::kickFour).muted(),
             CloserTrackFactory::closerChords,
             CloserTrackFactory::closerTambourin,
+            track(CloserTrackFactory::closerMiddleHat).withStart(TICK(8)),
             SequenceTrackFactory::clapFour,
             track(CloserTrackFactory::closerSing).muted(),
             CloserTrackFactory::closerModular,
@@ -173,12 +175,11 @@ Sequence CloserSequenceFactory::closerClimax()
 Sequence CloserSequenceFactory::closerEnd()
 {
     Sequence seq = buildSequence(
-        4, 4, 0, "Climax", songTempo, true,
+        4, 4, 0, "End", songTempo, true,
         {
             track(CloserTrackFactory::closerRiser).withMuteEvent(0).asFill(),
             CloserTrackFactory::closerStab,
             SequenceTrackFactory::matrixKill,
-            track(CloserTrackFactory::closerLedStab)
         });
     addInMidiRules(seq, &kTransposeInMidiRules, -12);
     return seq;

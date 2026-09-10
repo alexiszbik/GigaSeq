@@ -193,3 +193,17 @@ SequenceTrack FantasyTrackFactory::fantasySnareEnd(tick_t lengthInTicks, tick_t 
     track.setPattern(FantasyPatterns::kFantasySnareEnd, lengthInTicks, startInTicks);
     return track;
 }
+
+SequenceTrack FantasyTrackFactory::fantasyGuitar(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Guitar", MidiChannel::kSampler);
+
+    SequenceDesc desc;
+    desc.notes = {
+        {}, {Fantasy::fantGtr1}, {}, {},  {}, {}, {}, {},
+        {}, {Fantasy::fantGtr2}, {}, {},  {}, {}, {}, {}
+    };
+    desc.rate = 8;
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
+
+    return track;
+}

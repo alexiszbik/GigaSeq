@@ -25,6 +25,7 @@ Sequence WaterSequenceFactory::waterIntro()
             track(WaterTrackFactory::waterMarimba).muted(),
             track(WaterTrackFactory::waterFreak).withProgramChange(Microfreak::kWaterBass),
             track(SequenceTrackFactory::gtrLoop).withProgramChange(BossRC::kWater, TICK(4)),
+            track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kWater),
             track(SequenceTrackFactory::polySynth).withProgramChange(PolySynth::kWaterSqr),
             track(SequenceTrackFactory::midiLoop)
                 .withNote(MidiLoop::kEraseAll)
@@ -135,7 +136,9 @@ Sequence WaterSequenceFactory::waterPartB()
             track(WaterTrackFactory::waterXmas).withStart(start3).withLength(len3),
             track(WaterTrackFactory::waterShakes).withStart(start4).withLength(len4),
             WaterTrackFactory::waterEventsPartB,
-            track(SequenceTrackFactory::polySynth).withProgramChange(PolySynth::kSlowStr),
+            track(SequenceTrackFactory::polySynth)
+                .withProgramChange(PolySynth::kSlowStr)
+                .withProgramChange(PolySynth::kBigLead, TICK(31, 3)),
             track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, OFF).withCC(ModularA::kGlobalMute_cc, ON, len1),
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kWater_oscBlue),
             track(WaterTrackFactory::waterMatrix).withLength(TickHelper::bars(31)),
@@ -164,7 +167,6 @@ Sequence WaterSequenceFactory::waterChorus2()
             track(WaterTrackFactory::waterChorusFMBass).withStart(TickHelper::bars(15)),
             track(WaterTrackFactory::waterFreakChorusB).withLength(len)
                 .withProgramChange(Microfreak::kWaterArp),
-            track(SequenceTrackFactory::polySynth).withProgramChange(PolySynth::kBigLead),
             track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, OFF).withCC(ModularA::kGlobalMute_cc, ON, len),
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kWater_turnstile),
             track(WaterTrackFactory::waterChorusLed).withCC(LedStrips::kDecay_cc, 80).withLength(TICK(14))

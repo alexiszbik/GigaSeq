@@ -100,7 +100,7 @@ Sequence FriendshipSequenceFactory::friendshipBack()
     Sequence seq = buildSequence(
         8, 4, 0, "Back", songTempo, false,
         {
-            FriendshipTrackFactory::friendshipChords,
+            track(FriendshipTrackFactory::friendshipChords).withAutomation(TICK(0), TICK(8), Microfreak::kCutoff_cc, 40, 120),
             FriendshipTrackFactory::friendshipPolyBass,
             FriendshipTrackFactory::friendshipXylo,
             FriendshipTrackFactory::friendshipSeqVoice,
@@ -182,7 +182,7 @@ Sequence FriendshipSequenceFactory::friendshipRising()
             track(FriendshipTrackFactory::friendshipTrance).withLength(TICK(15)),
             track(FriendshipTrackFactory::friendshipBravery).withLength(TICK(15)),
             track(FriendshipTrackFactory::friendshipBass)
-                .withMuteEvent(TICK(15, 0, 1))
+                .withMuteEvent(TICK(14, 3, 3))
                 .withMuteEvent(TICK(15, 2, 1), false),
             track(FriendshipTrackFactory::friendshipJungle),
                 //.withNote(69, 127, TICK(15), TickHelper::kHalfStepLen),
@@ -194,7 +194,9 @@ Sequence FriendshipSequenceFactory::friendshipRising()
                 .withProgramChange(PolySynth::kBigLead),
             track(SequenceTrackFactory::modularA)
                 .withCC(ModularA::kMuteClock_cc, ON, TICK(15)),
-            track(FriendshipTrackFactory::friendshipMatrixBravery)
+            track(FriendshipTrackFactory::friendshipMatrixBravery),
+            track(SequenceTrackFactory::drumMachine)
+                .withCC(DrumMachine::kClearAll_cc, ON, TICK(15, 0, 1))
         });
 
     addOutMidiRules(seq, &kFriendshipLedRules);

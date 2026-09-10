@@ -48,7 +48,8 @@ Sequence UandiSequenceFactory::uandiIntroBass()
             UandiTrackFactory::uandiBassA,
             UandiTrackFactory::uandiFreak,
             track(SequenceTrackFactory::sampler)
-                .withNote(Uandi::uaiRiz, 127, TICK(7,2), TICK(0,2)),
+                .withNote(Uandi::uaiRiz, 127, TICK(7,2), TICK(0,2))
+                .withNote(Uandi::uandiChineseecho, 127, TICK(8)),
             track(UandiTrackFactory::uandiRiser)
                 .withMuteEvent(TICK(8)).asFill(),
         });

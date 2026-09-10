@@ -257,3 +257,9 @@ SequenceTrack CloserTrackFactory::closerBlastLed(tick_t lengthInTicks, tick_t st
 
     return track;
 }
+
+SequenceTrack CloserTrackFactory::closerMiddleHat(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("MiddleHat", MidiChannel::kDrums);
+    track.setPattern(CloserPatterns::kCloserMiddleHat, lengthInTicks, startInTicks);
+    return track;
+}
