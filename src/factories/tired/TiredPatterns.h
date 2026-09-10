@@ -154,10 +154,10 @@ MAKE_PATTERN(kTiredBass, kTiredBassSteps, 16);
 #undef NOTE_PATTERN
 
 constexpr PatternStep kTiredTechHatsSteps[] = {
-    _NO_STEP, _NO_STEP, {{Tired::hhod4}, 127, 1}, _NO_STEP,
-    _NO_STEP, _NO_STEP, {{Tired::hhod4}, 127, 1}, _NO_STEP,
-    _NO_STEP, _NO_STEP, {{Tired::hhod4}, 127, 1}, {{Tired::hhod42}, 127, 1},
-    _NO_STEP, _NO_STEP, {{Tired::hhod4}, 127, 1}, _NO_STEP,
+    {{Tired::tiredHat}, 110, 1}, {{Tired::tiredHat}, 96, 1}, {{Tired::hhod4}, 127, 1}, {{Tired::tiredHat}, 96, 1},
+    {{Tired::tiredHat}, 110, 1}, {{Tired::tiredHat}, 96, 1}, {{Tired::hhod4}, 127, 1}, {{Tired::tiredHat}, 96, 1},
+    {{Tired::tiredHat}, 110, 1}, {{Tired::tiredHat}, 96, 1}, {{Tired::hhod4}, 127, 1}, {{Tired::hhod42}, 127, 1},
+    {{Tired::tiredHat}, 110, 1}, {{Tired::tiredHat}, 96, 1}, {{Tired::hhod4}, 127, 1}, {{Tired::tiredHat}, 96, 1},
 };
 
 MAKE_PATTERN(kTiredTechHats, kTiredTechHatsSteps, 16);
