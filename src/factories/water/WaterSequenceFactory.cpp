@@ -47,16 +47,16 @@ Sequence WaterSequenceFactory::waterIntroBass()
     Sequence seq = buildSequence(
         16, 4, 8, "Intro Bass", songTempo, true,
         {
-            SequenceTrackFactory::kickFour,
+            track(SequenceTrackFactory::kickFour).withStart(TICK(4)),
             SequenceTrackFactory::clapFour,
             WaterTrackFactory::waterHats,
             track(WaterTrackFactory::waterMarimba).muted().withMuteEvent(TICK(8), false),
             WaterTrackFactory::waterFreak,
             WaterTrackFactory::waterBass,
-            track(WaterTrackFactory::waterClaves).withStart(TICK(8)),
+            track(WaterTrackFactory::waterClaves).withStart(TICK(4)),
             track(WaterTrackFactory::waterCongas).muted(),
-            track(WaterTrackFactory::waterFmbass).muted().withMuteEvent(TICK(3,2), false),
-            track(WaterTrackFactory::waterMatrix).muted().withMuteEvent(TICK(3,2), false),
+            track(WaterTrackFactory::waterFmbass).muted().withMuteEvent(TICK(7,2), false),
+            track(WaterTrackFactory::waterMatrix).muted().withMuteEvent(TICK(7,2), false),
             track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, decayCyan)
         });
 
