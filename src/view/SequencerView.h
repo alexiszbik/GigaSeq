@@ -43,6 +43,10 @@ namespace GigaSeq
         void updateBpm(uint8_t bpm);
         void drawTrack(uint8_t trackIndex, const char *text, bool state);
 
+        void showTemporaryMessage(const char *text, uint32_t durationMs, unsigned long nowMs);
+        bool updateOverlay(unsigned long nowMs);
+        bool isOverlayActive() const { return overlayActive_; }
+
         bool processOne();
 
     private:
@@ -57,6 +61,7 @@ namespace GigaSeq
         void executeUpdateTransportState(bool isPlaying);
         void executePendingSwitch(const char* name);
         void executeUpdateBpm(uint8_t bpm);
+        void drawOverlay(const char *text);
 
         void drawHeaderText(int x, int y, int width, const char *text, bool inverted = false);
         void drawHeaderChar(int x, int y, int width, uint8_t ch);
@@ -102,6 +107,9 @@ namespace GigaSeq
         uint8_t queueHead_ = 0;
         uint8_t queueTail_ = 0;
         uint8_t queueCount_ = 0;
+
+        unsigned long overlayUntilMs_ = 0;
+        bool overlayActive_ = false;
 
         bool disable = false;
     };

@@ -1,7 +1,15 @@
 #include "SequencePool.h"
+#include "MidiConst.h"
 
-#include "factories/SequenceFactory.h"
 #include "factories/together/TogetherSong.h"
+#include "factories/water/WaterSong.h"
+#include "factories/falling/FallingSong.h"
+#include "factories/closer/CloserSong.h"
+#include "factories/fantasy/FantasySong.h"
+#include "factories/uandi/UandiSong.h"
+#include "factories/tired/TiredSong.h"
+#include "factories/friendship/FriendshipSong.h"
+#include "factories/bibimbap/BibimbapSong.h"
 
 #include <cstdio>
 #include <utility>
@@ -37,6 +45,16 @@ Song& SequencePool::currentSong()
 const Song& SequencePool::currentSong() const
 {
     return songs_.at(currentSongIndex_);
+}
+
+Song& SequencePool::song(std::size_t index)
+{
+    return songs_.at(index);
+}
+
+const Song& SequencePool::song(std::size_t index) const
+{
+    return songs_.at(index);
 }
 
 Sequence& SequencePool::current()
@@ -127,6 +145,11 @@ void SequencePool::queueSwitch(PendingSwitch direction)
 
 void SequencePool::setPending(PendingSwitch sw) {
     pendingSwitch_ = sw;
+
+    if (sw == PendingSwitch::Next || sw == PendingSwitch::JumpToSong) {
+        current().unMuteFills();
+    }
+    
     if (onPendingChanged_) {
         onPendingChanged_(sw);
     }
@@ -150,6 +173,34 @@ void SequencePool::requestPrevious(bool now)
     }
 }
 
+void SequencePool::queueSongSwitch(std::size_t songIndex)
+{
+    if (songs_.empty() || songIndex >= songs_.size() || songs_[songIndex].size() == 0) {
+        logger_.info("Invalid song index.\n");
+        return;
+    }
+
+    pendingSongIndex_ = songIndex;
+    setPending(PendingSwitch::JumpToSong);
+
+    char buffer[128];
+    std::snprintf(
+        buffer,
+        sizeof(buffer),
+        "Song '%s' queued — finishing current sequence...\n",
+        songs_[songIndex].name());
+    logger_.info(buffer);
+}
+
+void SequencePool::requestSong(std::size_t songIndex, bool now)
+{
+    if (now) {
+        advanceToSong(songIndex);
+    } else {
+        queueSongSwitch(songIndex);
+    }
+}
+
 void SequencePool::processTick()
 {
     if (songs_.empty()) {
@@ -165,6 +216,8 @@ void SequencePool::processTick()
             advanceToNext();
         } else if (pendingSwitch_ == PendingSwitch::Previous) {
             advanceToPrevious();
+        } else if (pendingSwitch_ == PendingSwitch::JumpToSong) {
+            advanceToSong(pendingSongIndex_);
         } else if (!sequence.isLooping()) {
             if (canAdvanceNext()) {
                 advanceToNext();
@@ -172,6 +225,45 @@ void SequencePool::processTick()
                 notifyPlaybackStop();
             }
         }
+    }
+}
+
+void SequencePool::releaseCurrentInMidiHeldNotes()
+{
+    if (!songs_.empty()) {
+        current().releaseInMidiHeldNotes();
+    }
+}
+
+void SequencePool::handleNoteOn(uint8_t channel, uint8_t note, uint8_t velocity)
+{
+    if (songs_.empty()) {
+        midi_.sendNoteOn(channel, note, velocity);
+        return;
+    }
+
+    Sequence& sequence = current();
+    InMidiRules* rules = sequence.inMidiRules();
+    if (rules != nullptr) {
+        rules->processNoteOn(channel, note, velocity, sequence.inMidiRulesConfig(), midi_);
+    } else {
+        midi_.sendNoteOn(channel, note, velocity);
+    }
+}
+
+void SequencePool::handleNoteOff(uint8_t channel, uint8_t note, uint8_t velocity)
+{
+    if (songs_.empty()) {
+        midi_.sendNoteOff(channel, note, velocity);
+        return;
+    }
+
+    Sequence& sequence = current();
+    InMidiRules* rules = sequence.inMidiRules();
+    if (rules != nullptr) {
+        rules->processNoteOff(channel, note, velocity, sequence.inMidiRulesConfig(), midi_);
+    } else {
+        midi_.sendNoteOff(channel, note, velocity);
     }
 }
 
@@ -277,6 +369,7 @@ void SequencePool::advanceToNext()
         return;
     }
 
+    releaseCurrentInMidiHeldNotes();
     current().allNotesOff();
 
     setPending(PendingSwitch::None);
@@ -288,8 +381,14 @@ void SequencePool::advanceToNext()
         currentSequenceIndex_ = 0;
     }
 
+    sendProgramChange();
+
     current().reset();
     notifySequenceChanged();
+}
+
+void SequencePool::sendProgramChange() {
+    midi_.sendProgramChange(MidiChannel::kSampler, currentSong().programChange());
 }
 
 void SequencePool::advanceToPrevious()
@@ -299,6 +398,7 @@ void SequencePool::advanceToPrevious()
         return;
     }
 
+    releaseCurrentInMidiHeldNotes();
     current().allNotesOff();
 
     setPending(PendingSwitch::None);
@@ -310,6 +410,29 @@ void SequencePool::advanceToPrevious()
         currentSequenceIndex_ = currentSong().size() - 1;
     }
 
+    sendProgramChange();
+
+    current().reset();
+    notifySequenceChanged();
+}
+
+void SequencePool::advanceToSong(std::size_t songIndex)
+{
+    if (songIndex >= songs_.size() || songs_[songIndex].size() == 0) {
+        logger_.info("Invalid song index.\n");
+        return;
+    }
+
+    releaseCurrentInMidiHeldNotes();
+    current().allNotesOff();
+
+    setPending(PendingSwitch::None);
+
+    currentSongIndex_ = songIndex;
+    currentSequenceIndex_ = 0;
+
+    sendProgramChange();
+
     current().reset();
     notifySequenceChanged();
 }
@@ -318,86 +441,15 @@ SequencePool SequencePool::createDefault(MidiInOut& midi, Logger& logger)
 {
     SequencePool pool(midi, logger);
 
-    using Builder = Sequence (*)();
-    auto addSong = [&pool](const char* name, std::vector<Builder> builders) {
-        Song song(name);
-        for (auto& b : builders) {
-            song.add(b());
-        }
-        pool.add(std::move(song));
-    };
-
     addTogetherSong(pool);
-
-    addSong("Intro", {
-        SequenceFactory::createSequenceOne,
-        SequenceFactory::createSequenceTwo,
-    });
-    addSong("Main", {
-        SequenceFactory::createSequenceThree,
-        SequenceFactory::createSequenceFour,
-        SequenceFactory::createSequenceFive,
-    });
-    addSong("Outro", {
-        SequenceFactory::createSequenceSix,
-        SequenceFactory::createSequenceSeven,
-    });
-
-    addSong("Intro 2", {
-        SequenceFactory::createSequenceOne,
-        SequenceFactory::createSequenceTwo,
-    });
-    addSong("Main 2", {
-        SequenceFactory::createSequenceThree,
-        SequenceFactory::createSequenceFour,
-        SequenceFactory::createSequenceFive,
-    });
-    addSong("Outro 2", {
-        SequenceFactory::createSequenceSix,
-        SequenceFactory::createSequenceSeven,
-    });
-
-    addSong("Intro 3", {
-        SequenceFactory::createSequenceOne,
-        SequenceFactory::createSequenceTwo,
-    });
-    addSong("Main 3", {
-        SequenceFactory::createSequenceThree,
-        SequenceFactory::createSequenceFour,
-        SequenceFactory::createSequenceFive,
-    });
-    addSong("Outro 3", {
-        SequenceFactory::createSequenceSix,
-        SequenceFactory::createSequenceSeven,
-    });
-
-    addSong("Intro 4", {
-        SequenceFactory::createSequenceOne,
-        SequenceFactory::createSequenceTwo,
-    });
-    addSong("Main 4", {
-        SequenceFactory::createSequenceThree,
-        SequenceFactory::createSequenceFour,
-        SequenceFactory::createSequenceFive,
-    });
-    addSong("Outro 4", {
-        SequenceFactory::createSequenceSix,
-        SequenceFactory::createSequenceSeven,
-    });
-
-    addSong("Intro 5", {
-        SequenceFactory::createSequenceOne,
-        SequenceFactory::createSequenceTwo,
-    });
-    addSong("Main 5", {
-        SequenceFactory::createSequenceThree,
-        SequenceFactory::createSequenceFour,
-        SequenceFactory::createSequenceFive,
-    });
-    addSong("Outro 5", {
-        SequenceFactory::createSequenceSix,
-        SequenceFactory::createSequenceSeven,
-    });
+    addWaterSong(pool);
+    addFallingSong(pool);
+    addCloserSong(pool);
+    addFantasySong(pool);
+    addBibimbapSong(pool);
+    addUandiSong(pool);
+    addFriendshipSong(pool);
+    addTiredSong(pool);
 
     return pool;
 }

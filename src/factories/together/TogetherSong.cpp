@@ -9,7 +9,7 @@ void addTogetherSong(SequencePool& pool)
 {
     using Builder = Sequence (*)();
 
-    Song song("Together");
+    Song song("Together", 0);
     const Builder sequences[] = {
         TogetherSequenceFactory::togetherIntro,
         TogetherSequenceFactory::togetherSample,
@@ -22,6 +22,7 @@ void addTogetherSong(SequencePool& pool)
         TogetherSequenceFactory::togetherPartBWithHats,
         TogetherSequenceFactory::togetherPartBDrums,
         TogetherSequenceFactory::togetherPartBClimax,
+        TogetherSequenceFactory::togetherEnd,
     };
 
     for (Builder builder : sequences) {

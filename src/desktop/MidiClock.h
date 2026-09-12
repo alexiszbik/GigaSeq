@@ -2,6 +2,7 @@
 
 #include "Logger.h"
 #include "MidiInOut.h"
+#include "TickHelper.h"
 
 #include <functional>
 

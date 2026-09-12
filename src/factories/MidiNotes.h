@@ -5,7 +5,8 @@
 // MIDI note numbers (0-127). Middle C = C3 (60).
 // Negative octaves use an underscore suffix (e.g. C_2 = C in octave -2).
 
-#define C_2  0
+//Don't use C_2 0 !!! > this represent an end of array
+
 #define Cd_2 1
 #define Db_2 1
 #define D_2  2

@@ -16,4 +16,5 @@ public:
     static Sequence togetherPartBWithHats();
     static Sequence togetherPartBDrums();
     static Sequence togetherPartBClimax();
+    static Sequence togetherEnd();
 };

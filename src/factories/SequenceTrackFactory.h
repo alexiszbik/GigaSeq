@@ -5,34 +5,33 @@
 class SequenceTrackFactory
 {
 public:
-    static SequenceTrack createCMaj7Arpeggio(tick_t lengthInTicks);
-    static SequenceTrack createAm7Arpeggio(tick_t lengthInTicks);
-    static SequenceTrack createKickSnare(tick_t lengthInTicks);
-    static SequenceTrack createKickSnareWithHats(tick_t lengthInTicks);
-    static SequenceTrack createBassLine(tick_t lengthInTicks);
-    static SequenceTrack createMelodicBass(tick_t lengthInTicks);
-    static SequenceTrack createHiHatPattern(tick_t lengthInTicks);
-    static SequenceTrack kickFour(tick_t lengthInTicks);
-    static SequenceTrack createSnareBackbeat(tick_t lengthInTicks);
-    static SequenceTrack createPadChords(tick_t lengthInTicks);
-    static SequenceTrack createSynthStabs(tick_t lengthInTicks);
-    static SequenceTrack createClapBackbeat(tick_t lengthInTicks);
+    static SequenceTrack sampler(tick_t lengthInTicks, tick_t startInTicks);
 
-    // Additional tracks for limit testing
-    static SequenceTrack createOpenHat(tick_t lengthInTicks);
-    static SequenceTrack createTomFill(tick_t lengthInTicks);
-    static SequenceTrack createRimshot(tick_t lengthInTicks);
-    static SequenceTrack createCymbalRide(tick_t lengthInTicks);
-    static SequenceTrack createTambourine(tick_t lengthInTicks);
-    static SequenceTrack createShaker(tick_t lengthInTicks);
-    static SequenceTrack createClave(tick_t lengthInTicks);
-    static SequenceTrack createCowbell(tick_t lengthInTicks);
-    static SequenceTrack createChordStab(tick_t lengthInTicks);
-    static SequenceTrack createPluck(tick_t lengthInTicks);
-    static SequenceTrack createLead(tick_t lengthInTicks);
-    static SequenceTrack createSubBass(tick_t lengthInTicks);
-    static SequenceTrack createPadSwells(tick_t lengthInTicks);
-    static SequenceTrack createFxBleep(tick_t lengthInTicks);
-    static SequenceTrack createArpFast(tick_t lengthInTicks);
-    static SequenceTrack createGtrChug(tick_t lengthInTicks);
+    static SequenceTrack kickFour(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack clapFour(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack snareFour(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack rideOff(tick_t lengthInTicks, tick_t startInTicks);
+
+    static SequenceTrack gtrPedal(tick_t lengthInTicks, tick_t startInTicks);
+
+    static SequenceTrack gtrLoop(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack gtrLoopMute(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack gtrLoopUnmute(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack gtrLoopErase(tick_t lengthInTicks, tick_t startInTicks);
+
+    static SequenceTrack polySynth(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack bass(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack vocoder(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack microfreak(tick_t lengthInTicks, tick_t startInTicks);
+
+    static SequenceTrack midiLoop(tick_t lengthInTicks, tick_t startInTicks);
+
+    static SequenceTrack modularA(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack drumMachine(tick_t lengthInTicks, tick_t startInTicks);
+
+    static SequenceTrack matrix(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack matrixKill(tick_t lengthInTicks, tick_t startInTicks);
+
+    static SequenceTrack ledStrips(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack ledStripsTest(tick_t lengthInTicks, tick_t startInTicks);
 };

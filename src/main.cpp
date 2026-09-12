@@ -7,6 +7,7 @@
 #include "midi/EngineMidiBridge.h"
 #include "midi/GigaMidiInOut.h"
 #include "platform/ArduinoLogger.h"
+#include "platform/MemoryMonitor.h"
 #include "task/TimedTask.h"
 #include "view/SequencerView.h"
 
@@ -15,6 +16,7 @@ using namespace GigaSeq;
 unsigned long currentTime = 0;
 
 #define PUSH_PEDAL 2
+#define PUSH_PEDAL_B 3
 
 #define PUSH_PLAY 43
 #define PUSH_NEXT 45
@@ -24,6 +26,7 @@ unsigned long currentTime = 0;
 #define TOGGLE_SCENE 53
 
 Switch pushPedal(PUSH_PEDAL);
+Switch pushPedal_B(PUSH_PEDAL_B);
 Switch pushPlay(PUSH_PLAY);
 Switch pushNext(PUSH_NEXT);
 Switch pushPrev(PUSH_PREV);
@@ -120,7 +123,7 @@ void inputCheckCallback() {
         }
     }
 
-    if (pushNext.isPushed()) {
+    if (pushNext.isPushed() || pushPedal.isPushed() || pushPedal_B.isPushed()) {
         sequencePool.requestNext(!isPlaying);
     }
 
@@ -146,6 +149,9 @@ void muxCallback() {
 }
 
 void displayCallback() {
+    if (sequencerView.isOverlayActive()) {
+        return;
+    }
     sequencerView.processOne();
 }
 
@@ -189,8 +195,17 @@ void setup() {
 
     sequencerView.begin(display);
     refreshViewFromPool();
+    while (sequencerView.processOne()) {}
+
+    HeapStats heapStats{};
+    if (getHeapStats(heapStats)) {
+        char memoryText[48];
+        formatHeapStatsForDisplay(heapStats, memoryText, sizeof(memoryText));
+        sequencerView.showTemporaryMessage(memoryText, 2000, millis());
+    }
 
     gigaMidi.begin();
+    gigaMidi.setInputHandler(&sequencePool);
     transportClock.begin(sequencePool.current().getTempo());
     transportClock.setOnTick(onClockTick);
     sequencePool.setOnSequenceChanged(onSequenceChanged);
@@ -206,6 +221,10 @@ void loop() {
     if (gigaMidi.flush()) return;
 
     currentTime = millis();
+
+    if (sequencerView.updateOverlay(currentTime)) {
+        refreshViewFromPool();
+    }
 
     if (inputCheck.update(currentTime)) return;
     if (muxCheck.update(currentTime)) return;

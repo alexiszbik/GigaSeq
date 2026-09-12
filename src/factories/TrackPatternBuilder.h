@@ -12,6 +12,7 @@ struct SequenceDesc
     std::vector<uint8_t> velocities;
     std::vector<uint8_t> durations;
     double rate = 4;
+    uint8_t groove = 0;
 };
 
 void makeSequenceTrack(
@@ -20,10 +21,23 @@ void makeSequenceTrack(
     tick_t lengthInTicks,
     tick_t startTick = 0);
 
-void makeAutomationTrack(
+ void addSingleNote(
     SequenceTrack& track,
-    tick_t startInTicks,
-    tick_t endInTicks,
-    uint8_t controller,
-    uint8_t startValue,
-    uint8_t endValue);
+    uint8_t note,
+    tick_t startTick = 0);
+
+void makeRiser(
+    SequenceTrack& track,
+    uint8_t note,
+    tick_t lengthInTicks,
+    tick_t riserLength);
+
+void makeRoll(
+    SequenceTrack& track,
+    std::vector<uint8_t> notes,
+    tick_t lengthInTicks,
+    tick_t startTick,
+    uint8_t startVelocity,
+    uint8_t endVelocity,
+    std::vector<double> velocityPattern = {1},
+    uint8_t stepRatio = 16);

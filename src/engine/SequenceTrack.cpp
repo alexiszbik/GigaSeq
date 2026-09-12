@@ -1,15 +1,13 @@
 #include "SequenceTrack.h"
 
-#include "StringHelper.h"
-
 #include <algorithm>
 #include <cstddef>
 #include <stdexcept>
 
 SequenceTrack::SequenceTrack(const char* name, uint8_t channel)
-    : channel_(channel)
+    : name_(name ? name : ""),
+      channel_(channel)
 {
-    StringHelper::copyName(name_, name, kNameMaxLength + 1);
 }
 
 void SequenceTrack::attachMidi(MidiInOut& midi)
@@ -34,40 +32,50 @@ void SequenceTrack::addNote(
     }
     */
 
-    notes_.add({ startTick, durationTicks, note, velocity });
+    notes_.add({ startTick, durationTicks, { note, velocity } });
 }
 
-void SequenceTrack::addControlChange(
-    tick_t tick,
+void SequenceTrack::addControlChange(const ControlChange& change)
+{
+    controlChanges_.add(change);
+}
+
+void SequenceTrack::addControlAutomation(
+    tick_t startTick,
+    tick_t endTick,
     uint8_t controller,
-    uint8_t value)
+    uint8_t startValue,
+    uint8_t endValue)
 {
-    controlChanges_.add({ tick, controller, value });
-}
-
-void SequenceTrack::addProgramChange(
-    tick_t tick,
-    uint8_t program)
-{
-    programChanges_.add({ tick, program });
-}
-
-void SequenceTrack::addMuteEvent(
-    tick_t tick)
-{
-    muteEvents_.add({ tick });
-}
-
-void SequenceTrack::removeEvents(tick_t tick, tick_t durationTicks)
-{
-    if (durationTicks == 0) {
+    if (startTick > endTick) {
         return;
     }
 
-    notes_.removeInRange(tick, durationTicks);
-    controlChanges_.removeInRange(tick, durationTicks);
-    programChanges_.removeInRange(tick, durationTicks);
-    muteEvents_.removeInRange(tick, durationTicks);
+    controlAutomations_.push_back({
+        startTick,
+        endTick,
+        controller,
+        startValue,
+        endValue,
+    });
+    automationLastSent_.push_back(kAutomationNotSent);
+}
+
+void SequenceTrack::addProgramChange(const ProgramChange& change)
+{
+    programChanges_.add(change);
+}
+
+void SequenceTrack::addMuteEvent(const MuteEvent& event)
+{
+    muteEvents_.add(event);
+}
+
+void SequenceTrack::setPattern(const TrackPattern& pattern, tick_t lengthInTicks, tick_t startInTicks)
+{
+    pattern_ = &pattern;
+    patternStart_ = startInTicks;
+    patternLength_ = lengthInTicks;
 }
 
 void SequenceTrack::removeNotes(
@@ -79,11 +87,11 @@ void SequenceTrack::removeNotes(
         return;
     }
 
-    notes_.removeInRangeIf(tick, durationTicks, [&pitches](const Note& note) {
+    notes_.removeInRangeIf(tick, durationTicks, [&pitches](const ScheduledNote& scheduledNote) {
         if (pitches.empty()) {
             return true;
         }
-        return std::find(pitches.begin(), pitches.end(), note.note) != pitches.end();
+        return std::find(pitches.begin(), pitches.end(), scheduledNote.note.note) != pitches.end();
     });
 }
 
@@ -93,7 +101,8 @@ void SequenceTrack::reset()
     controlChanges_.reset();
     programChanges_.reset();
     muteEvents_.reset();
-    activeNoteCount_ = 0;
+    std::fill(automationLastSent_.begin(), automationLastSent_.end(), kAutomationNotSent);
+    activeNotes_.reset();
 
     const bool wasMuted = muted_;
     muted_ = startMuted_;
@@ -119,6 +128,11 @@ void SequenceTrack::notifyMuteChanged()
     }
 }
 
+void SequenceTrack::setFill() {
+    isFill_ = true; 
+    setStartMuted();
+}
+
 void SequenceTrack::setMuted(bool muted)
 {
     if (muted == muted_) {
@@ -133,43 +147,137 @@ void SequenceTrack::setMuted(bool muted)
         controlChanges_.reset();
         programChanges_.reset();
         muteEvents_.reset();
+        std::fill(automationLastSent_.begin(), automationLastSent_.end(), kAutomationNotSent);
     }
 
     notifyMuteChanged();
 }
 
-void SequenceTrack::startNote(const Note& note)
+void SequenceTrack::startNote(const ScheduledNote& scheduledNote)
 {
-    midi_->sendNoteOn(channel_, note.note, note.velocity);
-    if (activeNoteCount_ < kMaxActiveNotes) {
-        activeNotes_[activeNoteCount_++] = { note.note, note.durationTicks };
+    if (midi_ == nullptr) {
+        return;
     }
-    // Pool full: drop the note-on silently rather than allocating in ISR.
-}
 
-void SequenceTrack::tickActiveNotes()
-{
-    uint8_t write = 0;
-    for (uint8_t read = 0; read < activeNoteCount_; ++read)
-    {
-        --activeNotes_[read].remainingTicks;
+    const uint8_t pitch = static_cast<uint8_t>(
+        pitchOffset_ + static_cast<int>(scheduledNote.note.note));
 
-        if (activeNotes_[read].remainingTicks == 0) {
-            midi_->sendNoteOff(channel_, activeNotes_[read].note, 0);
-        } else {
-            activeNotes_[write++] = activeNotes_[read];
-        }
+    activeNotes_.startNote(
+        channel_,
+        pitch,
+        scheduledNote.note.velocity,
+        scheduledNote.durationTicks,
+        *midi_);
+
+    if (outMidiRules_ != nullptr) {
+        outMidiRules_->processNoteOn(
+            { pitch, scheduledNote.note.velocity },
+            channel_,
+            scheduledNote.durationTicks,
+            *midi_);
     }
-    activeNoteCount_ = write;
 }
 
 void SequenceTrack::releaseActiveNotes()
 {
-    for (uint8_t i = 0; i < activeNoteCount_; ++i) {
-        midi_->sendNoteOff(channel_, activeNotes_[i].note, 0);
+    if (midi_ != nullptr) {
+        activeNotes_.releaseAll(*midi_);
+    } else {
+        activeNotes_.reset();
+    }
+}
+
+void SequenceTrack::processPatternTick(tick_t position)
+{
+    if (!pattern_ || muted_ || pattern_->stepCount == 0) {
+        return;
     }
 
-    activeNoteCount_ = 0;
+    const tick_t stepDuration = patternStepDuration(*pattern_);
+    if (stepDuration == 0) {
+        return;
+    }
+
+    const tick_t local = position - patternStart_;
+    if (local < 0 || local >= patternLength_) {
+        return;
+    }
+
+    const uint8_t groove = patternEffectiveGroove(pattern_->rate, pattern_->groove);
+
+    auto playStepAt = [&](uint16_t stepIndex) {
+        const PatternStep& step = pattern_->steps[stepIndex];
+
+        if (step.notes[0] == 0) {
+            return;
+        }
+
+        //I added - 1 here to correct voice overlap
+        //But what would be awesome would be the ability to have durationMul under 1
+        const tick_t noteDuration = stepDuration * step.durationMul - 1;
+        for (uint8_t i = 0; i < kMaxNotesPerPatternStep && step.notes[i] != 0; ++i) {
+            startNote({ position, noteDuration, { step.notes[i], step.velocity } });
+        }
+    };
+
+    if (groove == 0) {
+        if (local % stepDuration != 0) {
+            return;
+        }
+
+        playStepAt(static_cast<uint16_t>((local / stepDuration) % pattern_->stepCount));
+        return;
+    }
+
+    const tick_t offBeatDelay = patternStepGrooveOffset(stepDuration, groove);
+
+    if (local % stepDuration == 0) { 
+        const uint16_t stepIndex = static_cast<uint16_t>((local / stepDuration) % pattern_->stepCount);
+
+        if ((stepIndex & 1u) == 0u) { //not off beat
+            playStepAt(stepIndex);
+        }
+    }
+
+    if (local >= offBeatDelay) {
+        const tick_t adjustedLocal = local - offBeatDelay;
+
+        if (adjustedLocal % stepDuration == 0) {
+            const uint16_t stepIndex = static_cast<uint16_t>(
+                (adjustedLocal / stepDuration) % pattern_->stepCount);
+
+            if ((stepIndex & 1u) != 0u) { //off beat
+                playStepAt(stepIndex);
+            }
+        }
+    }
+}
+
+void SequenceTrack::processControlAutomations(tick_t position, bool loopWrap)
+{
+    if (controlAutomations_.empty()) {
+        return;
+    }
+
+    if (loopWrap) {
+        std::fill(automationLastSent_.begin(), automationLastSent_.end(), kAutomationNotSent);
+    }
+
+    for (std::size_t i = 0; i < controlAutomations_.size(); ++i) {
+        const ControlAutomation& automation = controlAutomations_[i];
+
+        if (position < automation.startTick || position > automation.endTick) {
+            continue;
+        }
+
+        const uint8_t value = automationValueAt(automation, position);
+        if (automationLastSent_[i] == value) {
+            continue;
+        }
+
+        midi_->sendControlChange(channel_, automation.controller, value);
+        automationLastSent_[i] = value;
+    }
 }
 
 void SequenceTrack::processTick(tick_t position, bool loopWrap)
@@ -185,15 +293,21 @@ void SequenceTrack::processTick(tick_t position, bool loopWrap)
         midi_->sendControlChange(channel_, change.controller, change.value);
     });
 
+    processControlAutomations(position, loopWrap);
+
     muteEvents_.process(position, loopWrap, [this](const MuteEvent& e) {
-        setMuted(true);
+        setMuted(e.mute);
     });
 
-    notes_.process(position, loopWrap, [this](const Note& note) {
+    notes_.process(position, loopWrap, [this](const ScheduledNote& scheduledNote) {
         if (!muted_) {
-            startNote(note);
+            startNote(scheduledNote);
         }
     });
 
-    tickActiveNotes();
+    processPatternTick(position);
+
+    if (midi_ != nullptr) {
+        activeNotes_.processTick(*midi_);
+    }
 }

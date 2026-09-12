@@ -1,14 +1,13 @@
 #pragma once
 
 #include "Tick.h"
+#include "TickHelper.h"
 
 #include <string>
 
 class TransportPosition
 {
 public:
-    static constexpr int kTicksPerQuarterNote = 96;
-
     int bar = 1;
     int beat = 1;
     int tick = 0;

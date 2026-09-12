@@ -6,6 +6,7 @@
 
 #include <csignal>
 #include <cstdio>
+#include <cctype>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -88,6 +89,70 @@ void printPoolStatus(const SequencePool& pool, Logger& logger)
         sequence.name());
     logger.info(buffer);
     printTracks(sequence, logger);
+}
+
+bool namesMatchIgnoreCase(const char* songName, const std::string& query)
+{
+    if (query.empty()) {
+        return false;
+    }
+
+    std::size_t i = 0;
+    for (; songName[i] != '\0' && i < query.size(); ++i) {
+        if (std::tolower(static_cast<unsigned char>(songName[i]))
+            != std::tolower(static_cast<unsigned char>(query[i]))) {
+            return false;
+        }
+    }
+
+    return songName[i] == '\0' && i == query.size();
+}
+
+std::size_t findSongIndex(const SequencePool& pool, const std::string& name)
+{
+    for (std::size_t i = 0; i < pool.songCount(); ++i) {
+        if (namesMatchIgnoreCase(pool.song(i).name(), name)) {
+            return i;
+        }
+    }
+
+    return pool.songCount();
+}
+
+void printSongs(const SequencePool& pool, Logger& logger)
+{
+    char buffer[128];
+
+    for (std::size_t i = 0; i < pool.songCount(); ++i) {
+        std::snprintf(
+            buffer,
+            sizeof(buffer),
+            "  [%zu] %s (%zu sequences)\n",
+            i + 1,
+            pool.song(i).name(),
+            pool.song(i).size());
+        logger.info(buffer);
+    }
+}
+
+bool tryGoToSong(SequencePool& pool, MidiClock& clock, Logger& logger, const std::string& name)
+{
+    if (name.empty()) {
+        logger.info("Available songs:\n");
+        printSongs(pool, logger);
+        logger.info("Usage: song <name>\n");
+        return true;
+    }
+
+    const std::size_t index = findSongIndex(pool, name);
+    if (index >= pool.songCount()) {
+        logger.info("Unknown song. Available songs:\n");
+        printSongs(pool, logger);
+        return true;
+    }
+
+    pool.requestSong(index, !clock.isPlaying());
+    return true;
 }
 
 bool tryMuteTrack(SequencePool& pool, Logger& logger, const std::string& argument)
@@ -190,7 +255,7 @@ void printPosition(const Sequence& sequence, Logger& logger)
         time.beat,
         sequence.beatsPerBar(),
         time.tick,
-        TransportPosition::kTicksPerQuarterNote,
+        TickHelper::kTicksPerQuarterNote,
         time.toString().c_str());
     logger.info(buffer);
 }
@@ -198,7 +263,7 @@ void printPosition(const Sequence& sequence, Logger& logger)
 void maybePrintBarPosition(const Sequence& sequence, Logger& logger)
 {
     const tick_t tickIndex = sequence.position();
-    const int ticksPerBar = sequence.beatsPerBar() * TransportPosition::kTicksPerQuarterNote;
+    const int ticksPerBar = sequence.beatsPerBar() * TickHelper::kTicksPerQuarterNote;
 
     if (tickIndex % ticksPerBar != 0) {
         return;
@@ -218,6 +283,18 @@ void onSequenceChanged()
 {
     if (gPool && gLogger) {
         printPoolStatus(*gPool, *gLogger);
+    }
+
+    if (gPool && gClock) {
+        try {
+            gClock->setBpm(static_cast<double>(gPool->current().getTempo()));
+        } catch (const std::exception& error) {
+            if (gLogger) {
+                char buffer[128];
+                std::snprintf(buffer, sizeof(buffer), "%s\n", error.what());
+                gLogger->info(buffer);
+            }
+        }
     }
 }
 
@@ -311,7 +388,9 @@ int main()
         printPoolStatus(pool, logger);
 
         logger.info(
-            "Commands: [p]lay  [s]top  [n]ext  [b]ack  pos  [t]empo <bpm>  [m]ute <index>  [q]uit\n");
+            "Commands: [p]lay  [s]top  [n]ext  [b]ack  songs  song <name>  pos  [t]empo <bpm>  [m]ute <index>  [q]uit\n");
+
+            pool.sendProgramChange();
 
         while (gKeepRunning)
         {
@@ -358,8 +437,14 @@ int main()
             } else if (command.rfind("m ", 0) == 0 || command.rfind("mute ", 0) == 0) {
                 const auto space = command.find(' ');
                 tryMuteTrack(pool, logger, command.substr(space + 1));
+            } else if (command == "songs") {
+                printSongs(pool, logger);
+            } else if (command == "song") {
+                tryGoToSong(pool, clock, logger, "");
+            } else if (command.rfind("song ", 0) == 0) {
+                tryGoToSong(pool, clock, logger, command.substr(5));
             } else if (!command.empty()) {
-                logger.info("Unknown command. Use p/s/n/b/pos/t/m/q.\n");
+                logger.info("Unknown command. Use p/s/n/b/songs/song/pos/t/m/q.\n");
             }
         }
 

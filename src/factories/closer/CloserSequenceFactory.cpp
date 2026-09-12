@@ -1,0 +1,187 @@
+#include "CloserSequenceFactory.h"
+
+#include "factories/SequenceBuilder.h"
+#include "factories/SequenceTrackFactory.h"
+#include "factories/closer/CloserTrackFactory.h"
+#include "factories/closer/CloserLedRules.h"
+#include "factories/falling/FallingTrackFactory.h"
+#include "midiinrules/TransposeInMidiRules.h"
+#include "MidiConst.h"
+
+namespace {
+    constexpr uint8_t songTempo = 130;
+    constexpr uint8_t stabLedDecay = 50;
+    constexpr uint8_t chordsLedDecay = 40;
+}
+
+Sequence CloserSequenceFactory::closerIntro()
+{
+    Sequence seq = buildSequence(
+        8, 4, 4, "Intro", songTempo, true,
+        {
+            SequenceTrackFactory::kickFour,
+            track(CloserTrackFactory::closerStab).withProgramChange(PolySynth::kCloser),
+            track(CloserTrackFactory::closerHats).muted(),
+            track(CloserTrackFactory::closerLoopHat).muted(),
+            track(CloserTrackFactory::closerFill808).withMuteEvent(TICK(4)).asFill(),
+            track(CloserTrackFactory::closerRiser).withMuteEvent(TICK(4)).asFill(),
+            track(SequenceTrackFactory::midiLoop)
+                .withNote(MidiLoop::kSelectBass)
+                .withCC(MidiLoop::kArpMode_cc, OFF)
+                .withCC(MidiLoop::kRecord_cc, ON)
+                .withCC(MidiLoop::kBarCount_cc, 4),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kKill),
+            track(CloserTrackFactory::closerLedStab).withCC(LedStrips::kDecay_cc, stabLedDecay),
+            track(SequenceTrackFactory::gtrLoopErase).withProgramChange(BossRC::kCloser, TICK(4)),
+            track(FallingTrackFactory::fallingHarp).withProgramChange(Microfreak::kFallingHarp),
+        });
+    addInMidiRules(seq, &kTransposeInMidiRules, -12);
+    
+    return seq;
+}
+
+
+Sequence CloserSequenceFactory::closerIntroB()
+{
+    Sequence seq = buildSequence(
+        4, 4, 0, "Intro", songTempo, true,
+        {
+            SequenceTrackFactory::kickFour,
+            CloserTrackFactory::closerStab,
+            track(CloserTrackFactory::closerHats).muted(),
+            track(CloserTrackFactory::closerLoopHat).muted(),
+            CloserTrackFactory::closerClapTom,
+            CloserTrackFactory::closerModular,
+            track(CloserTrackFactory::closerFill808).withMuteEvent(TICK(0)).asFill(),
+            track(CloserTrackFactory::closerRiser).withMuteEvent(TICK(0)).asFill(),
+            FallingTrackFactory::fallingHarp,
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kCloser_lasers),
+            CloserTrackFactory::closerLedStab
+        });
+        
+    addInMidiRules(seq, &kTransposeInMidiRules, -12);
+    return seq;
+}
+
+
+Sequence CloserSequenceFactory::closerChords()
+{
+    Sequence seq = buildSequence(
+        16, 4, 8, "Chords", songTempo, true,
+        {
+            track(CloserTrackFactory::closerChords).withProgramChange(Microfreak::kCloserChords),
+            CloserTrackFactory::closerModular,
+            track(CloserTrackFactory::closerTambourin).muted(),
+            track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kCloserBassDisto),
+            track(SequenceTrackFactory::midiLoop).withCC(MidiLoop::kMuteBass_cc, ON),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kCloser_plasma),
+            track(SequenceTrackFactory::ledStrips)
+                .withCC(LedStrips::kDecay_cc, chordsLedDecay)
+                .withNotes({LedStrips::kBlue_ALL, LedStrips::kGreen_ALL}, 127, 0, TICK(8))
+                .withNotes({LedStrips::kBlue_ALL, LedStrips::kGreen_ALL}, 127, TICK(8), TICK(8))
+        });
+    addInMidiRules(seq, &kTransposeInMidiRules, -12);
+    return seq;
+}
+
+Sequence CloserSequenceFactory::closerBass()
+{
+    Sequence seq = buildSequence(
+        16, 4, 8, "Bass", songTempo, true,
+        {
+            track(SequenceTrackFactory::kickFour).muted(),
+            CloserTrackFactory::closerChords,
+            CloserTrackFactory::closerTambourin,
+            track(CloserTrackFactory::closerMiddleHat).withStart(TICK(8)),
+            SequenceTrackFactory::clapFour,
+            track(CloserTrackFactory::closerSing).muted(),
+            CloserTrackFactory::closerModular,
+            track(CloserTrackFactory::closerTop).muted(),
+            track(CloserTrackFactory::closerRiser).muted().asFill(),
+        });
+    addInMidiRules(seq, &kTransposeInMidiRules, -12);
+    addOutMidiRules(seq, &kCloserLedRules);
+    return seq;
+}
+
+Sequence CloserSequenceFactory::closerBlast()
+{
+    Sequence seq = buildSequence(
+        8, 4, 0, "Blast", songTempo, false,
+        {
+            CloserTrackFactory::closerChords,
+            CloserTrackFactory::closerArp,
+            CloserTrackFactory::closerTambourin,
+            CloserTrackFactory::closerRiser,
+            CloserTrackFactory::closerBlastCymb,
+            CloserTrackFactory::closerBlastKick,
+            CloserTrackFactory::closerBlastSnare,
+            CloserTrackFactory::closerBlastLed,
+        });
+    addInMidiRules(seq, &kTransposeInMidiRules, -12);
+    addOutMidiRules(seq, &kCloserLedRules);
+    return seq;
+}
+
+Sequence CloserSequenceFactory::closerBackKick()
+{
+    Sequence seq = buildSequence(
+        8, 4, 0, "BackKick", songTempo, true,
+        {
+            SequenceTrackFactory::kickFour,
+            CloserTrackFactory::closerStab,
+            track(CloserTrackFactory::closerHats).muted(),
+            track(CloserTrackFactory::closerLoopHat).muted(),
+            track(CloserTrackFactory::closerFill808).withMuteEvent(0).asFill(),
+            track(CloserTrackFactory::closerRiser).withMuteEvent(0).asFill(),
+            track(SequenceTrackFactory::gtrLoopErase),
+            track(SequenceTrackFactory::midiLoop)
+                .withCC(MidiLoop::kMuteBass_cc, OFF)
+                .withCC(MidiLoop::kCopy_cc, 1),
+            SequenceTrackFactory::matrixKill,
+            track(CloserTrackFactory::closerLedStab).withCC(LedStrips::kDecay_cc, stabLedDecay)
+        });
+
+    addInMidiRules(seq, &kTransposeInMidiRules, -12);
+    return seq;
+}
+
+Sequence CloserSequenceFactory::closerClimax()
+{
+    Sequence seq = buildSequence(
+        12, 4, 8, "Climax", songTempo, true,
+        {
+            SequenceTrackFactory::kickFour,
+            CloserTrackFactory::closerStab,
+            track(CloserTrackFactory::closerHats).withStart(TICK(8)),
+            track(CloserTrackFactory::closerLoopHat).withStart(TICK(8)),
+            CloserTrackFactory::closerClapTom,
+            CloserTrackFactory::closerDrumix,
+            track(CloserTrackFactory::closerFill808).withMuteEvent(TICK(8)).asFill(),
+            track(CloserTrackFactory::closerRiser).withMuteEvent(TICK(8)).asFill(),
+            CloserTrackFactory::closer303,
+            track(SequenceTrackFactory::microfreak).withProgramChange(Microfreak::kCloserHouse),
+            track(SequenceTrackFactory::midiLoop)
+                .withCC(MidiLoop::kPaste_cc, 3),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kCloser_smileys),
+            track(CloserTrackFactory::closerLedStab).withCC(LedStrips::kDecay_cc, stabLedDecay)
+        });
+
+    addInMidiRules(seq, &kTransposeInMidiRules, -12);
+    return seq;
+}
+
+
+Sequence CloserSequenceFactory::closerEnd()
+{
+    Sequence seq = buildSequence(
+        4, 4, 0, "End", songTempo, true,
+        {
+            track(CloserTrackFactory::closerRiser).withMuteEvent(0).asFill(),
+            CloserTrackFactory::closerStab,
+            SequenceTrackFactory::matrixKill,
+        });
+    addInMidiRules(seq, &kTransposeInMidiRules, -12);
+    return seq;
+}
+

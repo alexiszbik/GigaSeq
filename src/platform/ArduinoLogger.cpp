@@ -4,7 +4,7 @@
 
 void ArduinoLogger::info(const char* message) {
     if (message) {
-        //Serial.print(message);
+       //Serial.print(message);
     }
 }
 

@@ -1,0 +1,263 @@
+#include "WaterSequenceFactory.h"
+
+#include "factories/SequenceBuilder.h"
+#include "factories/SequenceTrackFactory.h"
+#include "factories/water/WaterTrackFactory.h"
+#include "factories/water/WaterLedRules.h"
+#include "factories/water/WaterInMidiRules.h"
+#include "MidiConst.h"
+#include "TickHelper.h"
+#include "WaterSamples.h"
+
+namespace {
+constexpr uint8_t songTempo = 125;
+constexpr uint8_t decayCyan = 22;
+}
+
+Sequence WaterSequenceFactory::waterIntro()
+{
+    Sequence seq = buildSequence(
+        8, 4, 4, "Intro", songTempo, true,
+        {
+            SequenceTrackFactory::kickFour,
+            SequenceTrackFactory::clapFour,
+            track(WaterTrackFactory::waterHats).muted(),
+            track(WaterTrackFactory::waterMarimba).muted(),
+            track(WaterTrackFactory::waterFreak).withProgramChange(Microfreak::kWaterBass),
+            track(SequenceTrackFactory::gtrLoop).withProgramChange(BossRC::kWater, TICK(4)),
+            track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kWater),
+            track(SequenceTrackFactory::polySynth).withProgramChange(PolySynth::kWaterSqr),
+            track(SequenceTrackFactory::midiLoop)
+                .withNote(MidiLoop::kEraseAll)
+                .withNote(MidiLoop::kSelectPoly)
+                .withCC(MidiLoop::kArpMode_cc, OFF)
+                .withCC(MidiLoop::kRecord_cc, OFF),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kWater_oscBlue),
+            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, decayCyan),
+            track(SequenceTrackFactory::drumMachine).withCC(DrumMachine::kClearAll_cc, ON),
+        });
+
+    addOutMidiRules(seq, &kWaterFmbassLedRules);
+    addInMidiRules(seq, &kWaterChordInRules);
+    return seq;
+}
+
+Sequence WaterSequenceFactory::waterIntroBass()
+{
+    Sequence seq = buildSequence(
+        16, 4, 8, "Intro Bass", songTempo, true,
+        {
+            track(SequenceTrackFactory::kickFour).withStart(TICK(4)),
+            SequenceTrackFactory::clapFour,
+            WaterTrackFactory::waterHats,
+            track(WaterTrackFactory::waterMarimba).muted().withMuteEvent(TICK(8), false),
+            WaterTrackFactory::waterFreak,
+            WaterTrackFactory::waterBass,
+            track(WaterTrackFactory::waterClaves).withStart(TICK(4)),
+            track(WaterTrackFactory::waterCongas).muted(),
+            track(WaterTrackFactory::waterFmbass).muted().withMuteEvent(TICK(7,2), false),
+            track(WaterTrackFactory::waterMatrix).muted().withMuteEvent(TICK(7,2), false),
+            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, decayCyan)
+        });
+
+    addOutMidiRules(seq, &kWaterFmbassLedRules);
+    addInMidiRules(seq, &kWaterChordInRules);
+
+    return seq;
+}
+
+Sequence WaterSequenceFactory::waterPrechorus()
+{
+    Sequence seq = buildSequence(
+        8, 4, 0, "PreChorus", songTempo, false,
+        {
+            WaterTrackFactory::waterKickPreChorus,
+            SequenceTrackFactory::clapFour,
+            WaterTrackFactory::waterHats,
+            WaterTrackFactory::waterMarimba,
+            WaterTrackFactory::waterFreak,
+            WaterTrackFactory::waterBass,
+            WaterTrackFactory::waterClaves,
+            WaterTrackFactory::waterCongas,
+            track(WaterTrackFactory::waterFmbass).withLength(TickHelper::bars(7)),
+            track(WaterTrackFactory::waterMatrix).withLength(TickHelper::bars(7)),
+            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, decayCyan)
+        });
+    
+    addOutMidiRules(seq, &kWaterFmbassLedRules);
+    addInMidiRules(seq, &kWaterChordInRules);
+
+    return seq;
+}
+
+Sequence WaterSequenceFactory::waterChorus()
+{
+    tick_t len = TICK(15, 2, 2);
+    tick_t len2 = TICK(7, 2, 2);
+
+    return buildSequence(
+        16, 4, 0, "Chorus", songTempo, false,
+        {
+            track(SequenceTrackFactory::clapFour).withLength(len),
+            track(WaterTrackFactory::waterHats).withLength(len),
+            track(WaterTrackFactory::waterChorus).withNote(69, 127, len), // note to stop the juno
+            track(WaterTrackFactory::waterMarimba).withNote(68, 127, len), // note to stop the marimba
+            track(WaterTrackFactory::waterXmas).withLength(len2).withStart(TickHelper::bars(8)),
+            track(WaterTrackFactory::waterChorusFMBass).withStart(TickHelper::bars(15)),
+            track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, ON, len),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kWater_turnstile),
+            track(WaterTrackFactory::waterChorusLed).withCC(LedStrips::kDecay_cc, 80).withLength(TICK(14))
+        });
+}
+
+Sequence WaterSequenceFactory::waterPartB()
+{
+    tick_t start2 = TickHelper::bars(8);
+    tick_t start3 = TickHelper::bars(16);
+    tick_t start4 = TickHelper::bars(24);
+
+    tick_t len1 = TICK(31, 3);
+    tick_t len2 = TICK(23, 3);
+    tick_t len3 = TICK(15, 3);
+    tick_t len4 = TICK(7, 3);
+
+    Sequence seq = buildSequence(
+        32, 4, 0, "PartB", songTempo, false,
+        {
+            WaterTrackFactory::waterKickPartB,
+            track(SequenceTrackFactory::clapFour).withLength(len1),
+            track(WaterTrackFactory::waterHats).withLength(len1),
+            track(WaterTrackFactory::waterFm).withLength(len1).withNote(70, 127, len1), // note to stop the juno
+            track(WaterTrackFactory::waterFreak).withLength(len1),
+            track(WaterTrackFactory::waterFmbass).withLength(TickHelper::bars(31)),
+            track(WaterTrackFactory::waterClaves).withStart(start2).withLength(len2),
+            track(WaterTrackFactory::waterBalafon).withStart(start2).withLength(len2),
+            track(WaterTrackFactory::waterBass).withStart(start2).withLength(len2),
+            track(WaterTrackFactory::waterXmas).withStart(start3).withLength(len3),
+            track(WaterTrackFactory::waterShakes).withStart(start4).withLength(len4),
+            WaterTrackFactory::waterEventsPartB,
+            track(SequenceTrackFactory::polySynth)
+                .withProgramChange(PolySynth::kSlowStr)
+                .withProgramChange(PolySynth::kBigLead, TICK(31, 3)),
+            track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, OFF).withCC(ModularA::kGlobalMute_cc, ON, len1),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kWater_oscBlue),
+            track(WaterTrackFactory::waterMatrix).withLength(TickHelper::bars(31)),
+            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, decayCyan)
+        });
+    
+    addOutMidiRules(seq, &kWaterFmbassLedRules);
+
+    return seq;
+}
+
+
+Sequence WaterSequenceFactory::waterChorus2()
+{
+    tick_t len = TICK(15, 2, 2);
+    tick_t len2 = TICK(7, 2, 2);
+
+    return buildSequence(
+        16, 4, 0, "ChorusB", songTempo, false,
+        {
+            track(SequenceTrackFactory::clapFour).withLength(len),
+            track(WaterTrackFactory::waterHats).withLength(len),
+            track(WaterTrackFactory::waterChorus).withNote(69, 127, len), // note to stop the juno
+            track(WaterTrackFactory::waterBalafon).withLength(len),
+            track(WaterTrackFactory::waterXmas).withLength(len2).withStart(TickHelper::bars(8)),
+            track(WaterTrackFactory::waterChorusFMBass).withStart(TickHelper::bars(15)),
+            track(WaterTrackFactory::waterFreakChorusB).withLength(len)
+                .withProgramChange(Microfreak::kWaterArp),
+            track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, OFF).withCC(ModularA::kGlobalMute_cc, ON, len),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kWater_turnstile),
+            track(WaterTrackFactory::waterChorusLed).withCC(LedStrips::kDecay_cc, 80).withLength(TICK(14))
+        });
+}
+
+
+Sequence WaterSequenceFactory::waterPartC()
+{
+    Sequence seq = buildSequence(
+        24, 4, 16, "PartC", songTempo, true,
+        {
+            SequenceTrackFactory::kickFour,
+            track(SequenceTrackFactory::clapFour).muted(),
+            track(WaterTrackFactory::waterHats).muted(),
+            WaterTrackFactory::waterMarimba,
+            track(WaterTrackFactory::waterFreak).withProgramChange(Microfreak::kWaterBass),
+            WaterTrackFactory::waterBass,
+            WaterTrackFactory::waterClaves,
+            track(WaterTrackFactory::waterBalafon).muted(),
+            track(WaterTrackFactory::waterShakes).muted(),
+            //track(WaterTrackFactory::waterXmas).withStart(TickHelper::bars(16)),
+            WaterTrackFactory::waterFmbass,
+            track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, OFF),
+            track(SequenceTrackFactory::drumMachine)
+                .withCC(DrumMachine::kPerformMode_cc, OFF)
+                .withNote(Water::wtrCym808),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kWater_oscBlueWhite),
+            WaterTrackFactory::waterMatrix,
+            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, decayCyan)
+                
+        });
+
+    addOutMidiRules(seq, &kWaterFmbassLedRules);
+
+    return seq;
+}
+
+Sequence WaterSequenceFactory::waterPartCEnd()
+{
+    tick_t len = TICK(7, 2, 2);
+
+    Sequence seq = buildSequence(
+        8, 4, 0, "PartCEnd", songTempo, false,
+        {
+            WaterTrackFactory::waterKickPartC,
+            SequenceTrackFactory::clapFour,
+            WaterTrackFactory::waterHats,
+            track(WaterTrackFactory::waterMarimba).withNote(68, 127, len), // note to stop the marimba
+            track(WaterTrackFactory::waterFreak).withLength(len),
+            track(WaterTrackFactory::waterBass).withLength(len),
+            WaterTrackFactory::waterClaves,
+            track(WaterTrackFactory::waterBalafon).withLength(len),
+            track(WaterTrackFactory::waterShakes).withLength(len),
+            track(WaterTrackFactory::waterXmas).withLength(len),
+            track(WaterTrackFactory::waterFmbass).withLength(len),
+            WaterTrackFactory::waterEventsPartC,
+            track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, ON, len),
+            track(SequenceTrackFactory::polySynth).withCC(PolySynth::kGlobalMute_cc, ON, len),
+            track(SequenceTrackFactory::drumMachine)
+                .withCC(DrumMachine::kClearAll_cc, ON, len),
+            track(WaterTrackFactory::waterMatrix).withLength(len),
+            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, decayCyan).withLength(len)
+        });
+    addOutMidiRules(seq, &kWaterFmbassLedRules);
+
+    return seq;
+}
+
+Sequence WaterSequenceFactory::waterChorusEnd()
+{
+    tick_t len1 = TickHelper::bars(8);
+    tick_t len2 = TickHelper::bars(16);
+    tick_t len4 = TickHelper::bars(32);
+
+    Sequence seq = buildSequence(
+        36, 4, 32, "ChorusEnd", songTempo, true,
+        {
+            track(SequenceTrackFactory::clapFour).withLength(len2),
+            track(WaterTrackFactory::waterHats).withLength(len2),
+            track(WaterTrackFactory::waterChorusEnd).withLength(len4),
+            track(WaterTrackFactory::waterMarimba).withLength(len4),
+            WaterTrackFactory::waterBalafon,
+            track(WaterTrackFactory::waterXmas).withLength(len1).withStart(len1),
+            WaterTrackFactory::waterEventsEnd,
+            track(WaterTrackFactory::waterFreakWind).withStart(TICK(8)).withProgramChange(Microfreak::kWind),
+            track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, OFF),
+            track(SequenceTrackFactory::polySynth).withCC(PolySynth::kGlobalMute_cc, OFF),
+            track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kWater_turnstile),
+            track(WaterTrackFactory::waterChorusLed).withLength(TICK(30)).withCC(LedStrips::kDecay_cc, 80)
+        });
+
+    return seq;
+}

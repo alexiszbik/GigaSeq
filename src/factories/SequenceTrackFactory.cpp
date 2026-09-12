@@ -1,439 +1,137 @@
 #include "SequenceTrackFactory.h"
 
+#include "DrumPatterns.h"
 #include "TrackPatternBuilder.h"
 
-#include "MidiChannel.h"
+#include "MidiConst.h"
 #include "MidiNotes.h"
 
-SequenceTrack SequenceTrackFactory::kickFour(tick_t lengthInTicks)
+SequenceTrack SequenceTrackFactory::sampler(tick_t lengthInTicks, tick_t startInTicks)
+{
+    SequenceTrack track("Sampler", MidiChannel::kSampler);
+    return track;
+}
+
+
+SequenceTrack SequenceTrackFactory::kickFour(tick_t lengthInTicks, tick_t startInTicks)
 {
     SequenceTrack track("Kick", MidiChannel::kDrums);
-
-    SequenceDesc desc;
-    desc.notes = {{36}};
-    desc.rate = 4;
-    makeSequenceTrack(track, desc, lengthInTicks);
-
+    track.setPattern(DrumPatterns::kKickFour, lengthInTicks, startInTicks);
     return track;
 }
 
-SequenceTrack SequenceTrackFactory::createCMaj7Arpeggio(tick_t lengthInTicks)
-{
-    SequenceTrack track("abcdefghijklmnopqrstuvwxyz123456789", MidiChannel::kModularA);
-
-    SequenceDesc desc;
-    desc.notes = {{60}, {64}, {67}, {71}};
-    desc.rate = 4;
-    makeSequenceTrack(track, desc, lengthInTicks);
-
-    makeAutomationTrack(track, 0, 96 * 4, 10, 0, 127);
-    makeAutomationTrack(track, 96 * 4, 96 * 8, 10, 0, 127);
-    makeAutomationTrack(track, 96 * 8, 96 * 12, 10, 0, 127);
-    makeAutomationTrack(track, 96 * 12, 96 * 16, 10, 0, 127);
-
-    return track;
-}
-
-SequenceTrack SequenceTrackFactory::createAm7Arpeggio(tick_t lengthInTicks)
-{
-    SequenceTrack track("Am7 Arpeggio", MidiChannel::kModularA);
-
-    SequenceDesc desc;
-    desc.notes = {{57}, {60}, {64}, {67}};
-    desc.velocities = {95};
-    desc.rate = 4;
-    makeSequenceTrack(track, desc, lengthInTicks);
-
-    return track;
-}
-
-SequenceTrack SequenceTrackFactory::createKickSnare(tick_t lengthInTicks)
-{
-    SequenceTrack track("Kick/Snare", MidiChannel::kDrums);
-
-    SequenceDesc desc;
-    desc.notes = {{36}, {36, 38}, {36}, {36, 38}};
-    desc.rate = 4;
-    makeSequenceTrack(track, desc, lengthInTicks);
-
-    return track;
-}
-
-SequenceTrack SequenceTrackFactory::createKickSnareWithHats(tick_t lengthInTicks)
-{
-    SequenceTrack track("Kick/Snare + Hats", MidiChannel::kDrums);
-
-    SequenceDesc hats;
-    hats.notes = {{42}};
-    hats.velocities = {32, 64, 96, 127, 32, 64, 96, 127};
-    hats.rate = 16;
-    makeSequenceTrack(track, hats, lengthInTicks);
-
-    SequenceDesc drums;
-    drums.notes = {
-        {36}, {}, {36, 37}, {}, {36}, {}, {36, 37}, {},
-        {36}, {}, {36, 37}, {}, {36}, {37}};
-    drums.rate = 8;
-    makeSequenceTrack(track, drums, lengthInTicks);
-
-    track.addMuteEvent(0);
-
-    return track;
-}
-
-SequenceTrack SequenceTrackFactory::createBassLine(tick_t lengthInTicks)
-{
-    SequenceTrack track("Bassline", MidiChannel::kModularA);
-
-    SequenceDesc desc;
-    desc.notes = {
-        {36}, {36}, {36}, {36},
-        {36}, {36}, {36}, {36},
-        {36}, {36}, {36}, {36},
-        {48}, {48}, {48}, {48},
-    };
-    desc.velocities = {100};
-    desc.rate = 4;
-    makeSequenceTrack(track, desc, lengthInTicks);
-
-    return track;
-}
-
-SequenceTrack SequenceTrackFactory::createMelodicBass(tick_t lengthInTicks)
-{
-    SequenceTrack track("Melodic Bass", MidiChannel::kModularA);
-
-    SequenceDesc desc;
-    desc.notes = {{36}, {36}, {43}, {41}, {38}, {38}, {43}, {41}};
-    desc.velocities = {110};
-    desc.rate = 8;
-    makeSequenceTrack(track, desc, lengthInTicks);
-
-    return track;
-}
-
-SequenceTrack SequenceTrackFactory::createHiHatPattern(tick_t lengthInTicks)
-{
-    SequenceTrack track("Hi-Hat", MidiChannel::kDrums);
-
-    SequenceDesc desc;
-    desc.notes = {
-        {42}, {}, {42}, {},
-        {42}, {46}, {42}, {},
-        {42}, {}, {42}, {46},
-        {42}, {}, {42}, {},
-    };
-    desc.velocities = {
-        100, 80,
-        100, 80, 80,
-        100, 80, 100,
-        100, 80};
-    desc.rate = 16;
-    makeSequenceTrack(track, desc, lengthInTicks);
-
-    return track;
-}
-
-SequenceTrack SequenceTrackFactory::createSnareBackbeat(tick_t lengthInTicks)
-{
-    SequenceTrack track("Snare Backbeat", MidiChannel::kDrums);
-
-    SequenceDesc desc;
-    desc.notes = {{}, {37}, {}, {37}};
-    desc.velocities = {120};
-    desc.rate = 4;
-    makeSequenceTrack(track, desc, lengthInTicks);
-
-    return track;
-}
-
-SequenceTrack SequenceTrackFactory::createPadChords(tick_t lengthInTicks)
-{
-    SequenceTrack track("Pad Chords", MidiChannel::kModularA);
-
-    SequenceDesc desc;
-    desc.notes = {
-        {}, {60, 64, 67}, {}, {},
-        {}, {65, 69, 72}, {}, {},
-        {}, {67, 72, 75}, {}, {},
-        {}, {60, 64, 67}, {}, {},
-    };
-    desc.velocities = {70};
-    desc.durations = {3};
-    desc.rate = 4;
-    makeSequenceTrack(track, desc, lengthInTicks);
-
-    return track;
-}
-
-SequenceTrack SequenceTrackFactory::createSynthStabs(tick_t lengthInTicks)
-{
-    SequenceTrack track("Synth Stabs", MidiChannel::kModularA);
-
-    SequenceDesc desc;
-    desc.notes = {{}, {72}, {}, {74}, {}, {76}, {}, {77}};
-    desc.velocities = {105};
-    desc.rate = 8;
-    makeSequenceTrack(track, desc, lengthInTicks);
-
-    return track;
-}
-
-SequenceTrack SequenceTrackFactory::createClapBackbeat(tick_t lengthInTicks)
+SequenceTrack SequenceTrackFactory::clapFour(tick_t lengthInTicks, tick_t startInTicks)
 {
     SequenceTrack track("Clap", MidiChannel::kDrums);
-
-    SequenceDesc desc;
-    desc.notes = {{}, {39}, {}, {39}};
-    desc.velocities = {115};
-    desc.rate = 4;
-    makeSequenceTrack(track, desc, lengthInTicks);
-
+    track.setPattern(DrumPatterns::kSnareFour, lengthInTicks, startInTicks);
     return track;
 }
 
-SequenceTrack SequenceTrackFactory::createOpenHat(tick_t lengthInTicks)
+SequenceTrack SequenceTrackFactory::snareFour(tick_t lengthInTicks, tick_t startInTicks)
 {
-    SequenceTrack track("Open Hat", MidiChannel::kDrums);
-
-    SequenceDesc desc;
-    desc.notes = {{}, {46}, {}, {46}};
-    desc.velocities = {90};
-    desc.rate = 4;
-    makeSequenceTrack(track, desc, lengthInTicks);
-
+    SequenceTrack track("Snare", MidiChannel::kDrums);
+    track.setPattern(DrumPatterns::kSnareFour, lengthInTicks, startInTicks);
     return track;
 }
 
-SequenceTrack SequenceTrackFactory::createTomFill(tick_t lengthInTicks)
-{
-    SequenceTrack track("Tom Fill", MidiChannel::kDrums);
-
-    SequenceDesc desc;
-    desc.notes = {
-        {}, {}, {}, {},
-        {}, {}, {}, {},
-        {50}, {48}, {47}, {45},
-        {45}, {47}, {48}, {50},
-    };
-    desc.velocities = {110};
-    desc.rate = 16;
-    makeSequenceTrack(track, desc, lengthInTicks);
-
-    return track;
-}
-
-SequenceTrack SequenceTrackFactory::createRimshot(tick_t lengthInTicks)
-{
-    SequenceTrack track("Rimshot", MidiChannel::kDrums);
-
-    SequenceDesc desc;
-    desc.notes = {{37}, {}, {37}, {}, {37}, {}, {37}, {}};
-    desc.velocities = {95};
-    desc.rate = 8;
-    makeSequenceTrack(track, desc, lengthInTicks);
-
-    return track;
-}
-
-SequenceTrack SequenceTrackFactory::createCymbalRide(tick_t lengthInTicks)
-{
+SequenceTrack SequenceTrackFactory::rideOff(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Ride", MidiChannel::kDrums);
+    track.setPattern(DrumPatterns::kRideOff, lengthInTicks, startInTicks);
+    return track;
+}
+
+SequenceTrack SequenceTrackFactory::gtrPedal(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("HXStomp", MidiChannel::kGtrPedal);
+    return track;
+}
+
+SequenceTrack SequenceTrackFactory::gtrLoop(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("GtrLoop", MidiChannel::kGtrLoop);
+    return track;
+}
+
+SequenceTrack SequenceTrackFactory::gtrLoopMute(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("GtrLoop Mute", MidiChannel::kGtrLoop);
+    track.addControlChange({ startInTicks, BossRC::kVolume_cc, 0 });
+    return track;
+}
+
+SequenceTrack SequenceTrackFactory::gtrLoopUnmute(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("GtrLoop Unmute", MidiChannel::kGtrLoop);
+    track.addControlChange({ startInTicks, BossRC::kVolume_cc, 65 });
+    return track;
+}
+
+SequenceTrack SequenceTrackFactory::gtrLoopErase(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("GtrLoop Erase", MidiChannel::kGtrLoop);
+    track.addControlChange({ startInTicks, BossRC::kErase_cc, 0 });
+    track.addControlChange({ static_cast<tick_t>(startInTicks + 2), BossRC::kErase_cc, 127 });
+    return track;
+}
+
+SequenceTrack SequenceTrackFactory::polySynth(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("PolySynth", MidiChannel::kPoly);
+    return track;
+}
+
+SequenceTrack SequenceTrackFactory::bass(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Bass", MidiChannel::kBass);
+    return track;
+}
+
+SequenceTrack SequenceTrackFactory::vocoder(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Vocoder", MidiChannel::kVocoder);
+    return track;
+}
+
+SequenceTrack SequenceTrackFactory::microfreak(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Microfreak", MidiChannel::kMicrofreak);
+    return track;
+}
+
+SequenceTrack SequenceTrackFactory::midiLoop(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("MidiLoop", MidiChannel::kMidiLoop);
+    return track;
+}
+
+SequenceTrack SequenceTrackFactory::modularA(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Modular", MidiChannel::kModularA);
+    return track;
+}
+
+SequenceTrack SequenceTrackFactory::drumMachine(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("DrumMachine", MidiChannel::kDrumMachine);
+    return track;
+}
+
+SequenceTrack SequenceTrackFactory::matrix(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("Matrix", MidiChannel::kMatrix);
+    return track;
+}
+
+SequenceTrack SequenceTrackFactory::matrixKill(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track = matrix(lengthInTicks, startInTicks);
+    track.addProgramChange({ 0, LedMatrix::kKill });
+    return track;
+}
+
+SequenceTrack SequenceTrackFactory::ledStrips(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("LedStrips", MidiChannel::kLedStrips);
+    return track;
+}
+
+SequenceTrack SequenceTrackFactory::ledStripsTest(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("LedStrips", MidiChannel::kLedStrips);
 
     SequenceDesc desc;
-    desc.notes = {{51}, {51}, {51}, {51}};
-    desc.velocities = {70, 85, 70, 90};
+    desc.notes = {
+        {LedStrips::kRed_A}, {LedStrips::kGreen_A}, {LedStrips::kBlue_A}, {LedStrips::kWhite_A},
+        {LedStrips::kRed_B}, {LedStrips::kGreen_B}, {LedStrips::kBlue_B}, {LedStrips::kWhite_B},
+        {LedStrips::kRed_C}, {LedStrips::kGreen_C}, {LedStrips::kBlue_C}, {LedStrips::kWhite_C},
+        {LedStrips::kRed_D}, {LedStrips::kGreen_D}, {LedStrips::kBlue_D}, {LedStrips::kWhite_D},
+    };
     desc.rate = 4;
-    makeSequenceTrack(track, desc, lengthInTicks);
-
-    return track;
-}
-
-SequenceTrack SequenceTrackFactory::createTambourine(tick_t lengthInTicks)
-{
-    SequenceTrack track("Tambourine", MidiChannel::kDrums);
-
-    SequenceDesc desc;
-    desc.notes = {{54}, {54}, {54}, {54}, {54}, {54}, {54}, {54}};
-    desc.velocities = {100, 60, 100, 60, 100, 60, 100, 60};
-    desc.rate = 8;
-    makeSequenceTrack(track, desc, lengthInTicks);
-
-    return track;
-}
-
-SequenceTrack SequenceTrackFactory::createShaker(tick_t lengthInTicks)
-{
-    SequenceTrack track("Shaker", MidiChannel::kDrums);
-
-    SequenceDesc desc;
-    desc.notes = {
-        {70}, {}, {70}, {},
-        {70}, {}, {70}, {},
-        {70}, {}, {70}, {},
-        {70}, {}, {70}, {},
-    };
-    desc.velocities = {80, 50};
-    desc.rate = 16;
-    makeSequenceTrack(track, desc, lengthInTicks);
-
-    return track;
-}
-
-SequenceTrack SequenceTrackFactory::createClave(tick_t lengthInTicks)
-{
-    SequenceTrack track("Clave", MidiChannel::kDrums);
-
-    SequenceDesc desc;
-    desc.notes = {{75}, {}, {}, {75}, {}, {75}, {}, {}};
-    desc.velocities = {105};
-    desc.rate = 8;
-    makeSequenceTrack(track, desc, lengthInTicks);
-
-    return track;
-}
-
-SequenceTrack SequenceTrackFactory::createCowbell(tick_t lengthInTicks)
-{
-    SequenceTrack track("Cowbell", MidiChannel::kDrums);
-
-    SequenceDesc desc;
-    desc.notes = {{56}, {}, {56}, {}};
-    desc.velocities = {120};
-    desc.rate = 4;
-    makeSequenceTrack(track, desc, lengthInTicks);
-
-    return track;
-}
-
-SequenceTrack SequenceTrackFactory::createChordStab(tick_t lengthInTicks)
-{
-    SequenceTrack track("Chord Stab", MidiChannel::kModularA);
-
-    SequenceDesc desc;
-    desc.notes = {
-        {}, {60, 63, 67}, {}, {},
-        {}, {65, 69, 72}, {}, {},
-        {}, {60, 63, 67}, {}, {60, 63, 67},
-        {}, {65, 69, 72}, {}, {},
-    };
-    desc.velocities = {100};
-    desc.durations = {1};
-    desc.rate = 4;
-    makeSequenceTrack(track, desc, lengthInTicks);
-
-    return track;
-}
-
-SequenceTrack SequenceTrackFactory::createPluck(tick_t lengthInTicks)
-{
-    SequenceTrack track("Pluck", MidiChannel::kModularB);
-
-    SequenceDesc desc;
-    desc.notes = {{72}, {}, {76}, {}, {79}, {}, {76}, {}};
-    desc.velocities = {85};
-    desc.rate = 8;
-    makeSequenceTrack(track, desc, lengthInTicks);
-
-    return track;
-}
-
-SequenceTrack SequenceTrackFactory::createLead(tick_t lengthInTicks)
-{
-    SequenceTrack track("Lead", MidiChannel::kModularB);
-
-    SequenceDesc desc;
-    desc.notes = {{76}, {77}, {79}, {81}, {79}, {77}, {76}, {74}};
-    desc.velocities = {95};
-    desc.rate = 8;
-    makeSequenceTrack(track, desc, lengthInTicks);
-
-    return track;
-}
-
-SequenceTrack SequenceTrackFactory::createSubBass(tick_t lengthInTicks)
-{
-    SequenceTrack track("Sub Bass", MidiChannel::kBass);
-
-    SequenceDesc desc;
-    desc.notes = {{36}, {36}, {36}, {36}, {36}, {36}, {36}, {41}};
-    desc.velocities = {120};
-    desc.rate = 8;
-    makeSequenceTrack(track, desc, lengthInTicks);
-
-    return track;
-}
-
-SequenceTrack SequenceTrackFactory::createPadSwells(tick_t lengthInTicks)
-{
-    SequenceTrack track("Pad Swell", MidiChannel::kPoly);
-
-    SequenceDesc desc;
-    desc.notes = {
-        {}, {60, 64, 67}, {}, {},
-        {}, {62, 65, 69}, {}, {},
-        {}, {64, 67, 71}, {}, {},
-        {}, {65, 69, 72}, {}, {},
-    };
-    desc.velocities = {60};
-    desc.durations = {3};
-    desc.rate = 4;
-    makeSequenceTrack(track, desc, lengthInTicks);
-
-    makeAutomationTrack(track, 0, 96 * 4, 7, 0, 110);
-    makeAutomationTrack(track, 96 * 4, 96 * 8, 7, 110, 40);
-    makeAutomationTrack(track, 96 * 8, 96 * 12, 7, 40, 110);
-    makeAutomationTrack(track, 96 * 12, 96 * 16, 7, 110, 0);
-
-    return track;
-}
-
-SequenceTrack SequenceTrackFactory::createFxBleep(tick_t lengthInTicks)
-{
-    SequenceTrack track("FX Bleep", MidiChannel::kFM);
-
-    SequenceDesc desc;
-    desc.notes = {
-        {}, {}, {}, {},
-        {}, {}, {}, {},
-        {}, {}, {}, {},
-        {}, {}, {96}, {99},
-    };
-    desc.velocities = {127};
-    desc.rate = 16;
-    makeSequenceTrack(track, desc, lengthInTicks);
-
-    return track;
-}
-
-SequenceTrack SequenceTrackFactory::createArpFast(tick_t lengthInTicks)
-{
-    SequenceTrack track("Arp Fast", MidiChannel::kModularA);
-
-    SequenceDesc desc;
-    desc.notes = {{60}, {64}, {67}, {72}, {67}, {64}, {60}, {64}};
-    desc.velocities = {90};
-    desc.rate = 16;
-    makeSequenceTrack(track, desc, lengthInTicks);
-
-    return track;
-}
-
-SequenceTrack SequenceTrackFactory::createGtrChug(tick_t lengthInTicks)
-{
-    SequenceTrack track("Gtr Chug", MidiChannel::kGtrPedal);
-
-    SequenceDesc desc;
-    desc.notes = {
-        {40}, {40}, {40}, {40},
-        {40}, {40}, {40}, {40},
-        {40}, {40}, {40}, {40},
-        {40}, {40}, {40}, {40},
-    };
-    desc.velocities = {110, 80};
-    desc.durations = {1};
-    desc.rate = 16;
-    makeSequenceTrack(track, desc, lengthInTicks);
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
 
     return track;
 }

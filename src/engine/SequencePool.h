@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Logger.h"
+#include "MidiInputHandler.h"
 #include "MidiInOut.h"
 #include "Sequence.h"
 #include "Song.h"
@@ -12,7 +13,8 @@ enum class PendingSwitch
 {
     None,
     Next,
-    Previous
+    Previous,
+    JumpToSong
 };
 
 
@@ -20,10 +22,13 @@ using SequenceChangedCallback = void (*)();
 using PendingChangedCallback = void (*)(PendingSwitch);
 using PlaybackStopCallback = void (*)();
 
-class SequencePool
+class SequencePool : public MidiInputHandler
 {
 public:
     SequencePool(MidiInOut& midi, Logger& logger);
+
+    void handleNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) override;
+    void handleNoteOff(uint8_t channel, uint8_t note, uint8_t velocity) override;
 
     void add(Song song);
 
@@ -35,14 +40,19 @@ public:
 
     Song& currentSong();
     const Song& currentSong() const;
+    Song& song(std::size_t index);
+    const Song& song(std::size_t index) const;
     Sequence& current();
     const Sequence& current() const;
 
     void resetCurrent();
     void requestNext(bool now = false);
     void requestPrevious(bool now = false);
+    void requestSong(std::size_t songIndex, bool now = false);
     void processTick();
     void allNotesOff();
+
+    void sendProgramChange();
 
     void setOnSequenceChanged(SequenceChangedCallback callback);
     void setOnTrackMuteChanged(MuteChangedCallback callback);
@@ -57,13 +67,16 @@ private:
     bool canAdvancePrevious() const;
     void advanceToNext();
     void advanceToPrevious();
+    void advanceToSong(std::size_t songIndex);
     void queueSwitch(PendingSwitch direction);
+    void queueSongSwitch(std::size_t songIndex);
     void logCurrentSequenceSwitch();
     void notifySequenceChanged();
     void notifyPlaybackStop();
     void wireTrackMuteCallbacks();
     void wireTempoCallbacks();
     void setPending(PendingSwitch sw);
+    void releaseCurrentInMidiHeldNotes();
 
     MidiInOut& midi_;
     Logger& logger_;
@@ -71,6 +84,7 @@ private:
     std::size_t currentSongIndex_ = 0;
     std::size_t currentSequenceIndex_ = 0;
     PendingSwitch pendingSwitch_ = PendingSwitch::None;
+    std::size_t pendingSongIndex_ = 0;
 
     SequenceChangedCallback onSequenceChanged_ = nullptr;
     MuteChangedCallback onTrackMuteChanged_ = nullptr;

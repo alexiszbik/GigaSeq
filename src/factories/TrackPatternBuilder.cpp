@@ -1,6 +1,7 @@
 #include "TrackPatternBuilder.h"
 
-#include "Sequence.h"
+#include "TickHelper.h"
+#include "TrackPattern.h"
 
 void makeSequenceTrack(
     SequenceTrack& track,
@@ -8,7 +9,7 @@ void makeSequenceTrack(
     tick_t lengthInTicks,
     tick_t startTick)
 {
-    const int barDuration = Sequence::kTicksPerQuarterNote * 4;
+    const int barDuration = TickHelper::kOneBarTick4_4;
     const int stepDuration = barDuration / desc.rate;
 
     const int seqSize = static_cast<int>(desc.notes.size());
@@ -20,10 +21,19 @@ void makeSequenceTrack(
     const int durationSize = static_cast<int>(desc.durations.size());
     int durIdx = 0;
 
+    const uint8_t groove = patternEffectiveGroove(static_cast<uint8_t>(desc.rate), desc.groove);
+
+    bool isOddBeat = false;
+
     for (tick_t tick = startTick; tick < (startTick + lengthInTicks); tick = static_cast<tick_t>(tick + stepDuration))
     {
         int noteDuration = stepDuration;
         const std::vector<uint8_t>& stepNotes = desc.notes[seqIdx];
+
+        tick_t noteTick = tick;
+        if (groove > 0 && isOddBeat) {
+            noteTick += patternStepGrooveOffset(stepDuration, groove);
+        }
 
         uint8_t velocity = 127;
         if (velIdx < velSize) {
@@ -37,7 +47,7 @@ void makeSequenceTrack(
         bool noteExists = false;
 
         for (uint8_t note : stepNotes) {
-            track.addNote(tick, noteDuration, note, velocity);
+            track.addNote(noteTick, noteDuration, note, velocity);
             noteExists = true;
         }
 
@@ -52,43 +62,77 @@ void makeSequenceTrack(
                 durIdx = (durIdx + 1) % durationSize;
             }
         }
+
+        isOddBeat = !isOddBeat;
     }
 }
 
-void makeAutomationTrack(
+
+void addSingleNote(
     SequenceTrack& track,
-    tick_t startInTicks,
-    tick_t endInTicks,
-    uint8_t controller,
-    uint8_t startValue,
-    uint8_t endValue)
+    uint8_t note,
+    tick_t startTick)
 {
-    if (startInTicks > endInTicks) {
+    track.addNote(startTick, TickHelper::kStepLen, note, 127);
+
+}
+
+void makeRiser(
+    SequenceTrack& track,
+    uint8_t note,
+    tick_t lengthInTicks,
+    tick_t riserLength) 
+{
+    track.addNote(lengthInTicks - riserLength, riserLength, note, 127);
+
+}
+
+void makeRoll(
+    SequenceTrack& track,
+    std::vector<uint8_t> notes,
+    tick_t lengthInTicks,
+    tick_t startTick,
+    uint8_t startVelocity,
+    uint8_t endVelocity,
+    std::vector<double> velocityPattern,
+    uint8_t stepRatio) 
+{
+    const tick_t stepDuration = TickHelper::kOneBarTick4_4 / stepRatio;
+
+    const int noteCount = notes.size();
+
+    int noteIdx = 0;
+
+    if (lengthInTicks < stepDuration) {
         return;
     }
 
-    if (startInTicks == endInTicks) {
-        track.addControlChange(startInTicks, controller, endValue);
-        return;
-    }
+    int velocityIdx = 0;
+    size_t velocityCount = velocityPattern.size();
+    
+    const int stepCount = static_cast<int>(lengthInTicks / stepDuration);
 
-    const tick_t duration = endInTicks - startInTicks;
-    uint8_t lastSentValue = startValue;
+    const int velocityDelta = static_cast<int>(endVelocity) - static_cast<int>(startVelocity);
+    
+    for (int step = 0; step < stepCount; ++step) {
 
-    track.addControlChange(startInTicks, controller, startValue);
+        double velocityRatio = velocityPattern.at(velocityIdx);
 
-    for (tick_t tick = startInTicks + 1; tick < endInTicks; ++tick) {
-        const tick_t delta = tick - startInTicks;
-        const int range = static_cast<int>(endValue) - startValue;
+        const tick_t tick = startTick + step * stepDuration;
 
-        const uint8_t value = static_cast<uint8_t>(
-            startValue + range * static_cast<int>(delta) / static_cast<int>(duration));
+        const int velocity = startVelocity + (velocityDelta * step) / (stepCount - 1);
 
-        if (value != lastSentValue) {
-            track.addControlChange(tick, controller, value);
-            lastSentValue = value;
+        track.addNote(tick, stepDuration, notes.at(noteIdx), static_cast<uint8_t>(velocity * velocityRatio));
+
+        velocityIdx++;
+        if (velocityIdx >= velocityCount) {
+            velocityIdx = 0;
+        }
+
+        noteIdx++;
+        if (noteIdx >= noteCount) {
+            noteIdx = 0;
         }
     }
 
-    track.addControlChange(endInTicks, controller, endValue);
 }

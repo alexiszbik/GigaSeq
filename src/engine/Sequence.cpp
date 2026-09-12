@@ -1,6 +1,7 @@
 #include "Sequence.h"
 
-#include "StringHelper.h"
+#include "midiinrules/InMidiRules.h"
+#include "OutMidiRules.h"
 
 #include <stdexcept>
 #include <utility>
@@ -12,26 +13,26 @@ Sequence::Sequence(
     uint8_t beatsPerBar,
     uint8_t barLoop,
     bool loop)
-    : tempo_(tempo),
+    : name_(name ? name : ""),
+      tempo_(tempo),
       activeTempo_(tempo),
       barCount_(barCount),
       beatsPerBar_(beatsPerBar),
       loop_(loop)
 {
-    StringHelper::copyName(name_, name, kNameMaxLength + 1);
 
-    const uint32_t length = static_cast<uint32_t>(barCount_) * beatsPerBar_ * kTicksPerQuarterNote;
+    const uint32_t length = static_cast<uint32_t>(barCount_) * beatsPerBar_ * TickHelper::kTicksPerQuarterNote;
     if (!fitsInTickRange(length)) {
         throw std::invalid_argument("Sequence length exceeds maximum tick range");
     }
 
-    const uint32_t loopInPoint = static_cast<uint32_t>(barLoop) * beatsPerBar_ * kTicksPerQuarterNote;
+    const uint32_t loopInPoint = static_cast<uint32_t>(barLoop) * beatsPerBar_ * TickHelper::kTicksPerQuarterNote;
     loopInPoint_ = static_cast<tick_t>(loopInPoint);
 }
 
 tick_t Sequence::lengthInTicks() const noexcept
 {
-    return static_cast<tick_t>(barCount_ * beatsPerBar_ * kTicksPerQuarterNote);
+    return static_cast<tick_t>(barCount_ * beatsPerBar_ * TickHelper::kTicksPerQuarterNote);
 }
 
 void Sequence::attachMidi(MidiInOut& midi)
@@ -49,8 +50,31 @@ void Sequence::addTrack(SequenceTrack track)
         track.attachMidi(*midi_);
     }
 
+    track.setOutMidiRules(outMidiRules_);
     tracks_.push_back(std::move(track));
     applyTrackMuteCallbacks();
+}
+
+void Sequence::setOutMidiRules(OutMidiRules* rules)
+{
+    outMidiRules_ = rules;
+    for (SequenceTrack& track : tracks_) {
+        track.setOutMidiRules(outMidiRules_);
+    }
+}
+
+void Sequence::setInMidiRules(InMidiRules* rules, int8_t transposeSemitones)
+{
+    inMidiRules_ = rules;
+    inMidiRulesConfig_.transposeSemitones = transposeSemitones;
+}
+
+void Sequence::releaseInMidiHeldNotes()
+{
+    if (midi_ != nullptr && inMidiRules_ != nullptr) {
+        inMidiRules_->releaseHeldNotes(*midi_);
+        inMidiRules_->reset();
+    }
 }
 
 void Sequence::setOnTrackMuteChanged(MuteChangedCallback callback)
@@ -82,6 +106,14 @@ void Sequence::clearTracks()
     tracks_.clear();
 }
 
+void Sequence::unMuteFills() {
+    for (auto& t : tracks_) {
+        if (t.getFill()) {
+            t.setMuted(false);
+        }
+    }
+}
+
 SequenceTrack& Sequence::track(std::size_t index)
 {
     return tracks_.at(index);
@@ -90,6 +122,16 @@ SequenceTrack& Sequence::track(std::size_t index)
 const SequenceTrack& Sequence::track(std::size_t index) const
 {
     return tracks_.at(index);
+}
+
+SequenceTrack& Sequence::lastTrack()
+{
+    return track(tracks_.size() - 1);
+}
+
+const SequenceTrack& Sequence::lastTrack() const
+{
+    return track(tracks_.size() - 1);
 }
 
 void Sequence::setTrackMuted(std::size_t index, bool muted)
@@ -139,8 +181,19 @@ void Sequence::processTick(bool wrapAtEnd)
         }
     });
 
+    if (loopWrap && outMidiRules_ != nullptr) {
+        if (midi_ != nullptr) {
+            outMidiRules_->releaseActiveNotes(*midi_);
+        }
+        outMidiRules_->reset();
+    }
+
     for (SequenceTrack& track : tracks_) {
         track.processTick(position_, loopWrap);
+    }
+
+    if (midi_ != nullptr && outMidiRules_ != nullptr) {
+        outMidiRules_->processTick(*midi_);
     }
 
     ++position_;
@@ -157,4 +210,10 @@ void Sequence::allNotesOff()
     for (SequenceTrack& track : tracks_) {
         track.releaseActiveNotes();
     }
+
+    if (midi_ != nullptr && outMidiRules_ != nullptr) {
+        outMidiRules_->releaseActiveNotes(*midi_);
+    }
+
+    releaseInMidiHeldNotes();
 }

@@ -1,10 +1,12 @@
 #pragma once
 
+#include "midiinrules/InMidiRules.h"
 #include "MidiInOut.h"
+#include "OutMidiRules.h"
 #include "SequenceTrack.h"
-#include "StringHelper.h"
 #include "TempoEvent.h"
 #include "Tick.h"
+#include "TickHelper.h"
 #include "TimedEventList.h"
 
 #include <cstddef>
@@ -15,9 +17,6 @@ using TempoChangedCallback = void (*)(uint8_t bpm);
 class Sequence
 {
 public:
-    static constexpr int kTicksPerQuarterNote = 96;
-    static constexpr std::size_t kNameMaxLength = 12;
-
     Sequence(
         const char* name,
         uint8_t tempo,
@@ -36,8 +35,8 @@ public:
     tick_t lengthInTicks() const noexcept;
     tick_t position() const noexcept { return position_; }
 
-    int currentBar () const noexcept { return position_ / (beatsPerBar_ * kTicksPerQuarterNote); }
-    int currentBeat () const noexcept { return (position_ / kTicksPerQuarterNote) % beatsPerBar_; }
+    int currentBar () const noexcept { return position_ / (beatsPerBar_ * TickHelper::kTicksPerQuarterNote); }
+    int currentBeat () const noexcept { return (position_ / TickHelper::kTicksPerQuarterNote) % beatsPerBar_; }
 
     uint8_t getTempo() const noexcept { return activeTempo_; }
 
@@ -46,9 +45,13 @@ public:
     void addTrack(SequenceTrack track);
     void clearTracks();
 
+    void unMuteFills();
+
     std::size_t trackCount() const noexcept { return tracks_.size(); }
     SequenceTrack& track(std::size_t index);
     const SequenceTrack& track(std::size_t index) const;
+    SequenceTrack& lastTrack();
+    const SequenceTrack& lastTrack() const;
 
     void setTrackMuted(std::size_t index, bool muted);
 
@@ -56,6 +59,15 @@ public:
     void setOnTempoChanged(TempoChangedCallback callback);
 
     void addTempoEvent(tick_t tick, uint8_t bpm);
+
+    void setOutMidiRules(OutMidiRules* rules);
+    void setInMidiRules(InMidiRules* rules, int8_t transposeSemitones = 0);
+
+    InMidiRules* inMidiRules() noexcept { return inMidiRules_; }
+    const InMidiRules* inMidiRules() const noexcept { return inMidiRules_; }
+    const InMidiRulesConfig& inMidiRulesConfig() const noexcept { return inMidiRulesConfig_; }
+
+    void releaseInMidiHeldNotes();
 
     void reset();
     void processTick(bool wrapAtEnd = true);
@@ -66,7 +78,7 @@ private:
     void notifyTempoChanged();
 
     MidiInOut* midi_ = nullptr;
-    char name_[kNameMaxLength + 1] = {};
+    const char* name_ = "";
     MuteChangedCallback onTrackMuteChanged_ = nullptr;
     TempoChangedCallback onTempoChanged_ = nullptr;
 
@@ -81,4 +93,8 @@ private:
     bool loopStartAfterWrap_ = false;
     TimedEventList<TempoEvent> tempoEvents_;
     std::vector<SequenceTrack> tracks_;
+    
+    OutMidiRules* outMidiRules_ = nullptr;
+    InMidiRules* inMidiRules_ = nullptr;
+    InMidiRulesConfig inMidiRulesConfig_ = {};
 };

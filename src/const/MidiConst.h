@@ -1,0 +1,19 @@
+#pragma once
+
+#include "MidiChannel.h"
+#include "HXStompPresets.h"
+#include "BossRCPresets.h"
+#include "PolySynthPresets.h"
+#include "MicrofreakPresets.h"
+#include "MidiLoop.h"
+#include "LEDStrips.h"
+#include "LedStripGroups.h"
+#include "LEDMatrix.h"
+#include "Vocoder.h"
+#include "ModularA.h"
+#include "DrumMachine.h"
+#include "Bass.h"
+
+
+#define ON 127
+#define OFF 0
