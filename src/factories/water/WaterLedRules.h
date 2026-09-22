@@ -1,6 +1,6 @@
 #pragma once
 
-#include "OutMidiRules.h"
+#include "outmidirules/OutMidiRules.h"
 
 class WaterLedRules : public OutMidiRules
 {

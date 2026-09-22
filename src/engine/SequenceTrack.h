@@ -3,10 +3,11 @@
 #include "ActiveNotePool.h"
 #include "ControlAutomation.h"
 #include "ControlChange.h"
+#include "midieffects/MidiEffect.h"
 #include "MidiInOut.h"
 #include "MuteEvent.h"
 #include "Note.h"
-#include "OutMidiRules.h"
+#include "outmidirules/OutMidiRules.h"
 #include "ProgramChange.h"
 #include "TimedEventList.h"
 #include "Tick.h"
@@ -63,18 +64,14 @@ public:
     int pitchOffset() const noexcept { return pitchOffset_; }
 
     void setOutMidiRules(OutMidiRules* rules) noexcept { outMidiRules_ = rules; }
-
-    void removeNotes(
-        tick_t tick,
-        tick_t durationTicks,
-        const std::vector<uint8_t>& pitches = {});
+    void setMidiEffect(MidiEffect* effect) noexcept { midiEffect_ = effect; }
 
     void reset();
     void processTick(tick_t position, bool loopWrap);
     void releaseActiveNotes();
 
 private:
-    void startNote(const ScheduledNote& scheduledNote);
+    void startNote(const Note& note, tick_t durationTicks);
     void processPatternTick(tick_t position);
     void processControlAutomations(tick_t position, bool loopWrap);
     void notifyMuteChanged();
@@ -91,6 +88,7 @@ private:
 
     MidiInOut* midi_ = nullptr;
     OutMidiRules* outMidiRules_ = nullptr;
+    MidiEffect* midiEffect_ = nullptr;
     MuteChangedCallback onMuteChanged_ = nullptr;
 
     const TrackPattern* pattern_ = nullptr;

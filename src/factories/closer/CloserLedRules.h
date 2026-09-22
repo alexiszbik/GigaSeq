@@ -1,6 +1,6 @@
 #pragma once
 
-#include "OutMidiRules.h"
+#include "outmidirules/OutMidiRules.h"
 
 class CloserLedRules : public OutMidiRules
 {

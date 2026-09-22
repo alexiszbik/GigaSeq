@@ -1,4 +1,4 @@
-#include "OutMidiRules.h"
+#include "outmidirules/OutMidiRules.h"
 
 void OutMidiRules::reset()
 {

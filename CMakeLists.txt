@@ -31,7 +31,9 @@ add_executable(GigaSeq
     src/engine/SequencePool.cpp
     src/engine/SequenceTrack.cpp
     src/engine/ActiveNotePool.cpp
-    src/engine/OutMidiRules.cpp
+    src/engine/outmidirules/OutMidiRules.cpp
+    src/engine/midieffects/MidiEffect.cpp
+    src/engine/midieffects/ArpeggiatorEffect.cpp
     src/engine/midiinrules/InMidiRules.cpp
     src/engine/midiinrules/ChordInMidiRules.cpp
     src/engine/midiinrules/TransposeInMidiRules.cpp

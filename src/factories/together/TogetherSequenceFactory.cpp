@@ -1,5 +1,6 @@
 #include "TogetherSequenceFactory.h"
 
+#include "midieffects/ArpeggiatorEffect.h"
 #include "factories/SequenceBuilder.h"
 #include "factories/SequenceTrackFactory.h"
 #include "factories/together/TogetherTrackFactory.h"
@@ -17,7 +18,7 @@ Sequence TogetherSequenceFactory::togetherIntro()
     Sequence seq = buildSequence(
         8, 4, 0, "Intro", songTempo, true,
         {
-            TogetherTrackFactory::togetherArp,
+            track(TogetherTrackFactory::togetherArp).withMidiEffect(&kTogetherArpeggiator),
             track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kBass),
             track(SequenceTrackFactory::gtrLoop).withProgramChange(BossRC::kTogetherA),
             track(SequenceTrackFactory::microfreak).withProgramChange(Microfreak::kTogetherLead),
@@ -37,7 +38,7 @@ Sequence TogetherSequenceFactory::togetherSample()
     Sequence seq = buildSequence(
         8, 4, 0, "Sample", songTempo, true,
         {
-            TogetherTrackFactory::togetherArp,
+            track(TogetherTrackFactory::togetherArp).withMidiEffect(&kTogetherArpeggiator),
             TogetherTrackFactory::togetherHiDrum,
             track(TogetherTrackFactory::togetherSample).muted(),
             track(TogetherTrackFactory::togetherDX7).muted(),
@@ -63,7 +64,7 @@ Sequence TogetherSequenceFactory::togetherKick()
     return buildSequence(
         8, 4, 0, "Kick", songTempo, true,
         {
-            TogetherTrackFactory::togetherArp,
+            track(TogetherTrackFactory::togetherArp).withMidiEffect(&kTogetherArpeggiator),
             TogetherTrackFactory::togetherHiDrum,
             track(TogetherTrackFactory::togetherSample).withCC(13, 127),
             TogetherTrackFactory::togetherDX7,
@@ -78,7 +79,7 @@ Sequence TogetherSequenceFactory::togetherVocoder()
     return buildSequence(
         16, 4, 16, "Vocoder", songTempo, false,
         {
-            TogetherTrackFactory::togetherArp,
+            track(TogetherTrackFactory::togetherArp).withMidiEffect(&kTogetherArpeggiator),
             TogetherTrackFactory::togetherHiDrum,
             track(TogetherTrackFactory::togetherSample).withCC(13, 63),
             TogetherTrackFactory::togetherDX7,
@@ -97,7 +98,7 @@ Sequence TogetherSequenceFactory::togetherPause()
     return buildSequence(
         8, 4, 0, "Pause", songTempo, true,
         {
-            TogetherTrackFactory::togetherArp,
+            track(TogetherTrackFactory::togetherArp).withMidiEffect(&kTogetherArpeggiator),
             TogetherTrackFactory::togetherHatsOnly,
             TogetherTrackFactory::togetherSample,
             TogetherTrackFactory::togetherDX7,
@@ -113,7 +114,7 @@ Sequence TogetherSequenceFactory::togetherClimax()
     return buildSequence(
         16, 4, 0, "Climax", songTempo, false,
         {
-            TogetherTrackFactory::togetherArp,
+            track(TogetherTrackFactory::togetherArp).withMidiEffect(&kTogetherArpeggiator),
             TogetherTrackFactory::togetherHiDrum,
             track(TogetherTrackFactory::togetherSample).withCC(13, 127),
             TogetherTrackFactory::togetherDX7,
@@ -135,7 +136,7 @@ Sequence TogetherSequenceFactory::togetherRepeat()
     return buildSequence(
         4, 4, 0, "Repeat", songTempo, false,
         {
-            TogetherTrackFactory::togetherArp,
+            track(TogetherTrackFactory::togetherArp).withMidiEffect(&kTogetherArpeggiator),
             TogetherTrackFactory::togetherHatsOnly,
             TogetherTrackFactory::togetherSampleRepeat,
             TogetherTrackFactory::togetherDX7,

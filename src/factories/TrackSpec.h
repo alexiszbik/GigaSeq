@@ -2,6 +2,7 @@
 
 #include "ControlAutomation.h"
 #include "ControlChange.h"
+#include "midieffects/MidiEffect.h"
 #include "MuteEvent.h"
 #include "Note.h"
 #include "ProgramChange.h"
@@ -46,6 +47,7 @@ public:
     TrackSpec& withLength(tick_t length);
     TrackSpec& withStart(tick_t start);
     TrackSpec& withPitchOffset(int offset);
+    TrackSpec& withMidiEffect(MidiEffect* effect);
 
     TrackBuilder builder() const noexcept { return builder_; }
     bool startMuted() const noexcept { return startMuted_; }
@@ -61,6 +63,7 @@ public:
     tick_t startInTicks() const noexcept { return startInTicks_; }
     bool hasPitchOffset() const noexcept { return hasPitchOffset_; }
     int pitchOffset() const noexcept { return pitchOffset_; }
+    MidiEffect* midiEffect() const noexcept { return midiEffect_; }
 
 private:
     TrackBuilder builder_;
@@ -78,6 +81,7 @@ private:
     tick_t startInTicks_ = 0;
     bool hasPitchOffset_ = false;
     int pitchOffset_ = 0;
+    MidiEffect* midiEffect_ = nullptr;
 };
 
 // Ergonomic helper to start a fluent TrackSpec from a builder.

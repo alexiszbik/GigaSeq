@@ -7,30 +7,11 @@
 namespace TogetherPatterns
 {
 
-#define ARP_GD_STEP \
-    {{Gd3}, 127, 1}, {{Gd2}, 127, 1}, {{Gd1}, 127, 1}, {{Gd2}, 127, 1}
-
-#define ARP_GD_BAR \
-    ARP_GD_STEP, ARP_GD_STEP, ARP_GD_STEP, ARP_GD_STEP
-
-#define ARP_GD_PHRASE \
-    ARP_GD_BAR, ARP_GD_BAR, ARP_GD_BAR, ARP_GD_BAR
-
-#define ARP_C_STEP \
-    {{C3}, 127, 1}, {{C2}, 127, 1}, {{C1}, 127, 1}, {{C2}, 127, 1}
-
-#define ARP_C_BAR \
-    ARP_C_STEP, ARP_C_STEP, ARP_C_STEP, ARP_C_STEP
-
-#define ARP_C_PHRASE \
-    ARP_C_BAR, ARP_C_BAR, ARP_C_BAR, ARP_C_BAR
-
-constexpr PatternStep kTogetherArpSteps[] = {
-    ARP_GD_PHRASE,
-    ARP_C_PHRASE,
+constexpr PatternStep kTogetherArpRootSteps[] = {
+    STEP(Gd1), _NO_STEP, STEP(Gd1), STEP(Gd1),
+    STEP(C1), STEP(C1), _NO_STEP, _NO_STEP,
 };
-
-MAKE_PATTERN(kTogetherArp, kTogetherArpSteps, 16);
+MAKE_PATTERN(kTogetherArpRoots, kTogetherArpRootSteps, 1);
 
 #define DX7_BB2_STEP {{Bb2}, 127, 1}
 
@@ -132,12 +113,6 @@ constexpr PatternStep kTogetherPartBCymbalSteps[] = {
 };
 MAKE_PATTERN(kTogetherPartBCymbal, kTogetherPartBCymbalSteps, 8);
 
-#undef ARP_GD_STEP
-#undef ARP_GD_BAR
-#undef ARP_GD_PHRASE
-#undef ARP_C_STEP
-#undef ARP_C_BAR
-#undef ARP_C_PHRASE
 #undef DX7_BB2_STEP
 #undef DX7_BB2_BAR
 #undef DX7_BB2_PHRASE

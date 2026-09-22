@@ -9,7 +9,7 @@
 
 SequenceTrack TogetherTrackFactory::togetherArp(tick_t lengthInTicks, tick_t startInTicks) {
     SequenceTrack track("Modular", MidiChannel::kModularA);
-    track.setPattern(TogetherPatterns::kTogetherArp, lengthInTicks, startInTicks);
+    track.setPattern(TogetherPatterns::kTogetherArpRoots, lengthInTicks, startInTicks);
     return track;
 }
 
