@@ -8,8 +8,8 @@ namespace TogetherPatterns
 {
 
 constexpr PatternStep kTogetherArpRootSteps[] = {
-    STEP(Gd1), _NO_STEP, STEP(Gd1), STEP(Gd1),
-    STEP(C1), STEP(C1), _NO_STEP, _NO_STEP,
+    STEP(Gd1), STEP(Gd1), STEP(Gd1), STEP(Gd1),
+    STEP(C1), STEP(C1), STEP(C1), STEP(C1),
 };
 MAKE_PATTERN(kTogetherArpRoots, kTogetherArpRootSteps, 1);
 
