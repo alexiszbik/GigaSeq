@@ -146,7 +146,7 @@ void SequencePool::queueSwitch(PendingSwitch direction)
 void SequencePool::setPending(PendingSwitch sw) {
     pendingSwitch_ = sw;
 
-    if (sw == PendingSwitch::Next || sw == PendingSwitch::JumpToSong) {
+    if (sw == PendingSwitch::Next || sw == PendingSwitch::JumpToSequence || sw == PendingSwitch::JumpToSong) {
         current().unMuteFills();
     }
     
@@ -192,12 +192,40 @@ void SequencePool::queueSongSwitch(std::size_t songIndex)
     logger_.info(buffer);
 }
 
+void SequencePool::queueSequenceSwitch(std::size_t sequenceIndex)
+{
+    if (songs_.empty() || sequenceIndex >= currentSong().size() || currentSong().size() == 0) {
+        logger_.info("Invalid song index.\n");
+        return;
+    }
+
+    pendingSequenceIndex_ = sequenceIndex;
+    setPending(PendingSwitch::JumpToSequence);
+
+    char buffer[128];
+    std::snprintf(
+        buffer,
+        sizeof(buffer),
+        "Sequence '%s' queued - finishing current sequence...\n",
+        currentSong().sequence(sequenceIndex).name());
+    logger_.info(buffer);
+}
+
 void SequencePool::requestSong(std::size_t songIndex, bool now)
 {
     if (now) {
         advanceToSong(songIndex);
     } else {
         queueSongSwitch(songIndex);
+    }
+}
+
+void SequencePool::requestSequence(std::size_t sequenceIndex, bool now)
+{
+    if (now) {
+        advanceToSequence(sequenceIndex);
+    } else {
+        queueSequenceSwitch(sequenceIndex);
     }
 }
 
@@ -216,6 +244,8 @@ void SequencePool::processTick()
             advanceToNext();
         } else if (pendingSwitch_ == PendingSwitch::Previous) {
             advanceToPrevious();
+        } else if (pendingSwitch_ == PendingSwitch::JumpToSequence) {
+            advanceToSequence(pendingSequenceIndex_);
         } else if (pendingSwitch_ == PendingSwitch::JumpToSong) {
             advanceToSong(pendingSongIndex_);
         } else if (!sequence.isLooping()) {
@@ -409,6 +439,27 @@ void SequencePool::advanceToPrevious()
         --currentSongIndex_;
         currentSequenceIndex_ = currentSong().size() - 1;
     }
+
+    sendProgramChange();
+
+    current().reset();
+    notifySequenceChanged();
+}
+
+
+void SequencePool::advanceToSequence(std::size_t sequenceIndex)
+{
+    if (currentSequenceIndex_ == sequenceIndex) {
+        logger_.info("Already on this sequence.\n");
+        return;
+    }
+
+    releaseCurrentInMidiHeldNotes();
+    current().allNotesOff();
+
+    setPending(PendingSwitch::None);
+
+    currentSequenceIndex_ = sequenceIndex;
 
     sendProgramChange();
 

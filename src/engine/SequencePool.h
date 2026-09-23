@@ -14,13 +14,16 @@ enum class PendingSwitch
     None,
     Next,
     Previous,
-    JumpToSong
+    JumpToSequence,
+    JumpToSong,
 };
 
 
 using SequenceChangedCallback = void (*)();
 using PendingChangedCallback = void (*)(PendingSwitch);
 using PlaybackStopCallback = void (*)();
+
+//TODO : factorize !!!
 
 class SequencePool : public MidiInputHandler
 {
@@ -49,6 +52,7 @@ public:
     void requestNext(bool now = false);
     void requestPrevious(bool now = false);
     void requestSong(std::size_t songIndex, bool now = false);
+    void requestSequence(std::size_t sequenceIndex, bool now);
     void processTick();
     void allNotesOff();
 
@@ -67,8 +71,10 @@ private:
     bool canAdvancePrevious() const;
     void advanceToNext();
     void advanceToPrevious();
+    void advanceToSequence(std::size_t sequenceIndx);
     void advanceToSong(std::size_t songIndex);
     void queueSwitch(PendingSwitch direction);
+    void queueSequenceSwitch(std::size_t sequenceIndex);
     void queueSongSwitch(std::size_t songIndex);
     void logCurrentSequenceSwitch();
     void notifySequenceChanged();
@@ -85,6 +91,7 @@ private:
     std::size_t currentSequenceIndex_ = 0;
     PendingSwitch pendingSwitch_ = PendingSwitch::None;
     std::size_t pendingSongIndex_ = 0;
+    std::size_t pendingSequenceIndex_ = 0;
 
     SequenceChangedCallback onSequenceChanged_ = nullptr;
     MuteChangedCallback onTrackMuteChanged_ = nullptr;

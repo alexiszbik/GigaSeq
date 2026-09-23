@@ -150,6 +150,24 @@ void SequencerConsoleUI::clampSelectedSong()
     }
 }
 
+void SequencerConsoleUI::clampSelectedSequence()
+{
+    if (pool_ == nullptr) {
+        selectedSequenceIndex_ = 0;
+        return;
+    }
+
+    const std::size_t seqCount = pool_->currentSong().size();
+    if (seqCount == 0) {
+        selectedSequenceIndex_ = 0;
+        return;
+    }
+
+    if (selectedSequenceIndex_ >= seqCount) {
+        selectedSequenceIndex_ = seqCount - 1;
+    }
+}
+
 void SequencerConsoleUI::enterSongSelectMode()
 {
     if (pool_ == nullptr || pool_->songCount() == 0) {
@@ -158,6 +176,17 @@ void SequencerConsoleUI::enterSongSelectMode()
 
     listPanel_ = ListPanel::Songs;
     selectedSongIndex_ = pool_->currentSongIndex();
+    clampSelectedSong();
+}
+
+void SequencerConsoleUI::enterSequenceSelectMode()
+{
+    if (pool_ == nullptr || pool_->currentSong().size() == 0) {
+        return;
+    }
+
+    listPanel_ = ListPanel::Sequences;
+    selectedSequenceIndex_ = pool_->currentSequenceIndex();
     clampSelectedSong();
 }
 
@@ -170,6 +199,18 @@ void SequencerConsoleUI::confirmSongSelection()
     clampSelectedSong();
     const bool switchNow = clock_ == nullptr || !clock_->isPlaying();
     pool_->requestSong(selectedSongIndex_, switchNow);
+    listPanel_ = ListPanel::Tracks;
+}
+
+void SequencerConsoleUI::confirmSequenceSelection()
+{
+    if (pool_ == nullptr) {
+        return;
+    }
+
+    clampSelectedSequence();
+    const bool switchNow = clock_ == nullptr || !clock_->isPlaying();
+    pool_->requestSequence(selectedSequenceIndex_, switchNow);
     listPanel_ = ListPanel::Tracks;
 }
 
@@ -191,14 +232,19 @@ bool SequencerConsoleUI::pollAndDraw(int timeoutMs, ConsoleAction& action)
             action = ConsoleAction::Quit;
         } else if (isEscapeKey(key)) {
             drainPendingInput();
-            if (listPanel_ == ListPanel::Songs) {
+            if (listPanel_ != ListPanel::Tracks) {
                 listPanel_ = ListPanel::Tracks;
             }
         } else if (key == 'p' || key == 'P') {
             action = ConsoleAction::TogglePlay;
         } else if (key == 's' || key == 'S') {
-            if (listPanel_ == ListPanel::Tracks) {
+            if (listPanel_ != ListPanel::Songs) {
                 enterSongSelectMode();
+            }
+        } 
+        else if (key == 'z' || key == 'Z') {
+            if (listPanel_ != ListPanel::Sequences) {
+                enterSequenceSelectMode();
             }
         } else if (key == 'n' || key == 'N') {
             action = ConsoleAction::Next;
@@ -207,13 +253,21 @@ bool SequencerConsoleUI::pollAndDraw(int timeoutMs, ConsoleAction& action)
         } else if (key == '\n' || key == KEY_ENTER) {
             if (listPanel_ == ListPanel::Songs) {
                 confirmSongSelection();
-            } else {
+            } else if (listPanel_ == ListPanel::Sequences) {
+                confirmSequenceSelection();
+            } 
+        } else if (key == 'm' || key == 'M') {
+            if (listPanel_ == ListPanel::Tracks) {
                 toggleSelectedTrackMute();
             }
         } else if (key == KEY_UP) {
             if (listPanel_ == ListPanel::Songs) {
                 if (selectedSongIndex_ > 0) {
                     --selectedSongIndex_;
+                }
+            } else if (listPanel_ == ListPanel::Sequences) {
+                if (selectedSequenceIndex_ > 0) {
+                    --selectedSequenceIndex_;
                 }
             } else if (selectedTrackIndex_ > 0) {
                 --selectedTrackIndex_;
@@ -222,6 +276,10 @@ bool SequencerConsoleUI::pollAndDraw(int timeoutMs, ConsoleAction& action)
             if (listPanel_ == ListPanel::Songs) {
                 if (pool_ != nullptr && selectedSongIndex_ + 1 < pool_->songCount()) {
                     ++selectedSongIndex_;
+                }
+            } else if (listPanel_ == ListPanel::Sequences) {
+                if (pool_ != nullptr && selectedSequenceIndex_ + 1 < pool_->currentSong().size()) {
+                    ++selectedSequenceIndex_;
                 }
             } else if (pool_ != nullptr) {
                 const std::size_t last = pool_->current().trackCount();
@@ -267,11 +325,13 @@ void SequencerConsoleUI::drawFrame()
     const int ticksPerBar = sequence.beatsPerBar() * TickHelper::kTicksPerQuarterNote;
     const int loopBar = static_cast<int>(sequence.loopInPoint() / ticksPerBar) + 1;
 
+
+    attron(A_REVERSE);
     attron(A_BOLD);
     mvprintw(
         0,
         0,
-        "GigaSeq  Song: %s (%zu/%zu)  Sequence: %s (%zu/%zu)",
+        "Song: %s (%zu/%zu)  Sequence: %s (%zu/%zu)",
         song.name(),
         pool_->currentSongIndex() + 1,
         pool_->songCount(),
@@ -279,6 +339,7 @@ void SequencerConsoleUI::drawFrame()
         pool_->currentSequenceIndex() + 1,
         song.size());
     attroff(A_BOLD);
+    attroff(A_REVERSE);
 
     mvprintw(
         1,
@@ -331,6 +392,44 @@ void SequencerConsoleUI::drawFrame()
                 i + 1,
                 listSong.name(),
                 listSong.size(),
+                current ? " *" : "");
+
+            if (has_colors() && current) {
+                attroff(COLOR_PAIR(2));
+            }
+
+            if (selected) {
+                attroff(A_REVERSE);
+            }
+
+            ++listRow;
+        }
+    } else if (listPanel_ == ListPanel::Sequences) {
+        mvprintw(kTrackListStartRow, 0, "Sequences (Up/Down, Enter=select, Esc=cancel):");
+        Song& song = pool_->currentSong();
+        for (std::size_t i = 0; i < song.size(); ++i) {
+            if (listRow >= maxRows - 3) {
+                break;
+            }
+
+            const Sequence& seq = song.sequence(i);
+            const bool selected = i == selectedSequenceIndex_;
+            const bool current = i == pool_->currentSequenceIndex();
+
+            if (selected) {
+                attron(A_REVERSE);
+            }
+
+            if (has_colors() && current) {
+                attron(COLOR_PAIR(2));
+            }
+
+            mvprintw(
+                listRow,
+                2,
+                "[%zu] %-20s %s",
+                i + 1,
+                seq.name(),
                 current ? " *" : "");
 
             if (has_colors() && current) {

@@ -21,6 +21,7 @@ enum class ListPanel
 {
     Tracks,
     Songs,
+    Sequences,
 };
 
 class SequencerConsoleUI
@@ -52,11 +53,19 @@ public:
 
 private:
     void drawFrame();
+
     void clampSelectedTrack();
     void clampSelectedSong();
+    void clampSelectedSequence();
+
     void enterSongSelectMode();
+    void enterSequenceSelectMode();
+
     void confirmSongSelection();
+    void confirmSequenceSelection();
     void toggleSelectedTrackMute();
+
+
     static std::string trimTrailingNewlines(const std::string& text);
     static std::string sanitizeForDisplay(const std::string& text);
 
@@ -65,8 +74,11 @@ private:
 
     std::mutex logMutex_;
     std::deque<std::string> logLines_;
+
     std::size_t selectedTrackIndex_ = 0;
+    std::size_t selectedSequenceIndex_ = 0;
     std::size_t selectedSongIndex_ = 0;
+
     ListPanel listPanel_ = ListPanel::Tracks;
     bool active_ = false;
     bool dirty_ = true;
