@@ -16,9 +16,13 @@ FetchContent_Declare(
 set(RTMIDI_BUILD_TESTING OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(rtmidi)
 
+find_package(Curses REQUIRED)
+
 add_executable(GigaSeq
     src/desktop/main.cpp
     src/desktop/MidiClock.cpp
+    src/desktop/SequencerConsoleUI.cpp
+    src/desktop/UiTerminalLogger.cpp
     src/desktop/TerminalLogger.cpp
     src/desktop/TransportPosition.cpp
     src/desktop/VirtualMidiSender.cpp
@@ -98,7 +102,8 @@ add_executable(GigaSeq
 
 target_include_directories(GigaSeq PRIVATE src src/engine src/desktop src/const)
 target_compile_definitions(GigaSeq PRIVATE GIGASEQ_LOCAL)
-target_link_libraries(GigaSeq PRIVATE rtmidi)
+target_link_libraries(GigaSeq PRIVATE rtmidi ${CURSES_LIBRARIES})
+target_include_directories(GigaSeq PRIVATE ${CURSES_INCLUDE_DIRS})
 
 if(APPLE)
     target_link_libraries(GigaSeq PRIVATE "-framework CoreMIDI" "-framework CoreFoundation")

@@ -137,9 +137,9 @@ void SequencePool::queueSwitch(PendingSwitch direction)
     setPending(direction);
 
     if (direction == PendingSwitch::Next) {
-        logger_.info("Next sequence queued — finishing current sequence...\n");
+        logger_.info("Next sequence queued - finishing current sequence...\n");
     } else {
-        logger_.info("Previous sequence queued — finishing current sequence...\n");
+        logger_.info("Previous sequence queued - finishing current sequence...\n");
     }
 }
 
@@ -187,7 +187,7 @@ void SequencePool::queueSongSwitch(std::size_t songIndex)
     std::snprintf(
         buffer,
         sizeof(buffer),
-        "Song '%s' queued — finishing current sequence...\n",
+        "Song '%s' queued - finishing current sequence...\n",
         songs_[songIndex].name());
     logger_.info(buffer);
 }
@@ -350,7 +350,7 @@ void SequencePool::logCurrentSequenceSwitch()
     std::snprintf(
         buffer,
         sizeof(buffer),
-        "Switched to song %zu / %zu — sequence %zu / %zu — %s (%zu tracks, %u BPM)\n",
+        "Switched to song %zu / %zu - sequence %zu / %zu - %s (%zu tracks, %u BPM)\n",
         currentSongIndex_ + 1,
         songs_.size(),
         currentSequenceIndex_ + 1,

@@ -42,5 +42,3 @@ private:
     uint8_t currentOctave = 0;
     bool isGoingUp = false;
 };
-
-extern ArpeggiatorEffect kTogetherArpeggiator;

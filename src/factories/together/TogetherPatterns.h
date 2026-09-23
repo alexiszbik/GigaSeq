@@ -3,6 +3,7 @@
 #include "TrackPattern.h"
 #include "MidiConst.h"
 #include "factories/MidiNotes.h"
+#include "TogetherSamples.h"
 
 namespace TogetherPatterns
 {
@@ -13,30 +14,13 @@ constexpr PatternStep kTogetherArpRootSteps[] = {
 };
 MAKE_PATTERN(kTogetherArpRoots, kTogetherArpRootSteps, 1);
 
-#define DX7_BB2_STEP {{Bb2}, 127, 1}
-
-#define DX7_BB2_BAR \
-    DX7_BB2_STEP, DX7_BB2_STEP, DX7_BB2_STEP, DX7_BB2_STEP, \
-    DX7_BB2_STEP, DX7_BB2_STEP, DX7_BB2_STEP, DX7_BB2_STEP
-
-#define DX7_BB2_PHRASE \
-    DX7_BB2_BAR, DX7_BB2_BAR, DX7_BB2_BAR, DX7_BB2_BAR
-
-#define DX7_B2_STEP {{B2}, 127, 1}
-
-#define DX7_B2_BAR \
-    DX7_B2_STEP, DX7_B2_STEP, DX7_B2_STEP, DX7_B2_STEP, \
-    DX7_B2_STEP, DX7_B2_STEP, DX7_B2_STEP, DX7_B2_STEP
-
-#define DX7_B2_PHRASE \
-    DX7_B2_BAR, DX7_B2_BAR, DX7_B2_BAR, DX7_B2_BAR
 
 constexpr PatternStep kTogetherDX7Steps[] = {
-    DX7_BB2_PHRASE,
-    DX7_B2_PHRASE,
+    STEP(Together::dx7bass), STEP(Together::dx7bass), STEP(Together::dx7bass), STEP(Together::dx7bass),
+    STEP(Together::dx7bass2), STEP(Together::dx7bass2), STEP(Together::dx7bass2), STEP(Together::dx7bass2),
 };
 
-MAKE_PATTERN(kTogetherDX7, kTogetherDX7Steps, 8);
+MAKE_PATTERN(kTogetherDX7, kTogetherDX7Steps, 1);
 
 constexpr PatternStep kTogetherHiDrumSteps[] = {
     {{56, 37, 40}, 127, 1},

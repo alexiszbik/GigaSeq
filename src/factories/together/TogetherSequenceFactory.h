@@ -2,6 +2,8 @@
 
 #include "Sequence.h"
 
+
+
 class TogetherSequenceFactory
 {
 public:

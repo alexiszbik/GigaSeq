@@ -1,21 +1,20 @@
 #include "MidiClock.h"
+#include "SequencerConsoleUI.h"
 #include "TerminalLogger.h"
+#include "UiTerminalLogger.h"
 #include "VirtualMidiSender.h"
 #include "SequencePool.h"
-#include "TransportPosition.h"
 
+#include <curses.h>
 #include <csignal>
 #include <cstdio>
-#include <cctype>
-#include <iostream>
-#include <sstream>
-#include <string>
 
 namespace
 {
 volatile std::sig_atomic_t gKeepRunning = 1;
 
 SequencePool* gPool = nullptr;
+SequencerConsoleUI* gUi = nullptr;
 Logger* gLogger = nullptr;
 MidiClock* gClock = nullptr;
 
@@ -24,318 +23,86 @@ void handleSignal(int)
     gKeepRunning = 0;
 }
 
-bool trySetTempo(MidiClock& clock, Logger& logger, const std::string& argument)
-{
-    char buffer[128];
-
-    if (argument.empty()) {
-        std::snprintf(buffer, sizeof(buffer), "Current tempo: %.0f BPM\n", clock.bpm());
-        logger.info(buffer);
-        return true;
-    }
-
-    std::istringstream stream(argument);
-    double bpm = 0.0;
-    stream >> bpm;
-
-    if (stream.fail() || !stream.eof()) {
-        logger.info("Invalid tempo. Example: t 128\n");
-        return true;
-    }
-
-    try {
-        clock.setBpm(bpm);
-        std::snprintf(buffer, sizeof(buffer), "Tempo set to %.0f BPM\n", clock.bpm());
-        logger.info(buffer);
-    } catch (const std::exception& error) {
-        std::snprintf(buffer, sizeof(buffer), "%s\n", error.what());
-        logger.info(buffer);
-    }
-
-    return true;
-}
-
-void printTracks(const Sequence& sequence, Logger& logger)
-{
-    char buffer[128];
-
-    for (std::size_t i = 0; i < sequence.trackCount(); ++i) {
-        const SequenceTrack& track = sequence.track(i);
-        std::snprintf(
-            buffer,
-            sizeof(buffer),
-            "  [%zu] %s%s\n",
-            i,
-            track.name(),
-            track.isMuted() ? " (muted)" : "");
-        logger.info(buffer);
-    }
-}
-
-void printPoolStatus(const SequencePool& pool, Logger& logger)
-{
-    char buffer[192];
-    const Sequence& sequence = pool.current();
-
-    std::snprintf(
-        buffer,
-        sizeof(buffer),
-        "Song %zu / %zu — %s — Sequence %zu / %zu — %s\n",
-        pool.currentSongIndex() + 1,
-        pool.songCount(),
-        pool.currentSong().name(),
-        pool.currentSequenceIndex() + 1,
-        pool.currentSong().size(),
-        sequence.name());
-    logger.info(buffer);
-    printTracks(sequence, logger);
-}
-
-bool namesMatchIgnoreCase(const char* songName, const std::string& query)
-{
-    if (query.empty()) {
-        return false;
-    }
-
-    std::size_t i = 0;
-    for (; songName[i] != '\0' && i < query.size(); ++i) {
-        if (std::tolower(static_cast<unsigned char>(songName[i]))
-            != std::tolower(static_cast<unsigned char>(query[i]))) {
-            return false;
-        }
-    }
-
-    return songName[i] == '\0' && i == query.size();
-}
-
-std::size_t findSongIndex(const SequencePool& pool, const std::string& name)
-{
-    for (std::size_t i = 0; i < pool.songCount(); ++i) {
-        if (namesMatchIgnoreCase(pool.song(i).name(), name)) {
-            return i;
-        }
-    }
-
-    return pool.songCount();
-}
-
-void printSongs(const SequencePool& pool, Logger& logger)
-{
-    char buffer[128];
-
-    for (std::size_t i = 0; i < pool.songCount(); ++i) {
-        std::snprintf(
-            buffer,
-            sizeof(buffer),
-            "  [%zu] %s (%zu sequences)\n",
-            i + 1,
-            pool.song(i).name(),
-            pool.song(i).size());
-        logger.info(buffer);
-    }
-}
-
-bool tryGoToSong(SequencePool& pool, MidiClock& clock, Logger& logger, const std::string& name)
-{
-    if (name.empty()) {
-        logger.info("Available songs:\n");
-        printSongs(pool, logger);
-        logger.info("Usage: song <name>\n");
-        return true;
-    }
-
-    const std::size_t index = findSongIndex(pool, name);
-    if (index >= pool.songCount()) {
-        logger.info("Unknown song. Available songs:\n");
-        printSongs(pool, logger);
-        return true;
-    }
-
-    pool.requestSong(index, !clock.isPlaying());
-    return true;
-}
-
-bool tryMuteTrack(SequencePool& pool, Logger& logger, const std::string& argument)
-{
-    Sequence& sequence = pool.current();
-    char buffer[128];
-
-    if (argument.empty()) {
-        logger.info("Tracks (current sequence):\n");
-        printTracks(sequence, logger);
-        logger.info("Usage: m <index>  |  m <index> on/off\n");
-        return true;
-    }
-
-    std::istringstream stream(argument);
-    std::size_t index = 0;
-    stream >> index;
-
-    if (stream.fail()) {
-        logger.info("Invalid track index. Example: m 0\n");
-        return true;
-    }
-
-    if (index >= sequence.trackCount()) {
-        std::snprintf(
-            buffer,
-            sizeof(buffer),
-            "Track index out of range (0-%zu)\n",
-            sequence.trackCount() - 1);
-        logger.info(buffer);
-        return true;
-    }
-
-    std::string state;
-    stream >> state;
-
-    if (stream.fail()) {
-        const bool muted = !sequence.track(index).isMuted();
-        sequence.setTrackMuted(index, muted);
-        std::snprintf(
-            buffer,
-            sizeof(buffer),
-            "Track [%zu] %s %s\n",
-            index,
-            sequence.track(index).name(),
-            muted ? "muted" : "unmuted");
-        logger.info(buffer);
-        return true;
-    }
-
-    if (state == "on" || state == "mute") {
-        sequence.setTrackMuted(index, true);
-        std::snprintf(
-            buffer,
-            sizeof(buffer),
-            "Track [%zu] %s muted\n",
-            index,
-            sequence.track(index).name());
-        logger.info(buffer);
-    } else if (state == "off" || state == "unmute") {
-        sequence.setTrackMuted(index, false);
-        std::snprintf(
-            buffer,
-            sizeof(buffer),
-            "Track [%zu] %s unmuted\n",
-            index,
-            sequence.track(index).name());
-        logger.info(buffer);
-    } else {
-        logger.info("Invalid mute state. Use on/off. Example: m 0 off\n");
-    }
-
-    return true;
-}
-
-std::string formatPlayhead(const Sequence& sequence)
-{
-    const tick_t tickIndex = sequence.position() == 0 ? 0 : sequence.position() - 1;
-    return TransportPosition::fromTickIndex(
-        tickIndex,
-        sequence.beatsPerBar(),
-        sequence.lengthInTicks()).toString();
-}
-
-void printPosition(const Sequence& sequence, Logger& logger)
-{
-    const tick_t tickIndex = sequence.position() == 0 ? 0 : sequence.position() - 1;
-    const TransportPosition time = TransportPosition::fromTickIndex(
-        tickIndex,
-        sequence.beatsPerBar(),
-        sequence.lengthInTicks());
-
-    char buffer[128];
-    std::snprintf(
-        buffer,
-        sizeof(buffer),
-        "Position: bar %d / %d  beat %d / %d  tick %d / %d  (%s)\n",
-        time.bar,
-        sequence.barCount(),
-        time.beat,
-        sequence.beatsPerBar(),
-        time.tick,
-        TickHelper::kTicksPerQuarterNote,
-        time.toString().c_str());
-    logger.info(buffer);
-}
-
-void maybePrintBarPosition(const Sequence& sequence, Logger& logger)
-{
-    const tick_t tickIndex = sequence.position();
-    const int ticksPerBar = sequence.beatsPerBar() * TickHelper::kTicksPerQuarterNote;
-
-    if (tickIndex % ticksPerBar != 0) {
-        return;
-    }
-
-    const TransportPosition time = TransportPosition::fromTickIndex(
-        tickIndex,
-        sequence.beatsPerBar(),
-        sequence.lengthInTicks());
-
-    char buffer[32];
-    std::snprintf(buffer, sizeof(buffer), "--- Bar %d ---\n", time.bar);
-    logger.info(buffer);
-}
-
 void onSequenceChanged()
 {
-    if (gPool && gLogger) {
-        printPoolStatus(*gPool, *gLogger);
+    if (gUi != nullptr) {
+        gUi->resetTrackSelection();
+        gUi->requestRedraw();
     }
 
-    if (gPool && gClock) {
+    if (gPool != nullptr && gClock != nullptr) {
         try {
             gClock->setBpm(static_cast<double>(gPool->current().getTempo()));
         } catch (const std::exception& error) {
-            if (gLogger) {
+            if (gLogger != nullptr) {
                 char buffer[128];
-                std::snprintf(buffer, sizeof(buffer), "%s\n", error.what());
+                std::snprintf(buffer, sizeof(buffer), "%s", error.what());
                 gLogger->info(buffer);
             }
         }
     }
 }
 
-void onTrackMuteChanged(uint8_t trackIndex, bool muted)
+void onTrackMuteChanged(uint8_t, bool)
 {
-    if (!gPool || !gLogger) {
-        return;
+    if (gUi != nullptr) {
+        gUi->requestRedraw();
     }
-
-    char buffer[128];
-    std::snprintf(
-        buffer,
-        sizeof(buffer),
-        "Track [%u] %s %s\n",
-        trackIndex,
-        gPool->current().track(trackIndex).name(),
-        muted ? "muted" : "unmuted");
-    gLogger->info(buffer);
 }
 
 void onTempoChanged(uint8_t bpm)
 {
-    if (!gClock) {
+    if (gClock == nullptr) {
         return;
     }
 
     try {
         gClock->setBpm(static_cast<double>(bpm));
     } catch (const std::exception& error) {
-        if (gLogger) {
+        if (gLogger != nullptr) {
             char buffer[128];
-            std::snprintf(buffer, sizeof(buffer), "%s\n", error.what());
+            std::snprintf(buffer, sizeof(buffer), "%s", error.what());
             gLogger->info(buffer);
         }
+    }
+
+    if (gUi != nullptr) {
+        gUi->requestRedraw();
     }
 }
 
 void onPlaybackStop()
 {
-    if (gClock && gClock->isPlaying()) {
+    if (gClock != nullptr && gClock->isPlaying()) {
         gClock->stop();
+    }
+
+    if (gUi != nullptr) {
+        gUi->requestRedraw();
+    }
+}
+
+void handleAction(ConsoleAction action, SequencePool& pool, MidiClock& clock)
+{
+    switch (action) {
+    case ConsoleAction::TogglePlay:
+        if (clock.isPlaying()) {
+            clock.stop();
+        } else {
+            clock.play();
+        }
+        break;
+    case ConsoleAction::Next:
+        pool.requestNext(!clock.isPlaying());
+        break;
+    case ConsoleAction::Back:
+        pool.requestPrevious(!clock.isPlaying());
+        break;
+    case ConsoleAction::Quit:
+        gKeepRunning = 0;
+        break;
+    case ConsoleAction::None:
+        break;
     }
 }
 } // namespace
@@ -346,14 +113,22 @@ int main()
 
     constexpr auto kPortName = "GigaSeq Virtual";
 
-    try
-    {
-        TerminalLogger logger;
+    try {
+        SequencerConsoleUI ui;
+        if (!ui.init()) {
+            return 1;
+        }
+
+        UiTerminalLogger logger(ui);
         VirtualMidiSender sender(kPortName, logger);
         MidiClock clock(sender, logger);
         SequencePool pool = SequencePool::createDefault(sender, logger);
 
+        ui.setPool(&pool);
+        ui.setClock(&clock);
+
         gPool = &pool;
+        gUi = &ui;
         gLogger = &logger;
         gClock = &clock;
 
@@ -368,95 +143,43 @@ int main()
             pool.resetCurrent();
         });
 
-        clock.setOnTick([&pool, &logger](int) {
-            maybePrintBarPosition(pool.current(), logger);
+        clock.setOnTick([&pool, &ui](int) {
             pool.processTick();
+            ui.requestRedraw();
         });
 
-        clock.setOnStop([&pool]() {
+        clock.setOnStop([&pool, &ui]() {
             pool.allNotesOff();
+            ui.requestRedraw();
         });
 
         char buffer[64];
         std::snprintf(
             buffer,
             sizeof(buffer),
-            "Loaded %zu songs (%zu sequences)\n",
+            "Loaded %zu songs (%zu sequences)",
             pool.songCount(),
             pool.sequenceCount());
         logger.info(buffer);
-        printPoolStatus(pool, logger);
+        logger.info("Ready - p play/stop, s song, n/b seq, tracks: Up/Down Enter mute.");
 
-        logger.info(
-            "Commands: [p]lay  [s]top  [n]ext  [b]ack  songs  song <name>  pos  [t]empo <bpm>  [m]ute <index>  [q]uit\n");
+        pool.sendProgramChange();
 
-            pool.sendProgramChange();
-
-        while (gKeepRunning)
-        {
-            if (clock.isPlaying()) {
-                std::snprintf(
-                    buffer,
-                    sizeof(buffer),
-                    "[song %zu/%zu seq %zu/%zu %s | %s] ",
-                    pool.currentSongIndex() + 1,
-                    pool.songCount(),
-                    pool.currentSequenceIndex() + 1,
-                    pool.currentSong().size(),
-                    pool.current().name(),
-                    formatPlayhead(pool.current()).c_str());
-                logger.info(buffer);
-            }
-
-            logger.info("> ");
-            std::string command;
-            if (!std::getline(std::cin, command)) {
-                break;
-            }
-
-            if (command == "p" || command == "play") {
-                clock.play();
-            } else if (command == "s" || command == "stop") {
-                clock.stop();
-            } else if (command == "n" || command == "next") {
-                pool.requestNext(!clock.isPlaying());
-            } else if (command == "b" || command == "back" || command == "previous" || command == "prev") {
-                pool.requestPrevious(!clock.isPlaying());
-            } else if (command == "pos" || command == "position") {
-                printPosition(pool.current(), logger);
-            } else if (command == "q" || command == "quit") {
-                break;
-            } else if (command == "t" || command == "tempo" || command == "bpm") {
-                trySetTempo(clock, logger, "");
-            } else if (command.rfind("t ", 0) == 0 || command.rfind("tempo ", 0) == 0
-                       || command.rfind("bpm ", 0) == 0) {
-                const auto space = command.find(' ');
-                trySetTempo(clock, logger, command.substr(space + 1));
-            } else if (command == "m" || command == "mute") {
-                tryMuteTrack(pool, logger, "");
-            } else if (command.rfind("m ", 0) == 0 || command.rfind("mute ", 0) == 0) {
-                const auto space = command.find(' ');
-                tryMuteTrack(pool, logger, command.substr(space + 1));
-            } else if (command == "songs") {
-                printSongs(pool, logger);
-            } else if (command == "song") {
-                tryGoToSong(pool, clock, logger, "");
-            } else if (command.rfind("song ", 0) == 0) {
-                tryGoToSong(pool, clock, logger, command.substr(5));
-            } else if (!command.empty()) {
-                logger.info("Unknown command. Use p/s/n/b/songs/song/pos/t/m/q.\n");
+        while (gKeepRunning) {
+            ConsoleAction action = ConsoleAction::None;
+            if (ui.pollAndDraw(50, action)) {
+                handleAction(action, pool, clock);
             }
         }
 
         clock.stop();
-        logger.info("Bye.\n");
-    }
-    catch (const std::exception& error)
-    {
+        ui.shutdown();
+    } catch (const std::exception& error) {
+        endwin();
         char buffer[256];
         std::snprintf(buffer, sizeof(buffer), "Error: %s\n", error.what());
-        TerminalLogger logger;
-        logger.error(buffer);
+        TerminalLogger fallback;
+        fallback.error(buffer);
         return 1;
     }
 

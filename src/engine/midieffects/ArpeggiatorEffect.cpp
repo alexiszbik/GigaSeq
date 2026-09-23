@@ -1,8 +1,6 @@
 #include "midieffects/ArpeggiatorEffect.h"
 #include <algorithm>
 
-ArpeggiatorEffect kTogetherArpeggiator(2, 16, ArpDirection::DownUp);
-
 ArpeggiatorEffect::ArpeggiatorEffect(uint8_t octaves, uint8_t rate, ArpDirection direction)
     : octaves_(octaves),
       rate_(rate),
@@ -33,7 +31,7 @@ uint8_t ArpeggiatorEffect::pitchForStep()
 {
     uint8_t note = static_cast<uint8_t>(static_cast<int>(rootPitch_) + currentOctave*12);
 
-    if (direction_ == ArpDirection::DownUp) {
+    if (direction_ == ArpDirection::DownUp && octaves_ > 0) {
         if (isGoingUp) {
             currentOctave++;
         } else {
