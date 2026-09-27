@@ -85,6 +85,10 @@ private:
     void releaseCurrentInMidiHeldNotes();
 
     void finalizeSequenceChange();
+    static void tempoChangedAdapter(uint8_t bpm);
+    void handleCurrentTempoChanged(uint8_t bpm);
+
+    static SequencePool* tempoCallbackTarget_;
 
     MidiInOut& midi_;
     Logger& logger_;

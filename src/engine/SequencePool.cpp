@@ -14,10 +14,13 @@
 #include <cstdio>
 #include <utility>
 
+SequencePool* SequencePool::tempoCallbackTarget_ = nullptr;
+
 SequencePool::SequencePool(MidiInOut& midi, Logger& logger)
     : midi_(midi)
     , logger_(logger)
 {
+    tempoCallbackTarget_ = this;
 }
 
 void SequencePool::add(Song song)
@@ -344,15 +347,33 @@ void SequencePool::wireTrackMuteCallbacks()
     }
 }
 
-void SequencePool::wireTempoCallbacks()
+void SequencePool::tempoChangedAdapter(uint8_t bpm)
 {
-    if (!onTempoChanged_) {
-        return;
+    if (tempoCallbackTarget_ != nullptr) {
+        tempoCallbackTarget_->handleCurrentTempoChanged(bpm);
+    }
+}
+
+void SequencePool::handleCurrentTempoChanged(uint8_t bpm)
+{
+    uint8_t ccValue = 0;
+    if (bpm > 60) {
+        const unsigned adjusted = static_cast<unsigned>(bpm) - 60u;
+        ccValue = adjusted > 127u ? 127u : static_cast<uint8_t>(adjusted);
     }
 
+    midi_.sendControlChange(MidiChannel::kCommon, Common::kTempo_cc, ccValue);
+
+    if (onTempoChanged_ != nullptr) {
+        onTempoChanged_(bpm);
+    }
+}
+
+void SequencePool::wireTempoCallbacks()
+{
     for (Song& song : songs_) {
         for (std::size_t i = 0; i < song.size(); ++i) {
-            song.sequence(i).setOnTempoChanged(onTempoChanged_);
+            song.sequence(i).setOnTempoChanged(tempoChangedAdapter);
         }
     }
 }
