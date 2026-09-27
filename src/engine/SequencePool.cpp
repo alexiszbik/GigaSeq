@@ -410,11 +410,8 @@ void SequencePool::advanceToNext()
         ++currentSongIndex_;
         currentSequenceIndex_ = 0;
     }
-
-    sendProgramChange();
-
-    current().reset();
-    notifySequenceChanged();
+    
+    finalizeSequenceChange();
 }
 
 void SequencePool::sendProgramChange() {
@@ -439,11 +436,8 @@ void SequencePool::advanceToPrevious()
         --currentSongIndex_;
         currentSequenceIndex_ = currentSong().size() - 1;
     }
-
-    sendProgramChange();
-
-    current().reset();
-    notifySequenceChanged();
+ 
+    finalizeSequenceChange();
 }
 
 
@@ -461,6 +455,10 @@ void SequencePool::advanceToSequence(std::size_t sequenceIndex)
 
     currentSequenceIndex_ = sequenceIndex;
 
+    finalizeSequenceChange();
+}
+
+void SequencePool::finalizeSequenceChange() {
     sendProgramChange();
 
     current().reset();
@@ -482,10 +480,7 @@ void SequencePool::advanceToSong(std::size_t songIndex)
     currentSongIndex_ = songIndex;
     currentSequenceIndex_ = 0;
 
-    sendProgramChange();
-
-    current().reset();
-    notifySequenceChanged();
+    finalizeSequenceChange();
 }
 
 SequencePool SequencePool::createDefault(MidiInOut& midi, Logger& logger)

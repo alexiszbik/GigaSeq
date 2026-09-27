@@ -84,6 +84,8 @@ private:
     void setPending(PendingSwitch sw);
     void releaseCurrentInMidiHeldNotes();
 
+    void finalizeSequenceChange();
+
     MidiInOut& midi_;
     Logger& logger_;
     std::vector<Song> songs_;
