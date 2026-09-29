@@ -28,7 +28,7 @@ add_executable(GigaSeq
     src/desktop/VirtualMidiSender.cpp
     src/engine/StringHelper.cpp
     src/engine/RandomHelper.cpp
-    src/engine/LedStripRandom.cpp
+    src/const/LedStripRandom.cpp
     src/const/LedStripGroups.cpp
     src/engine/Sequence.cpp
     src/engine/Song.cpp

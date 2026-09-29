@@ -185,7 +185,8 @@ Sequence TogetherSequenceFactory::togetherPartBWithHats()
             //TogetherTrackFactory::togetherPartBAh,
             TogetherTrackFactory::togetherPartBDaDaDa,
             TogetherTrackFactory::togetherHatsOnly,
-            track(TogetherTrackFactory::togetherBassLed).withCC(LedStrips::kDecay_cc, 80)
+            track(TogetherTrackFactory::togetherBassLed).withCC(LedStrips::kDecay_cc, 80),
+            track(SequenceTrackFactory::sampler).withCC(Sampler::kPanLfoAmount_cc, 127)
         });
 }
 
@@ -229,7 +230,8 @@ Sequence TogetherSequenceFactory::togetherEnd()
             //track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, ON),
             track(SequenceTrackFactory::gtrLoopErase),
             track(SequenceTrackFactory::midiLoop)
-                .withNote(MidiLoop::kEraseAll)
+                .withNote(MidiLoop::kEraseAll),
+            track(SequenceTrackFactory::sampler).withCC(Sampler::kPanLfoAmount_cc, 0)
 
         });
     return seq;
