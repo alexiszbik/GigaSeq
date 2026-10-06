@@ -43,6 +43,12 @@ void onSequenceChanged()
     }
 }
 
+void onPendingChanged(PendingSwitch sw) {
+     if (gUi != nullptr) {
+        gUi->requestRedraw();
+    }
+}
+
 void onTrackMuteChanged(uint8_t, bool)
 {
     if (gUi != nullptr) {
@@ -136,6 +142,7 @@ int main()
         pool.setOnTrackMuteChanged(onTrackMuteChanged);
         pool.setOnTempoChanged(onTempoChanged);
         pool.setOnPlaybackStop(onPlaybackStop);
+        pool.setOnPendingChanged(onPendingChanged);
 
         clock.setBpm(static_cast<double>(pool.current().getTempo()));
 

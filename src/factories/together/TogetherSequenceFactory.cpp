@@ -20,19 +20,22 @@ ArpeggiatorEffect kTogetherDX7Arp(0, 8, ArpDirection::DownUp);
 Sequence TogetherSequenceFactory::togetherIntro()
 {
     Sequence seq = buildSequence(
-        8, 4, 0, "Intro", songTempo, true,
+        16, 4, 8, "Intro", songTempo, true,
         {
             track(TogetherTrackFactory::togetherArp).withMidiEffect(&kTogetherModArp),
+            track(TogetherTrackFactory::togetherBassIntro).muted(),
             track(SequenceTrackFactory::gtrPedal).withProgramChange(HXStomp::kBass),
             track(SequenceTrackFactory::gtrLoop).withProgramChange(BossRC::kTogetherA),
             track(SequenceTrackFactory::microfreak).withProgramChange(Microfreak::kTogetherLead),
             track(SequenceTrackFactory::midiLoop)
-                .withNote(MidiLoop::kSelectMicrofreak)
-                .withCC(MidiLoop::kBarCount_cc, 4),
+                .withNote(MidiLoop::kSelectPoly)
+                .withCC(MidiLoop::kBarCount_cc, 4)
+                .withCC(MidiLoop::kArpMode_cc, OFF)
+                .withCC(MidiLoop::kRecord_cc, OFF),
             SequenceTrackFactory::matrixKill
         });
 
-    addProgramChangeTrack(seq, "Poly pgm", MidiChannel::kPoly, 1);
+    addProgramChangeTrack(seq, "Poly pgm", MidiChannel::kPoly, PolySynth::kTogetherIntro);
     addInMidiRules(seq, &kTransposeInMidiRules, 12);
     return seq;
 }
@@ -40,7 +43,7 @@ Sequence TogetherSequenceFactory::togetherIntro()
 Sequence TogetherSequenceFactory::togetherSample()
 {
     Sequence seq = buildSequence(
-        8, 4, 0, "Sample", songTempo, true,
+        16, 4, 8, "Sample", songTempo, true,
         {
             track(TogetherTrackFactory::togetherArp).withMidiEffect(&kTogetherModArp),
             TogetherTrackFactory::togetherHiDrum,
@@ -57,6 +60,11 @@ Sequence TogetherSequenceFactory::togetherSample()
                 .withCC(Vocoder::kOscBWaveform_cc, 0)
                 .withCC(Vocoder::kOscAPwm_cc, 64)
                 .withCC(Vocoder::kOscBPwm_cc, 64),
+            track(SequenceTrackFactory::midiLoop)
+                .withNote(MidiLoop::kSelectMicrofreak)
+                .withCC(MidiLoop::kBarCount_cc, 4)
+                .withCC(MidiLoop::kRecord_cc, ON),
+            track(TogetherTrackFactory::togetherBassIntro)
 
         });
     addInMidiRules(seq, &kTransposeInMidiRules, 12);
@@ -151,8 +159,11 @@ Sequence TogetherSequenceFactory::togetherRepeat()
             track(SequenceTrackFactory::ledStrips)
                 .withNote(LedStrips::kRainbow_note, 127, 0, TICK(4))
                 .withCC(LedStrips::kRainbowSpeed_cc, 2)
-                .withCC(LedStrips::kDecay_cc, 0)
+                .withCC(LedStrips::kDecay_cc, 0),
+            track(SequenceTrackFactory::polySynth).withProgramChange(PolySynth::kTogetherChords),
         });
+
+        
 }
 
 Sequence TogetherSequenceFactory::togetherPartB()
@@ -200,6 +211,7 @@ Sequence TogetherSequenceFactory::togetherPartBDrums()
             TogetherTrackFactory::togetherHiDrum,
             SequenceTrackFactory::kickFour,
             track(TogetherTrackFactory::togetherPartBJC).muted(),
+            track(TogetherTrackFactory::togetherBassEnd).muted(),
             track(TogetherTrackFactory::togetherPartBTambourin).muted(),
             track(SequenceTrackFactory::polySynth).withCC(PolySynth::kFilterCutoff_cc, 3)
         });
@@ -217,6 +229,7 @@ Sequence TogetherSequenceFactory::togetherPartBClimax()
             TogetherTrackFactory::togetherPartBJC,
             TogetherTrackFactory::togetherPartBTambourin,
             TogetherTrackFactory::togetherPartBCymbal,
+            TogetherTrackFactory::togetherBassEnd,
             track(TogetherTrackFactory::togetherEndRiser).withMuteEvent(0).asFill(),
             track(TogetherTrackFactory::togetherLedBlinkClimax).withCC(LedStrips::kDecay_cc, 44)
         });
@@ -230,8 +243,7 @@ Sequence TogetherSequenceFactory::togetherEnd()
             //track(SequenceTrackFactory::modularA).withCC(ModularA::kGlobalMute_cc, ON),
             track(SequenceTrackFactory::gtrLoopErase),
             track(SequenceTrackFactory::midiLoop)
-                .withNote(MidiLoop::kEraseAll),
-            track(SequenceTrackFactory::sampler).withCC(Sampler::kPanLfoAmount_cc, 0)
+                .withNote(MidiLoop::kEraseAll)
 
         });
     return seq;

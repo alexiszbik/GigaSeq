@@ -35,6 +35,7 @@ Sequence WaterSequenceFactory::waterIntro()
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kWater_oscBlue),
             track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, decayCyan),
             track(SequenceTrackFactory::drumMachine).withCC(DrumMachine::kClearAll_cc, ON),
+            track(SequenceTrackFactory::sampler).withCC(Sampler::kPanLfoAmount_cc, 0)
         });
 
     addOutMidiRules(seq, &kWaterFmbassLedRules);

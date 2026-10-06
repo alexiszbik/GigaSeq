@@ -34,6 +34,14 @@ SequenceTrack TogetherTrackFactory::togetherDX7(tick_t lengthInTicks, tick_t sta
     return track;
 }
 
+SequenceTrack TogetherTrackFactory::togetherBassIntro(tick_t lengthInTicks, tick_t startInTicks)
+{
+    SequenceTrack track("Bass Intro", MidiChannel::kBass);
+    track.setPattern(TogetherPatterns::kTogetherBassIntro, lengthInTicks, startInTicks);
+    return track;
+}
+
+
 SequenceTrack TogetherTrackFactory::togetherVocoder(tick_t lengthInTicks, tick_t startInTicks)
 {
     SequenceTrack track("Vocoder", MidiChannel::kVocoder);
@@ -192,11 +200,44 @@ SequenceTrack TogetherTrackFactory::togetherLedBlinkClimax(tick_t lengthInTicks,
     SequenceDesc desc;
     desc.notes = {
         {LedStrips::kWhite_ALL}, {},
-        {LedStrips::kWhite_A}, {}, 
-        {LedStrips::kWhite_B}, {}, 
-        {LedStrips::kWhite_C}, {}, 
+        {LedStrips::kWhite_A, LedStrips::kWhite_D}, {}, 
+        {LedStrips::kWhite_B, LedStrips::kWhite_E}, {}, 
+        {LedStrips::kWhite_C, LedStrips::kWhite_F}, {},
     };
     desc.rate = 8;
+    makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
+
+    return track;
+}
+
+SequenceTrack TogetherTrackFactory::togetherBassEnd(tick_t lengthInTicks, tick_t startInTicks) {
+    SequenceTrack track("BassEnd", MidiChannel::kBass);
+
+    SequenceDesc desc;
+    desc.notes = {
+
+        {}, {}, {C3}, {},
+        {D3}, {}, {Eb3}, {D3},
+        {}, {}, {C3}, {},
+        {D3}, {}, {G3}, {},
+
+        {}, {}, {C3}, {},
+        {D3}, {}, {Eb3}, {D3},
+        {}, {}, {C3}, {},
+        {D3}, {}, {G3}, {},
+        
+        {}, {}, {C3}, {},
+        {D3}, {}, {Eb3}, {D3},
+        {}, {}, {C3}, {},
+        {D3}, {}, {G3}, {},
+        
+        {}, {}, {C3}, {},
+        {D3}, {}, {C3}, {Bb3},
+        {}, {}, {Ab3}, {},
+        {G3}, {}, {F3}, {},
+
+    };
+    desc.rate = 16;
     makeSequenceTrack(track, desc, lengthInTicks, startInTicks);
 
     return track;

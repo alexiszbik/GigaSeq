@@ -10,6 +10,7 @@ public:
     static SequenceTrack togetherSample(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack togetherDX7(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack togetherVocoder(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack togetherBassIntro(tick_t lengthInTicks, tick_t startInTicks);
 
     static SequenceTrack togetherSampleRepeat(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack togetherKickRepeat(tick_t lengthInTicks, tick_t startInTicks);
@@ -28,4 +29,5 @@ public:
     static SequenceTrack togetherLedBlinkBlue(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack togetherBassLed(tick_t lengthInTicks, tick_t startInTicks);
     static SequenceTrack togetherLedBlinkClimax(tick_t lengthInTicks, tick_t startInTicks);
+    static SequenceTrack togetherBassEnd(tick_t lengthInTicks, tick_t startInTicks);
 };

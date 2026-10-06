@@ -65,7 +65,6 @@ private:
     void confirmSequenceSelection();
     void toggleSelectedTrackMute();
 
-
     static std::string trimTrailingNewlines(const std::string& text);
     static std::string sanitizeForDisplay(const std::string& text);
 

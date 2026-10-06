@@ -78,7 +78,8 @@ Sequence CloserSequenceFactory::closerChords()
             track(SequenceTrackFactory::ledStrips)
                 .withCC(LedStrips::kDecay_cc, chordsLedDecay)
                 .withNotes({LedStrips::kBlue_ALL, LedStrips::kGreen_ALL}, 127, 0, TICK(8))
-                .withNotes({LedStrips::kBlue_ALL, LedStrips::kGreen_ALL}, 127, TICK(8), TICK(8))
+                .withNotes({LedStrips::kBlue_ALL, LedStrips::kGreen_ALL}, 127, TICK(8), TICK(8)),
+            track(SequenceTrackFactory::sampler).withCC(Sampler::kPanLfoAmount_cc, 127)
         });
     addInMidiRules(seq, &kTransposeInMidiRules, -12);
     return seq;
@@ -139,7 +140,8 @@ Sequence CloserSequenceFactory::closerBackKick()
                 .withCC(MidiLoop::kMuteBass_cc, OFF)
                 .withCC(MidiLoop::kCopy_cc, 1),
             SequenceTrackFactory::matrixKill,
-            track(CloserTrackFactory::closerLedStab).withCC(LedStrips::kDecay_cc, stabLedDecay)
+            track(CloserTrackFactory::closerLedStab).withCC(LedStrips::kDecay_cc, stabLedDecay),
+            track(SequenceTrackFactory::sampler).withCC(Sampler::kPanLfoAmount_cc, 0)
         });
 
     addInMidiRules(seq, &kTransposeInMidiRules, -12);

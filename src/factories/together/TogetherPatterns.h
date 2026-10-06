@@ -111,4 +111,13 @@ constexpr PatternStep kTogetherLedBlinkBlueSteps[] = {
 
 MAKE_PATTERN(kTogetherLedBlinkBlue, kTogetherLedBlinkBlueSteps, 8); //parce qu'on peut pas encore gérer la longueur des notes
 
+
+constexpr PatternStep kTogetherBassIntroSteps[] = {
+    {{C4}, 127, 1},
+    {{Ab3}, 127, 1},
+    {{G3}, 127, 1},
+};
+
+MAKE_PATTERN(kTogetherBassIntro, kTogetherBassIntroSteps, 16);
+
 } // namespace TogetherPatterns

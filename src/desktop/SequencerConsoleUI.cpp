@@ -315,6 +315,7 @@ void SequencerConsoleUI::drawFrame()
 
     const Sequence& sequence = pool_->current();
     const Song& song = pool_->currentSong();
+    const PendingSwitch& pendingSwitch = pool_->currentPendingSwitch();
 
     const tick_t tickIndex = sequence.position() == 0 ? 0 : sequence.position() - 1;
     const TransportPosition transport = TransportPosition::fromTickIndex(
@@ -325,9 +326,9 @@ void SequencerConsoleUI::drawFrame()
     const int ticksPerBar = sequence.beatsPerBar() * TickHelper::kTicksPerQuarterNote;
     const int loopBar = static_cast<int>(sequence.loopInPoint() / ticksPerBar) + 1;
 
-
     attron(A_REVERSE);
     attron(A_BOLD);
+
     mvprintw(
         0,
         0,
@@ -338,6 +339,7 @@ void SequencerConsoleUI::drawFrame()
         sequence.name(),
         pool_->currentSequenceIndex() + 1,
         song.size());
+
     attroff(A_BOLD);
     attroff(A_REVERSE);
 
@@ -350,19 +352,35 @@ void SequencerConsoleUI::drawFrame()
         sequence.isLooping() ? "yes" : "no",
         sequence.getTempo());
 
-    const char* transportState = "stopped";
-    if (clock_ != nullptr && clock_->isPlaying()) {
-        transportState = "playing";
+    mvaddch(2, 0, (clock_ != nullptr && clock_->isPlaying()) ? ACS_RARROW : ACS_S9);
+
+    mvprintw(
+        2,
+        2,
+        "Pos: bar %d / %d  (%s)",
+        transport.bar,
+        sequence.barCount(),
+        transport.toString().c_str());
+
+    attron(A_REVERSE);
+    attron(A_BOLD);
+
+    const char* swString;
+    switch(pendingSwitch) {
+        case PendingSwitch::None : swString = ""; break;
+        case PendingSwitch::Next : swString = " NEXT "; break;
+        case PendingSwitch::Previous : swString = " PREV "; break;
+        case PendingSwitch::JumpToSequence : swString = " JUMP TO SEQ "; break;
+        case PendingSwitch::JumpToSong : swString = " JUMP TO SONG "; break;
     }
 
     mvprintw(
         2,
-        0,
-        "Transport: %s  Position: bar %d / %d  (%s)",
-        transportState,
-        transport.bar,
-        sequence.barCount(),
-        transport.toString().c_str());
+        32,
+        swString);
+
+    attroff(A_BOLD);
+    attroff(A_REVERSE);
 
     int listRow = kTrackListStartRow + 1;
 
@@ -509,7 +527,7 @@ void SequencerConsoleUI::drawFrame()
     mvprintw(
         maxRows - 1,
         0,
-        "[p]lay/stop [s]ong [n]ext [b]ack [q]uit  |  tracks: Up/Down+Enter=mute  songs: Esc=cancel");
+        "[p]lay/stop [s]ong [z]sequence [n]ext [b]ack [q]uit  |  tracks: [m]mute");
     if (has_colors()) {
         attroff(COLOR_PAIR(4));
     }

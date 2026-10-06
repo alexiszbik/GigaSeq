@@ -160,6 +160,7 @@ Sequence FallingSequenceFactory::fallingClimax()
             SequenceTrackFactory::rideOff,
             FallingTrackFactory::fallingRimTom,
             track(FallingTrackFactory::fallingRiser).withMuteEvent(0).asFill(),
+            track(FallingTrackFactory::fallingSynthEnd)
         });
 
     addOutMidiRules(seq, &kFallingLedRules);

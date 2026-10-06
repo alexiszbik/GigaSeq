@@ -39,6 +39,7 @@ public:
     std::size_t sequenceCount() const noexcept;
     std::size_t currentSongIndex() const noexcept { return currentSongIndex_; }
     std::size_t currentSequenceIndex() const noexcept { return currentSequenceIndex_; }
+    PendingSwitch currentPendingSwitch() const noexcept { return pendingSwitch_; }
     bool hasPendingSwitch() const noexcept { return pendingSwitch_ != PendingSwitch::None; }
 
     Song& currentSong();
