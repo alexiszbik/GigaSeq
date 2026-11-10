@@ -85,7 +85,7 @@ fi
 cat > "$RULES_H" <<EOF
 #pragma once
 
-#include "OutMidiRules.h"
+#include "outmidirules/OutMidiRules.h"
 
 class ${CLASS_NAME} : public OutMidiRules
 {

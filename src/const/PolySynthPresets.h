@@ -6,6 +6,7 @@ namespace PolySynth {
 #define _POLY_PRESET(preset, nbr) constexpr uint8_t k##preset = nbr - 1
 #define _POLY_CC(name, nbr) constexpr uint8_t k##name##_cc = nbr
 
+_POLY_PRESET(TogetherIntro, 1);
 _POLY_PRESET(TogetherChords, 2);
 _POLY_PRESET(WaterSqr, 3);
 _POLY_PRESET(SlowStr, 4);

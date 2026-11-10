@@ -3,59 +3,24 @@
 #include "TrackPattern.h"
 #include "MidiConst.h"
 #include "factories/MidiNotes.h"
+#include "TogetherSamples.h"
 
 namespace TogetherPatterns
 {
 
-#define ARP_GD_STEP \
-    {{Gd3}, 127, 1}, {{Gd2}, 127, 1}, {{Gd1}, 127, 1}, {{Gd2}, 127, 1}
-
-#define ARP_GD_BAR \
-    ARP_GD_STEP, ARP_GD_STEP, ARP_GD_STEP, ARP_GD_STEP
-
-#define ARP_GD_PHRASE \
-    ARP_GD_BAR, ARP_GD_BAR, ARP_GD_BAR, ARP_GD_BAR
-
-#define ARP_C_STEP \
-    {{C3}, 127, 1}, {{C2}, 127, 1}, {{C1}, 127, 1}, {{C2}, 127, 1}
-
-#define ARP_C_BAR \
-    ARP_C_STEP, ARP_C_STEP, ARP_C_STEP, ARP_C_STEP
-
-#define ARP_C_PHRASE \
-    ARP_C_BAR, ARP_C_BAR, ARP_C_BAR, ARP_C_BAR
-
-constexpr PatternStep kTogetherArpSteps[] = {
-    ARP_GD_PHRASE,
-    ARP_C_PHRASE,
+constexpr PatternStep kTogetherArpRootSteps[] = {
+    STEP(Gd1), STEP(Gd1), STEP(Gd1), STEP(Gd1),
+    STEP(C1), STEP(C1), STEP(C1), STEP(C1),
 };
+MAKE_PATTERN(kTogetherArpRoots, kTogetherArpRootSteps, 1);
 
-MAKE_PATTERN(kTogetherArp, kTogetherArpSteps, 16);
-
-#define DX7_BB2_STEP {{Bb2}, 127, 1}
-
-#define DX7_BB2_BAR \
-    DX7_BB2_STEP, DX7_BB2_STEP, DX7_BB2_STEP, DX7_BB2_STEP, \
-    DX7_BB2_STEP, DX7_BB2_STEP, DX7_BB2_STEP, DX7_BB2_STEP
-
-#define DX7_BB2_PHRASE \
-    DX7_BB2_BAR, DX7_BB2_BAR, DX7_BB2_BAR, DX7_BB2_BAR
-
-#define DX7_B2_STEP {{B2}, 127, 1}
-
-#define DX7_B2_BAR \
-    DX7_B2_STEP, DX7_B2_STEP, DX7_B2_STEP, DX7_B2_STEP, \
-    DX7_B2_STEP, DX7_B2_STEP, DX7_B2_STEP, DX7_B2_STEP
-
-#define DX7_B2_PHRASE \
-    DX7_B2_BAR, DX7_B2_BAR, DX7_B2_BAR, DX7_B2_BAR
 
 constexpr PatternStep kTogetherDX7Steps[] = {
-    DX7_BB2_PHRASE,
-    DX7_B2_PHRASE,
+    STEP(Together::dx7bass), STEP(Together::dx7bass), STEP(Together::dx7bass), STEP(Together::dx7bass),
+    STEP(Together::dx7bass2), STEP(Together::dx7bass2), STEP(Together::dx7bass2), STEP(Together::dx7bass2),
 };
 
-MAKE_PATTERN(kTogetherDX7, kTogetherDX7Steps, 8);
+MAKE_PATTERN(kTogetherDX7, kTogetherDX7Steps, 1);
 
 constexpr PatternStep kTogetherHiDrumSteps[] = {
     {{56, 37, 40}, 127, 1},
@@ -132,12 +97,6 @@ constexpr PatternStep kTogetherPartBCymbalSteps[] = {
 };
 MAKE_PATTERN(kTogetherPartBCymbal, kTogetherPartBCymbalSteps, 8);
 
-#undef ARP_GD_STEP
-#undef ARP_GD_BAR
-#undef ARP_GD_PHRASE
-#undef ARP_C_STEP
-#undef ARP_C_BAR
-#undef ARP_C_PHRASE
 #undef DX7_BB2_STEP
 #undef DX7_BB2_BAR
 #undef DX7_BB2_PHRASE
@@ -151,5 +110,14 @@ constexpr PatternStep kTogetherLedBlinkBlueSteps[] = {
 };
 
 MAKE_PATTERN(kTogetherLedBlinkBlue, kTogetherLedBlinkBlueSteps, 8); //parce qu'on peut pas encore gérer la longueur des notes
+
+
+constexpr PatternStep kTogetherBassIntroSteps[] = {
+    {{C4}, 127, 1},
+    {{Ab3}, 127, 1},
+    {{G3}, 127, 1},
+};
+
+MAKE_PATTERN(kTogetherBassIntro, kTogetherBassIntroSteps, 16);
 
 } // namespace TogetherPatterns

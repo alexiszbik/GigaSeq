@@ -77,3 +77,9 @@ TrackSpec& TrackSpec::withPitchOffset(int offset)
     hasPitchOffset_ = true;
     return *this;
 }
+
+TrackSpec& TrackSpec::withMidiEffect(MidiEffect* effect)
+{
+    midiEffect_ = effect;
+    return *this;
+}

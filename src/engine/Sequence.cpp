@@ -1,7 +1,7 @@
 #include "Sequence.h"
 
 #include "midiinrules/InMidiRules.h"
-#include "OutMidiRules.h"
+#include "outmidirules/OutMidiRules.h"
 
 #include <stdexcept>
 #include <utility>

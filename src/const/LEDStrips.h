@@ -18,6 +18,8 @@ STRIP_NOTES(A, 1)
 STRIP_NOTES(B, 2)
 STRIP_NOTES(C, 3)
 STRIP_NOTES(D, 4)
+STRIP_NOTES(E, 5)
+STRIP_NOTES(F, 6)
 
 constexpr uint8_t kRainbow_note = 58;
 constexpr uint8_t kExplode_note = 59;

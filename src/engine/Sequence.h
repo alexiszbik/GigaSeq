@@ -2,7 +2,7 @@
 
 #include "midiinrules/InMidiRules.h"
 #include "MidiInOut.h"
-#include "OutMidiRules.h"
+#include "outmidirules/OutMidiRules.h"
 #include "SequenceTrack.h"
 #include "TempoEvent.h"
 #include "Tick.h"

@@ -1,7 +1,7 @@
 #include "SequenceBuilder.h"
 
 #include "midiinrules/InMidiRules.h"
-#include "OutMidiRules.h"
+#include "outmidirules/OutMidiRules.h"
 
 Sequence buildSequence(
     int barCount,
@@ -58,6 +58,9 @@ Sequence buildSequence(
         }
         if (spec.hasPitchOffset()) {
             t.setPitchOffset(spec.pitchOffset());
+        }
+        if (spec.midiEffect() != nullptr) {
+            t.setMidiEffect(spec.midiEffect());
         }
     }
 

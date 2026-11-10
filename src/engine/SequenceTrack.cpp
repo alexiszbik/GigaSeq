@@ -78,23 +78,6 @@ void SequenceTrack::setPattern(const TrackPattern& pattern, tick_t lengthInTicks
     patternLength_ = lengthInTicks;
 }
 
-void SequenceTrack::removeNotes(
-    tick_t tick,
-    tick_t durationTicks,
-    const std::vector<uint8_t>& pitches)
-{
-    if (durationTicks == 0) {
-        return;
-    }
-
-    notes_.removeInRangeIf(tick, durationTicks, [&pitches](const ScheduledNote& scheduledNote) {
-        if (pitches.empty()) {
-            return true;
-        }
-        return std::find(pitches.begin(), pitches.end(), scheduledNote.note.note) != pitches.end();
-    });
-}
-
 void SequenceTrack::reset()
 {
     notes_.reset();
@@ -103,6 +86,10 @@ void SequenceTrack::reset()
     muteEvents_.reset();
     std::fill(automationLastSent_.begin(), automationLastSent_.end(), kAutomationNotSent);
     activeNotes_.reset();
+
+    if (midiEffect_ != nullptr) {
+        midiEffect_->reset();
+    }
 
     const bool wasMuted = muted_;
     muted_ = startMuted_;
@@ -143,6 +130,11 @@ void SequenceTrack::setMuted(bool muted)
 
     if (muted) {
         releaseActiveNotes();
+
+        if (midiEffect_ != nullptr) {
+            midiEffect_->reset();
+        }
+
         notes_.reset();
         controlChanges_.reset();
         programChanges_.reset();
@@ -153,27 +145,27 @@ void SequenceTrack::setMuted(bool muted)
     notifyMuteChanged();
 }
 
-void SequenceTrack::startNote(const ScheduledNote& scheduledNote)
+void SequenceTrack::startNote(const Note& note, tick_t durationTicks)
 {
     if (midi_ == nullptr) {
         return;
     }
 
     const uint8_t pitch = static_cast<uint8_t>(
-        pitchOffset_ + static_cast<int>(scheduledNote.note.note));
+        pitchOffset_ + static_cast<int>(note.note));
 
     activeNotes_.startNote(
         channel_,
         pitch,
-        scheduledNote.note.velocity,
-        scheduledNote.durationTicks,
+        note.velocity,
+        durationTicks,
         *midi_);
 
     if (outMidiRules_ != nullptr) {
         outMidiRules_->processNoteOn(
-            { pitch, scheduledNote.note.velocity },
+            { pitch, note.velocity },
             channel_,
-            scheduledNote.durationTicks,
+            durationTicks,
             *midi_);
     }
 }
@@ -216,7 +208,16 @@ void SequenceTrack::processPatternTick(tick_t position)
         //But what would be awesome would be the ability to have durationMul under 1
         const tick_t noteDuration = stepDuration * step.durationMul - 1;
         for (uint8_t i = 0; i < kMaxNotesPerPatternStep && step.notes[i] != 0; ++i) {
-            startNote({ position, noteDuration, { step.notes[i], step.velocity } });
+            const Note note = {
+                static_cast<uint8_t>(pitchOffset_ + static_cast<int>(step.notes[i])),
+                step.velocity,
+            };
+
+            if (midiEffect_ != nullptr) {
+                midiEffect_->onSourceNote(note, noteDuration, local);
+            } else {
+                startNote({ step.notes[i], step.velocity }, noteDuration);
+            }
         }
     };
 
@@ -301,11 +302,22 @@ void SequenceTrack::processTick(tick_t position, bool loopWrap)
 
     notes_.process(position, loopWrap, [this](const ScheduledNote& scheduledNote) {
         if (!muted_) {
-            startNote(scheduledNote);
+            startNote(scheduledNote.note, scheduledNote.durationTicks);
         }
     });
 
+    if (loopWrap && midiEffect_ != nullptr) {
+        midiEffect_->reset();
+    }
+
     processPatternTick(position);
+
+    if (midiEffect_ != nullptr && midi_ != nullptr && !muted_ && pattern_) {
+        const tick_t local = position - patternStart_;
+        if (local >= 0 && local < patternLength_) {
+            midiEffect_->processTick(local, channel_, activeNotes_, *midi_);
+        }
+    }
 
     if (midi_ != nullptr) {
         activeNotes_.processTick(*midi_);

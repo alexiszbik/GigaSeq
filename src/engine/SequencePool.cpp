@@ -14,10 +14,13 @@
 #include <cstdio>
 #include <utility>
 
+SequencePool* SequencePool::tempoCallbackTarget_ = nullptr;
+
 SequencePool::SequencePool(MidiInOut& midi, Logger& logger)
     : midi_(midi)
     , logger_(logger)
 {
+    tempoCallbackTarget_ = this;
 }
 
 void SequencePool::add(Song song)
@@ -137,16 +140,16 @@ void SequencePool::queueSwitch(PendingSwitch direction)
     setPending(direction);
 
     if (direction == PendingSwitch::Next) {
-        logger_.info("Next sequence queued — finishing current sequence...\n");
+        logger_.info("Next sequence queued - finishing current sequence...\n");
     } else {
-        logger_.info("Previous sequence queued — finishing current sequence...\n");
+        logger_.info("Previous sequence queued - finishing current sequence...\n");
     }
 }
 
 void SequencePool::setPending(PendingSwitch sw) {
     pendingSwitch_ = sw;
 
-    if (sw == PendingSwitch::Next || sw == PendingSwitch::JumpToSong) {
+    if (sw == PendingSwitch::Next || sw == PendingSwitch::JumpToSequence || sw == PendingSwitch::JumpToSong) {
         current().unMuteFills();
     }
     
@@ -187,8 +190,27 @@ void SequencePool::queueSongSwitch(std::size_t songIndex)
     std::snprintf(
         buffer,
         sizeof(buffer),
-        "Song '%s' queued — finishing current sequence...\n",
+        "Song '%s' queued - finishing current sequence...\n",
         songs_[songIndex].name());
+    logger_.info(buffer);
+}
+
+void SequencePool::queueSequenceSwitch(std::size_t sequenceIndex)
+{
+    if (songs_.empty() || sequenceIndex >= currentSong().size() || currentSong().size() == 0) {
+        logger_.info("Invalid song index.\n");
+        return;
+    }
+
+    pendingSequenceIndex_ = sequenceIndex;
+    setPending(PendingSwitch::JumpToSequence);
+
+    char buffer[128];
+    std::snprintf(
+        buffer,
+        sizeof(buffer),
+        "Sequence '%s' queued - finishing current sequence...\n",
+        currentSong().sequence(sequenceIndex).name());
     logger_.info(buffer);
 }
 
@@ -198,6 +220,15 @@ void SequencePool::requestSong(std::size_t songIndex, bool now)
         advanceToSong(songIndex);
     } else {
         queueSongSwitch(songIndex);
+    }
+}
+
+void SequencePool::requestSequence(std::size_t sequenceIndex, bool now)
+{
+    if (now) {
+        advanceToSequence(sequenceIndex);
+    } else {
+        queueSequenceSwitch(sequenceIndex);
     }
 }
 
@@ -216,6 +247,8 @@ void SequencePool::processTick()
             advanceToNext();
         } else if (pendingSwitch_ == PendingSwitch::Previous) {
             advanceToPrevious();
+        } else if (pendingSwitch_ == PendingSwitch::JumpToSequence) {
+            advanceToSequence(pendingSequenceIndex_);
         } else if (pendingSwitch_ == PendingSwitch::JumpToSong) {
             advanceToSong(pendingSongIndex_);
         } else if (!sequence.isLooping()) {
@@ -314,15 +347,33 @@ void SequencePool::wireTrackMuteCallbacks()
     }
 }
 
-void SequencePool::wireTempoCallbacks()
+void SequencePool::tempoChangedAdapter(uint8_t bpm)
 {
-    if (!onTempoChanged_) {
-        return;
+    if (tempoCallbackTarget_ != nullptr) {
+        tempoCallbackTarget_->handleCurrentTempoChanged(bpm);
+    }
+}
+
+void SequencePool::handleCurrentTempoChanged(uint8_t bpm)
+{
+    uint8_t ccValue = 0;
+    if (bpm > 60) {
+        const unsigned adjusted = static_cast<unsigned>(bpm) - 60u;
+        ccValue = adjusted > 127u ? 127u : static_cast<uint8_t>(adjusted);
     }
 
+    midi_.sendControlChange(MidiChannel::kCommon, Common::kTempo_cc, ccValue);
+
+    if (onTempoChanged_ != nullptr) {
+        onTempoChanged_(bpm);
+    }
+}
+
+void SequencePool::wireTempoCallbacks()
+{
     for (Song& song : songs_) {
         for (std::size_t i = 0; i < song.size(); ++i) {
-            song.sequence(i).setOnTempoChanged(onTempoChanged_);
+            song.sequence(i).setOnTempoChanged(tempoChangedAdapter);
         }
     }
 }
@@ -350,7 +401,7 @@ void SequencePool::logCurrentSequenceSwitch()
     std::snprintf(
         buffer,
         sizeof(buffer),
-        "Switched to song %zu / %zu — sequence %zu / %zu — %s (%zu tracks, %u BPM)\n",
+        "Switched to song %zu / %zu - sequence %zu / %zu - %s (%zu tracks, %u BPM)\n",
         currentSongIndex_ + 1,
         songs_.size(),
         currentSequenceIndex_ + 1,
@@ -380,11 +431,8 @@ void SequencePool::advanceToNext()
         ++currentSongIndex_;
         currentSequenceIndex_ = 0;
     }
-
-    sendProgramChange();
-
-    current().reset();
-    notifySequenceChanged();
+    
+    finalizeSequenceChange();
 }
 
 void SequencePool::sendProgramChange() {
@@ -409,7 +457,29 @@ void SequencePool::advanceToPrevious()
         --currentSongIndex_;
         currentSequenceIndex_ = currentSong().size() - 1;
     }
+ 
+    finalizeSequenceChange();
+}
 
+
+void SequencePool::advanceToSequence(std::size_t sequenceIndex)
+{
+    if (currentSequenceIndex_ == sequenceIndex) {
+        logger_.info("Already on this sequence.\n");
+        return;
+    }
+
+    releaseCurrentInMidiHeldNotes();
+    current().allNotesOff();
+
+    setPending(PendingSwitch::None);
+
+    currentSequenceIndex_ = sequenceIndex;
+
+    finalizeSequenceChange();
+}
+
+void SequencePool::finalizeSequenceChange() {
     sendProgramChange();
 
     current().reset();
@@ -431,10 +501,7 @@ void SequencePool::advanceToSong(std::size_t songIndex)
     currentSongIndex_ = songIndex;
     currentSequenceIndex_ = 0;
 
-    sendProgramChange();
-
-    current().reset();
-    notifySequenceChanged();
+    finalizeSequenceChange();
 }
 
 SequencePool SequencePool::createDefault(MidiInOut& midi, Logger& logger)

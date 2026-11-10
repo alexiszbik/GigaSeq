@@ -13,6 +13,8 @@
 #include "ModularA.h"
 #include "DrumMachine.h"
 #include "Bass.h"
+#include "Sampler.h"
+#include "Common.h"
 
 
 #define ON 127

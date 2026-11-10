@@ -39,7 +39,8 @@ Sequence TiredSequenceFactory::tiredIntro()
             track(SequenceTrackFactory::matrix).withProgramChange(LedMatrix::kTired_sticks),
             track(SequenceTrackFactory::drumMachine)
                 .withCC(DrumMachine::kClearAll_cc, ON),
-            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, kickDecayLed)
+            track(SequenceTrackFactory::ledStrips).withCC(LedStrips::kDecay_cc, kickDecayLed),
+            track(SequenceTrackFactory::sampler).withCC(Sampler::kPanLfoAmount_cc, 0)
         });
 
     addInMidiRules(seq, &kTransposeInMidiRules, -12);

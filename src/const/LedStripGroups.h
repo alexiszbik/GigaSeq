@@ -10,6 +10,8 @@ constexpr uint8_t kWhiteLeds[] = {
     kWhite_B,
     kWhite_C,
     kWhite_D,
+    kWhite_E,
+    kWhite_F,
 };
 
 constexpr uint8_t kWhiteLedCount = sizeof(kWhiteLeds) / sizeof(kWhiteLeds[0]);
@@ -19,6 +21,8 @@ constexpr uint8_t kGreenLeds[] = {
     kGreen_B,
     kGreen_C,
     kGreen_D,
+    kGreen_E,
+    kGreen_F,
 };
 
 constexpr uint8_t kGreenLedCount = sizeof(kGreenLeds) / sizeof(kGreenLeds[0]);
